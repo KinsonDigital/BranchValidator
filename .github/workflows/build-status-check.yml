@@ -1,0 +1,52 @@
+name: ✔Build Status Check
+
+
+env:
+  PROJECT_NAME: BranchValidator
+  NET_SDK_VERSION: 6.0.300
+
+
+on:
+  workflow_dispatch:
+    paths-ignore:
+      - ".github/**"
+      - "Documentation/**"
+      - '.editorconfig'
+      - '*.runsettings'
+      - '.gitattributes'
+      - '.gitignore'
+      - '*.md'
+      - '*.yml'
+      - '.vscode/**'
+      - '*.sln'
+
+
+jobs:
+  Build_Status_Check:
+    name: Build Status Check
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Get Build Config
+      id: get-build-config
+      run: |
+        # If the destination branch that the pull request is merging into is master, do a release build
+        if ( "${{ github.base_ref }}" -eq "master") {
+          Write-Host "::set-output name=build-config::Release"
+        } else { # Any other branch than master, do a debug build
+          Write-Host "::set-output name=build-config::Debug"
+        }
+
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: ${{ env.NET_SDK_VERSION }}
+
+    - name: Restore Dependencies
+      run: dotnet restore "${{ github.workspace }}/${{ env.PROJECT_NAME }}/${{ env.PROJECT_NAME }}.csproj"
+
+    - name: Build Project
+      run: dotnet build "${{ github.workspace }}/${{ env.PROJECT_NAME }}/${{ env.PROJECT_NAME }}.csproj" `
+        -c ${{ steps.get-build-config.outputs.build-config }} `
+        --no-restore

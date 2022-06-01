@@ -1,0 +1,35 @@
+name: 'BranchValidator'
+description: 'Checks if a GIT branch name is valid.'
+author: 'Calvin Wilkinson (KinsonDigital)'
+branding:
+  icon: settings
+  color: purple
+inputs:
+  branch-name:
+    description: 'The name of the GIT branch.'
+    required: true
+    default: ''
+  validation-logic:
+    description: 'The logic expression to use to validate the branch name.'
+    required: true
+    default: ''
+  fail-when-not-valid:
+    description: 'If true, will fail the job if the branch name is not valid.'
+    required: false
+    default: true
+
+outputs:
+  nuget-exists:
+    description: 'True if the NuGet package exists.'
+
+# These are the arguments that are passed into the console app
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+  - '--branch-name'
+  - ${{ inputs.branch-name }}
+  - '--validation-logic'
+  - ${{ inputs.validation-logic }}
+  - '--fail-when-not-valid'
+  - ${{ inputs.fail-when-not-valid }}

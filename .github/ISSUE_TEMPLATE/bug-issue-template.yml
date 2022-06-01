@@ -1,0 +1,77 @@
+name: 🐛 Bug
+description: File a bug
+title: "🐛"
+labels: [bug, ⚕️NEEDS TRIAGE]
+body:
+- type: checkboxes
+  attributes:
+    label: I have done the items below . . .
+    description: Please make sure to do the items below.
+    options:
+    - label: I have updated the title without removing the 🐛 emoji.
+      required: true
+
+- type: checkboxes
+  attributes:
+    label: Is there an existing issue for this?
+    description: Please search to see if an issue already exists for the bug you encountered.
+    options:
+    - label: I have searched the existing issues
+      required: true
+
+- type: textarea
+  attributes:
+    label: Current Behavior
+    description: A concise description of what you're experiencing.
+  validations:
+    required: false
+
+- type: textarea
+  attributes:
+    label: Expected Behavior
+    description: A concise description of what you expected to happen.
+  validations:
+    required: false
+
+- type: textarea
+  attributes:
+    label: Steps To Reproduce
+    description: Steps to reproduce the behavior.
+    placeholder: |
+      1. In this environment...
+      2. With this config...
+      3. Run '...'
+      4. See error...
+  validations:
+    required: false
+
+- type: textarea
+  attributes:
+    label: If you know what version of Ubuntu the action is running one, enter this here.
+    description: Enter Ubuntu operating system version here
+    placeholder: |
+      Examples: `ubuntu-latest` or `Ubuntu-20.04`
+      If you do not know what version it is due to using the value `ubuntu-latest`, this can be found in the
+      console logs produced by running the action.
+      Refer to [here](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idruns-on) for more information.
+  validations:
+    required: false
+
+- type: textarea
+  attributes:
+    label: Anything else?
+    description: |
+      Links? References? Anything that will give us more context about the issue you are encountering!
+      
+      Tip: You can attach images or log files by clicking this area to highlight it and then dragging files in.
+  validations:
+    required: false
+
+- type: checkboxes
+  id: terms
+  attributes:
+    label: Code of Conduct
+    description: By submitting this issue, you agree to follow our [Code of Conduct](../../code_of_conduct.md)
+    options:
+      - label: I agree to follow this project's Code of Conduct
+        required: true
