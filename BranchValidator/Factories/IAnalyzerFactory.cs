@@ -3,7 +3,6 @@
 // </copyright>
 
 using System.Collections.ObjectModel;
-using BranchValidator.Services;
 using BranchValidator.Services.Interfaces;
 
 namespace BranchValidator.Factories;
