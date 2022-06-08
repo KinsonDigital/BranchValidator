@@ -1,4 +1,8 @@
-﻿namespace BranchValidator.Exceptions;
+﻿// <copyright file="LoadEmbeddedResourceException.cs" company="KinsonDigital">
+// Copyright (c) KinsonDigital. All rights reserved.
+// </copyright>
+
+namespace BranchValidator.Exceptions;
 
 /// <summary>
 /// Occurs when something goes wrong with loading an embedded resource.
