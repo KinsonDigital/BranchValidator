@@ -124,7 +124,7 @@ public class GitHubActionTests
     }
 
     [Fact]
-    public async void Run_WhenFailingActionForInvalidBranches_FailsActionWithException()
+    public async void Run_WhenFailingActionForInvalidBranchesWithInvalidBranch_FailsActionWithException()
     {
         // Arrange
         var inputs = CreateInputs();
@@ -147,6 +147,22 @@ public class GitHubActionTests
         var inputs = CreateInputs(failWhenNotValid: false);
         this.mockExpressionExecutorService.Setup(m => m.Execute(inputs.ValidationLogic, inputs.BranchName))
             .Returns((false, "branch invalid"));
+        var action = CreateAction();
+
+        // Act
+        var act = () => action.Run(inputs, _ => { }, e => throw e);
+
+        // Assert
+        await act.Should().NotThrowAsync();
+    }
+
+    [Fact]
+    public async void Run_WhenFailingActionForInvalidBranchesWithValidBranch_DoesNotFailAction()
+    {
+        // Arrange
+        var inputs = CreateInputs(failWhenNotValid: true);
+        this.mockExpressionExecutorService.Setup(m => m.Execute(It.IsAny<string>(), It.IsAny<string>()))
+            .Returns((true, "branch valid"));
         var action = CreateAction();
 
         // Act

@@ -60,7 +60,7 @@ public sealed class GitHubAction : IGitHubAction<bool>
             (bool branchIsValid, string msg) logicResult = this.expressionExecutorService.Execute(inputs.ValidationLogic, inputs.BranchName);
             branchIsValid = logicResult.branchIsValid;
 
-            if (inputs.FailWhenNotValid is true)
+            if (inputs.FailWhenNotValid is true && logicResult.branchIsValid is false)
             {
                 throw new Exception(logicResult.msg);
             }
