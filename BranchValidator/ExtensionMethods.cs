@@ -281,48 +281,56 @@ public static class ExtensionMethods
     ///     <item><c>msg:</c> Additional information about the result.</item>
     /// </list>
     /// </returns>
-    public static (bool result, string msg) MethodContainsParams(this object? obj, string methodName, Type returnType, string[] argValues)
+    public static (bool result, string msg) MethodContainsParams(this object? obj, string methodName, Type returnType, string[]? argValues)
     {
+        var totalArgValues = argValues?.Length ?? 0;
+        var invalidResult = (false, $"No function with the name '{methodName}' with '{totalArgValues}' parameters found.");
+
         var methodExistsResult = ContainsMethod(obj, methodName, returnType);
         if (methodExistsResult.exists is false)
         {
             return methodExistsResult;
         }
 
-        var method = (from m in obj?.GetType().GetMethods(BindingFlags.Public | BindingFlags.Instance)
+        var possibleMethods = (from m in obj?.GetType().GetMethods(BindingFlags.Public | BindingFlags.Instance)
             where m.Name == methodName
-            select m).ToArray()[0];
+            select m).ToArray();
 
-        var methodParams = method.GetParameters();
-
-        bool NullOrEmpty<T>(IEnumerable<T>? items) => items is null || !items.Any();
-
-        if (NullOrEmpty(methodParams) || methodParams.Length != argValues.Length)
+        foreach (MethodInfo possibleMethod in possibleMethods)
         {
-            return (false, $"No function with the name '{methodName}' with '{argValues.Length}' parameters found.");
-        }
+            var methodParams = possibleMethod.GetParameters();
 
-        bool IsStringParam(string value)
-        {
-            return (value.StartsWith(SingleQuote) && value.EndsWith(SingleQuote) && value.DoesNotContain(DoubleQuote)) ||
-                   (value.StartsWith(DoubleQuote) && value.EndsWith(DoubleQuote) && value.DoesNotContain(SingleQuote));
-        }
+            bool NullOrEmpty<T>(IEnumerable<T>? items) => items is null || !items.Any();
 
-        for (var i = 0; i < methodParams.Length; i++)
-        {
-            var methodParamType = methodParams[i].ParameterType == typeof(string)
-                ? "string"
-                : "number";
-            var funcParamType = IsStringParam(argValues[i])
-                ? "string"
-                : "number";
-
-            if (methodParamType != funcParamType)
+            if (NullOrEmpty(methodParams) || methodParams.Length != (argValues?.Length ?? 0))
             {
-                return (false, $"No function with the parameter type of '{funcParamType}' found at parameter position '{i + 1}'.");
+                return invalidResult;
             }
+
+            bool IsStringParam(string value)
+            {
+                return (value.StartsWith(SingleQuote) && value.EndsWith(SingleQuote) && value.DoesNotContain(DoubleQuote)) ||
+                       (value.StartsWith(DoubleQuote) && value.EndsWith(DoubleQuote) && value.DoesNotContain(SingleQuote));
+            }
+
+            for (var i = 0; i < methodParams.Length; i++)
+            {
+                var methodParamType = methodParams[i].ParameterType == typeof(string)
+                    ? "string"
+                    : "number";
+                var funcParamType = IsStringParam(argValues?[i] ?? string.Empty)
+                    ? "string"
+                    : "number";
+
+                if (methodParamType != funcParamType)
+                {
+                    return (false, $"No function with the parameter type of '{funcParamType}' found at parameter position '{i + 1}'.");
+                }
+            }
+
+            return (true, string.Empty);
         }
 
-        return (true, string.Empty);
+        return invalidResult;
     }
 }

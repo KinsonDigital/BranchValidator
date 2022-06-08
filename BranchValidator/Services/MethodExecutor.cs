@@ -20,7 +20,7 @@ public class MethodExecutor : IMethodExecutor
     };
 
     /// <inheritdoc/>
-    public (bool result, string msg) ExecuteMethod(object obj, string name, string[] argValues)
+    public (bool result, string msg) ExecuteMethod(object obj, string name, string[]? argValues)
     {
         name = name.ToPascalCase();
         var methodExistsResult = obj.ContainsMethod(name, typeof(bool));
@@ -65,9 +65,9 @@ public class MethodExecutor : IMethodExecutor
 
         var methodArgValues = new List<object>();
 
-        for (var i = 0; i < argValues.Length; i++)
+        for (var i = 0; i < argValues?.Length; i++)
         {
-            var parameter = argValues[i];
+            var parameter = argValues?[i] ?? string.Empty;
 
             // If the param is a number
             if (!IsStringParam(parameter) && IsNumParam(parameter))

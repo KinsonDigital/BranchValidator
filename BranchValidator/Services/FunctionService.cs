@@ -123,7 +123,7 @@ public class FunctionService : IFunctionService
     }
 
     /// <inheritdoc/>
-    public (bool valid, string msg) Execute(string functionName, params string[] argValues)
+    public (bool valid, string msg) Execute(string functionName, params string[]? argValues)
     {
         var methodResult = this.methodExecutor.ExecuteMethod(this.functionDefinitions, functionName.ToPascalCase(), argValues);
         return methodResult;

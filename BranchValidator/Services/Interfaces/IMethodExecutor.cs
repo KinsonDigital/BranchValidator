@@ -17,5 +17,5 @@ public interface IMethodExecutor
     /// <param name="name">The name of the method.</param>
     /// <param name="argValues">The argument values to send into the method.</param>
     /// <returns>The result of the method execution.</returns>
-    (bool result, string msg) ExecuteMethod(object obj, string name, string[] argValues);
+    (bool result, string msg) ExecuteMethod(object obj, string name, string[]? argValues);
 }

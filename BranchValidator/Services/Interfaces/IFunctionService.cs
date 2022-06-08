@@ -42,5 +42,5 @@ public interface IFunctionService
     /// <param name="functionName">The name of the function.</param>
     /// <param name="argValues">The list of argument values to send into the function.</param>
     /// <returns>The function execution result.</returns>
-    (bool valid, string msg) Execute(string functionName, params string[] argValues);
+    (bool valid, string msg) Execute(string functionName, params string[]? argValues);
 }

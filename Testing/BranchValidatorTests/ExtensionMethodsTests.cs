@@ -322,5 +322,27 @@ public class ExtensionMethodsTests
         actual.result.Should().BeFalse();
         actual.msg.Should().Be("No function with the parameter type of 'string' found at parameter position '2'.");
     }
+
+    [Theory]
+    [InlineData("123", "456", true, "")] // Function Example: isSectionNum(8, 10)
+    [InlineData("123", "-", true, "")] // Function Example: isSectionNum(8, '-')
+    public void MethodContainsParams_WithOverloadedMethods_ReturnsCorrectResult(
+        string param1Value,
+        string param2Value,
+        bool expectedValidResult,
+        string expectedMsgResult)
+    {
+        // Arrange
+        var argValues = new[] { param1Value, param2Value };
+
+        var testClass = new SampleTestClass();
+
+        // Act
+        var actual = testClass.MethodContainsParams(nameof(SampleTestClass.MethodOverload), typeof(bool), argValues);
+
+        // Assert
+        actual.result.Should().Be(expectedValidResult);
+        actual.msg.Should().Be(expectedMsgResult);
+    }
     #endregion
 }
