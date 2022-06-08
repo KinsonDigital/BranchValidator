@@ -30,6 +30,8 @@ public static class Program
         host = Host.CreateDefaultBuilder(args)
             .ConfigureServices((_, services) =>
             {
+                services.AddSingleton<IJSONService, JSONService>();
+                services.AddSingleton<IEmbeddedResourceLoaderService<string>, TextResourceLoaderService>();
                 services.AddSingleton<IAppService, AppService>();
                 services.AddSingleton<IGitHubConsoleService, GitHubConsoleService>();
                 services.AddSingleton<IActionOutputService, ActionOutputService>();
