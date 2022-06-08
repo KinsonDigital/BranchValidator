@@ -3,7 +3,6 @@
 // </copyright>
 
 using BranchValidator.Exceptions;
-using BranchValidator.Services;
 using BranchValidator.Services.Interfaces;
 
 namespace BranchValidator;
@@ -23,6 +22,7 @@ public sealed class GitHubAction : IGitHubAction
     /// <param name="expressionExecutorService">Executes expressions.</param>
     /// <param name="consoleService">Prints messages to the GitHub console.</param>
     /// <param name="outputService">Sets the GitHub action outputs.</param>
+    /// <param name="functionService">Holds information about the available functions.</param>
     public GitHubAction(
         IGitHubConsoleService consoleService,
         IActionOutputService outputService,
@@ -42,14 +42,7 @@ public sealed class GitHubAction : IGitHubAction
 
         var functionSignatures = this.functionService.FunctionSignatures;
 
-        var functionList = "Available Functions:";
-
-        foreach (var functionSignature in functionSignatures)
-        {
-            functionList += $"{Environment.NewLine}\t{functionSignature}";
-        }
-
-        this.consoleService.WriteLine(functionList);
+        this.consoleService.WriteGroup("Available Functions", functionSignatures.ToArray());
 
         try
         {
@@ -65,12 +58,13 @@ public sealed class GitHubAction : IGitHubAction
 
             (bool branchIsValid, string msg) logicResult = this.expressionExecutorService.Execute(inputs.ValidationLogic, inputs.BranchName);
 
-            this.consoleService.WriteLine(logicResult.msg);
-
-            if (inputs.FailWhenNotValid ?? false)
+            if (inputs.FailWhenNotValid is true)
             {
                 throw new Exception(logicResult.msg);
             }
+
+            this.consoleService.BlankLine();
+            this.consoleService.WriteLine(logicResult.msg);
 
             this.outputService.SetOutputValue("valid-branch", logicResult.branchIsValid.ToString().ToLower());
         }

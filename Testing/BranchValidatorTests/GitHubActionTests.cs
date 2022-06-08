@@ -4,7 +4,6 @@
 
 using BranchValidator;
 using BranchValidator.Exceptions;
-using BranchValidator.Services;
 using BranchValidator.Services.Interfaces;
 using BranchValidatorTests.Helpers;
 using FluentAssertions;
@@ -30,7 +29,10 @@ public class GitHubActionTests
         this.mockConsoleService = new Mock<IGitHubConsoleService>();
         this.mockActionOutputService = new Mock<IActionOutputService>();
         this.mockExpressionExecutorService = new Mock<IExpressionExecutorService>();
+
         this.mockFunctionService = new Mock<IFunctionService>();
+        this.mockFunctionService.SetupGet(p => p.FunctionSignatures)
+            .Returns(() => new[] { "equalTo(value: string)" }.ToReadOnlyCollection());
     }
 
     #region Method Tests
@@ -52,10 +54,7 @@ public class GitHubActionTests
     public async void Run_WhenInvoked_PrintsFunctionList()
     {
         // Arrange
-        this.mockFunctionService.SetupGet(p => p.FunctionSignatures)
-            .Returns(() => new[] { "equalTo(value: string)" }.ToReadOnlyCollection());
-        var functionListMsg = "Available Functions:";
-        functionListMsg += $"{Environment.NewLine}\tequalTo(value: string)";
+        var functionListMsg = $"{Environment.NewLine}equalTo(value: string)";
 
         var inputs = CreateInputs();
         var action = CreateAction();
@@ -64,7 +63,7 @@ public class GitHubActionTests
         await action.Run(inputs, () => { }, _ => { });
 
         // Assert
-        this.mockConsoleService.VerifyOnce(m => m.WriteLine(functionListMsg));
+        this.mockConsoleService.VerifyOnce(m => m.WriteGroup("Available Functions", functionListMsg));
     }
 
     [Theory]
@@ -119,6 +118,7 @@ public class GitHubActionTests
         await action.Run(inputs, () => { }, _ => { });
 
         // Assert
+        this.mockConsoleService.Verify(m => m.BlankLine(), Times.Exactly(2));
         this.mockConsoleService.VerifyOnce(m => m.WriteLine(expectedMsgResult));
         this.mockActionOutputService.VerifyOnce(m => m.SetOutputValue("valid-branch", expectedValidResult.ToString().ToLower()));
     }
