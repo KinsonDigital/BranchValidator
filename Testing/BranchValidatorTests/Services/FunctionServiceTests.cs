@@ -17,21 +17,87 @@ namespace BranchValidatorTests.Services;
 public class FunctionServiceTests
 {
     private readonly Mock<IMethodExecutor> mockMethodExecutor;
+    private readonly Mock<IJSONService> mockJSONService;
+    private readonly Mock<IEmbeddedResourceLoaderService<string>> mockResourceLoaderService;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="FunctionServiceTests"/> class.
     /// </summary>
-    public FunctionServiceTests() => this.mockMethodExecutor = new Mock<IMethodExecutor>();
+    public FunctionServiceTests()
+    {
+        this.mockMethodExecutor = new Mock<IMethodExecutor>();
+
+        this.mockJSONService = new Mock<IJSONService>();
+        this.mockJSONService.Setup(m => m.Deserialize<Dictionary<string, DataTypes[]>>(It.IsAny<string>()))
+            .Returns(() =>
+            {
+                return new Dictionary<string, DataTypes[]>
+                {
+                    { "equalTo:value", new[] { DataTypes.String } },
+                    { "isCharNum:charPos", new[] { DataTypes.Number } },
+                };
+            });
+
+        this.mockResourceLoaderService = new Mock<IEmbeddedResourceLoaderService<string>>();
+    }
 
     #region Constructor Tests
     [Fact]
-    public void Ctor_WhenInvoked_DoesNotThrowException()
+    public void Ctor_WithNullJSONServiceParam_ThrowsException()
     {
         // Arrange & Act
-        var act = CreateService;
+        var act = () =>
+        {
+            _ = new FunctionService(null, this.mockResourceLoaderService.Object, this.mockMethodExecutor.Object);
+        };
 
         // Assert
-        act.Should().NotThrow("to check if function name and signature data is created correctly.");
+        act.Should()
+            .Throw<ArgumentNullException>()
+            .WithMessage("The parameter must not be null. (Parameter 'jsonService')");
+    }
+
+    [Fact]
+    public void Ctor_WithNullResourceLoaderServiceParam_ThrowsException()
+    {
+        // Arrange & Act
+        var act = () =>
+        {
+            _ = new FunctionService(this.mockJSONService.Object, null, this.mockMethodExecutor.Object);
+        };
+
+        // Assert
+        act.Should()
+            .Throw<ArgumentNullException>()
+            .WithMessage("The parameter must not be null. (Parameter 'resourceLoaderService')");
+    }
+
+    [Fact]
+    public void Ctor_WithNullMethodExecutorParam_ThrowsException()
+    {
+        // Arrange & Act
+        var act = () =>
+        {
+            _ = new FunctionService(this.mockJSONService.Object, this.mockResourceLoaderService.Object, null);
+        };
+
+        // Assert
+        act.Should()
+            .Throw<ArgumentNullException>()
+            .WithMessage("The parameter must not be null. (Parameter 'methodExecutor')");
+    }
+
+    [Fact]
+    public void Ctor_WithNullValidFunctionData_ThrowsException()
+    {
+        // Arrange & Act
+        this.mockJSONService.Setup(m => m.Deserialize<Dictionary<string, DataTypes[]>>(It.IsAny<string>()))
+            .Returns(() => null);
+        var act = () => _ = CreateService();
+
+        // Assert
+        act.Should().Throw<InvalidOperationException>()
+            .WithMessage("Loading of the function definition data was unsuccessful.");
     }
     #endregion
 
@@ -191,5 +257,8 @@ public class FunctionServiceTests
     /// Creates a new instance of <see cref="FunctionService"/> for the purpose of testing.
     /// </summary>
     /// <returns>The instance to test.</returns>
-    private FunctionService CreateService() => new (this.mockMethodExecutor.Object);
+    private FunctionService CreateService()
+        => new (this.mockJSONService.Object,
+            this.mockResourceLoaderService.Object,
+            this.mockMethodExecutor.Object);
 }

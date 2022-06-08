@@ -11,87 +11,46 @@ namespace BranchValidator.Services;
 public class FunctionService : IFunctionService
 {
     private const char FuncNameParamSeparator = ':';
+    private const string FunctionDefFileName = "func-defs.json";
     private static readonly char[] Numbers =
     {
         '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
     };
-    private static readonly char[] LowerCaseLetters =
-    {
-        'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-    };
-
-    // TODO: Possibly load this data as JSON data from an embedded JSON data file
-    private readonly Dictionary<string, DataTypes[]> validFunctions = new ()
-    {
-        // NOTE: For no parameters, just do not include the ':' empty.  Example: equalTo:
-        { "equalTo:value", new[] { DataTypes.String } },
-        { "isCharNum:charPos", new[] { DataTypes.Number } },
-    };
+    private readonly Dictionary<string, DataTypes[]>? validFunctions;
     private readonly IMethodExecutor methodExecutor;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="FunctionService"/> class.
     /// </summary>
+    /// <param name="jsonService">Serializes and deserializes JSON data.</param>
+    /// <param name="resourceLoaderService">Loads resources.</param>
     /// <param name="methodExecutor">Executes methods on an object using reflection.</param>
-    public FunctionService(IMethodExecutor methodExecutor)
+    public FunctionService(
+        IJSONService jsonService,
+        IEmbeddedResourceLoaderService<string> resourceLoaderService,
+        IMethodExecutor methodExecutor)
     {
-        // TODO: Need to unit test this ctor. Cannot do unless the function data is loaded with a service
-        // All of this data check stuff might go away if we are loading from JSON data due to model loading to a model class
-
-        this.methodExecutor = methodExecutor;
-
-        // No empty or null keys aloud
-        if (this.validFunctions.Keys.Any(string.IsNullOrEmpty))
+        if (jsonService is null)
         {
-            throw new Exception("Valid function data set key cannot be null or empty.");
+            throw new ArgumentNullException(nameof(jsonService), "The parameter must not be null.");
         }
 
-        // Check that a colon exists in every single key of the func list
-        if (this.validFunctions.Keys.Any(k => k.DoesNotContain(FuncNameParamSeparator) && k.Contains(',')))
+        if (resourceLoaderService is null)
         {
-            throw new Exception($"Valid function data set key has a param name separator of ',' but is missing the '{FuncNameParamSeparator}' character.");
+            throw new ArgumentNullException(nameof(resourceLoaderService), "The parameter must not be null.");
         }
 
-        // Check that the param names section after the function name is valid
-        if (this.validFunctions.Keys.Any(k =>
-            {
-                var sections = k.Split(FuncNameParamSeparator, StringSplitOptions.RemoveEmptyEntries);
+        this.methodExecutor = methodExecutor ?? throw new ArgumentNullException(nameof(methodExecutor), "The parameter must not be null.");
 
-                if (sections.Length <= 1)
-                {
-                    return false;
-                }
+        var rawFuncDefData = resourceLoaderService.LoadResource(FunctionDefFileName);
+        this.validFunctions = jsonService.Deserialize<Dictionary<string, DataTypes[]>>(rawFuncDefData);
 
-                var paramNames = sections[1].Split(',', StringSplitOptions.RemoveEmptyEntries);
-
-                // Commas aloud but param names only allowed to have lower and upper case letters
-                return paramNames.Any(c => LowerCaseLetters.DoesNotContain(c.ToString().ToLower()[0]));
-            }))
+        if (this.validFunctions is null)
         {
-            var exceptionMsg = "Function parameters contain a parameter name with invalid characters.";
-            exceptionMsg += $"{Environment.NewLine}Only lower and upper case letters allowed.";
-
-            throw new Exception(exceptionMsg);
+            throw new InvalidOperationException("Loading of the function definition data was unsuccessful.");
         }
 
-        // Check if the param name count is equal to the param data list count
-        foreach (KeyValuePair<string, DataTypes[]> validFunction in this.validFunctions)
-        {
-            var functionSections = validFunction.Key.Split(FuncNameParamSeparator, StringSplitOptions.RemoveEmptyEntries);
-            var paramNames = functionSections.Length >= 2
-                ? functionSections[1].Split(',', StringSplitOptions.RemoveEmptyEntries)
-                : Array.Empty<string>();
-
-            // If no parameters exist, move on
-            if (paramNames.Length <= 0 || paramNames.Length == validFunction.Value.Length)
-            {
-                continue;
-            }
-
-            var exceptionMsg = $"The total number of parameter names vs the total number of parameter data types do not match for function '{functionSections[0]}'.";
-            throw new Exception(exceptionMsg);
-        }
-
+        // Create the list of function names
         FunctionNames = this.validFunctions.Select(f =>
         {
             var sections = f.Key.Split(FuncNameParamSeparator, StringSplitOptions.RemoveEmptyEntries);
@@ -99,6 +58,7 @@ public class FunctionService : IFunctionService
             return sections[0];
         }).ToReadOnlyCollection();
 
+        // Create all of the function signatures
         FunctionSignatures = this.validFunctions.Select(f =>
         {
             var functionSections = f.Key.Split(FuncNameParamSeparator, StringSplitOptions.RemoveEmptyEntries);
