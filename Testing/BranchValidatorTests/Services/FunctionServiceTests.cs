@@ -19,6 +19,7 @@ public class FunctionServiceTests
     private readonly Mock<IMethodExecutor> mockMethodExecutor;
     private readonly Mock<IJSONService> mockJSONService;
     private readonly Mock<IEmbeddedResourceLoaderService<string>> mockResourceLoaderService;
+    private readonly Mock<IFunctionDefinitions> mockFunctionDefinitions;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="FunctionServiceTests"/> class.
@@ -39,6 +40,7 @@ public class FunctionServiceTests
             });
 
         this.mockResourceLoaderService = new Mock<IEmbeddedResourceLoaderService<string>>();
+        this.mockFunctionDefinitions = new Mock<IFunctionDefinitions>();
     }
 
     #region Constructor Tests
@@ -48,7 +50,11 @@ public class FunctionServiceTests
         // Arrange & Act
         var act = () =>
         {
-            _ = new FunctionService(null, this.mockResourceLoaderService.Object, this.mockMethodExecutor.Object);
+            _ = new FunctionService(
+                null,
+                this.mockResourceLoaderService.Object,
+                this.mockMethodExecutor.Object,
+                this.mockFunctionDefinitions.Object);
         };
 
         // Assert
@@ -63,7 +69,11 @@ public class FunctionServiceTests
         // Arrange & Act
         var act = () =>
         {
-            _ = new FunctionService(this.mockJSONService.Object, null, this.mockMethodExecutor.Object);
+            _ = new FunctionService(
+                this.mockJSONService.Object,
+                null,
+                this.mockMethodExecutor.Object,
+                this.mockFunctionDefinitions.Object);
         };
 
         // Assert
@@ -78,13 +88,36 @@ public class FunctionServiceTests
         // Arrange & Act
         var act = () =>
         {
-            _ = new FunctionService(this.mockJSONService.Object, this.mockResourceLoaderService.Object, null);
+            _ = new FunctionService(
+                this.mockJSONService.Object,
+                this.mockResourceLoaderService.Object,
+                null,
+                this.mockFunctionDefinitions.Object);
         };
 
         // Assert
         act.Should()
             .Throw<ArgumentNullException>()
             .WithMessage("The parameter must not be null. (Parameter 'methodExecutor')");
+    }
+
+    [Fact]
+    public void Ctor_WithNullFunctionDefinitionsParam_ThrowsException()
+    {
+        // Arrange & Act
+        var act = () =>
+        {
+            _ = new FunctionService(
+                this.mockJSONService.Object,
+                this.mockResourceLoaderService.Object,
+                this.mockMethodExecutor.Object,
+                null);
+        };
+
+        // Assert
+        act.Should()
+            .Throw<ArgumentNullException>()
+            .WithMessage("The parameter must not be null. (Parameter 'functionDefinitions')");
     }
 
     [Fact]
@@ -207,52 +240,6 @@ public class FunctionServiceTests
 
         this.mockMethodExecutor.VerifyOnce(m => m.ExecuteMethod(It.IsAny<object>(), expectedMethodName, argValues.ToArray()));
     }
-
-    #region Expression Function Tests
-    [Theory]
-    [InlineData("my-branch", "my-branch", true)]
-    [InlineData(null, "", true)]
-    [InlineData("", null, true)]
-    [InlineData("my-branch", "other-branch", false)]
-    [InlineData(null, "my-branch", false)]
-    [InlineData("", "my-branch", false)]
-    [InlineData("my-branch", null, false)]
-    [InlineData("my-branch", "", false)]
-    public void EqualTo_WhenInvoked_ReturnsCorrectResult(
-        string value,
-        string branchName,
-        bool expected)
-    {
-        // Arrange
-        var service = CreateService();
-
-        // Act
-        var actual = service.EqualTo(value, branchName);
-
-        // Assert
-        actual.Should().Be(expected);
-    }
-
-    [Theory]
-    [InlineData(8, "", false)]
-    [InlineData(4, "feature/123-my-branch", false)]
-    [InlineData(400, "feature/123-my-branch", false)]
-    [InlineData(8, "feature/123-my-branch", true)]
-    public void IsCharNum_WhenInvoked_ReturnsCorrectResult(
-        uint charPos,
-        string branchName,
-        bool expected)
-    {
-        // Arrange
-        var service = CreateService();
-
-        // Act
-        var actual = service.IsCharNum(charPos, branchName);
-
-        // Assert
-        actual.Should().Be(expected);
-    }
-    #endregion
     #endregion
 
     /// <summary>
@@ -262,5 +249,6 @@ public class FunctionServiceTests
     private FunctionService CreateService()
         => new (this.mockJSONService.Object,
             this.mockResourceLoaderService.Object,
-            this.mockMethodExecutor.Object);
+            this.mockMethodExecutor.Object,
+            this.mockFunctionDefinitions.Object);
 }

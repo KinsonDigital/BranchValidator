@@ -12,12 +12,9 @@ public class FunctionService : IFunctionService
 {
     private const char FuncNameParamSeparator = ':';
     private const string FunctionDefFileName = "func-defs.json";
-    private static readonly char[] Numbers =
-    {
-        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-    };
     private readonly Dictionary<string, DataTypes[]>? validFunctions;
     private readonly IMethodExecutor methodExecutor;
+    private readonly IFunctionDefinitions functionDefinitions;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="FunctionService"/> class.
@@ -25,10 +22,12 @@ public class FunctionService : IFunctionService
     /// <param name="jsonService">Serializes and deserializes JSON data.</param>
     /// <param name="resourceLoaderService">Loads resources.</param>
     /// <param name="methodExecutor">Executes methods on an object using reflection.</param>
+    /// <param name="functionDefinitions">The available expression functions.</param>
     public FunctionService(
         IJSONService jsonService,
         IEmbeddedResourceLoaderService<string> resourceLoaderService,
-        IMethodExecutor methodExecutor)
+        IMethodExecutor methodExecutor,
+        IFunctionDefinitions functionDefinitions)
     {
         if (jsonService is null)
         {
@@ -41,6 +40,7 @@ public class FunctionService : IFunctionService
         }
 
         this.methodExecutor = methodExecutor ?? throw new ArgumentNullException(nameof(methodExecutor), "The parameter must not be null.");
+        this.functionDefinitions = functionDefinitions ?? throw new ArgumentNullException(nameof(functionDefinitions), "The parameter must not be null.");
 
         var rawFuncDefData = resourceLoaderService.LoadResource(FunctionDefFileName);
         this.validFunctions = jsonService.Deserialize<Dictionary<string, DataTypes[]>>(rawFuncDefData);
@@ -125,29 +125,7 @@ public class FunctionService : IFunctionService
     /// <inheritdoc/>
     public (bool valid, string msg) Execute(string functionName, params string[] argValues)
     {
-        var methodResult = this.methodExecutor.ExecuteMethod(this, functionName.ToPascalCase(), argValues);
+        var methodResult = this.methodExecutor.ExecuteMethod(this.functionDefinitions, functionName.ToPascalCase(), argValues);
         return methodResult;
-    }
-
-    /// <inheritdoc/>
-    public bool EqualTo(string value, string branchName)
-    {
-        if (string.IsNullOrEmpty(value) && string.IsNullOrEmpty(branchName))
-        {
-            return true;
-        }
-
-        return value == branchName;
-    }
-
-    /// <inheritdoc/>
-    public bool IsCharNum(uint charPos, string branchName)
-    {
-        if (string.IsNullOrEmpty(branchName))
-        {
-            return false;
-        }
-
-        return charPos <= branchName.Length - 1 && Numbers.Contains(branchName[(int)charPos]);
     }
 }
