@@ -1,4 +1,4 @@
-﻿// <copyright file="ExecutorServiceTests.cs" company="KinsonDigital">
+﻿// <copyright file="ExpressionExecutorServiceTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -10,12 +10,12 @@ using Moq;
 
 namespace BranchValidatorTests.Services;
 
-public class ExecutorServiceTests
+public class ExpressionExecutorServiceTests
 {
     private readonly Mock<IExpressionValidatorService> mockValidationService;
     private readonly Mock<IFunctionService> mockFunctionService;
 
-    public ExecutorServiceTests()
+    public ExpressionExecutorServiceTests()
     {
         this.mockValidationService = new Mock<IExpressionValidatorService>();
         this.mockValidationService.Setup(m => m.Validate(It.IsAny<string>()))
