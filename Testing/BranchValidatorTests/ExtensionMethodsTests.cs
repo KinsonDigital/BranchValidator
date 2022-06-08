@@ -279,12 +279,12 @@ public class ExtensionMethodsTests
     public void MethodContainsParams_WhenInvoked_ReturnsCorrectResult()
     {
         // Arrange
-        var parameters = new[] { "'string-value'" };
+        var argValues = new[] { "'string-value'" };
 
         var testClass = new SampleTestClass();
 
         // Act
-        var actual = testClass.MethodContainsParams(nameof(SampleTestClass.MethodWithSingleParam), typeof(bool), parameters);
+        var actual = testClass.MethodContainsParams(nameof(SampleTestClass.MethodWithSingleParam), typeof(bool), argValues);
 
         // Assert
         actual.result.Should().BeTrue();
@@ -295,12 +295,12 @@ public class ExtensionMethodsTests
     public void MethodContainsParams_WhenNoMethodsExistWithSameParamCount_ReturnsCorrectResult()
     {
         // Arrange
-        var parameters = new[] { "'string-value-1'", "123" };
+        var argValues = new[] { "'string-value-1'", "123" };
 
         var testClass = new SampleTestClass();
 
         // Act
-        var actual = testClass.MethodContainsParams(nameof(SampleTestClass.MethodWith3Params), typeof(bool), parameters);
+        var actual = testClass.MethodContainsParams(nameof(SampleTestClass.MethodWith3Params), typeof(bool), argValues);
 
         // Assert
         actual.result.Should().BeFalse();
@@ -311,12 +311,12 @@ public class ExtensionMethodsTests
     public void MethodContainsParams_With2ParamsOfDiffTypes_ReturnsCorrectResult()
     {
         // Arrange
-        var parameters = new[] { "'string-value-1'", "'string-value-2'" };
+        var argValues = new[] { "'string-value-1'", "'string-value-2'" };
 
         var testClass = new SampleTestClass();
 
         // Act
-        var actual = testClass.MethodContainsParams(nameof(SampleTestClass.MethodWith2ParamsDiffTypes), typeof(bool), parameters);
+        var actual = testClass.MethodContainsParams(nameof(SampleTestClass.MethodWith2ParamsDiffTypes), typeof(bool), argValues);
 
         // Assert
         actual.result.Should().BeFalse();

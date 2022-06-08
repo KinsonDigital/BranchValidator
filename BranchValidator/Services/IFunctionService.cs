@@ -32,12 +32,12 @@ public interface IFunctionService
     DataTypes GetFunctionParamDataType(string functionName, uint paramPos);
 
     /// <summary>
-    /// Executes a function that matches the given <paramref name="functionName"/> and uses the given <paramref name="args"/>.
+    /// Executes a function that matches the given <paramref name="functionName"/> and uses the given <paramref name="argValues"/>.
     /// </summary>
     /// <param name="functionName">The name of the function.</param>
-    /// <param name="args">The list of argument values to send into the function.</param>
+    /// <param name="argValues">The list of argument values to send into the function.</param>
     /// <returns>The function execution result.</returns>
-    (bool valid, string msg) Execute(string functionName, params string[] args);
+    (bool valid, string msg) Execute(string functionName, params string[] argValues);
 
     /// <summary>
     /// Returns a value indicating whether or not a branch with the given <paramref name="branchName"/>

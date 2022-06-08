@@ -169,20 +169,20 @@ public class FunctionServiceTests
         this.mockMethodExecutor.Setup(m => m.ExecuteMethod(It.IsAny<object>(), It.IsAny<string>(), It.IsAny<string[]>()))
             .Returns((actualValid, "test-msg"));
 
-        var parameters = new List<string>();
-        parameters.AddRange(paramList.Split(',', StringSplitOptions.TrimEntries));
-        parameters.Add(branchName);
+        var argValues = new List<string>();
+        argValues.AddRange(paramList.Split(',', StringSplitOptions.TrimEntries));
+        argValues.Add(branchName);
 
         var service = CreateService();
 
         // Act
-        var actual = service.Execute(funcName, parameters.ToArray());
+        var actual = service.Execute(funcName, argValues.ToArray());
 
         // Assert
         actual.valid.Should().Be(actualValid);
         actual.msg.Should().Be("test-msg");
 
-        this.mockMethodExecutor.VerifyOnce(m => m.ExecuteMethod(It.IsAny<object>(), expectedMethodName, parameters.ToArray()));
+        this.mockMethodExecutor.VerifyOnce(m => m.ExecuteMethod(It.IsAny<object>(), expectedMethodName, argValues.ToArray()));
     }
     #endregion
 

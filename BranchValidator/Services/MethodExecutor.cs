@@ -18,9 +18,8 @@ public class MethodExecutor : IMethodExecutor
         '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
     };
 
-    // TODO: Rename arguments to paramValues
     /// <inheritdoc/>
-    public (bool result, string msg) ExecuteMethod(object obj, string name, string[] arguments)
+    public (bool result, string msg) ExecuteMethod(object obj, string name, string[] argValues)
     {
         name = name.ToPascalCase();
         var methodExistsResult = obj.ContainsMethod(name, typeof(bool));
@@ -30,7 +29,7 @@ public class MethodExecutor : IMethodExecutor
             return methodExistsResult;
         }
 
-        var methodContainsParams = obj.MethodContainsParams(name, typeof(bool), arguments);
+        var methodContainsParams = obj.MethodContainsParams(name, typeof(bool), argValues);
 
         if (methodContainsParams.result is false)
         {
@@ -58,16 +57,16 @@ public class MethodExecutor : IMethodExecutor
         }
 
         var foundMethod = (from m in obj.GetType().GetMethods(BindingFlags.Public | BindingFlags.Instance)
-            where m.Name == name && m.ReturnType == typeof(bool) && m.GetParameters().Length == arguments.Length
+            where m.Name == name && m.ReturnType == typeof(bool) && m.GetParameters().Length == argValues.Length
             select m).ToArray()[0];
 
         var methodParams = foundMethod.GetParameters();
 
         var methodArgValues = new List<object>();
 
-        for (var i = 0; i < arguments.Length; i++)
+        for (var i = 0; i < argValues.Length; i++)
         {
-            var parameter = arguments[i];
+            var parameter = argValues[i];
 
             // If the param is a number
             if (!IsStringParam(parameter) && IsNumParam(parameter))

@@ -88,11 +88,11 @@ public class ExecutorServiceTests
         string expectedMsg)
     {
         // Arrange
-        var parameters = new List<string>();
-        parameters.AddRange(paramStr.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries));
-        parameters.Add($"'{branchName}'");
+        var argValues = new List<string>();
+        argValues.AddRange(paramStr.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries));
+        argValues.Add($"'{branchName}'");
 
-        this.mockFunctionService.Setup(m => m.Execute(funcName, parameters.ToArray()))
+        this.mockFunctionService.Setup(m => m.Execute(funcName, argValues.ToArray()))
             .Returns((expectedFuncValid, expectedMsg));
         var service = CreateService();
 
