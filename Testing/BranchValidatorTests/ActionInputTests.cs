@@ -35,8 +35,8 @@ public class ActionInputTests
             .AssertOptionAttrProps("validation-logic", true, string.Empty, "The logic expression to use to validate the branch name.");
 
         inputs.BranchName.Should().BeEmpty();
-        typeof(ActionInputs).GetProperty(nameof(ActionInputs.FailWhenNotFound)).Should().BeDecoratedWith<OptionAttribute>();
-        inputs.GetAttrFromProp<OptionAttribute>(nameof(ActionInputs.FailWhenNotFound))
+        typeof(ActionInputs).GetProperty(nameof(ActionInputs.FailWhenNotValid)).Should().BeDecoratedWith<OptionAttribute>();
+        inputs.GetAttrFromProp<OptionAttribute>(nameof(ActionInputs.FailWhenNotValid))
             .AssertOptionAttrProps("fail-when-not-valid", false, true, "If true, will fail the job if the branch name is not valid.");
     }
     #endregion

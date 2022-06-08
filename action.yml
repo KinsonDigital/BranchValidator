@@ -19,10 +19,8 @@ inputs:
     default: true
 
 outputs:
-  nuget-exists:
-    description: 'True if the NuGet package exists.'
-  logic1: 'equalTo("") && isNum(45)'
-  logic2: "equalTo('') && isNum(45)"
+  valid-branch:
+    description: 'True if the branch is valid.'
 
 # These are the arguments that are passed into the console app
 runs:

@@ -37,5 +37,5 @@ public class ActionInputs
         Required = false,
         Default = true,
         HelpText = "If true, will fail the job if the branch name is not valid.")]
-    public bool? FailWhenNotFound { get; set; } = true;
+    public bool? FailWhenNotValid { get; set; } = true;
 }
