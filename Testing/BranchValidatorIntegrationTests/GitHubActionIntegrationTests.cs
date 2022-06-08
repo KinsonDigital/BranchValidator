@@ -1,4 +1,4 @@
-﻿// <copyright file="IntegrationTests.cs" company="KinsonDigital">
+﻿// <copyright file="GitHubActionIntegrationTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -7,19 +7,19 @@ using BranchValidator.Factories;
 using BranchValidator.Services;
 using FluentAssertions;
 
-namespace BranchValidatorTests.IntegrationTests;
+namespace BranchValidatorIntegrationTests;
 
 /// <summary>
 /// Tests various classes integrated with each other.
 /// </summary>
-public class IntegrationTests : IDisposable
+public class GitHubActionIntegrationTests : IDisposable
 {
     private readonly GitHubAction action;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="IntegrationTests"/> class.
+    /// Initializes a new instance of the <see cref="GitHubActionIntegrationTests"/> class.
     /// </summary>
-    public IntegrationTests()
+    public GitHubActionIntegrationTests()
     {
         var analyzerFactory = new AnalyzerFactory();
         var expressionValidationService = new ExpressionValidatorService(analyzerFactory);

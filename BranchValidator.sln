@@ -40,6 +40,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Pull Request Templates", "P
 		.github\PULL_REQUEST_TEMPLATE\preview-feature-pr-template.md = .github\PULL_REQUEST_TEMPLATE\preview-feature-pr-template.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BranchValidatorIntegrationTests", "Testing\BranchValidatorIntegrationTests\BranchValidatorIntegrationTests.csproj", "{FEAF2CD0-88B7-4BBC-BEA9-36BE1B2A54C5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,6 +56,10 @@ Global
 		{77B96B49-4D77-456B-A787-E852E9842B60}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{77B96B49-4D77-456B-A787-E852E9842B60}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{77B96B49-4D77-456B-A787-E852E9842B60}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FEAF2CD0-88B7-4BBC-BEA9-36BE1B2A54C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FEAF2CD0-88B7-4BBC-BEA9-36BE1B2A54C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FEAF2CD0-88B7-4BBC-BEA9-36BE1B2A54C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FEAF2CD0-88B7-4BBC-BEA9-36BE1B2A54C5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -66,5 +72,6 @@ Global
 		{5010ECCD-3BCC-475D-87EE-31E289E24571} = {5F6905A4-928D-4A81-9D9B-B273A27B3A92}
 		{2C56562A-E5F8-43AD-A99F-049FEA733577} = {5F6905A4-928D-4A81-9D9B-B273A27B3A92}
 		{DC46D789-4072-4F81-B83C-CEF24FFD7229} = {5F6905A4-928D-4A81-9D9B-B273A27B3A92}
+		{FEAF2CD0-88B7-4BBC-BEA9-36BE1B2A54C5} = {0D648979-F6A2-4DBD-ABE7-BDCB9E0EE4BE}
 	EndGlobalSection
 EndGlobal

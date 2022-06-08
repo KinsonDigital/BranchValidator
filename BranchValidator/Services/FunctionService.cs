@@ -1,4 +1,4 @@
-// <copyright file="FunctionService.cs" company="KinsonDigital">
+﻿// <copyright file="FunctionService.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -23,7 +23,7 @@ public class FunctionService : IFunctionService
     // TODO: Possibly load this data as JSON data from an embedded JSON data file
     private readonly Dictionary<string, DataTypes[]> validFunctions = new ()
     {
-        // NOTE: For no parameters, just leave the right side of the ':' empty.  Example: equalTo:
+        // NOTE: For no parameters, just do not include the ':' empty.  Example: equalTo:
         { "equalTo:value", new[] { DataTypes.String } },
         { "isCharNum:charPos", new[] { DataTypes.Number } },
     };
@@ -35,6 +35,9 @@ public class FunctionService : IFunctionService
     /// <param name="methodExecutor">Executes methods on an object using reflection.</param>
     public FunctionService(IMethodExecutor methodExecutor)
     {
+        // TODO: Need to unit test this ctor. Cannot do unless the function data is loaded with a service
+        // All of this data check stuff might go away if we are loading from JSON data due to model loading to a model class
+
         this.methodExecutor = methodExecutor;
 
         // No empty or null keys aloud
