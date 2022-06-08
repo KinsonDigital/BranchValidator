@@ -8,7 +8,7 @@ using BranchValidator.Services.Interfaces;
 namespace BranchValidator;
 
 /// <inheritdoc/>
-public sealed class GitHubAction : IGitHubAction
+public sealed class GitHubAction : IGitHubAction<bool>
 {
     private readonly IGitHubConsoleService consoleService;
     private readonly IActionOutputService outputService;
@@ -36,8 +36,9 @@ public sealed class GitHubAction : IGitHubAction
     }
 
     /// <inheritdoc/>
-    public async Task Run(ActionInputs inputs, Action onCompleted, Action<Exception> onError)
+    public async Task Run(ActionInputs inputs, Action<bool> onCompleted, Action<Exception> onError)
     {
+        var branchIsValid = false;
         ShowWelcomeMessage();
 
         var functionSignatures = this.functionService.FunctionSignatures;
@@ -57,6 +58,7 @@ public sealed class GitHubAction : IGitHubAction
             }
 
             (bool branchIsValid, string msg) logicResult = this.expressionExecutorService.Execute(inputs.ValidationLogic, inputs.BranchName);
+            branchIsValid = logicResult.branchIsValid;
 
             if (inputs.FailWhenNotValid is true)
             {
@@ -73,7 +75,7 @@ public sealed class GitHubAction : IGitHubAction
             onError(e);
         }
 
-        onCompleted();
+        onCompleted(branchIsValid);
     }
 
     /// <inheritdoc />

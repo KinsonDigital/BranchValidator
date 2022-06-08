@@ -43,7 +43,7 @@ public class GitHubActionTests
         var action = CreateAction();
 
         // Act
-        await action.Run(inputs, () => { }, _ => { });
+        await action.Run(inputs, _ => { }, _ => { });
 
         // Assert
         this.mockConsoleService.VerifyOnce(m => m.WriteLine("Welcome To The BranchValidator GitHub Action!!"));
@@ -54,16 +54,16 @@ public class GitHubActionTests
     public async void Run_WhenInvoked_PrintsFunctionList()
     {
         // Arrange
-        var functionListMsg = $"{Environment.NewLine}equalTo(value: string)";
+        const string functionListMsg = "equalTo(value: string)";
 
         var inputs = CreateInputs();
         var action = CreateAction();
 
         // Act
-        await action.Run(inputs, () => { }, _ => { });
+        await action.Run(inputs, _ => { }, _ => { });
 
         // Assert
-        this.mockConsoleService.VerifyOnce(m => m.WriteGroup("Available Functions", functionListMsg));
+        this.mockConsoleService.VerifyOnce(m => m.WriteGroup("Available Functions", new[] { functionListMsg }));
     }
 
     [Theory]
@@ -76,7 +76,7 @@ public class GitHubActionTests
         var action = CreateAction();
 
         // Act
-        var act = () => action.Run(inputs, () => { }, e => throw e);
+        var act = () => action.Run(inputs, _ => { }, e => throw e);
 
         // Assert
         await act.Should().ThrowAsync<InvalidActionInput>()
@@ -93,7 +93,7 @@ public class GitHubActionTests
         var action = CreateAction();
 
         // Act
-        var act = () => action.Run(inputs, () => { }, e => throw e);
+        var act = () => action.Run(inputs, _ => { }, e => throw e);
 
         // Assert
         await act.Should().ThrowAsync<InvalidActionInput>()
@@ -115,7 +115,7 @@ public class GitHubActionTests
         var action = CreateAction();
 
         // Act
-        await action.Run(inputs, () => { }, _ => { });
+        await action.Run(inputs, _ => { }, _ => { });
 
         // Assert
         this.mockConsoleService.Verify(m => m.BlankLine(), Times.Exactly(2));
@@ -133,7 +133,7 @@ public class GitHubActionTests
         var action = CreateAction();
 
         // Act
-        var act = () => action.Run(inputs, () => { }, e => throw e);
+        var act = () => action.Run(inputs, _ => { }, e => throw e);
 
         // Assert
         await act.Should().ThrowAsync<Exception>()
@@ -150,7 +150,7 @@ public class GitHubActionTests
         var action = CreateAction();
 
         // Act
-        var act = () => action.Run(inputs, () => { }, e => throw e);
+        var act = () => action.Run(inputs, _ => { }, e => throw e);
 
         // Assert
         await act.Should().NotThrowAsync();
@@ -165,7 +165,7 @@ public class GitHubActionTests
         var action = CreateAction();
 
         // Act
-        await action.Run(inputs, () => onCompletedExecuted = true, _ => { });
+        await action.Run(inputs, _ => onCompletedExecuted = true, _ => { });
 
         // Assert
         onCompletedExecuted.Should().BeTrue();

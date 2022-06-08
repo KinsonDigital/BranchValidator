@@ -39,16 +39,16 @@ public static class Program
                 services.AddSingleton<IExpressionValidatorService, ExpressionValidatorService>();
                 services.AddSingleton<IAnalyzerFactory, AnalyzerFactory>();
                 services.AddSingleton<IExpressionExecutorService, ExpressionExecutorService>();
-                services.AddSingleton<IGitHubAction, GitHubAction>();
+                services.AddSingleton<IGitHubAction<bool>, GitHubAction>();
             }).Build();
 
         var appService = host.Services.GetRequiredService<IAppService>();
         var consoleService = host.Services.GetRequiredService<IGitHubConsoleService>();
-        IGitHubAction? gitHubAction = null;
+        IGitHubAction<bool>? gitHubAction = null;
 
         try
         {
-            gitHubAction = host.Services.GetRequiredService<IGitHubAction>();
+            gitHubAction = host.Services.GetRequiredService<IGitHubAction<bool>>();
         }
         catch (Exception e)
         {
@@ -72,7 +72,7 @@ public static class Program
 
                 await gitHubAction.Run(
                     inputs,
-                    () =>
+                    _ =>
                     {
                         host.Dispose();
                         Default.Dispose();
