@@ -2,6 +2,7 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
+using BranchValidator;
 using BranchValidator.Factories;
 using BranchValidator.Services;
 using FluentAssertions;
@@ -11,9 +12,9 @@ namespace BranchValidatorTests.IntegrationTests;
 /// <summary>
 /// Tests various classes integrated with each other.
 /// </summary>
-public class IntegrationTests
+public class IntegrationTests : IDisposable
 {
-    private readonly ExpressionExecutorService expressionExecutorService;
+    private readonly GitHubAction action;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="IntegrationTests"/> class.
@@ -24,26 +25,42 @@ public class IntegrationTests
         var expressionValidationService = new ExpressionValidatorService(analyzerFactory);
         var methodExecutor = new MethodExecutor();
         var functionService = new FunctionService(methodExecutor);
+        var consoleService = new GitHubConsoleService();
+        var outputService = new ActionOutputService(consoleService);
+        var expressionExecutorService = new ExpressionExecutorService(expressionValidationService, functionService);
 
-        this.expressionExecutorService = new ExpressionExecutorService(expressionValidationService, functionService);
+        this.action = new GitHubAction(consoleService, outputService, expressionExecutorService, functionService);
     }
 
     [Theory]
-    [InlineData("equalTo('my-branch')", "my-branch", true, "The function 'equalTo' returned a value of 'true'.")]
-    [InlineData("equalTo('not-equal-to-this')", "feature/123-my-branch", false, "The function 'equalTo' returned a value of 'false'.")]
-    [InlineData("isCharNum(4)", "feature/123-my-branch", false, "The function 'isCharNum' returned a value of 'false'.")]
-    [InlineData("isCharNum(8)", "feature/123-my-branch", true, "The function 'isCharNum' returned a value of 'true'.")]
-    public void Execute_WhenInvoked_ReturnsCorrectResult(
-        string expression,
-        string branchName,
-        bool expectedValidResult,
-        string expectedMsgResult)
+    [InlineData("equalTo('my-branch')", "my-branch")]
+    [InlineData("isCharNum(8)", "feature/123-my-branch")]
+    public async void Execute_WithValidBranches_ReturnsCorrectResult(string expression, string branchName)
     {
-        // Act
-        var actual = this.expressionExecutorService.Execute(expression, branchName);
+        // Arrange
+        bool? branchIsValid = null;
+        var actionInputs = new ActionInputs()
+        {
+            BranchName = branchName,
+            ValidationLogic = expression,
+            FailWhenNotValid = true,
+        };
+
+        // Act & Assert
+        var act = () => this.action.Run(
+            actionInputs,
+            result =>
+            {
+                branchIsValid = result;
+            }, e => throw e);
 
         // Assert
-        actual.valid.Should().Be(expectedValidResult);
-        actual.msg.Should().Be(expectedMsgResult);
+        await act.Should().NotThrowAsync();
+        branchIsValid.Should().BeTrue();
     }
+
+    /// <summary>
+    /// Disposes of the action.
+    /// </summary>
+    public void Dispose() => this.action.Dispose();
 }
