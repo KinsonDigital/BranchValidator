@@ -10,6 +10,7 @@ namespace BranchValidator.Services;
 /// <inheritdoc/>
 public class FunctionService : IFunctionService
 {
+    private const char FuncNameParamSeparator = ':';
     private static readonly char[] Numbers =
     {
         '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
@@ -43,27 +44,37 @@ public class FunctionService : IFunctionService
         }
 
         // Check that a colon exists in every single key of the func list
-        if (this.validFunctions.Keys.Any(k => k.DoesNotContain(':')))
+        if (this.validFunctions.Keys.Any(k => k.DoesNotContain(FuncNameParamSeparator) && k.Contains(',')))
         {
-            throw new Exception("Valid function data set key missing a ':' character.");
+            throw new Exception($"Valid function data set key has a param name separator of ',' but is missing the '{FuncNameParamSeparator}' character.");
         }
 
         // Check that the param names section after the function name is valid
         if (this.validFunctions.Keys.Any(k =>
             {
-                var sections = k.Split(':', StringSplitOptions.RemoveEmptyEntries);
+                var sections = k.Split(FuncNameParamSeparator, StringSplitOptions.RemoveEmptyEntries);
+
+                if (sections.Length <= 1)
+                {
+                    return false;
+                }
+
+                var paramNames = sections[1].Split(',', StringSplitOptions.RemoveEmptyEntries);
 
                 // Commas aloud but param names only allowed to have lower and upper case letters
-                return sections.Length <= 1 || sections[1].Any(c => c != ',' && LowerCaseLetters.DoesNotContain(c.ToString().ToLower()[0]));
+                return paramNames.Any(c => LowerCaseLetters.DoesNotContain(c.ToString().ToLower()[0]));
             }))
         {
-            throw new Exception("Valid function data set key does not end with a number.");
+            var exceptionMsg = "Function parameters contain a parameter name with invalid characters.";
+            exceptionMsg += $"{Environment.NewLine}Only lower and upper case letters allowed.";
+
+            throw new Exception(exceptionMsg);
         }
 
         // Check if the param name count is equal to the param data list count
         foreach (KeyValuePair<string, DataTypes[]> validFunction in this.validFunctions)
         {
-            var functionSections = validFunction.Key.Split(':', StringSplitOptions.RemoveEmptyEntries);
+            var functionSections = validFunction.Key.Split(FuncNameParamSeparator, StringSplitOptions.RemoveEmptyEntries);
             var paramNames = functionSections.Length >= 2
                 ? functionSections[1].Split(',', StringSplitOptions.RemoveEmptyEntries)
                 : Array.Empty<string>();
@@ -80,7 +91,7 @@ public class FunctionService : IFunctionService
 
         FunctionNames = this.validFunctions.Select(f =>
         {
-            var sections = f.Key.Split(':');
+            var sections = f.Key.Split(FuncNameParamSeparator, StringSplitOptions.RemoveEmptyEntries);
 
             return sections[0];
         }).ToReadOnlyCollection();
