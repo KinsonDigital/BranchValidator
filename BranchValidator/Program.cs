@@ -1,9 +1,10 @@
-﻿// <copyright file="Program.cs" company="KinsonDigital">
+// <copyright file="Program.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using BranchValidator.Factories;
 using BranchValidator.Services;
 using BranchValidator.Services.Interfaces;
 
@@ -33,12 +34,28 @@ public static class Program
                 services.AddSingleton<IGitHubConsoleService, GitHubConsoleService>();
                 services.AddSingleton<IActionOutputService, ActionOutputService>();
                 services.AddSingleton<IArgParsingService<ActionInputs>, ArgParsingService>();
+                services.AddSingleton<IMethodExecutor, MethodExecutor>();
+                services.AddSingleton<IFunctionService, FunctionService>();
+                services.AddSingleton<IExpressionValidatorService, ExpressionValidatorService>();
+                services.AddSingleton<IAnalyzerFactory, AnalyzerFactory>();
+                services.AddSingleton<IExpressionExecutorService, ExpressionExecutorService>();
                 services.AddSingleton<IGitHubAction, GitHubAction>();
             }).Build();
 
         var appService = host.Services.GetRequiredService<IAppService>();
-        var gitHubAction = host.Services.GetRequiredService<IGitHubAction>();
         var consoleService = host.Services.GetRequiredService<IGitHubConsoleService>();
+        IGitHubAction? gitHubAction = null;
+
+        try
+        {
+            gitHubAction = host.Services.GetRequiredService<IGitHubAction>();
+        }
+        catch (Exception e)
+        {
+#if DEBUG
+            appService.ExitWithException(e);
+#endif
+        }
 
         var argParsingService = host.Services.GetRequiredService<IArgParsingService<ActionInputs>>();
 
@@ -47,6 +64,12 @@ public static class Program
             args,
             async inputs =>
             {
+                if (gitHubAction is null)
+                {
+                    appService.ExitWithException(new NullReferenceException("The GitHub action object is null."));
+                    return;
+                }
+
                 await gitHubAction.Run(
                     inputs,
                     () =>
@@ -56,7 +79,7 @@ public static class Program
                         gitHubAction.Dispose();
                         appService.Exit(0);
                     },
-                    (e) =>
+                    e =>
                     {
                         host.Dispose();
                         Default.Dispose();
