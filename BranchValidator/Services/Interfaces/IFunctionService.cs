@@ -1,4 +1,4 @@
-﻿// <copyright file="IFunctionService.cs" company="KinsonDigital">
+// <copyright file="IFunctionService.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -12,9 +12,9 @@ namespace BranchValidator.Services.Interfaces;
 public interface IFunctionService
 {
     /// <summary>
-    /// Gets the list of available functions for use.
+    /// Gets a list of available functions names.
     /// </summary>
-    ReadOnlyCollection<string> AvailableFunctions { get; }
+    ReadOnlyCollection<string> FunctionNames { get; }
 
     /// <summary>
     /// Gets the total number of parameters for a function that matches the given <paramref name="name"/>.

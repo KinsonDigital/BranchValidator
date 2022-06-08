@@ -43,7 +43,7 @@ public class FunctionServiceTests
         var service = CreateService();
 
         // Act
-        var actual = service.AvailableFunctions;
+        var actual = service.FunctionNames;
 
         // Assert
         actual.Should().HaveCount(2);

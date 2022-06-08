@@ -91,7 +91,7 @@ public class FuncAnalyzerService : IAnalyzerService
             return (false, "The name of a function can only contain lower or upper case letters.");
         }
 
-        if (this.functionService.AvailableFunctions.DoesNotContain(funcName))
+        if (this.functionService.FunctionNames.DoesNotContain(funcName))
         {
             return (false, $"The function '{funcName}' is not a valid function that can be used.");
         }

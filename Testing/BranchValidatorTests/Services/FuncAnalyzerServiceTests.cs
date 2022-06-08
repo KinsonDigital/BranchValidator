@@ -122,7 +122,7 @@ public class FuncAnalyzerServiceTests
         string expectedMsg)
     {
         // Arrange
-        this.mockFunctionsService.SetupGet(p => p.AvailableFunctions)
+        this.mockFunctionsService.SetupGet(p => p.FunctionNames)
             .Returns(new[] { "funcA", "funcB" }.ToReadOnlyCollection);
         this.mockFunctionsService.Setup(m => m.GetTotalFunctionParams("funcA")).Returns(1);
         this.mockFunctionsService.Setup(m => m.GetTotalFunctionParams("funcB")).Returns(1);

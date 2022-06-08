@@ -1,4 +1,4 @@
-﻿// <copyright file="FunctionService.cs" company="KinsonDigital">
+// <copyright file="FunctionService.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -78,7 +78,7 @@ public class FunctionService : IFunctionService
             throw new Exception(exceptionMsg);
         }
 
-        AvailableFunctions = this.validFunctions.Select(f =>
+        FunctionNames = this.validFunctions.Select(f =>
         {
             var sections = f.Key.Split(':');
 
@@ -87,7 +87,7 @@ public class FunctionService : IFunctionService
     }
 
     /// <inheritdoc/>
-    public ReadOnlyCollection<string> AvailableFunctions { get; }
+    public ReadOnlyCollection<string> FunctionNames { get; }
 
     /// <inheritdoc/>
     public uint GetTotalFunctionParams(string name)
