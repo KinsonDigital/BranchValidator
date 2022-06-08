@@ -131,7 +131,7 @@ public class ExpressionExecutorService : IExpressionExecutorService
         var allFuncParams = function.GetBetween(LeftParen, RightParen);
 
         return allFuncParams.Contains(',')
-            ? allFuncParams.Split(',')
+            ? allFuncParams.Split(',', StringSplitOptions.TrimEntries)
             : new[] { allFuncParams };
     }
 }

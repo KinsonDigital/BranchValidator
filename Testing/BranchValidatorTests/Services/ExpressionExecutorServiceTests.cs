@@ -1,4 +1,4 @@
-// <copyright file="ExpressionExecutorServiceTests.cs" company="KinsonDigital">
+﻿// <copyright file="ExpressionExecutorServiceTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -79,6 +79,9 @@ public class ExpressionExecutorServiceTests
     [InlineData(" equalTo('feature/123-test-branch')", "equalTo", "'feature/123-test-branch'", "feature/123-test-branch", true, true)]
     [InlineData("equalTo('feature/123-test-branch') ", "equalTo", "'feature/123-test-branch'", "feature/123-test-branch", true, true)]
     [InlineData("isCharNum(8)", "isCharNum", "8", "feature/123-test-branch", true, true)]
+    [InlineData("isSectionNum(8,10)", "isSectionNum", "8,10", "feature/123-test-branch", true, true)]
+    [InlineData("isSectionNum(8, 10)", "isSectionNum", "8,10", "feature/123-test-branch", true, true)]
+    [InlineData("isSectionNum(8,10)", "isSectionNum", "8, 10", "feature/123-test-branch", true, true)]
     public void Execute_WithNoOperators_ReturnsCorrectResult(
         string expression,
         string funcName,
