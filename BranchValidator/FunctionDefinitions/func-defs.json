@@ -1,0 +1,4 @@
+{
+  "equalTo:value": ["String"],
+  "isCharNum:charPos": ["Number"]
+}

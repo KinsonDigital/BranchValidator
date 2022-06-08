@@ -42,4 +42,9 @@
     <AdditionalFiles Include="stylecop.json" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="FunctionDefinitions\func-defs.json" />
+    <EmbeddedResource Include="FunctionDefinitions\func-defs.json" />
+  </ItemGroup>
+
 </Project>
