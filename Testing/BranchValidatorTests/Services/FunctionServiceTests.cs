@@ -179,6 +179,37 @@ public class FunctionServiceTests
     }
 
     [Theory]
+    [InlineData("equalTo", "test-branch", "EqualTo", "'test-branch'", true)]
+    [InlineData("equalTo", "other-branch", "EqualTo", "'test-branch'", false)]
+    public void Execute_WhenInvoked_ReturnsCorrectResult(
+        string funcName,
+        string branchName,
+        string expectedMethodName,
+        string paramList,
+        bool actualValid)
+    {
+        // Arrange
+        this.mockMethodExecutor.Setup(m => m.ExecuteMethod(It.IsAny<object>(), It.IsAny<string>(), It.IsAny<string[]>()))
+            .Returns((actualValid, "test-msg"));
+
+        var argValues = new List<string>();
+        argValues.AddRange(paramList.Split(',', StringSplitOptions.TrimEntries));
+        argValues.Add(branchName);
+
+        var service = CreateService();
+
+        // Act
+        var actual = service.Execute(funcName, argValues.ToArray());
+
+        // Assert
+        actual.valid.Should().Be(actualValid);
+        actual.msg.Should().Be("test-msg");
+
+        this.mockMethodExecutor.VerifyOnce(m => m.ExecuteMethod(It.IsAny<object>(), expectedMethodName, argValues.ToArray()));
+    }
+
+    #region Expression Function Tests
+    [Theory]
     [InlineData("my-branch", "my-branch", true)]
     [InlineData(null, "", true)]
     [InlineData("", null, true)]
@@ -221,36 +252,7 @@ public class FunctionServiceTests
         // Assert
         actual.Should().Be(expected);
     }
-
-    [Theory]
-    [InlineData("equalTo", "test-branch", "EqualTo", "'test-branch'", true)]
-    [InlineData("equalTo", "other-branch", "EqualTo", "'test-branch'", false)]
-    public void Execute_WhenInvoked_ReturnsCorrectResult(
-        string funcName,
-        string branchName,
-        string expectedMethodName,
-        string paramList,
-        bool actualValid)
-    {
-        // Arrange
-        this.mockMethodExecutor.Setup(m => m.ExecuteMethod(It.IsAny<object>(), It.IsAny<string>(), It.IsAny<string[]>()))
-            .Returns((actualValid, "test-msg"));
-
-        var argValues = new List<string>();
-        argValues.AddRange(paramList.Split(',', StringSplitOptions.TrimEntries));
-        argValues.Add(branchName);
-
-        var service = CreateService();
-
-        // Act
-        var actual = service.Execute(funcName, argValues.ToArray());
-
-        // Assert
-        actual.valid.Should().Be(actualValid);
-        actual.msg.Should().Be("test-msg");
-
-        this.mockMethodExecutor.VerifyOnce(m => m.ExecuteMethod(It.IsAny<object>(), expectedMethodName, argValues.ToArray()));
-    }
+    #endregion
     #endregion
 
     /// <summary>
