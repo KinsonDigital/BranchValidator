@@ -1,4 +1,8 @@
-﻿namespace BranchValidator.Services;
+﻿// <copyright file="IJSONService.cs" company="KinsonDigital">
+// Copyright (c) KinsonDigital. All rights reserved.
+// </copyright>
+
+namespace BranchValidator.Services;
 
 /// <summary>
 /// Loads JSON file data.
