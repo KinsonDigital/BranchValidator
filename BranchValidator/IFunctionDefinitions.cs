@@ -41,4 +41,30 @@ public interface IFunctionDefinitions
     /// </list>
     /// </remarks>
     bool IsCharNum(uint charPos, string branchName);
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="startPos"></param>
+    /// <param name="endPos"></param>
+    /// <param name="branchName"></param>
+    /// <returns></returns>
+    /// <remarks>
+    /// TODO: Add info that if the endPos is greater then the len of the branch name,
+    /// TODO: ↪ then the length of the branch name will be used
+    /// </remarks>
+    bool IsSectionNum(uint startPos, uint endPos, string branchName);
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="startPos"></param>
+    /// <param name="upToChar"></param>
+    /// <param name="branchName"></param>
+    /// <returns></returns>
+    /// <remarks>
+    /// TODO: Add info that if the startPos is greater then the branch name len, then its false
+    /// TODO: Add info that only the first character of the upToChar string is used and the rest is ignored
+    /// </remarks>
+    bool IsSectionNum(uint startPos, string upToChar, string branchName);
 }

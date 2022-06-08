@@ -1,4 +1,6 @@
 {
   "equalTo:value": ["String"],
-  "isCharNum:charPos": ["Number"]
+  "isCharNum:charPos": ["Number"],
+  "isSectionNum:startPos,upToChar": ["Number", "String"],
+  "isSectionNum:startPos,endPos": ["Number", "Number"]
 }

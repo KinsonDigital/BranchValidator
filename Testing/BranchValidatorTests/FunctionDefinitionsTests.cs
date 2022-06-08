@@ -53,5 +53,57 @@ public class FunctionDefinitionsTests
         // Assert
         actual.Should().Be(expected);
     }
+
+    [Theory]
+    [InlineData(null, 0, 10, false)]
+    [InlineData("", 0, 10, false)]
+    [InlineData("feature/123-test-branch", 8, 12, false)]
+    [InlineData("feature/test-branch", 12, 3000, false)]
+    [InlineData("feature/123-test-branch", 8, 11, false)]
+    [InlineData("feature/123-test-branch", 8, 10, true)]
+    [InlineData("feature/0123456789", 12, 3000, true)]
+    public void IsSectionNum_WhenInvokedWithStartAndEndPosParams_ReturnsCorrectResult(
+        string branchName,
+        uint startPos,
+        uint endPos,
+        bool expected)
+    {
+        // Arrange
+        var definitions = new FunctionDefinitions();
+
+        // Act
+        var actual = definitions.IsSectionNum(startPos, endPos, branchName);
+
+        // Assert
+        actual.Should().Be(expected);
+    }
+
+    [Theory]
+    [InlineData(null, 0, "-", false)]
+    [InlineData("", 0, "-", false)]
+    [InlineData("feature/123-test-branch", 8, null, false)]
+    [InlineData("feature/123-test-branch", 8, "", false)]
+    [InlineData("feature/123testbranch", 8, "-", false)]
+    [InlineData("feature/123-testbranch", 11, "-", false)]
+    [InlineData("feature/123test-branch", 8, "-", false)]
+    [InlineData("feature/123-test-branch", 3000, "-", false)]
+    [InlineData("feature/123-test-branch", 8, "-", true)]
+    [InlineData("feature/123-test-branch", 8, "-other-characters", true)]
+    [InlineData("0123456789-", 0, "-", true)]
+    public void IsSectionNum_WhenInvokedWithStartPosAndUpToCharParams_ReturnsCorrectResult(
+        string branchName,
+        uint startPos,
+        string upToChar,
+        bool expected)
+    {
+        // Arrange
+        var definitions = new FunctionDefinitions();
+
+        // Act
+        var actual = definitions.IsSectionNum(startPos, upToChar, branchName);
+
+        // Assert
+        actual.Should().Be(expected);
+    }
     #endregion
 }
