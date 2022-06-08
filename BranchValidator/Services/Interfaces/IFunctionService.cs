@@ -1,4 +1,4 @@
-// <copyright file="IFunctionService.cs" company="KinsonDigital">
+﻿// <copyright file="IFunctionService.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -15,6 +15,11 @@ public interface IFunctionService
     /// Gets a list of available functions names.
     /// </summary>
     ReadOnlyCollection<string> FunctionNames { get; }
+
+    /// <summary>
+    /// Gets a list of available function signatures.
+    /// </summary>
+    ReadOnlyCollection<string> FunctionSignatures { get; }
 
     /// <summary>
     /// Gets the total number of parameters for a function that matches the given <paramref name="name"/>.

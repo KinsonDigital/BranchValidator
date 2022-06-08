@@ -95,10 +95,36 @@ public class FunctionService : IFunctionService
 
             return sections[0];
         }).ToReadOnlyCollection();
+
+        FunctionSignatures = this.validFunctions.Select(f =>
+        {
+            var functionSections = f.Key.Split(FuncNameParamSeparator, StringSplitOptions.RemoveEmptyEntries);
+            var funcName = functionSections[0];
+            var paramNames = functionSections.Length <= 1 ? Array.Empty<string>() : functionSections[1].Split(',');
+
+            if (paramNames.Length <= 0)
+            {
+                return $"{funcName}()";
+            }
+
+            var paramStr = string.Empty;
+
+            for (var i = 0; i < paramNames.Length; i++)
+            {
+                var paramName = paramNames[i];
+
+                paramStr += $"{paramName}: {f.Value[i].ToString().ToLower()}";
+            }
+
+            return $"{funcName}({paramStr})";
+        }).ToReadOnlyCollection();
     }
 
     /// <inheritdoc/>
     public ReadOnlyCollection<string> FunctionNames { get; }
+
+    /// <inheritdoc/>
+    public ReadOnlyCollection<string> FunctionSignatures { get; }
 
     /// <inheritdoc/>
     public uint GetTotalFunctionParams(string name)
