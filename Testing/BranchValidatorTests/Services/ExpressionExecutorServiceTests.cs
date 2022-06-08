@@ -1,4 +1,4 @@
-﻿// <copyright file="ExpressionExecutorServiceTests.cs" company="KinsonDigital">
+// <copyright file="ExpressionExecutorServiceTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -75,20 +75,20 @@ public class ExpressionExecutorServiceTests
     }
 
     [Theory]
-    [InlineData("equalTo('feature/123-my-branch')", "equalTo", "'feature/123-my-branch'", "feature/123-my-branch", true, true, "branch valid")]
-    [InlineData(" equalTo('feature/123-my-branch')", "equalTo", "'feature/123-my-branch'", "feature/123-my-branch", true, true, "branch valid")]
-    [InlineData("equalTo('feature/123-my-branch') ", "equalTo", "'feature/123-my-branch'", "feature/123-my-branch", true, true, "branch valid")]
-    [InlineData("isCharNum(8)", "isCharNum", "8", "feature/123-my-branch", true, true, "branch valid")]
+    [InlineData("equalTo('feature/123-test-branch')", "equalTo", "'feature/123-test-branch'", "feature/123-test-branch", true, true)]
+    [InlineData(" equalTo('feature/123-test-branch')", "equalTo", "'feature/123-test-branch'", "feature/123-test-branch", true, true)]
+    [InlineData("equalTo('feature/123-test-branch') ", "equalTo", "'feature/123-test-branch'", "feature/123-test-branch", true, true)]
+    [InlineData("isCharNum(8)", "isCharNum", "8", "feature/123-test-branch", true, true)]
     public void Execute_WithNoOperators_ReturnsCorrectResult(
         string expression,
         string funcName,
         string paramStr, // Comma delimited list
         string branchName,
         bool expectedFuncValid,
-        bool expectedExecutionValid,
-        string expectedMsg)
+        bool expectedExecutionValid)
     {
         // Arrange
+        var expectedMsg = $"The function '{funcName}' returned a value of '{expectedFuncValid.ToString().ToLower()}'.";
         var argValues = new List<string>();
         argValues.AddRange(paramStr.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries));
         argValues.Add($"'{branchName}'");
@@ -102,6 +102,7 @@ public class ExpressionExecutorServiceTests
 
         // Assert
         actual.valid.Should().Be(expectedExecutionValid);
+        actual.msg.Should().Be(expectedMsg);
     }
 
     [Fact]
