@@ -2,6 +2,7 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
+using BranchValidator.Exceptions;
 using BranchValidator.Services;
 using BranchValidator.Services.Interfaces;
 
@@ -10,9 +11,10 @@ namespace BranchValidator;
 /// <inheritdoc/>
 public sealed class GitHubAction : IGitHubAction
 {
-    private readonly IExpressionExecutorService expressionExecutorService;
     private readonly IGitHubConsoleService consoleService;
     private readonly IActionOutputService outputService;
+    private readonly IExpressionExecutorService expressionExecutorService;
+    private readonly IFunctionService functionService;
     private bool isDisposed;
 
     /// <summary>
@@ -22,13 +24,15 @@ public sealed class GitHubAction : IGitHubAction
     /// <param name="consoleService">Prints messages to the GitHub console.</param>
     /// <param name="outputService">Sets the GitHub action outputs.</param>
     public GitHubAction(
-        IExpressionExecutorService expressionExecutorService,
         IGitHubConsoleService consoleService,
-        IActionOutputService outputService)
+        IActionOutputService outputService,
+        IExpressionExecutorService expressionExecutorService,
+        IFunctionService functionService)
     {
-        this.expressionExecutorService = expressionExecutorService;
         this.consoleService = consoleService;
         this.outputService = outputService;
+        this.expressionExecutorService = expressionExecutorService;
+        this.functionService = functionService;
     }
 
     /// <inheritdoc/>
@@ -36,9 +40,39 @@ public sealed class GitHubAction : IGitHubAction
     {
         ShowWelcomeMessage();
 
+        var functionSignatures = this.functionService.FunctionSignatures;
+
+        var functionList = "Available Functions:";
+
+        foreach (var functionSignature in functionSignatures)
+        {
+            functionList += $"{Environment.NewLine}\t{functionSignature}";
+        }
+
+        this.consoleService.WriteLine(functionList);
+
         try
         {
-            // TODO: Bring in the IFunctionService to get a list of functions to print to the console.
+            if (string.IsNullOrEmpty(inputs.BranchName))
+            {
+                throw new InvalidActionInput("The 'branch-name' action input cannot be null or empty.");
+            }
+
+            if (string.IsNullOrEmpty(inputs.ValidationLogic))
+            {
+                throw new InvalidActionInput("The 'validation-logic' action input cannot be null or empty.");
+            }
+
+            (bool branchIsValid, string msg) logicResult = this.expressionExecutorService.Execute(inputs.ValidationLogic, inputs.BranchName);
+
+            this.consoleService.WriteLine(logicResult.msg);
+
+            if (inputs.FailWhenNotValid ?? false)
+            {
+                throw new Exception(logicResult.msg);
+            }
+
+            this.outputService.SetOutputValue("valid-branch", logicResult.branchIsValid.ToString().ToLower());
         }
         catch (Exception e)
         {
