@@ -50,6 +50,20 @@ public interface IGitHubConsoleService
     void EndGroup();
 
     /// <summary>
+    /// Creates a textual group in the console window with content and ends the group.
+    /// </summary>
+    /// <param name="title">The title of the group.</param>
+    /// <param name="content">The content to print in the group.</param>
+    void WriteGroup(string title, string content);
+
+    /// <summary>
+    /// Creates a textual group in the console window with content and ends the group.
+    /// </summary>
+    /// <param name="title">The title of the group.</param>
+    /// <param name="contentLines">The individual lines to write to the console.</param>
+    void WriteGroup(string title, string[] contentLines);
+
+    /// <summary>
     /// Writes the given <paramref name="value"/> to the console as an error GitHub action workflow command.
     /// </summary>
     /// <param name="value">The value to write.</param>
