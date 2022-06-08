@@ -16,7 +16,7 @@ public interface IActionOutputService
     /// </summary>
     /// <param name="name">The name of the output.</param>
     /// <param name="value">The value of the output.</param>
-    /// <exception cref="NullOrEmptyStringException">
+    /// <exception cref="NullOrEmptyStringArgumentException">
     ///     Thrown if the <paramref name="name"/> parameter is null or empty.
     /// </exception>
     void SetOutputValue(string name, string value);

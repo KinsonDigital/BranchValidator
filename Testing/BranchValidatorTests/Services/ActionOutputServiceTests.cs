@@ -10,6 +10,9 @@ using Moq;
 
 namespace BranchValidatorTests.Services;
 
+/// <summary>
+/// Tests the <see cref="ActionOutputService"/> class.
+/// </summary>
 public class ActionOutputServiceTests
 {
     private readonly Mock<IGitHubConsoleService> mockConsoleService;
@@ -44,7 +47,7 @@ public class ActionOutputServiceTests
 
         // Assert
         act.Should()
-            .Throw<NullOrEmptyStringException>()
+            .Throw<NullOrEmptyStringArgumentException>()
             .WithMessage("The parameter 'name' must not be null or empty.");
     }
     #endregion

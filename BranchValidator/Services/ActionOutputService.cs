@@ -22,7 +22,7 @@ public class ActionOutputService : IActionOutputService
     {
         if (string.IsNullOrEmpty(name))
         {
-            throw new NullOrEmptyStringException($"The parameter '{nameof(name)}' must not be null or empty.");
+            throw new NullOrEmptyStringArgumentException($"The parameter '{nameof(name)}' must not be null or empty.");
         }
 
         this.gitHubConsoleService.WriteLine($"::set-output name={name}::{value}");

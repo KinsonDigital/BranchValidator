@@ -9,21 +9,25 @@ namespace BranchValidator;
 /// <inheritdoc/>
 public sealed class GitHubAction : IGitHubAction
 {
-    private readonly IGitHubConsoleService gitHubConsoleService;
-    private readonly IActionOutputService actionOutputService;
+    private readonly IExpressionExecutorService expressionExecutorService;
+    private readonly IGitHubConsoleService consoleService;
+    private readonly IActionOutputService outputService;
     private bool isDisposed;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="GitHubAction"/> class.
     /// </summary>
-    /// <param name="gitHubConsoleService">Writes to the console.</param>
-    /// <param name="actionOutputService">Sets the output data of the action.</param>
+    /// <param name="expressionExecutorService">Executes expressions.</param>
+    /// <param name="consoleService">Prints messages to the GitHub console.</param>
+    /// <param name="outputService">Sets the GitHub action outputs.</param>
     public GitHubAction(
-        IGitHubConsoleService gitHubConsoleService,
-        IActionOutputService actionOutputService)
+        IExpressionExecutorService expressionExecutorService,
+        IGitHubConsoleService consoleService,
+        IActionOutputService outputService)
     {
-        this.gitHubConsoleService = gitHubConsoleService;
-        this.actionOutputService = actionOutputService;
+        this.expressionExecutorService = expressionExecutorService;
+        this.consoleService = consoleService;
+        this.outputService = outputService;
     }
 
     /// <inheritdoc/>
@@ -33,6 +37,7 @@ public sealed class GitHubAction : IGitHubAction
 
         try
         {
+            // TODO: Bring in the IFunctionService to get a list of functions to print to the console.
         }
         catch (Exception e)
         {
@@ -59,7 +64,7 @@ public sealed class GitHubAction : IGitHubAction
     /// </summary>
     private void ShowWelcomeMessage()
     {
-        this.gitHubConsoleService.WriteLine("Welcome To The BranchValidator GitHub Action!!");
-        this.gitHubConsoleService.BlankLine();
+        this.consoleService.WriteLine("Welcome To The BranchValidator GitHub Action!!");
+        this.consoleService.BlankLine();
     }
 }

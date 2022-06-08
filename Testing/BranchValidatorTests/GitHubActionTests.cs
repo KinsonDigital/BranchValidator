@@ -13,6 +13,7 @@ public class GitHubActionTests
 {
     private readonly Mock<IGitHubConsoleService> mockConsoleService;
     private readonly Mock<IActionOutputService> mockActionOutputService;
+    private readonly Mock<IExpressionExecutorService> mockExpressionExecutorService;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="GitHubActionTests"/> class.
@@ -21,6 +22,7 @@ public class GitHubActionTests
     {
         this.mockConsoleService = new Mock<IGitHubConsoleService>();
         this.mockActionOutputService = new Mock<IActionOutputService>();
+        this.mockExpressionExecutorService = new Mock<IExpressionExecutorService>();
     }
 
     #region Method Tests
@@ -58,5 +60,5 @@ public class GitHubActionTests
     /// </summary>
     /// <returns>The instance to test.</returns>
     private GitHubAction CreateAction()
-        => new (this.mockConsoleService.Object, this.mockActionOutputService.Object);
+        => new (this.mockExpressionExecutorService.Object, this.mockConsoleService.Object, this.mockActionOutputService.Object);
 }
