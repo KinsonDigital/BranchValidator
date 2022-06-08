@@ -4,6 +4,7 @@
 
 using BranchValidator;
 using BranchValidator.Services;
+using BranchValidator.Services.Interfaces;
 using FluentAssertions;
 using Moq;
 

@@ -3,6 +3,7 @@
 // </copyright>
 
 using BranchValidator.Services;
+using BranchValidator.Services.Interfaces;
 
 namespace BranchValidator;
 

@@ -2,7 +2,7 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-namespace BranchValidator.Services;
+namespace BranchValidator.Services.Interfaces;
 
 /// <summary>
 /// Executes expressions.

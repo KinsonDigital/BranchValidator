@@ -4,7 +4,7 @@
 
 using System.Collections.ObjectModel;
 
-namespace BranchValidator.Services;
+namespace BranchValidator.Services.Interfaces;
 
 /// <summary>
 /// Executes specialized functions from an expression.

@@ -2,7 +2,7 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-namespace BranchValidator.Services;
+namespace BranchValidator.Services.Interfaces;
 
 /// <summary>
 /// Provides helper methods for GitHub console related operations.

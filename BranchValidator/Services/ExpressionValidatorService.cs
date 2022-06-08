@@ -4,6 +4,7 @@
 
 using System.Diagnostics.CodeAnalysis;
 using BranchValidator.Factories;
+using BranchValidator.Services.Interfaces;
 
 namespace BranchValidator.Services;
 

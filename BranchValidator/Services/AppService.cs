@@ -3,6 +3,7 @@
 // </copyright>
 
 using System.Diagnostics.CodeAnalysis;
+using BranchValidator.Services.Interfaces;
 
 namespace BranchValidator.Services;
 

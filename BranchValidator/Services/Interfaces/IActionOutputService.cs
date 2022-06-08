@@ -4,7 +4,7 @@
 
 using BranchValidator.Exceptions;
 
-namespace BranchValidator.Services;
+namespace BranchValidator.Services.Interfaces;
 
 /// <summary>
 /// Provides the ability to set the GitHub action output.

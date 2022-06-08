@@ -2,6 +2,8 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
+using BranchValidator.Services.Interfaces;
+
 namespace BranchValidator.Services;
 
 /// <inheritdoc/>
