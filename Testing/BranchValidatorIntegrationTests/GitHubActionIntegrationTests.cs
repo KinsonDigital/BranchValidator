@@ -24,7 +24,9 @@ public class GitHubActionIntegrationTests : IDisposable
         var analyzerFactory = new AnalyzerFactory();
         var expressionValidationService = new ExpressionValidatorService(analyzerFactory);
         var methodExecutor = new MethodExecutor();
-        var functionService = new FunctionService(methodExecutor);
+        var jsonService = new JSONService();
+        var resourceLoaderService = new TextResourceLoaderService();
+        var functionService = new FunctionService(jsonService, resourceLoaderService, methodExecutor);
         var consoleService = new GitHubConsoleService();
         var outputService = new ActionOutputService(consoleService);
         var expressionExecutorService = new ExpressionExecutorService(expressionValidationService, functionService);
