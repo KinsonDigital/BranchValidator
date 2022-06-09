@@ -239,6 +239,37 @@ public static class ExtensionMethods
         => !IsBetween(thisStr, value, startPos, endPos);
 
     /// <summary>
+    /// Returns a value indicating whether or not the given <c>string</c> <paramref name="value"/> is
+    /// a negative or positive whole number.
+    /// </summary>
+    /// <param name="value">The value to check.</param>
+    /// <returns><c>true</c> if the <paramref name="value"/> is a whole number.</returns>
+    public static bool IsWholeNumber(this string value)
+    {
+        if (string.IsNullOrEmpty(value))
+        {
+            return false;
+        }
+
+        if (value.StartsWith('-') && value.Length < 2)
+        {
+            return false;
+        }
+
+        if (value.Contains('-') && value.DoesNotStartWith('-'))
+        {
+            return false;
+        }
+
+        if (value.All(c => c == '-' || Numbers.Contains(c)))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
     /// Returns a result indicating whether or not this <c>object</c> contains a method that matches
     /// the given <paramref name="methodName"/> with the given <paramref name="returnType"/>.
     /// </summary>
