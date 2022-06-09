@@ -13,9 +13,6 @@ namespace BranchValidator;
 /// </summary>
 public static class ExtensionMethods
 {
-    private const char SingleQuote = '\'';
-    private const char DoubleQuote = '"';
-
     private static readonly char[] Numbers =
     {
         '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
@@ -323,12 +320,6 @@ public static class ExtensionMethods
             }
 
             bool IsNumberParam(string value) => value.All(c => Numbers.Contains(c));
-
-            bool IsStringParam(string value)
-            {
-                return (value.StartsWith(SingleQuote) && value.EndsWith(SingleQuote) && value.DoesNotContain(DoubleQuote)) ||
-                       (value.StartsWith(DoubleQuote) && value.EndsWith(DoubleQuote) && value.DoesNotContain(SingleQuote));
-            }
 
             for (var i = 0; i < methodParams.Length; i++)
             {
