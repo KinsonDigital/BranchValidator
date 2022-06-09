@@ -38,13 +38,15 @@ public class GitHubActionIntegrationTests : IDisposable
     }
 
     [Theory]
-    [InlineData("equalTo('my-branch')", "my-branch")]
-    [InlineData("isCharNum(8)", "feature/123-my-branch")]
+    [InlineData("equalTo('test-branch')", "test-branch")]
+    [InlineData("isCharNum(8)", "feature/123-test-branch")]
+    [InlineData("isSectionNum(8, 10)", "feature/123-test-branch")]
+    [InlineData("isSectionNum(8, '-')", "feature/123-test-branch")]
     public async void Execute_WithValidBranches_ReturnsCorrectResult(string expression, string branchName)
     {
         // Arrange
         bool? branchIsValid = null;
-        var actionInputs = new ActionInputs()
+        var actionInputs = new ActionInputs
         {
             BranchName = branchName,
             ValidationLogic = expression,
@@ -62,6 +64,31 @@ public class GitHubActionIntegrationTests : IDisposable
         // Assert
         await act.Should().NotThrowAsync();
         branchIsValid.Should().BeTrue();
+    }
+
+    [Theory]
+    [InlineData("equalTo('not-equal-branch')", "equalTo", "test-branch")]
+    [InlineData("isCharNum(4)", "isCharNum", "feature/123-test-branch")]
+    [InlineData("isSectionNum(4, 8)", "isSectionNum", "feature/123-test-branch")]
+    public async void Execute_WithInvalidBranches_FailsActionWithException(
+        string expression,
+        string funcName,
+        string branchName)
+    {
+        // Arrange
+        var actionInputs = new ActionInputs
+        {
+            BranchName = branchName,
+            ValidationLogic = expression,
+            FailWhenNotValid = true,
+        };
+
+        // Act & Assert
+        var act = () => this.action.Run(actionInputs, _ => { }, e => throw e);
+
+        // Assert
+        await act.Should().ThrowAsync<Exception>()
+            .WithMessage($"The function '{funcName}' returned a value of 'false'.");
     }
 
     /// <summary>
