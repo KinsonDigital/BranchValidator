@@ -1,4 +1,4 @@
-// <copyright file="ExtensionMethods.cs" company="KinsonDigital">
+﻿// <copyright file="ExtensionMethods.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -307,9 +307,7 @@ public static class ExtensionMethods
             var matchFound = true;
             var methodParams = possibleMethod.GetParameters();
 
-            bool NullOrEmpty<T>(IEnumerable<T>? items) => items is null || !items.Any();
-
-            if (NullOrEmpty(methodParams) || methodParams.Length != (argValues?.Length ?? 0))
+            if (methodParams.Length != (argValues?.Length ?? 0))
             {
                 return invalidResult;
             }
