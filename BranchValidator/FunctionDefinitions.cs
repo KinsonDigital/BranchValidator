@@ -151,6 +151,17 @@ public class FunctionDefinitions : IFunctionDefinitions
     }
 
     /// <inheritdoc/>
+    public bool LenGreaterThan(uint length)
+    {
+        if (string.IsNullOrEmpty(this.branchName))
+        {
+            return length > 0;
+        }
+
+        return this.branchName.Length > length;
+    }
+
+    /// <inheritdoc/>
     public void Dispose()
     {
         if (this.isDisposed)
