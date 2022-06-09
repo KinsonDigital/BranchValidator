@@ -13,7 +13,6 @@ public class ExpressionExecutorService : IExpressionExecutorService
     private const string OrOperator = "||";
     private const char LeftParen = '(';
     private const char RightParen = ')';
-    private const char SingleQuote = '\'';
 
     private readonly IExpressionValidatorService expressionValidatorService;
     private readonly IFunctionService functionService;
@@ -70,7 +69,6 @@ public class ExpressionExecutorService : IExpressionExecutorService
         {
             var funcParams = new List<string>();
             funcParams.AddRange(ExtractArgs(function));
-            funcParams.Add($"{SingleQuote}{branchName}{SingleQuote}");
 
             var result = this.functionService.Execute(function.GetUpToChar(LeftParen), funcParams.ToArray()).valid;
 

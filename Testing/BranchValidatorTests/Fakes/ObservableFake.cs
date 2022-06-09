@@ -1,4 +1,8 @@
-﻿using BranchValidator.Observables.Core;
+﻿// <copyright file="ObservableFake.cs" company="KinsonDigital">
+// Copyright (c) KinsonDigital. All rights reserved.
+// </copyright>
+
+using BranchValidator.Observables.Core;
 
 namespace BranchValidatorTests.Fakes;
 
