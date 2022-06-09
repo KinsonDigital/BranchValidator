@@ -116,4 +116,11 @@ public interface IFunctionDefinitions : IDisposable
     /// <param name="value">The value to check for.</param>
     /// <returns><c>true</c> if a branch name contains the <paramref name="value"/>.</returns>
     bool Contains(string value);
+
+    /// <summary>
+    /// Returns a value indicating whether or not the given <paramref name="value"/> is contained within a branch name.
+    /// </summary>
+    /// <param name="value">The value to check for.</param>
+    /// <returns><c>true</c> if a branch name does not contain the <paramref name="value"/>.</returns>
+    bool NotContains(string value);
 }

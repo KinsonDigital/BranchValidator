@@ -110,6 +110,9 @@ public class FunctionDefinitions : IFunctionDefinitions
     public bool Contains(string value) => this.branchName.Contains(value);
 
     /// <inheritdoc/>
+    public bool NotContains(string value) => this.branchName.DoesNotContain(value);
+
+    /// <inheritdoc/>
     public void Dispose()
     {
         if (this.isDisposed)

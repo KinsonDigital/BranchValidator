@@ -43,6 +43,7 @@ public class GitHubActionIntegrationTests : IDisposable
     [InlineData("isSectionNum(8, 10)", "feature/123-test-branch")]
     [InlineData("isSectionNum(8, '-')", "feature/123-test-branch")]
     [InlineData("contains('123-test')", "feature/123-test-branch")]
+    [InlineData("notContains('not-contained')", "feature/123-test-branch")]
     public async void Execute_WithValidBranches_ReturnsCorrectResult(string expression, string branchName)
     {
         // Arrange
@@ -73,6 +74,7 @@ public class GitHubActionIntegrationTests : IDisposable
     [InlineData("isCharNum(-8)", "isCharNum", "feature/123-test-branch")]
     [InlineData("isSectionNum(4, 8)", "isSectionNum", "feature/123-test-branch")]
     [InlineData("contains('not-contained')", "contains", "feature/123-test-branch")]
+    [InlineData("notContains('123-test')", "notContains", "feature/123-test-branch")]
     public async void Execute_WithInvalidBranches_FailsActionWithException(
         string expression,
         string funcName,
