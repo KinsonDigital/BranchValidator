@@ -314,17 +314,12 @@ public static class ExtensionMethods
                 return invalidResult;
             }
 
-            bool IsNumberParam(string value)
-            {
-                return value.All(c => Numbers.Contains(c));
-            }
-
             for (var i = 0; i < methodParams.Length; i++)
             {
                 var methodParamType = methodParams[i].ParameterType == typeof(string)
                     ? "string"
                     : "number";
-                var funcParamType = IsNumberParam(argValues?[i] ?? string.Empty)
+                var funcParamType = argValues?[i].IsWholeNumber() ?? false
                     ? "number"
                     : "string";
 

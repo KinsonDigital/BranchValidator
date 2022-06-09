@@ -1,4 +1,4 @@
-﻿// <copyright file="MethodExecutor.cs" company="KinsonDigital">
+// <copyright file="MethodExecutor.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -35,26 +35,6 @@ public class MethodExecutor : IMethodExecutor
             return (getMethodResult.result, getMethodResult.msg);
         }
 
-        bool IsStringParam(string value)
-        {
-            if (string.IsNullOrEmpty(value))
-            {
-                return false;
-            }
-
-            var hasSingleQuotes = value.StartsWith(SingleQuote) && value.EndsWith(SingleQuote) && value.DoesNotContain(DoubleQuote);
-            var hasDoubleQuotes = value.StartsWith(DoubleQuote) && value.EndsWith(DoubleQuote) && value.DoesNotContain(SingleQuote);
-
-            return hasSingleQuotes || hasDoubleQuotes;
-        }
-
-        bool IsNumParam(string value)
-        {
-            return value.DoesNotContain(SingleQuote) &&
-                   value.DoesNotContain(DoubleQuote) &&
-                   value.All(c => Numbers.Contains(c));
-        }
-
         var methodParams = getMethodResult.method.GetParameters();
 
         var methodArgValues = new List<object>();
@@ -64,7 +44,7 @@ public class MethodExecutor : IMethodExecutor
             var parameter = argValues?[i] ?? string.Empty;
 
             // If the param is a number
-            if (!IsStringParam(parameter) && IsNumParam(parameter))
+            if (parameter.IsWholeNumber())
             {
                 bool parseSuccess;
                 var paramType = methodParams[i].ParameterType;
