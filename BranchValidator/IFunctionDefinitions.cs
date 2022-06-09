@@ -232,4 +232,13 @@ public interface IFunctionDefinitions : IDisposable
     /// <param name="length">The length to compare to the length of the branch.</param>
     /// <returns><c>true</c> if the length of the branch is greater than the given <paramref name="length"/>.</returns>
     bool LenGreaterThan(uint length);
+
+    /// <summary>
+    /// Returns a value indicating whether or not the given <paramref name="value"/> <c>string</c> is located
+    /// before the given <paramref name="after"/> <c>string</c>.
+    /// </summary>
+    /// <param name="value">The <c>string</c> located before <paramref name="after"/> <c>string</c>.</param>
+    /// <param name="after">The <c>string</c> located after the <paramref name="value"/> <c>string</c>.</param>
+    /// <returns><c>true</c> if the <paramref name="value"/> <c>string</c> is located before the <paramref name="after"/> <c>string</c>.</returns>
+    bool IsBefore(string value, string after);
 }

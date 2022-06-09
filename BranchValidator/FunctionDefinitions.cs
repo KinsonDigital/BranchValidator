@@ -162,6 +162,20 @@ public class FunctionDefinitions : IFunctionDefinitions
     }
 
     /// <inheritdoc/>
+    public bool IsBefore(string value, string after)
+    {
+        if (string.IsNullOrEmpty(this.branchName))
+        {
+            return false;
+        }
+
+        var valueIndex = this.branchName.IndexOf(value, StringComparison.Ordinal);
+        var afterIndex = this.branchName.IndexOf(after, StringComparison.Ordinal);
+
+        return valueIndex < afterIndex;
+    }
+
+    /// <inheritdoc/>
     public void Dispose()
     {
         if (this.isDisposed)

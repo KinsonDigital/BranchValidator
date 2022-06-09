@@ -440,6 +440,28 @@ public class FunctionDefinitionsTests
         // Assert
         actual.Should().Be(expected);
     }
+
+    [Theory]
+    [InlineData("feature/123-test-branch", "123", "branch", true)]
+    [InlineData(null, "123", "branch", false)]
+    [InlineData("", "123", "branch", false)]
+    [InlineData("feature/123-test-branch", "branch", "123", false)]
+    public void IsBefore_WhenInvoked_ReturnsCorrectResult(
+        string branchName,
+        string value,
+        string after,
+        bool expected)
+    {
+        // Arrange
+        var definitions = CreateDefinitions();
+        this.observer.OnNext(branchName);
+
+        // Act
+        var actual = definitions.IsBefore(value, after);
+
+        // Assert
+        actual.Should().Be(expected);
+    }
     #endregion
 
     /// <summary>

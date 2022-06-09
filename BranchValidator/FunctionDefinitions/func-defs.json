@@ -15,5 +15,6 @@
   "startsWithNum": [],
   "endsWithNum": [],
   "lenLessThan:length": ["Number"],
-  "lenGreaterThan:length": ["Number"]
+  "lenGreaterThan:length": ["Number"],
+  "isBefore:value,after": ["String", "String"]
 }
