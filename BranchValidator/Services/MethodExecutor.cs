@@ -11,13 +11,6 @@ namespace BranchValidator.Services;
 [ExcludeFromCodeCoverage]
 public class MethodExecutor : IMethodExecutor
 {
-    private const char SingleQuote = '\'';
-    private const char DoubleQuote = '"';
-    private static readonly char[] Numbers =
-    {
-        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-    };
-
     /// <inheritdoc/>
     public (bool result, string method) ExecuteMethod(object obj, string name, string[]? argValues)
     {
