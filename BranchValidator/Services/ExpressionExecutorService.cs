@@ -70,6 +70,11 @@ public class ExpressionExecutorService : IExpressionExecutorService
             var funcParams = new List<string>();
             funcParams.AddRange(ExtractArgs(function));
 
+            if (funcParams.All(string.IsNullOrEmpty))
+            {
+                funcParams.Clear();
+            }
+
             var result = this.functionService.Execute(function.GetUpToChar(LeftParen), funcParams.ToArray()).valid;
 
             return result;
