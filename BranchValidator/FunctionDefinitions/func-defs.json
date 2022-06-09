@@ -12,5 +12,6 @@
   "notStartsWith:value": ["String"],
   "endsWith:value": ["String"],
   "notEndsWith:value": ["String"],
-  "startsWithNum": []
+  "startsWithNum": [],
+  "endsWithNum": []
 }
