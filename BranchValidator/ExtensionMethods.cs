@@ -16,6 +16,10 @@ public static class ExtensionMethods
     private const char SingleQuote = '\'';
     private const char DoubleQuote = '"';
 
+    private static readonly char[] Numbers =
+    {
+        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+    };
     private static readonly char[] LowerCaseLetters =
     {
         'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
@@ -301,8 +305,14 @@ public static class ExtensionMethods
             where m.Name == methodName
             select m).ToArray();
 
+        var methodFound = false;
+        var returnMsg = possibleMethods.Length <= 0
+            ? $"A function with the name '{methodName}' was not found."
+            : string.Empty;
+
         foreach (MethodInfo possibleMethod in possibleMethods)
         {
+            var matchFound = true;
             var methodParams = possibleMethod.GetParameters();
 
             bool NullOrEmpty<T>(IEnumerable<T>? items) => items is null || !items.Any();
@@ -311,6 +321,8 @@ public static class ExtensionMethods
             {
                 return invalidResult;
             }
+
+            bool IsNumberParam(string value) => value.All(c => Numbers.Contains(c));
 
             bool IsStringParam(string value)
             {
@@ -323,19 +335,29 @@ public static class ExtensionMethods
                 var methodParamType = methodParams[i].ParameterType == typeof(string)
                     ? "string"
                     : "number";
-                var funcParamType = IsStringParam(argValues?[i] ?? string.Empty)
-                    ? "string"
-                    : "number";
+                var funcParamType = IsNumberParam(argValues?[i] ?? string.Empty)
+                    ? "number"
+                    : "string";
 
                 if (methodParamType != funcParamType)
                 {
-                    return (false, $"No function with the parameter type of '{funcParamType}' found at parameter position '{i + 1}'.");
+                    matchFound = false;
+                    returnMsg = $"No function with the parameter type of '{funcParamType}' found at parameter position '{i + 1}'.";
                 }
             }
 
-            return (true, string.Empty);
+            methodFound = matchFound;
+
+            if (!methodFound)
+            {
+                continue;
+            }
+
+            // If this point is reached, then the method was found.  Reset the msg back to empty and leave loop.
+            returnMsg = string.Empty;
+            break;
         }
 
-        return invalidResult;
+        return (methodFound, returnMsg);
     }
 }
