@@ -125,6 +125,9 @@ public class FunctionDefinitions : IFunctionDefinitions
     public bool StartsWith(string value) => this.branchName.StartsWith(value);
 
     /// <inheritdoc/>
+    public bool NotStartsWith(string value) => !this.branchName.StartsWith(value);
+
+    /// <inheritdoc/>
     public void Dispose()
     {
         if (this.isDisposed)

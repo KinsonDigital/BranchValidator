@@ -8,5 +8,6 @@
   "existTotal:value,total": ["String", "Number"],
   "existsLessThan:value,total": ["String", "Number"],
   "existsGreaterThan:value,total": ["String", "Number"],
-  "startsWith:value": ["String"]
+  "startsWith:value": ["String"],
+  "notStartsWith:value": ["String"]
 }

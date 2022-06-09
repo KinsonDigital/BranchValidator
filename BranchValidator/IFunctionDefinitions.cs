@@ -173,4 +173,14 @@ public interface IFunctionDefinitions : IDisposable
     ///     The match for the <paramref name="value"/> is case sensitive.
     /// </remarks>
     bool StartsWith(string value);
+
+    /// <summary>
+    /// Returns a value indicating whether or not a branch name starts with the given <paramref name="value"/>.
+    /// </summary>
+    /// <param name="value">The value that the branch possibly starts with.</param>
+    /// <returns><c>true</c> if the branch does not start with the given <paramref name="value."/>.</returns>
+    /// <remarks>
+    ///     The match for the <paramref name="value"/> is case sensitive.
+    /// </remarks>
+    bool NotStartsWith(string value);
 }
