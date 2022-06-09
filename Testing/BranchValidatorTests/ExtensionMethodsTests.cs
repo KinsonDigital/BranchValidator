@@ -279,21 +279,22 @@ public class ExtensionMethodsTests
     }
 
     [Fact]
-    public void MethodContainsParams_WhenMethodDoesNotExist_ReturnsCorrectResult()
+    public void GetMethod_WhenMethodDoesNotExist_ReturnsCorrectResult()
     {
         // Arrange
         var testClass = new SampleTestClass();
 
         // Act
-        var actual = testClass.MethodContainsParams("non-existing-method", typeof(bool), It.IsAny<string[]>());
+        var actual = testClass.GetMethod("non-existing-method", typeof(bool), It.IsAny<string[]>());
 
         // Assert
         actual.result.Should().BeFalse();
         actual.msg.Should().Be("A function with the name 'non-existing-method' does not exist.");
+        actual.method.Should().BeNull();
     }
 
     [Fact]
-    public void MethodContainsParams_WhenInvoked_ReturnsCorrectResult()
+    public void GetMethod_WhenInvoked_ReturnsCorrectResult()
     {
         // Arrange
         var argValues = new[] { "'string-value'" };
@@ -301,15 +302,16 @@ public class ExtensionMethodsTests
         var testClass = new SampleTestClass();
 
         // Act
-        var actual = testClass.MethodContainsParams(nameof(SampleTestClass.MethodWithSingleParam), typeof(bool), argValues);
+        var actual = testClass.GetMethod(nameof(SampleTestClass.MethodWithSingleParam), typeof(bool), argValues);
 
         // Assert
         actual.result.Should().BeTrue();
         actual.msg.Should().Be(string.Empty);
+        actual.method.Should().NotBeNull();
     }
 
     [Fact]
-    public void MethodContainsParams_WhenNoMethodsExistWithSameParamCount_ReturnsCorrectResult()
+    public void GetMethod_WhenNoMethodsExistWithSameParamCount_ReturnsCorrectResult()
     {
         // Arrange
         var argValues = new[] { "'string-value-1'", "123" };
@@ -317,15 +319,16 @@ public class ExtensionMethodsTests
         var testClass = new SampleTestClass();
 
         // Act
-        var actual = testClass.MethodContainsParams(nameof(SampleTestClass.MethodWith3Params), typeof(bool), argValues);
+        var actual = testClass.GetMethod(nameof(SampleTestClass.MethodWith3Params), typeof(bool), argValues);
 
         // Assert
         actual.result.Should().BeFalse();
         actual.msg.Should().Be($"No function with the name '{nameof(SampleTestClass.MethodWith3Params)}' with '2' parameters found.");
+        actual.method.Should().BeNull();
     }
 
     [Fact]
-    public void MethodContainsParams_With2ParamsOfDiffTypes_ReturnsCorrectResult()
+    public void GetMethod_With2ParamsOfDiffTypes_ReturnsCorrectResult()
     {
         // Arrange
         var argValues = new[] { "'string-value-1'", "'string-value-2'" };
@@ -333,11 +336,12 @@ public class ExtensionMethodsTests
         var testClass = new SampleTestClass();
 
         // Act
-        var actual = testClass.MethodContainsParams(nameof(SampleTestClass.MethodWith2ParamsDiffTypes), typeof(bool), argValues);
+        var actual = testClass.GetMethod(nameof(SampleTestClass.MethodWith2ParamsDiffTypes), typeof(bool), argValues);
 
         // Assert
         actual.result.Should().BeFalse();
         actual.msg.Should().Be("No function with the parameter type of 'string' found at parameter position '2'.");
+        actual.method.Should().BeNull();
     }
 
     [Theory]
@@ -345,7 +349,7 @@ public class ExtensionMethodsTests
     [InlineData("123", "'-'", true, "")] // Function Example: isSectionNum(8, '-')
     // Validation would catch that quotes to no exist, but this is just checking the param value without caring about the analyzers
     [InlineData("123", "-", true, "")] // Function Example: isSectionNum(8, -)
-    public void MethodContainsParams_WithOverloadedMethods_ReturnsCorrectResult(
+    public void GetMethod_WithOverloadedMethods_ReturnsCorrectResult(
         string param1Value,
         string param2Value,
         bool expectedValidResult,
@@ -357,11 +361,12 @@ public class ExtensionMethodsTests
         var testClass = new SampleTestClass();
 
         // Act
-        var actual = testClass.MethodContainsParams(nameof(SampleTestClass.MethodOverload), typeof(bool), argValues);
+        var actual = testClass.GetMethod(nameof(SampleTestClass.MethodOverload), typeof(bool), argValues);
 
         // Assert
         actual.result.Should().Be(expectedValidResult);
         actual.msg.Should().Be(expectedMsgResult);
+        actual.method.Should().NotBeNull();
     }
     #endregion
 }

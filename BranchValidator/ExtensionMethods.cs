@@ -287,21 +287,22 @@ public static class ExtensionMethods
     ///     <item><c>msg:</c> Additional information about the result.</item>
     /// </list>
     /// </returns>
-    public static (bool result, string msg) MethodContainsParams(this object? obj, string methodName, Type returnType, string[]? argValues)
+    public static (bool result, string msg, MethodInfo? method) GetMethod(this object? obj, string methodName, Type returnType, string[]? argValues)
     {
         var totalArgValues = argValues?.Length ?? 0;
-        var invalidResult = (false, $"No function with the name '{methodName}' with '{totalArgValues}' parameters found.");
+        (bool, string, MethodInfo?) invalidResult = (false, $"No function with the name '{methodName}' with '{totalArgValues}' parameters found.", null);
 
         var methodExistsResult = ContainsMethod(obj, methodName, returnType);
         if (methodExistsResult.exists is false)
         {
-            return methodExistsResult;
+            return (false, "A function with the name 'non-existing-method' does not exist.", null);
         }
 
         var possibleMethods = (from m in obj?.GetType().GetMethods(BindingFlags.Public | BindingFlags.Instance)
             where m.Name == methodName
             select m).ToArray();
 
+        MethodInfo? foundMethod = null;
         var methodFound = false;
         var returnMsg = possibleMethods.Length <= 0
             ? $"A function with the name '{methodName}' was not found."
@@ -344,11 +345,13 @@ public static class ExtensionMethods
                 continue;
             }
 
+            foundMethod = possibleMethod;
+
             // If this point is reached, then the method was found.  Reset the msg back to empty and leave loop.
             returnMsg = string.Empty;
             break;
         }
 
-        return (methodFound, returnMsg);
+        return (methodFound, returnMsg, foundMethod);
     }
 }
