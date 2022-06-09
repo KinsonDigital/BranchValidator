@@ -20,7 +20,7 @@ public class MethodExecutor : IMethodExecutor
     };
 
     /// <inheritdoc/>
-    public (bool result, string msg) ExecuteMethod(object obj, string name, string[]? argValues)
+    public (bool result, string method) ExecuteMethod(object obj, string name, string[]? argValues)
     {
         name = name.ToPascalCase();
         var methodExistsResult = obj.ContainsMethod(name, typeof(bool));
@@ -30,11 +30,11 @@ public class MethodExecutor : IMethodExecutor
             return methodExistsResult;
         }
 
-        var methodContainsParams = obj.MethodContainsParams(name, typeof(bool), argValues);
+        var getMethodResult = obj.GetMethod(name, typeof(bool), argValues);
 
-        if (methodContainsParams.result is false)
+        if (getMethodResult.result is false || getMethodResult.method is null)
         {
-            return methodContainsParams;
+            return (getMethodResult.result, getMethodResult.msg);
         }
 
         bool IsStringParam(string value)
@@ -57,11 +57,7 @@ public class MethodExecutor : IMethodExecutor
                    value.All(c => Numbers.Contains(c));
         }
 
-        var foundMethod = (from m in obj.GetType().GetMethods(BindingFlags.Public | BindingFlags.Instance)
-            where m.Name == name && m.ReturnType == typeof(bool) && m.GetParameters().Length == argValues.Length
-            select m).ToArray()[0];
-
-        var methodParams = foundMethod.GetParameters();
+        var methodParams = getMethodResult.method.GetParameters();
 
         var methodArgValues = new List<object>();
 
@@ -91,7 +87,7 @@ public class MethodExecutor : IMethodExecutor
                     var paramName = methodParams[i].Name;
 
                     var exceptionMsg = $"Could not convert value to '{paramType}' for parameter '{paramName}'.";
-                    exceptionMsg += $"{Environment.NewLine}Can only use 'int' or 'uint' for function '{foundMethod.Name}'.";
+                    exceptionMsg += $"{Environment.NewLine}Can only use 'int' or 'uint' for function '{getMethodResult.method.Name}'.";
 
                     throw new Exception(exceptionMsg);
                 }
@@ -110,7 +106,7 @@ public class MethodExecutor : IMethodExecutor
             }
         }
 
-        var methodResult = (bool)(foundMethod.Invoke(obj, methodArgValues.ToArray()) ?? false);
+        var methodResult = (bool)(getMethodResult.method.Invoke(obj, methodArgValues.ToArray()) ?? false);
 
         return (methodResult, string.Empty);
     }
