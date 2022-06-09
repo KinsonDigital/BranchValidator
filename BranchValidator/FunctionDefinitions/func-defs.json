@@ -9,5 +9,6 @@
   "existsLessThan:value,total": ["String", "Number"],
   "existsGreaterThan:value,total": ["String", "Number"],
   "startsWith:value": ["String"],
-  "notStartsWith:value": ["String"]
+  "notStartsWith:value": ["String"],
+  "endsWith:value": ["String"]
 }

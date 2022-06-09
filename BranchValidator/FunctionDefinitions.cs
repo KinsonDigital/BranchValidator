@@ -1,4 +1,4 @@
-﻿// <copyright file="FunctionDefinitions.cs" company="KinsonDigital">
+// <copyright file="FunctionDefinitions.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -126,6 +126,9 @@ public class FunctionDefinitions : IFunctionDefinitions
 
     /// <inheritdoc/>
     public bool NotStartsWith(string value) => !this.branchName.StartsWith(value);
+
+    /// <inheritdoc/>
+    public bool EndsWith(string value) => this.branchName.EndsWith(value);
 
     /// <inheritdoc/>
     public void Dispose()

@@ -1,4 +1,4 @@
-﻿// <copyright file="IFunctionDefinitions.cs" company="KinsonDigital">
+// <copyright file="IFunctionDefinitions.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -183,4 +183,14 @@ public interface IFunctionDefinitions : IDisposable
     ///     The match for the <paramref name="value"/> is case sensitive.
     /// </remarks>
     bool NotStartsWith(string value);
+
+    /// <summary>
+    /// Returns a value indicating whether or not a branch name ends with the given <paramref name="value"/>.
+    /// </summary>
+    /// <param name="value">The value that the branch possibly ends with.</param>
+    /// <returns><c>true</c> if the branch does ends with the given <paramref name="value."/>.</returns>
+    /// <remarks>
+    ///     The match for the <paramref name="value"/> is case sensitive.
+    /// </remarks>
+    bool EndsWith(string value);
 }

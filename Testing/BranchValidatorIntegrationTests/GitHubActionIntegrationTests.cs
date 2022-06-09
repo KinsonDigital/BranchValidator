@@ -1,4 +1,4 @@
-﻿// <copyright file="GitHubActionIntegrationTests.cs" company="KinsonDigital">
+// <copyright file="GitHubActionIntegrationTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -50,6 +50,7 @@ public class GitHubActionIntegrationTests : IDisposable
     [InlineData("existsGreaterThan('test', 2)", "feature/test-123-test-123-test-branch")]
     [InlineData("startsWith('feature/123')", "feature/123-test-branch")]
     [InlineData("notStartsWith('123')", "feature/123-test-branch")]
+    [InlineData("endsWith('test-branch')", "feature/123-test-branch")]
     public async void Execute_WithValidBranches_ReturnsCorrectResult(string expression, string branchName)
     {
         // Arrange
@@ -86,6 +87,7 @@ public class GitHubActionIntegrationTests : IDisposable
     [InlineData("existsGreaterThan('test', 2)", "existsGreaterThan", "feature/123-test-123-test-branch")]
     [InlineData("startsWith('123')", "startsWith", "feature/123-test-branch")]
     [InlineData("notStartsWith('feature/123')", "notStartsWith", "feature/123-test-branch")]
+    [InlineData("endsWith('123')", "endsWith", "feature/123-test-branch")]
     public async void Execute_WithInvalidBranches_FailsActionWithException(
         string expression,
         string funcName,

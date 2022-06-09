@@ -1,4 +1,4 @@
-﻿// <copyright file="FunctionDefinitionsTests.cs" company="KinsonDigital">
+// <copyright file="FunctionDefinitionsTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -316,6 +316,28 @@ public class FunctionDefinitionsTests
         // Act
         var actual = definitions.NotStartsWith(value);
 
+        // Assert
+        actual.Should().Be(expected);
+    }
+
+    [Theory]
+    [InlineData("feature/123-test-branch", "branch", true)]
+    [InlineData("feature/123-test-branch", "123", false)]
+    public void EndsWith_WhenInvoked_ReturnsCorrectResult(
+        string branchName,
+        string value,
+        bool expected)
+    {
+        // Arrange
+        var definitions = CreateDefinitions();
+        this.observer.OnNext(branchName);
+
+        // Act
+        var actual = definitions.EndsWith(value);
+
+        // Assert
+        actual.Should().Be(expected);
+    }
         // Assert
         actual.Should().Be(expected);
     }
