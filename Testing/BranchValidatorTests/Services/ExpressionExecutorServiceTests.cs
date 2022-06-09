@@ -94,7 +94,6 @@ public class ExpressionExecutorServiceTests
         var expectedMsg = $"The function '{funcName}' returned a value of '{expectedFuncValid.ToString().ToLower()}'.";
         var argValues = new List<string>();
         argValues.AddRange(paramStr.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries));
-        argValues.Add($"'{branchName}'");
 
         this.mockFunctionService.Setup(m => m.Execute(funcName, argValues.ToArray()))
             .Returns((expectedFuncValid, expectedMsg));
@@ -139,7 +138,6 @@ public class ExpressionExecutorServiceTests
         const string branchName = "is-2-branch";
         const bool expectedFuncValid = true;
         const bool expectedExecutionValid = true;
-        const string expectedBranchParamValue = $"'{branchName}'";
         const string expectedMsg = "branch valid";
 
         this.mockFunctionService.Setup(m => m.Execute("funA", It.IsAny<string[]>()))
@@ -153,8 +151,8 @@ public class ExpressionExecutorServiceTests
         var actual = service.Execute(expression, branchName);
 
         // Assert
-        this.mockFunctionService.VerifyOnce(m => m.Execute("funA", "'is-2-branch'", expectedBranchParamValue));
-        this.mockFunctionService.VerifyOnce(m => m.Execute("funB", "3", expectedBranchParamValue));
+        this.mockFunctionService.VerifyOnce(m => m.Execute("funA", "'is-2-branch'"));
+        this.mockFunctionService.VerifyOnce(m => m.Execute("funB", "3"));
         actual.valid.Should().Be(expectedExecutionValid);
         actual.msg.Should().Be(expectedMsg);
     }
@@ -176,7 +174,6 @@ public class ExpressionExecutorServiceTests
         const string expression = "funA('value-A') && funB(10) || funC('value-C') || funD(20) && funE('value-E')";
         const string branchName = "test-branch";
         const string expectedMsg = "branch valid";
-        const string expectedBranchParamValue = $"'{branchName}'";
 
         this.mockFunctionService.Setup(m => m.Execute("funA", It.IsAny<string[]>()))
             .Returns((funcAValidResult, expectedMsg));
@@ -195,11 +192,11 @@ public class ExpressionExecutorServiceTests
         var actual = service.Execute(expression, branchName);
 
         // Assert
-        this.mockFunctionService.VerifyOnce(m => m.Execute("funA", "'value-A'", expectedBranchParamValue));
-        this.mockFunctionService.VerifyOnce(m => m.Execute("funB", "10", expectedBranchParamValue));
-        this.mockFunctionService.VerifyOnce(m => m.Execute("funC", "'value-C'", expectedBranchParamValue));
-        this.mockFunctionService.VerifyOnce(m => m.Execute("funD", "20", expectedBranchParamValue));
-        this.mockFunctionService.VerifyOnce(m => m.Execute("funE", "'value-E'", expectedBranchParamValue));
+        this.mockFunctionService.VerifyOnce(m => m.Execute("funA", "'value-A'"));
+        this.mockFunctionService.VerifyOnce(m => m.Execute("funB", "10"));
+        this.mockFunctionService.VerifyOnce(m => m.Execute("funC", "'value-C'"));
+        this.mockFunctionService.VerifyOnce(m => m.Execute("funD", "20"));
+        this.mockFunctionService.VerifyOnce(m => m.Execute("funE", "'value-E'"));
         actual.valid.Should().Be(expectedExecuteResult);
         actual.msg.Should().Be(expectedExecuteMsg);
     }

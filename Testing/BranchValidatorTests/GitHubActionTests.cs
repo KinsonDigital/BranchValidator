@@ -20,6 +20,7 @@ public class GitHubActionTests
     private readonly Mock<IActionOutputService> mockActionOutputService;
     private readonly Mock<IExpressionExecutorService> mockExpressionExecutorService;
     private readonly Mock<IFunctionService> mockFunctionService;
+    private readonly Mock<IBranchNameObservable> mockBranchNameObservable;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="GitHubActionTests"/> class.
@@ -33,6 +34,8 @@ public class GitHubActionTests
         this.mockFunctionService = new Mock<IFunctionService>();
         this.mockFunctionService.SetupGet(p => p.FunctionSignatures)
             .Returns(() => new[] { "equalTo(value: string)" }.ToReadOnlyCollection());
+
+        this.mockBranchNameObservable = new Mock<IBranchNameObservable>();
     }
 
     #region Method Tests
@@ -121,6 +124,8 @@ public class GitHubActionTests
         this.mockConsoleService.Verify(m => m.BlankLine(), Times.Exactly(2));
         this.mockConsoleService.VerifyOnce(m => m.WriteLine(expectedMsgResult));
         this.mockActionOutputService.VerifyOnce(m => m.SetOutputValue("valid-branch", expectedValidResult.ToString().ToLower()));
+        this.mockBranchNameObservable.VerifyOnce(m => m.PushNotification(branchName));
+        this.mockBranchNameObservable.VerifyOnce(m => m.UnsubscribeAll());
     }
 
     [Fact]
@@ -210,5 +215,6 @@ public class GitHubActionTests
         => new (this.mockConsoleService.Object,
             this.mockActionOutputService.Object,
             this.mockExpressionExecutorService.Object,
-            this.mockFunctionService.Object);
+            this.mockFunctionService.Object,
+            this.mockBranchNameObservable.Object);
 }

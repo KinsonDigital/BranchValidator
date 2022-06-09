@@ -3,13 +3,83 @@
 // </copyright>
 
 using BranchValidator;
+using BranchValidatorTests.Helpers;
 using FluentAssertions;
+using Moq;
 
 namespace BranchValidatorTests;
 
+/// <summary>
+/// Tests the <see cref="FunctionDefinitions"/> class.
+/// </summary>
 public class FunctionDefinitionsTests
 {
+    private readonly Mock<IDisposable> unsubscriber;
+    private readonly Mock<IBranchNameObservable> mockBranchNameObservable;
+    private IStringObserver observer = null!;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="FunctionDefinitionsTests"/> class.
+    /// </summary>
+    public FunctionDefinitionsTests()
+    {
+        this.unsubscriber = new Mock<IDisposable>();
+        this.mockBranchNameObservable = new Mock<IBranchNameObservable>();
+        this.mockBranchNameObservable.Setup(m => m.Subscribe(It.IsAny<IStringObserver>()))
+            .Returns(() => this.unsubscriber.Object)
+            .Callback<IStringObserver>(observerValue =>
+            {
+                observerValue.Should().NotBeNull();
+
+                this.observer = observerValue;
+            });
+    }
+
+    #region Constructor Tests
+    [Fact]
+    public void Observer_WhenOnCompletedIsInvoked_DisposesUnsubscriber()
+    {
+        // Arrange
+        var unused = CreateDefinitions();
+
+        // Act
+        this.observer.OnCompleted();
+        this.observer.OnCompleted();
+
+        // Assert
+        this.unsubscriber.VerifyOnce(m => m.Dispose());
+    }
+
+    [Fact]
+    public void Observer_WhenOnOnErrorIsInvoked_DisposesUnsubscriber()
+    {
+        // Arrange
+        var unused = CreateDefinitions();
+
+        // Act
+        this.observer.OnError(new Exception("test-exception"));
+        this.observer.OnError(new Exception("test-exception"));
+
+        // Assert
+        this.unsubscriber.VerifyOnce(m => m.Dispose());
+    }
+    #endregion
+
     #region Method Tests
+    [Fact]
+    public void Dispose_WhenInvoked_DisposesOfObject()
+    {
+        // Arrange
+        var definitions = CreateDefinitions();
+
+        // Act
+        definitions.Dispose();
+        definitions.Dispose();
+
+        // Assert
+        this.unsubscriber.VerifyOnce(m => m.Dispose());
+    }
+
     [Theory]
     [InlineData("my-branch", "my-branch", true)]
     [InlineData(null, "", true)]
@@ -25,10 +95,11 @@ public class FunctionDefinitionsTests
         bool expected)
     {
         // Arrange
-        var definitions = new FunctionDefinitions();
+        var definitions = CreateDefinitions();
+        this.observer.OnNext(branchName);
 
         // Act
-        var actual = definitions.EqualTo(value, branchName);
+        var actual = definitions.EqualTo(value);
 
         // Assert
         actual.Should().Be(expected);
@@ -45,10 +116,11 @@ public class FunctionDefinitionsTests
         bool expected)
     {
         // Arrange
-        var definitions = new FunctionDefinitions();
+        var definitions = CreateDefinitions();
+        this.observer.OnNext(branchName);
 
         // Act
-        var actual = definitions.IsCharNum(charPos, branchName);
+        var actual = definitions.IsCharNum(charPos);
 
         // Assert
         actual.Should().Be(expected);
@@ -69,10 +141,11 @@ public class FunctionDefinitionsTests
         bool expected)
     {
         // Arrange
-        var definitions = new FunctionDefinitions();
+        var definitions = CreateDefinitions();
+        this.observer.OnNext(branchName);
 
         // Act
-        var actual = definitions.IsSectionNum(startPos, endPos, branchName);
+        var actual = definitions.IsSectionNum(startPos, endPos);
 
         // Assert
         actual.Should().Be(expected);
@@ -97,13 +170,20 @@ public class FunctionDefinitionsTests
         bool expected)
     {
         // Arrange
-        var definitions = new FunctionDefinitions();
+        var definitions = CreateDefinitions();
+        this.observer.OnNext(branchName);
 
         // Act
-        var actual = definitions.IsSectionNum(startPos, upToChar, branchName);
+        var actual = definitions.IsSectionNum(startPos, upToChar);
 
         // Assert
         actual.Should().Be(expected);
     }
     #endregion
+
+    /// <summary>
+    /// Creates a new instance of <see cref="FunctionDefinitions"/> for the purpose of testing.
+    /// </summary>
+    /// <returns>The instance to test.</returns>
+    private FunctionDefinitions CreateDefinitions() => new (this.mockBranchNameObservable.Object);
 }
