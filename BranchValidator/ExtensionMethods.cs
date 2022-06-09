@@ -1,4 +1,4 @@
-﻿// <copyright file="ExtensionMethods.cs" company="KinsonDigital">
+// <copyright file="ExtensionMethods.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -86,6 +86,14 @@ public static class ExtensionMethods
 
         return Regex.Matches(thisStr, value, RegexOptions.IgnoreCase).Count;
     }
+
+    /// <summary>
+    /// Returns a value indicating whether or not the given this <c>string</c> <paramref name="value"/> does not start with the given <paramref name="character"/>.
+    /// </summary>
+    /// <param name="value">The value that might start with the <paramref name="character"/>.</param>
+    /// <param name="character">The character to check for.</param>
+    /// <returns><c>true</c> if the <paramref name="value"/> does not start with the <paramref name="character"/>.</returns>
+    public static bool DoesNotStartWith(this string value, char character) => !value.StartsWith(character);
 
     /// <summary>
     /// Returns a value indicating whether or not the given this <c>string</c> <paramref name="value"/> ends with the given <paramref name="character"/>.
