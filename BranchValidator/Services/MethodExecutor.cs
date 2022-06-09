@@ -1,4 +1,4 @@
-// <copyright file="MethodExecutor.cs" company="KinsonDigital">
+﻿// <copyright file="MethodExecutor.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -58,7 +58,7 @@ public class MethodExecutor : IMethodExecutor
                 }
                 else if (paramType == typeof(uint))
                 {
-                    parseSuccess = uint.TryParse(parameter, out uintValue);
+                    parseSuccess = uint.TryParse(parameter.Contains('-') ? "0" : parameter, out uintValue);
                 }
                 else
                 {

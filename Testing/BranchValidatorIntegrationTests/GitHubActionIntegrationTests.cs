@@ -69,6 +69,7 @@ public class GitHubActionIntegrationTests : IDisposable
     [Theory]
     [InlineData("equalTo('not-equal-branch')", "equalTo", "test-branch")]
     [InlineData("isCharNum(4)", "isCharNum", "feature/123-test-branch")]
+    [InlineData("isCharNum(-8)", "isCharNum", "feature/123-test-branch")]
     [InlineData("isSectionNum(4, 8)", "isSectionNum", "feature/123-test-branch")]
     public async void Execute_WithInvalidBranches_FailsActionWithException(
         string expression,
