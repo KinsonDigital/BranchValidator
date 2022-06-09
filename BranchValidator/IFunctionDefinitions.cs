@@ -81,6 +81,9 @@ public interface IFunctionDefinitions : IDisposable
     ///         <item>
     ///             The <paramref name="upToChar"/> is exclusive in the <c>string</c> section to be checked.
     ///         </item>
+    ///         <item>
+    ///             The match against the <paramref name="upToChar"/> is vase sensitive if it is a letter.
+    ///         </item>
     ///     </list>
     ///
     ///     Examples:
@@ -115,6 +118,9 @@ public interface IFunctionDefinitions : IDisposable
     /// </summary>
     /// <param name="value">The value to check for.</param>
     /// <returns><c>true</c> if a branch name contains the <paramref name="value"/>.</returns>
+    /// <remarks>
+    ///     The search is case sensitive.
+    /// </remarks>
     bool Contains(string value);
 
     /// <summary>
@@ -122,6 +128,9 @@ public interface IFunctionDefinitions : IDisposable
     /// </summary>
     /// <param name="value">The value to check for.</param>
     /// <returns><c>true</c> if a branch name does not contain the <paramref name="value"/>.</returns>
+    /// <remarks>
+    ///     The search is case sensitive.
+    /// </remarks>
     bool NotContains(string value);
 
     /// <summary>
@@ -131,5 +140,8 @@ public interface IFunctionDefinitions : IDisposable
     /// <param name="value">The value to check for.</param>
     /// <param name="total">The total number of times that the <paramref name="value"/> should exist.</param>
     /// <returns><c>true</c> if the <paramref name="value"/> exists the exact amount of times.</returns>
+    /// <remarks>
+    ///     The search is case sensitive.
+    /// </remarks>
     bool ExistTotal(string value, uint total);
 }
