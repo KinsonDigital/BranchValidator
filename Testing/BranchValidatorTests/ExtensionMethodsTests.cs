@@ -262,6 +262,23 @@ public class ExtensionMethodsTests
     }
 
     [Fact]
+    public void ContainsMethod_WhenMethodNameMatchesAndReturnTypeDoesNot_ReturnsCorrectResult()
+    {
+        // Arrange
+        var expectedMsg = $"A function with the name '{nameof(SampleTestClass.MethodThatDoesNotReturnBool)}' exists";
+        expectedMsg += " but does not have a 'boolean' return type.";
+
+        var testClass = new SampleTestClass();
+
+        // Act
+        var actual = testClass.ContainsMethod(nameof(SampleTestClass.MethodThatDoesNotReturnBool), typeof(bool));
+
+        // Assert
+        actual.exists.Should().BeFalse();
+        actual.msg.Should().Be(expectedMsg);
+    }
+
+    [Fact]
     public void MethodContainsParams_WhenMethodDoesNotExist_ReturnsCorrectResult()
     {
         // Arrange

@@ -263,7 +263,12 @@ public static class ExtensionMethods
             return (false, msg);
         }
 
-        return (method.ReturnType == returnType, string.Empty);
+        var hasCorrectReturnType = method.ReturnType == returnType;
+        var returnMsg = hasCorrectReturnType
+            ? string.Empty
+            : $"A function with the name '{methodName}' exists but does not have a '{returnType.Name.ToLower()}' return type.";
+
+        return (hasCorrectReturnType, returnMsg);
     }
 
     /// <summary>
