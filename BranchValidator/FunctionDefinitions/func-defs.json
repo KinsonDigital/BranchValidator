@@ -13,5 +13,6 @@
   "endsWith:value": ["String"],
   "notEndsWith:value": ["String"],
   "startsWithNum": [],
-  "endsWithNum": []
+  "endsWithNum": [],
+  "lenLessThan": ["Number"]
 }

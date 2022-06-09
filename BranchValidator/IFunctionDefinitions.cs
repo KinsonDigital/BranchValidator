@@ -215,4 +215,14 @@ public interface IFunctionDefinitions : IDisposable
     /// </summary>
     /// <returns><c>true</c> if the branch ends with a number.</returns>
     bool EndsWithNum();
+
+    /// <summary>
+    /// Returns a value indicating whether or not the length of the branch name is less than the given <paramref name="length"/>.
+    /// </summary>
+    /// <param name="length">The length to compare to the length of the branch.</param>
+    /// <returns><c>true</c> if the length of the branch is less than the given <paramref name="length"/>.</returns>
+    /// <remarks>
+    ///     If the <paramref name="length"/> value is less than 0, then 0 will be used.
+    /// </remarks>
+    bool LenLessThan(uint length);
 }

@@ -1,4 +1,4 @@
-﻿// <copyright file="FunctionDefinitions.cs" company="KinsonDigital">
+// <copyright file="FunctionDefinitions.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -138,6 +138,17 @@ public class FunctionDefinitions : IFunctionDefinitions
 
     /// <inheritdoc/>
     public bool EndsWithNum() => !string.IsNullOrEmpty(this.branchName) && Numbers.Contains(this.branchName[^1]);
+
+    /// <inheritdoc/>
+    public bool LenLessThan(uint length)
+    {
+        if (string.IsNullOrEmpty(this.branchName))
+        {
+            return false;
+        }
+
+        return this.branchName.Length < length;
+    }
 
     /// <inheritdoc/>
     public void Dispose()

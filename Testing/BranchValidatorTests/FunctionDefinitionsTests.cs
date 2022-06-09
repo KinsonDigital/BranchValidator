@@ -397,6 +397,28 @@ public class FunctionDefinitionsTests
         // Assert
         actual.Should().Be(expected);
     }
+
+    [Theory]
+    [InlineData("feature/123-test-branch", 200, true)]
+    [InlineData(null, 0, false)]
+    [InlineData("", 0, false)]
+    [InlineData("feature/123-test-branch", 10, false)]
+    [InlineData("feature/123-test-branch", 23, false)]
+    public void LenLessThan_WhenInvoked_ReturnsCorrectResult(
+        string branchName,
+        uint value,
+        bool expected)
+    {
+        // Arrange
+        var definitions = CreateDefinitions();
+        this.observer.OnNext(branchName);
+
+        // Act
+        var actual = definitions.LenLessThan(value);
+
+        // Assert
+        actual.Should().Be(expected);
+    }
     #endregion
 
     /// <summary>

@@ -54,6 +54,7 @@ public class GitHubActionIntegrationTests : IDisposable
     [InlineData("notEndsWith('123')", "feature/123-test-branch")]
     [InlineData("startsWithNum()", "123-test-branch")]
     [InlineData("endsWithNum()", "feature/123-test-branch-456")]
+    [InlineData("lenLessThan(200)", "feature/123-test-branch")]
     public async void Execute_WithValidBranches_ReturnsCorrectResult(string expression, string branchName)
     {
         // Arrange
@@ -94,6 +95,7 @@ public class GitHubActionIntegrationTests : IDisposable
     [InlineData("notEndsWith('test-branch')", "notEndsWith", "feature/123-test-branch")]
     [InlineData("startsWithNum()", "startsWithNum", "feature/123-test-branch")]
     [InlineData("endsWithNum()", "endsWithNum", "feature/123-test-branch")]
+    [InlineData("lenLessThan(10)", "lenLessThan", "feature/123-test-branch")]
     public async void Execute_WithInvalidBranches_FailsActionWithException(
         string expression,
         string funcName,
