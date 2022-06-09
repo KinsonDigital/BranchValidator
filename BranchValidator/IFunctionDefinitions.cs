@@ -203,4 +203,10 @@ public interface IFunctionDefinitions : IDisposable
     ///     The match for the <paramref name="value"/> is case sensitive.
     /// </remarks>
     bool NotEndsWith(string value);
+
+    /// <summary>
+    /// Returns a value indicating whether or not the branch name starts with a number.
+    /// </summary>
+    /// <returns><c>true</c> if the branch starts with a number.</returns>
+    bool StartsWithNum();
 }

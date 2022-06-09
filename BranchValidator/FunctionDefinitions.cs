@@ -134,6 +134,9 @@ public class FunctionDefinitions : IFunctionDefinitions
     public bool NotEndsWith(string value) => !this.branchName.EndsWith(value);
 
     /// <inheritdoc/>
+    public bool StartsWithNum() => !string.IsNullOrEmpty(this.branchName) && Numbers.Contains(this.branchName[0]);
+
+    /// <inheritdoc/>
     public void Dispose()
     {
         if (this.isDisposed)
