@@ -4,6 +4,7 @@
 
 using BranchValidator;
 using BranchValidator.Factories;
+using BranchValidator.Observables;
 using BranchValidator.Services;
 using FluentAssertions;
 
@@ -26,13 +27,14 @@ public class GitHubActionIntegrationTests : IDisposable
         var methodExecutor = new MethodExecutor();
         var jsonService = new JSONService();
         var resourceLoaderService = new TextResourceLoaderService();
-        var functionDefinitions = new FunctionDefinitions();
+        var updateBranchNameObservable = new UpdateBranchNameObservable();
+        var functionDefinitions = new FunctionDefinitions(updateBranchNameObservable);
         var functionService = new FunctionService(jsonService, resourceLoaderService, methodExecutor, functionDefinitions);
         var consoleService = new GitHubConsoleService();
         var outputService = new ActionOutputService(consoleService);
         var expressionExecutorService = new ExpressionExecutorService(expressionValidationService, functionService);
 
-        this.action = new GitHubAction(consoleService, outputService, expressionExecutorService, functionService);
+        this.action = new GitHubAction(consoleService, outputService, expressionExecutorService, functionService, updateBranchNameObservable);
     }
 
     [Theory]

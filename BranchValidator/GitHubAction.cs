@@ -14,6 +14,7 @@ public sealed class GitHubAction : IGitHubAction<bool>
     private readonly IActionOutputService outputService;
     private readonly IExpressionExecutorService expressionExecutorService;
     private readonly IFunctionService functionService;
+    private readonly IBranchNameObservable branchNameObservable;
     private bool isDisposed;
 
     /// <summary>
@@ -23,16 +24,19 @@ public sealed class GitHubAction : IGitHubAction<bool>
     /// <param name="consoleService">Prints messages to the GitHub console.</param>
     /// <param name="outputService">Sets the GitHub action outputs.</param>
     /// <param name="functionService">Holds information about the available functions.</param>
+    /// <param name="branchNameObservable">Sends a push notification of the branch name.</param>
     public GitHubAction(
         IGitHubConsoleService consoleService,
         IActionOutputService outputService,
         IExpressionExecutorService expressionExecutorService,
-        IFunctionService functionService)
+        IFunctionService functionService,
+        IBranchNameObservable branchNameObservable)
     {
         this.consoleService = consoleService;
         this.outputService = outputService;
         this.expressionExecutorService = expressionExecutorService;
         this.functionService = functionService;
+        this.branchNameObservable = branchNameObservable;
     }
 
     /// <inheritdoc/>
@@ -40,6 +44,10 @@ public sealed class GitHubAction : IGitHubAction<bool>
     {
         var branchIsValid = false;
         ShowWelcomeMessage();
+
+        // Update the function definitions object of the branch name
+        this.branchNameObservable.PushNotification(inputs.BranchName);
+        this.branchNameObservable.UnsubscribeAll();
 
         var functionSignatures = this.functionService.FunctionSignatures;
 
@@ -86,7 +94,7 @@ public sealed class GitHubAction : IGitHubAction<bool>
             return;
         }
 
-        // TODO: Dispose of something here.  If nothing to dispose, remove this comment
+        this.branchNameObservable.Dispose();
         this.isDisposed = true;
     }
 

@@ -5,6 +5,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using BranchValidator.Factories;
+using BranchValidator.Observables;
 using BranchValidator.Services;
 using BranchValidator.Services.Interfaces;
 
@@ -30,6 +31,7 @@ public static class Program
         host = Host.CreateDefaultBuilder(args)
             .ConfigureServices((_, services) =>
             {
+                services.AddSingleton<IBranchNameObservable, UpdateBranchNameObservable>();
                 services.AddSingleton<IJSONService, JSONService>();
                 services.AddSingleton<IEmbeddedResourceLoaderService<string>, TextResourceLoaderService>();
                 services.AddSingleton<IAppService, AppService>();
@@ -37,6 +39,7 @@ public static class Program
                 services.AddSingleton<IActionOutputService, ActionOutputService>();
                 services.AddSingleton<IArgParsingService<ActionInputs>, ArgParsingService>();
                 services.AddSingleton<IMethodExecutor, MethodExecutor>();
+                services.AddSingleton<IFunctionDefinitions, FunctionDefinitions>();
                 services.AddSingleton<IFunctionService, FunctionService>();
                 services.AddSingleton<IExpressionValidatorService, ExpressionValidatorService>();
                 services.AddSingleton<IAnalyzerFactory, AnalyzerFactory>();
