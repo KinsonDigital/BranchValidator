@@ -111,6 +111,18 @@ public class ExtensionMethodsTests
     }
 
     [Theory]
+    [InlineData("valuez", true)]
+    [InlineData("zvalue", false)]
+    public void DoesNotStartWith(string value, bool expected)
+    {
+        // Act
+        var actual = value.DoesNotStartWith('z');
+
+        // Assert
+        actual.Should().Be(expected);
+    }
+
+    [Theory]
     [InlineData("value", true)]
     [InlineData("valuez", false)]
     public void DoesNotEndWith(string value, bool expected)
@@ -221,6 +233,23 @@ public class ExtensionMethodsTests
     {
         // Act
         var actual = thisString.IsNotBetween(value, leftPos, rightPos);
+
+        // Assert
+        actual.Should().Be(expected);
+    }
+
+    [Theory]
+    [InlineData(null, false)]
+    [InlineData("", false)]
+    [InlineData("123abc", false)]
+    [InlineData("123-", false)]
+    [InlineData("12.3", false)]
+    [InlineData("123", true)]
+    [InlineData("-123", true)]
+    public void IsWholeNumber_WhenInvoked_ReturnsCorrectResult(string value, bool expected)
+    {
+        // Act
+        var actual = value.IsWholeNumber();
 
         // Assert
         actual.Should().Be(expected);
