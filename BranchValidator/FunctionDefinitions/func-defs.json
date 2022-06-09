@@ -4,5 +4,6 @@
   "isSectionNum:startPos,upToChar": ["Number", "String"],
   "isSectionNum:startPos,endPos": ["Number", "Number"],
   "contains:value": ["String"],
-  "notContains:value": ["String"]
+  "notContains:value": ["String"],
+  "existTotal:value,total": ["String", "Number"]
 }

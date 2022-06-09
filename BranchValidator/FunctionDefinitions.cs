@@ -113,6 +113,9 @@ public class FunctionDefinitions : IFunctionDefinitions
     public bool NotContains(string value) => this.branchName.DoesNotContain(value);
 
     /// <inheritdoc/>
+    public bool ExistTotal(string value, uint total) => this.branchName.Count(value) == total;
+
+    /// <inheritdoc/>
     public void Dispose()
     {
         if (this.isDisposed)

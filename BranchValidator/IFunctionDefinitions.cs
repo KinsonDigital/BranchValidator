@@ -123,4 +123,13 @@ public interface IFunctionDefinitions : IDisposable
     /// <param name="value">The value to check for.</param>
     /// <returns><c>true</c> if a branch name does not contain the <paramref name="value"/>.</returns>
     bool NotContains(string value);
+
+    /// <summary>
+    /// Returns a value indicating whether or not the given <paramref name="value"/> occurs within
+    /// a branch name the given <paramref name="total"/> amount of times.
+    /// </summary>
+    /// <param name="value">The value to check for.</param>
+    /// <param name="total">The total number of times that the <paramref name="value"/> should exist.</param>
+    /// <returns><c>true</c> if the <paramref name="value"/> exists the exact amount of times.</returns>
+    bool ExistTotal(string value, uint total);
 }

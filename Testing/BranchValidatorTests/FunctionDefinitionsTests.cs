@@ -217,6 +217,29 @@ public class FunctionDefinitionsTests
         // Assert
         actual.Should().Be(expected);
     }
+
+    [Theory]
+    [InlineData("feature/123-branch", "test", 1, false)]
+    [InlineData("feature/123-branch", "a", 2, true)]
+    [InlineData("feature/123-test-branch-test", "test", 4, false)]
+    [InlineData("feature/123-test-branch", "test", 1, true)]
+    [InlineData("feature/123-test-branch-test", "test", 2, true)]
+    public void ExistTotal_WhenInvoked_ReturnsCorrectResult(
+        string branchName,
+        string value,
+        uint total,
+        bool expected)
+    {
+        // Arrange
+        var definitions = CreateDefinitions();
+        this.observer.OnNext(branchName);
+
+        // Act
+        var actual = definitions.ExistTotal(value, total);
+
+        // Assert
+        actual.Should().Be(expected);
+    }
     #endregion
 
     /// <summary>
