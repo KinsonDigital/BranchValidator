@@ -1,4 +1,4 @@
-﻿// <copyright file="IFunctionDefinitions.cs" company="KinsonDigital">
+// <copyright file="IFunctionDefinitions.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -139,7 +139,7 @@ public interface IFunctionDefinitions : IDisposable
     /// </summary>
     /// <param name="value">The value to check for.</param>
     /// <param name="total">The total number of times that the <paramref name="value"/> should exist.</param>
-    /// <returns><c>true</c> if the <paramref name="value"/> exists the exact amount of times.</returns>
+    /// <returns><c>true</c> if the <paramref name="value"/> exists the exact specified number of times.</returns>
     /// <remarks>
     ///     The search is case sensitive.
     /// </remarks>
@@ -151,6 +151,6 @@ public interface IFunctionDefinitions : IDisposable
     /// </summary>
     /// <param name="value">The value to check for.</param>
     /// <param name="total">The total number of times to check that the <paramref name="value"/> exists.</param>
-    /// <returns><c>true</c> if the <paramref name="value"/> exists the specified number of times.</returns>
+    /// <returns><c>true</c> if the <paramref name="value"/> exists greater than the specified number of times.</returns>
     bool ExistsLessThan(string value, uint total);
 }
