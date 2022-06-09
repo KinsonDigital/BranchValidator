@@ -144,4 +144,13 @@ public interface IFunctionDefinitions : IDisposable
     ///     The search is case sensitive.
     /// </remarks>
     bool ExistTotal(string value, uint total);
+
+    /// <summary>
+    /// Returns a value indicating whether or not the given <paramref name="value"/> exists
+    /// less than the given <paramref name="total"/> amount of times.
+    /// </summary>
+    /// <param name="value">The value to check for.</param>
+    /// <param name="total">The total number of times to check that the <paramref name="value"/> exists.</param>
+    /// <returns><c>true</c> if the <paramref name="value"/> exists the specified number of times.</returns>
+    bool ExistsLessThan(string value, uint total);
 }

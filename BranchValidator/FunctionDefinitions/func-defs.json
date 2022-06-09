@@ -5,5 +5,6 @@
   "isSectionNum:startPos,endPos": ["Number", "Number"],
   "contains:value": ["String"],
   "notContains:value": ["String"],
-  "existTotal:value,total": ["String", "Number"]
+  "existTotal:value,total": ["String", "Number"],
+  "existsLessThan:value,total": ["String", "Number"]
 }
