@@ -119,6 +119,9 @@ public class FunctionDefinitions : IFunctionDefinitions
     public bool ExistsLessThan(string value, uint total) => this.branchName.Count(value) < total;
 
     /// <inheritdoc/>
+    public bool ExistsGreaterThan(string value, uint total) => this.branchName.Count(value) > total;
+
+    /// <inheritdoc/>
     public void Dispose()
     {
         if (this.isDisposed)

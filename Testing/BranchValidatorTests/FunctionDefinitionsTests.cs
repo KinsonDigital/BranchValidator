@@ -261,6 +261,26 @@ public class FunctionDefinitionsTests
         // Assert
         actual.Should().Be(expected);
     }
+
+    [Theory]
+    [InlineData("feature/123-test-123-branch-123", "123", 2, true)]
+    [InlineData("feature/123-test-branch", "123", 1, false)]
+    public void ExistsGreaterThan_WhenInvoked_ReturnsCorrectResult(
+        string branchName,
+        string value,
+        uint total,
+        bool expected)
+    {
+        // Arrange
+        var definitions = CreateDefinitions();
+        this.observer.OnNext(branchName);
+
+        // Act
+        var actual = definitions.ExistsGreaterThan(value, total);
+
+        // Assert
+        actual.Should().Be(expected);
+    }
     #endregion
 
     /// <summary>

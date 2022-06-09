@@ -47,6 +47,7 @@ public class GitHubActionIntegrationTests : IDisposable
     [InlineData("existTotal('123-test', 1)", "feature/123-test-branch")]
     [InlineData("existTotal('test-branch', 2)", "feature/123-test-branch-test-branch-test")]
     [InlineData("existsLessThan('123-', 2)", "feature/123-test-branch")]
+    [InlineData("existsGreaterThan('test', 2)", "feature/test-123-test-123-test-branch")]
     public async void Execute_WithValidBranches_ReturnsCorrectResult(string expression, string branchName)
     {
         // Arrange
@@ -80,6 +81,7 @@ public class GitHubActionIntegrationTests : IDisposable
     [InlineData("notContains('123-test')", "notContains", "feature/123-test-branch")]
     [InlineData("existTotal('456-test', 1)", "existTotal", "feature/123-test-branch")]
     [InlineData("existsLessThan('123-test', 2)", "existsLessThan", "feature/123-test-123-test-branch")]
+    [InlineData("existsGreaterThan('test', 2)", "existsGreaterThan", "feature/123-test-123-test-branch")]
     public async void Execute_WithInvalidBranches_FailsActionWithException(
         string expression,
         string funcName,

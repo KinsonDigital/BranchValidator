@@ -6,5 +6,6 @@
   "contains:value": ["String"],
   "notContains:value": ["String"],
   "existTotal:value,total": ["String", "Number"],
-  "existsLessThan:value,total": ["String", "Number"]
+  "existsLessThan:value,total": ["String", "Number"],
+  "existsGreaterThan:value,total": ["String", "Number"]
 }
