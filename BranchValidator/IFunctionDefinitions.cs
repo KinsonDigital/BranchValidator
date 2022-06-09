@@ -2,6 +2,7 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
+// ReSharper disable UnusedMemberInSuper.Global
 namespace BranchValidator;
 
 /// <summary>
@@ -162,4 +163,14 @@ public interface IFunctionDefinitions : IDisposable
     /// <param name="total">The total number of times to check that the <paramref name="value"/> exists.</param>
     /// <returns><c>true</c> if the <paramref name="value"/> exists greater than the specified number of times.</returns>
     bool ExistsGreaterThan(string value, uint total);
+
+    /// <summary>
+    /// Returns a value indicating whether or not a branch name starts with the given <paramref name="value"/>.
+    /// </summary>
+    /// <param name="value">The value that the branch possibly starts with.</param>
+    /// <returns><c>true</c> if the branch starts with the given <paramref name="value."/>.</returns>
+    /// <remarks>
+    ///     The match for the <paramref name="value"/> is case sensitive.
+    /// </remarks>
+    bool StartsWith(string value);
 }

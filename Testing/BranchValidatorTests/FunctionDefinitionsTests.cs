@@ -281,6 +281,25 @@ public class FunctionDefinitionsTests
         // Assert
         actual.Should().Be(expected);
     }
+
+    [Theory]
+    [InlineData("feature/123-test-123-branch-123", "feature/123", true)]
+    [InlineData("feature/123-test-branch", "123", false)]
+    public void StartsWith_WhenInvoked_ReturnsCorrectResult(
+        string branchName,
+        string value,
+        bool expected)
+    {
+        // Arrange
+        var definitions = CreateDefinitions();
+        this.observer.OnNext(branchName);
+
+        // Act
+        var actual = definitions.StartsWith(value);
+
+        // Assert
+        actual.Should().Be(expected);
+    }
     #endregion
 
     /// <summary>
