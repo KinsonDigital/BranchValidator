@@ -14,6 +14,6 @@
   "notEndsWith:value": ["String"],
   "startsWithNum": [],
   "endsWithNum": [],
-  "lenLessThan": ["Number"],
-  "lenGreaterThan": ["Number"]
+  "lenLessThan:length": ["Number"],
+  "lenGreaterThan:length": ["Number"]
 }
