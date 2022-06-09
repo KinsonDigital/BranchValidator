@@ -179,6 +179,25 @@ public class FunctionDefinitionsTests
         // Assert
         actual.Should().Be(expected);
     }
+
+    [Theory]
+    [InlineData("feature/123-test-branch", "123-test", true)]
+    [InlineData("feature/123-test-branch", "is-not-contained", false)]
+    public void Contains_WhenInvoked_ReturnsCorrectResult(
+        string branchName,
+        string value,
+        bool expected)
+    {
+        // Arrange
+        var definitions = CreateDefinitions();
+        this.observer.OnNext(branchName);
+
+        // Act
+        var actual = definitions.Contains(value);
+
+        // Assert
+        actual.Should().Be(expected);
+    }
     #endregion
 
     /// <summary>

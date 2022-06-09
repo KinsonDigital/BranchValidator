@@ -2,5 +2,6 @@
   "equalTo:value": ["String"],
   "isCharNum:charPos": ["Number"],
   "isSectionNum:startPos,upToChar": ["Number", "String"],
-  "isSectionNum:startPos,endPos": ["Number", "Number"]
+  "isSectionNum:startPos,endPos": ["Number", "Number"],
+  "contains:value": ["String"]
 }
