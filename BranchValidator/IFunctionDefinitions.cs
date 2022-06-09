@@ -41,26 +41,72 @@ public interface IFunctionDefinitions : IDisposable
     bool IsCharNum(uint charPos);
 
     /// <summary>
-    ///
+    /// Returns a value indicating whether or not a section of a branch name is a whole number.
+    /// The section is determined by the text between the <paramref name="startPos"/> and <paramref name="endPos"/>.
     /// </summary>
-    /// <param name="startPos"></param>
-    /// <param name="endPos"></param>
-    /// <returns></returns>
+    /// <param name="startPos">The starting position of the section to check.</param>
+    /// <param name="endPos">The ending position of the section to check.</param>
+    /// <returns><c>true</c> if the section is a whole number.</returns>
     /// <remarks>
-    /// TODO: Add info that if the endPos is greater then the len of the branch name,
-    /// TODO: ↪ then the length of the branch name will be used
+    /// Things to consider:
+    /// <list type="bullet">
+    ///     <item>
+    ///         If the <paramref name="startPos"/> is larger than the length of the branch name, then the length of the branch name is used.
+    ///     </item>
+    ///     <item>
+    ///         If the <paramref name="endPos"/> is larger than the length of the branch name, then the length of the branch name is used.
+    ///     </item>
+    /// </list>
     /// </remarks>
     bool IsSectionNum(uint startPos, uint endPos);
 
     /// <summary>
-    ///
+    /// Returns a value indicating whether or not a section of a branch name is a whole number.
+    /// The section is determined by the text between the <paramref name="startPos"/> and the position of the first
+    /// occurrence of the given <paramref name="upToChar"/>.
     /// </summary>
-    /// <param name="startPos"></param>
-    /// <param name="upToChar"></param>
-    /// <returns></returns>
+    /// <param name="startPos">The starting position of the section to check.</param>
+    /// <param name="upToChar">The character to signify the ending position of the section.</param>
+    /// <returns><c>true</c> if the section is a whole number.</returns>
     /// <remarks>
-    /// TODO: Add info that if the startPos is greater then the branch name len, then its false
-    /// TODO: Add info that only the first character of the upToChar string is used and the rest is ignored
+    ///     Things to consider:
+    ///     <list type="bullet">
+    ///         <item>
+    ///             If the <paramref name="startPos"/> is larger than the length of the branch name, then the length of the branch name is used.
+    ///         </item>
+    ///         <item>
+    ///             If the <paramref name="upToChar"/> does not exist anywhere after the <paramref name="startPos"/>, then the rest of the <c>string</c>
+    ///             after the <paramref name="startPos"/> will be considered.
+    ///         </item>
+    ///         <item>
+    ///             The <paramref name="upToChar"/> is exclusive in the <c>string</c> section to be checked.
+    ///         </item>
+    ///     </list>
+    ///
+    ///     Examples:
+    ///     <list type="bullet">
+    ///         <item>
+    ///             Example 1:
+    ///             <code>
+    ///             // This would return true if the branch name was 'feature/123-test-branch'
+    ///             IsCheckNum(8, "-");
+    ///             </code>
+    ///         </item>
+    ///         <item>
+    ///             Example 2:
+    ///             <code>
+    ///             // This would return true if the branch name was 'feature/12345'
+    ///             IsCheckNum(8, "-");
+    ///             </code>
+    ///         </item>
+    ///         <item>
+    ///             Example 3:
+    ///             <code>
+    ///             // This would return false if the branch name was 'feature/123testbranch'
+    ///             IsCheckNum(8, "-");
+    ///             </code>
+    ///         </item>
+    ///     </list>
     /// </remarks>
     bool IsSectionNum(uint startPos, string upToChar);
 }
