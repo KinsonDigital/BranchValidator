@@ -1,4 +1,4 @@
-// <copyright file="ExtensionMethods.cs" company="KinsonDigital">
+﻿// <copyright file="ExtensionMethods.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -271,48 +271,6 @@ public static class ExtensionMethods
 
     /// <summary>
     /// Returns a result indicating whether or not this <c>object</c> contains a method that matches
-    /// the given <paramref name="methodName"/> with the given <paramref name="returnType"/>.
-    /// </summary>
-    /// <param name="obj">The <c>object</c> that might contain the method.</param>
-    /// <param name="methodName">The name of the method to search for.</param>
-    /// <param name="returnType">The type returned by the method.</param>
-    /// <returns>
-    ///     Tuple Result:
-    /// <list type="bullet">
-    ///     <item><c>exists:</c> <c>true</c> if the object contains the method.</item>
-    ///     <item><c>msg:</c> Additional information about the result.</item>
-    /// </list>
-    /// </returns>
-    public static (bool exists, string msg) ContainsMethod(this object? obj, string methodName, Type returnType)
-    {
-        if (obj is null)
-        {
-            return (false, "No instance of object to get method for.");
-        }
-
-        var method = (from m in obj.GetType().GetMethods(BindingFlags.Public | BindingFlags.Instance)
-            where m.Name == methodName
-            select m).FirstOrDefault();
-
-        if (method is null)
-        {
-            var msg = string.IsNullOrEmpty(methodName)
-                ? "No function name provided."
-                : $"A function with the name '{methodName}' does not exist.";
-
-            return (false, msg);
-        }
-
-        var hasCorrectReturnType = method.ReturnType == returnType;
-        var returnMsg = hasCorrectReturnType
-            ? string.Empty
-            : $"A function with the name '{methodName}' exists but does not have a '{returnType.Name.ToLower()}' return type.";
-
-        return (hasCorrectReturnType, returnMsg);
-    }
-
-    /// <summary>
-    /// Returns a result indicating whether or not this <c>object</c> contains a method that matches
     /// the given <paramref name="methodName"/> with the given <paramref name="returnType"/> with the given <paramref name="argValues"/>.
     /// </summary>
     /// <param name="obj">The <c>object</c> that might contain the method.</param>
@@ -331,21 +289,18 @@ public static class ExtensionMethods
         var totalArgValues = argValues?.Length ?? 0;
         (bool, string, MethodInfo?) invalidResult = (false, $"No function with the name '{methodName}' with '{totalArgValues}' parameters found.", null);
 
-        var methodExistsResult = ContainsMethod(obj, methodName, returnType);
-        if (methodExistsResult.exists is false)
-        {
-            return (false, "A function with the name 'non-existing-method' does not exist.", null);
-        }
-
         var possibleMethods = (from m in obj?.GetType().GetMethods(BindingFlags.Public | BindingFlags.Instance)
             where m.Name == methodName
             select m).ToArray();
 
         MethodInfo? foundMethod = null;
         var methodFound = false;
-        var returnMsg = possibleMethods.Length <= 0
-            ? $"A function with the name '{methodName}' was not found."
-            : string.Empty;
+        var returnMsg = string.Empty;
+
+        if (possibleMethods.Length <= 0)
+        {
+            return (false, $"A function with the name '{methodName}' does not exist.", null);
+        }
 
         foreach (MethodInfo possibleMethod in possibleMethods)
         {
@@ -359,7 +314,10 @@ public static class ExtensionMethods
                 return invalidResult;
             }
 
-            bool IsNumberParam(string value) => value.All(c => Numbers.Contains(c));
+            bool IsNumberParam(string value)
+            {
+                return value.All(c => Numbers.Contains(c));
+            }
 
             for (var i = 0; i < methodParams.Length; i++)
             {

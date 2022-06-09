@@ -3,7 +3,6 @@
 // </copyright>
 
 using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
 using BranchValidator.Services.Interfaces;
 
 namespace BranchValidator.Services;
@@ -23,14 +22,13 @@ public class MethodExecutor : IMethodExecutor
     public (bool result, string method) ExecuteMethod(object obj, string name, string[]? argValues)
     {
         name = name.ToPascalCase();
-        var methodExistsResult = obj.ContainsMethod(name, typeof(bool));
-
-        if (methodExistsResult.exists is false)
-        {
-            return methodExistsResult;
-        }
 
         var getMethodResult = obj.GetMethod(name, typeof(bool), argValues);
+
+        if (getMethodResult.result is false)
+        {
+            return (getMethodResult.result, getMethodResult.msg);
+        }
 
         if (getMethodResult.result is false || getMethodResult.method is null)
         {

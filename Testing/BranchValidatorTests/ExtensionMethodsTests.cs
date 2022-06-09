@@ -256,58 +256,6 @@ public class ExtensionMethodsTests
     }
 
     [Fact]
-    public void ContainsMethod_WithNullObj_ReturnsFalse()
-    {
-        // Arrange
-        SampleTestClass testClass = null!;
-
-        // Act
-        var actual = testClass.ContainsMethod(It.IsAny<string>(), typeof(bool));
-
-        // Assert
-        actual.exists.Should().BeFalse();
-        actual.msg.Should().Be("No instance of object to get method for.");
-    }
-
-    [Theory]
-    [InlineData("DoesNotExistMethod", false, "A function with the name 'DoesNotExistMethod' does not exist.")]
-    [InlineData(null, false, "No function name provided.")]
-    [InlineData("", false, "No function name provided.")]
-    [InlineData(nameof(SampleTestClass.MethodThatReturnsBool), true, "")]
-    public void ContainsMethod_WhenInvoked_ReturnsCorrectResult(
-        string methodName,
-        bool expectedExists,
-        string expectedMsg)
-    {
-        // Arrange
-        var testClass = new SampleTestClass();
-
-        // Act
-        var actual = testClass.ContainsMethod(methodName, typeof(bool));
-
-        // Assert
-        actual.exists.Should().Be(expectedExists);
-        actual.msg.Should().Be(expectedMsg);
-    }
-
-    [Fact]
-    public void ContainsMethod_WhenMethodNameMatchesAndReturnTypeDoesNot_ReturnsCorrectResult()
-    {
-        // Arrange
-        var expectedMsg = $"A function with the name '{nameof(SampleTestClass.MethodThatDoesNotReturnBool)}' exists";
-        expectedMsg += " but does not have a 'boolean' return type.";
-
-        var testClass = new SampleTestClass();
-
-        // Act
-        var actual = testClass.ContainsMethod(nameof(SampleTestClass.MethodThatDoesNotReturnBool), typeof(bool));
-
-        // Assert
-        actual.exists.Should().BeFalse();
-        actual.msg.Should().Be(expectedMsg);
-    }
-
-    [Fact]
     public void GetMethod_WhenMethodDoesNotExist_ReturnsCorrectResult()
     {
         // Arrange
