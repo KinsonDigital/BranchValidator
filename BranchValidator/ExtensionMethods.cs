@@ -1,4 +1,4 @@
-﻿// <copyright file="ExtensionMethods.cs" company="KinsonDigital">
+// <copyright file="ExtensionMethods.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -290,7 +290,7 @@ public static class ExtensionMethods
         (bool, string, MethodInfo?) invalidResult = (false, $"No function with the name '{methodName}' with '{totalArgValues}' parameters found.", null);
 
         var possibleMethods = (from m in obj?.GetType().GetMethods(BindingFlags.Public | BindingFlags.Instance)
-            where m.Name == methodName
+            where m.Name == methodName && m.ReturnType == returnType
             select m).ToArray();
 
         MethodInfo? foundMethod = null;
