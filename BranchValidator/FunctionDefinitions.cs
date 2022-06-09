@@ -3,6 +3,7 @@
 // </copyright>
 
 using System.Diagnostics.CodeAnalysis;
+using BranchValidator.Observables.Core;
 
 namespace BranchValidator;
 
@@ -15,42 +16,63 @@ public class FunctionDefinitions : IFunctionDefinitions
     {
         '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
     };
+    private IDisposable? branchNameUnsubscriber;
+    private string branchName = string.Empty;
+    private bool isDisposed;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="FunctionDefinitions"/> class.
+    /// </summary>
+    /// <param name="branchNameObservable">Receives push notifications of branch name updates.</param>
+    public FunctionDefinitions(IBranchNameObservable branchNameObservable) =>
+        this.branchNameUnsubscriber = branchNameObservable.Subscribe(new Observer<string>(
+            onNext: branchNameValue =>
+            {
+                this.branchName = branchNameValue;
+            }, onCompleted: () =>
+            {
+                this.branchNameUnsubscriber?.Dispose();
+            }, onError: _ =>
+            {
+                this.branchNameUnsubscriber?.Dispose();
+                this.branchNameUnsubscriber = null;
+            }));
 
     /// <inheritdoc/>
-    public bool EqualTo(string value, string branchName)
+    public bool EqualTo(string value)
     {
-        if (string.IsNullOrEmpty(value) && string.IsNullOrEmpty(branchName))
+        if (string.IsNullOrEmpty(value) && string.IsNullOrEmpty(this.branchName))
         {
             return true;
         }
 
-        return value == branchName;
+        return value == this.branchName;
     }
 
     /// <inheritdoc/>
-    public bool IsCharNum(uint charPos, string branchName)
+    public bool IsCharNum(uint charPos)
     {
-        if (string.IsNullOrEmpty(branchName))
+        if (string.IsNullOrEmpty(this.branchName))
         {
             return false;
         }
 
-        return charPos <= branchName.Length - 1 && Numbers.Contains(branchName[(int)charPos]);
+        return charPos <= this.branchName.Length - 1 && Numbers.Contains(this.branchName[(int)charPos]);
     }
 
     /// <inheritdoc/>
-    public bool IsSectionNum(uint startPos, uint endPos, string branchName)
+    public bool IsSectionNum(uint startPos, uint endPos)
     {
-        if (string.IsNullOrEmpty(branchName))
+        if (string.IsNullOrEmpty(this.branchName))
         {
             return false;
         }
 
-        endPos = endPos > branchName.Length - 1 ? (uint)branchName.Length - 1u : endPos;
+        endPos = endPos > this.branchName.Length - 1 ? (uint)this.branchName.Length - 1u : endPos;
 
         for (var i = startPos; i <= endPos; i++)
         {
-            if (Numbers.DoesNotContain(branchName[(int)i]))
+            if (Numbers.DoesNotContain(this.branchName[(int)i]))
             {
                 return false;
             }
@@ -60,27 +82,40 @@ public class FunctionDefinitions : IFunctionDefinitions
     }
 
     /// <inheritdoc/>
-    public bool IsSectionNum(uint startPos, string upToChar, string branchName)
+    public bool IsSectionNum(uint startPos, string upToChar)
     {
-        if (string.IsNullOrEmpty(branchName) || string.IsNullOrEmpty(upToChar))
+        if (string.IsNullOrEmpty(this.branchName) || string.IsNullOrEmpty(upToChar))
         {
             return false;
         }
 
-        if (startPos > branchName.Length - 1)
+        if (startPos > this.branchName.Length - 1)
         {
             return false;
         }
 
-        var upToCharIndex = branchName.IndexOf(upToChar[0], (int)startPos);
+        var upToCharIndex = this.branchName.IndexOf(upToChar[0], (int)startPos);
 
         if (upToCharIndex == -1)
         {
             return false;
         }
 
-        var section = branchName.Substring((int)startPos, upToCharIndex - (int)startPos);
+        var section = this.branchName.Substring((int)startPos, upToCharIndex - (int)startPos);
 
         return !string.IsNullOrEmpty(section) && section.All(c => Numbers.Contains(c));
+    }
+
+    /// <inheritdoc/>
+    public void Dispose()
+    {
+        if (this.isDisposed)
+        {
+            return;
+        }
+
+        this.branchNameUnsubscriber?.Dispose();
+
+        this.isDisposed = true;
     }
 }
