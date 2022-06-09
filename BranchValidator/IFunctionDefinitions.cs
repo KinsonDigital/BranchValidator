@@ -241,4 +241,13 @@ public interface IFunctionDefinitions : IDisposable
     /// <param name="after">The <c>string</c> located after the <paramref name="value"/> <c>string</c>.</param>
     /// <returns><c>true</c> if the <paramref name="value"/> <c>string</c> is located before the <paramref name="after"/> <c>string</c>.</returns>
     bool IsBefore(string value, string after);
+
+    /// <summary>
+    /// Returns a value indicating whether or not the given <paramref name="value"/> <c>string</c> is located
+    /// after the given <paramref name="before"/> <c>string</c>.
+    /// </summary>
+    /// <param name="value">The <c>string</c> located after <paramref name="before"/> <c>string</c>.</param>
+    /// <param name="before">The <c>string</c> located before the <paramref name="value"/> <c>string</c>.</param>
+    /// <returns><c>true</c> if the <paramref name="value"/> <c>string</c> is located after the <paramref name="before"/> <c>string</c>.</returns>
+    bool IsAfter(string value, string before);
 }

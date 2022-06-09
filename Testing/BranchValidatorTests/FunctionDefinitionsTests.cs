@@ -462,6 +462,28 @@ public class FunctionDefinitionsTests
         // Assert
         actual.Should().Be(expected);
     }
+
+    [Theory]
+    [InlineData("feature/123-test-branch", "branch", "123", true)]
+    [InlineData(null, "123", "branch", false)]
+    [InlineData("", "123", "branch", false)]
+    [InlineData("feature/123-test-branch", "123", "branch", false)]
+    public void IsAfter_WhenInvoked_ReturnsCorrectResult(
+        string branchName,
+        string value,
+        string after,
+        bool expected)
+    {
+        // Arrange
+        var definitions = CreateDefinitions();
+        this.observer.OnNext(branchName);
+
+        // Act
+        var actual = definitions.IsAfter(value, after);
+
+        // Assert
+        actual.Should().Be(expected);
+    }
     #endregion
 
     /// <summary>
