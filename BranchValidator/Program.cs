@@ -31,6 +31,7 @@ public static class Program
         host = Host.CreateDefaultBuilder(args)
             .ConfigureServices((_, services) =>
             {
+                services.AddSingleton<IScriptService, ScriptService>();
                 services.AddSingleton<IBranchNameObservable, UpdateBranchNameObservable>();
                 services.AddSingleton<IJSONService, JSONService>();
                 services.AddSingleton<IEmbeddedResourceLoaderService<string>, TextResourceLoaderService>();
