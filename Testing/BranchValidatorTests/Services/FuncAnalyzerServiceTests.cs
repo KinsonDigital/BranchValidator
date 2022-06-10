@@ -108,27 +108,33 @@ public class FuncAnalyzerServiceTests
     }
 
     [Theory]
-    [InlineData("notExistFunc()", false, "The function 'notExistFunc' is not a valid function that can be used.")]
-    [InlineData("funcA()", false, "The 'funcA' function does not contain an argument.")]
-    [InlineData("funcA(123)", false, "Parameter '1' for function 'funcA' must be a string data type.")]
-    [InlineData("funcB('test')", false, "Parameter '1' for function 'funcB' must be a number data type.")]
-    [InlineData("funcB(12test34)", false, "Parameter '1' for function 'funcB' must be a number data type.")]
-    [InlineData("funcA('test')", true, "")]
-    [InlineData("funcA('123')", true, "")]
-    [InlineData("funcB(123)", true, "")]
+    [InlineData("notExistFunc()", false, 1, "The function 'notExistFunc' is not a valid function that can be used.")]
+    [InlineData("funA()", false, 1, "The 'funA' function does not contain an argument.")]
+    [InlineData("funA(123)", false, 1, "Parameter '1' for function 'funA' must be a string data type.")]
+    [InlineData("funB('test')", false, 1, "Parameter '1' for function 'funB' must be a number data type.")]
+    [InlineData("funB(12test34)", false, 1, "Parameter '1' for function 'funB' must be a number data type.")]
+    [InlineData(
+        "funA('test')",
+        false,
+        2,
+        $"Incorrect number of function arguments.\r\nThe function 'funA' currently has '1' parameters but is expecting '2'.")]
+    [InlineData("funA('test')", true, 1, "")]
+    [InlineData("funA('123')", true, 1, "")]
+    [InlineData("funB(123)", true, 1, "")]
     public void Analyze_WhenCheckingFunctionNames_ReturnsCorrectResult(
         string function,
         bool expectedValid,
+        uint totalFuncParams,
         string expectedMsg)
     {
         // Arrange
         this.mockFunctionsService.SetupGet(p => p.FunctionNames)
-            .Returns(new[] { "funcA", "funcB" }.ToReadOnlyCollection);
-        this.mockFunctionsService.Setup(m => m.GetTotalFunctionParams("funcA")).Returns(1);
-        this.mockFunctionsService.Setup(m => m.GetTotalFunctionParams("funcB")).Returns(1);
-        this.mockFunctionsService.Setup(m => m.GetFunctionParamDataType("funcA", 1))
+            .Returns(new[] { "funA", "funB" }.ToReadOnlyCollection);
+        this.mockFunctionsService.Setup(m => m.GetTotalFunctionParams("funA")).Returns(totalFuncParams);
+        this.mockFunctionsService.Setup(m => m.GetTotalFunctionParams("funB")).Returns(totalFuncParams);
+        this.mockFunctionsService.Setup(m => m.GetFunctionParamDataType("funA", 1))
             .Returns(DataTypes.String);
-        this.mockFunctionsService.Setup(m => m.GetFunctionParamDataType("funcB", 1))
+        this.mockFunctionsService.Setup(m => m.GetFunctionParamDataType("funB", 1))
             .Returns(DataTypes.Number);
 
         var service = CreateService();

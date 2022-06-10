@@ -75,22 +75,21 @@ public class ExpressionExecutorServiceTests
     }
 
     [Theory]
-    [InlineData("equalTo('feature/123-test-branch')", "equalTo", "'feature/123-test-branch'", "feature/123-test-branch", true, true)]
-    [InlineData(" equalTo('feature/123-test-branch')", "equalTo", "'feature/123-test-branch'", "feature/123-test-branch", true, true)]
-    [InlineData("equalTo('feature/123-test-branch') ", "equalTo", "'feature/123-test-branch'", "feature/123-test-branch", true, true)]
-    [InlineData("isCharNum(8)", "isCharNum", "8", "feature/123-test-branch", true, true)]
-    [InlineData("isSectionNum(8,10)", "isSectionNum", "8,10", "feature/123-test-branch", true, true)]
-    [InlineData("isSectionNum(8, 10)", "isSectionNum", "8,10", "feature/123-test-branch", true, true)]
-    [InlineData("isSectionNum(8,10)", "isSectionNum", "8, 10", "feature/123-test-branch", true, true)]
+    [InlineData("funA(8)", "8", "feature/123-test-branch", true, true)]
+    [InlineData("funA(8,10)", "8,10", "feature/123-test-branch", true, true)]
+    [InlineData("funA( 8,10)", "8,10", "feature/123-test-branch", true, true)]
+    [InlineData("funA(8, 10)", "8,10", "feature/123-test-branch", true, true)]
+    [InlineData("funA(8,10 )", "8,10", "feature/123-test-branch", true, true)]
+    [InlineData("funA()", "", "feature/123-test-branch", true, true)]
     public void Execute_WithNoOperators_ReturnsCorrectResult(
         string expression,
-        string funcName,
         string paramStr, // Comma delimited list
         string branchName,
         bool expectedFuncValid,
         bool expectedExecutionValid)
     {
         // Arrange
+        const string funcName = "funA";
         var expectedMsg = $"The function '{funcName}' returned a value of '{expectedFuncValid.ToString().ToLower()}'.";
         var argValues = new List<string>();
         argValues.AddRange(paramStr.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries));

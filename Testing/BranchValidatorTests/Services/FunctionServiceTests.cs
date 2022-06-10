@@ -1,4 +1,4 @@
-﻿// <copyright file="FunctionServiceTests.cs" company="KinsonDigital">
+// <copyright file="FunctionServiceTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -34,8 +34,8 @@ public class FunctionServiceTests
             {
                 return new Dictionary<string, DataTypes[]>
                 {
-                    { "equalTo:value", new[] { DataTypes.String } },
-                    { "isCharNum:charPos", new[] { DataTypes.Number } },
+                    { "funA:value", new[] { DataTypes.String } },
+                    { "funB:charPos", new[] { DataTypes.Number } },
                 };
             });
 
@@ -146,7 +146,11 @@ public class FunctionServiceTests
 
         // Assert
         actual.Should().HaveCount(2);
-        actual.Should().BeEquivalentTo("equalTo", "isCharNum");
+        actual.Should().BeEquivalentTo("funA", "funB");
+
+        // Assert
+        actual.Should().HaveCount(2);
+        actual.Should().BeEquivalentTo("funA", "funB");
     }
     #endregion
 
@@ -154,7 +158,7 @@ public class FunctionServiceTests
     [Theory]
     [InlineData("", 0u)]
     [InlineData(null, 0u)]
-    [InlineData("equalTo", 1u)]
+    [InlineData("funA", 1u)]
     public void GetTotalFunctionParams_WhenInvoked_ReturnsCorrectResult(string funcName, uint expected)
     {
         // Arrange
@@ -205,15 +209,15 @@ public class FunctionServiceTests
         var service = CreateService();
 
         // Act
-        var actual = service.GetFunctionParamDataType("equalTo", 1);
+        var actual = service.GetFunctionParamDataType("funA", 1);
 
         // Assert
         actual.Should().Be(DataTypes.String);
     }
 
     [Theory]
-    [InlineData("equalTo", "test-branch", "EqualTo", "'test-branch'", true)]
-    [InlineData("equalTo", "other-branch", "EqualTo", "'test-branch'", false)]
+    [InlineData("funA", "test-branch", "FunA", "'test-branch'", true)]
+    [InlineData("funA", "other-branch", "FunA", "'test-branch'", false)]
     public void Execute_WhenInvoked_ReturnsCorrectResult(
         string funcName,
         string branchName,
