@@ -1,4 +1,4 @@
-// <copyright file="FunctionServiceTests.cs" company="KinsonDigital">
+﻿// <copyright file="FunctionServiceTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -30,14 +30,7 @@ public class FunctionServiceTests
 
         this.mockJSONService = new Mock<IJSONService>();
         this.mockJSONService.Setup(m => m.Deserialize<Dictionary<string, DataTypes[]>>(It.IsAny<string>()))
-            .Returns(() =>
-            {
-                return new Dictionary<string, DataTypes[]>
-                {
-                    { "funA:value", new[] { DataTypes.String } },
-                    { "funB:charPos", new[] { DataTypes.Number } },
-                };
-            });
+            .Returns(() => new Dictionary<string, DataTypes[]>());
 
         this.mockResourceLoaderService = new Mock<IEmbeddedResourceLoaderService<string>>();
         this.mockFunctionDefinitions = new Mock<IFunctionDefinitions>();
@@ -132,13 +125,20 @@ public class FunctionServiceTests
         act.Should().Throw<InvalidOperationException>()
             .WithMessage("Loading of the function definition data was unsuccessful.");
     }
-    #endregion
 
-    #region Prop Tests
     [Fact]
-    public void AvailableFunctions_WhenGettingValue_ReturnsCorrectResult()
+    public void Ctor_WhenGettingValue_CorrectlySetsAvailableFunctionsProp()
     {
         // Arrange
+        this.mockJSONService.Setup(m => m.Deserialize<Dictionary<string, DataTypes[]>>(It.IsAny<string>()))
+            .Returns(() =>
+            {
+                return new Dictionary<string, DataTypes[]>
+                {
+                    { "funA:p1", new[] { DataTypes.String } },
+                    { "funB:p2", new[] { DataTypes.Number } },
+                };
+            });
         var service = CreateService();
 
         // Act
@@ -147,10 +147,42 @@ public class FunctionServiceTests
         // Assert
         actual.Should().HaveCount(2);
         actual.Should().BeEquivalentTo("funA", "funB");
+    }
+
+    [Theory]
+    [InlineData("funA", "p1", new[] { DataTypes.String }, "funA(p1: string)")]
+    [InlineData("funB", "p2", new[] { DataTypes.Number }, "funB(p2: number)")]
+    [InlineData("funC", "p3,p4", new[] { DataTypes.Number, DataTypes.String }, "funC(p3: number, p4: string)")]
+    [InlineData("funD", " p5 ,p6", new[] { DataTypes.Number, DataTypes.String }, "funD(p5: number, p6: string)")]
+    [InlineData("funE", "p7 ,p8", new[] { DataTypes.Number, DataTypes.String }, "funE(p7: number, p8: string)")]
+    [InlineData("funF", "p9, p10", new[] { DataTypes.Number, DataTypes.String }, "funF(p9: number, p10: string)")]
+    [InlineData("funG", "p11, p12 ", new[] { DataTypes.Number, DataTypes.String }, "funG(p11: number, p12: string)")]
+    [InlineData("funH", "", new[] { DataTypes.Number }, "funH()")]
+    [InlineData(" funI", "", new[] { DataTypes.Number }, "funI()")]
+    [InlineData("funJ ", "", new[] { DataTypes.Number }, "funJ()")]
+    public void Ctor_WhenGettingValue_CorrectlySetsFunctionSignaturesProp(
+        string funcName,
+        string parameters,
+        DataTypes[] paramTypes,
+        string expectedFuncSignatureResult)
+    {
+        // Arrange
+        var fullFuncSignature = $"{funcName}:{parameters}";
+        this.mockJSONService.Setup(m => m.Deserialize<Dictionary<string, DataTypes[]>>(It.IsAny<string>()))
+            .Returns(() => new Dictionary<string, DataTypes[]>
+            {
+                { fullFuncSignature, paramTypes },
+            });
+
+        var expected = new[] { expectedFuncSignatureResult };
+        var service = CreateService();
+
+        // Act
+        var actual = service.FunctionSignatures;
 
         // Assert
-        actual.Should().HaveCount(2);
-        actual.Should().BeEquivalentTo("funA", "funB");
+        actual.Should().HaveCount(1);
+        actual.Should().BeEquivalentTo(expected);
     }
     #endregion
 
@@ -162,6 +194,16 @@ public class FunctionServiceTests
     public void GetTotalFunctionParams_WhenInvoked_ReturnsCorrectResult(string funcName, uint expected)
     {
         // Arrange
+        this.mockJSONService.Setup(m => m.Deserialize<Dictionary<string, DataTypes[]>>(It.IsAny<string>()))
+            .Returns(() =>
+            {
+                return new Dictionary<string, DataTypes[]>
+                {
+                    { "funA:p1", new[] { DataTypes.String } },
+                    { "funB:p2", new[] { DataTypes.Number } },
+                };
+            });
+
         var service = CreateService();
 
         // Act
@@ -206,6 +248,16 @@ public class FunctionServiceTests
     public void GetFunctionParamDataType_WhenInvoked_ReturnsCorrectResult()
     {
         // Arrange
+        this.mockJSONService.Setup(m => m.Deserialize<Dictionary<string, DataTypes[]>>(It.IsAny<string>()))
+            .Returns(() =>
+            {
+                return new Dictionary<string, DataTypes[]>
+                {
+                    { "funA:p1", new[] { DataTypes.String } },
+                    { "funB:p2", new[] { DataTypes.Number } },
+                };
+            });
+
         var service = CreateService();
 
         // Act
@@ -226,6 +278,16 @@ public class FunctionServiceTests
         bool actualValid)
     {
         // Arrange
+        this.mockJSONService.Setup(m => m.Deserialize<Dictionary<string, DataTypes[]>>(It.IsAny<string>()))
+            .Returns(() =>
+            {
+                return new Dictionary<string, DataTypes[]>
+                {
+                    { "funA:p1", new[] { DataTypes.String } },
+                    { "funB:p2", new[] { DataTypes.Number } },
+                };
+            });
+
         this.mockMethodExecutor.Setup(m => m.ExecuteMethod(It.IsAny<object>(), It.IsAny<string>(), It.IsAny<string[]>()))
             .Returns((actualValid, "test-msg"));
 

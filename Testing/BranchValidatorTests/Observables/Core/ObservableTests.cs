@@ -79,6 +79,24 @@ public class ObservableTests
     }
 
     [Fact]
+    public void UnsubscribeAll_WhenInvoked_UnsubscribesAllObservers()
+    {
+        // Arrange
+        var observable = CreateObservable<bool>();
+        var mockObserverA = new Mock<BranchValidator.Observables.Core.IObserver<bool>>();
+        var mockObserverB = new Mock<BranchValidator.Observables.Core.IObserver<bool>>();
+
+        observable.Subscribe(mockObserverA.Object);
+        observable.Subscribe(mockObserverB.Object);
+
+        // Act
+        observable.UnsubscribeAll();
+
+        // Assert
+        observable.Observers.Should().BeEmpty();
+    }
+
+    [Fact]
     public void Dispose_WhenInvokedWithObservers_RemovesObservers()
     {
         // Arrange

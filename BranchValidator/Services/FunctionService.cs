@@ -29,6 +29,7 @@ public class FunctionService : IFunctionService
         IMethodExecutor methodExecutor,
         IFunctionDefinitions functionDefinitions)
     {
+        const char comma = ',';
         if (jsonService is null)
         {
             throw new ArgumentNullException(nameof(jsonService), "The parameter must not be null.");
@@ -61,9 +62,11 @@ public class FunctionService : IFunctionService
         // Create all of the function signatures
         FunctionSignatures = this.validFunctions.Select(f =>
         {
-            var functionSections = f.Key.Split(FuncNameParamSeparator, StringSplitOptions.RemoveEmptyEntries);
+            var functionSections = f.Key.Split(FuncNameParamSeparator, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
             var funcName = functionSections[0];
-            var paramNames = functionSections.Length <= 1 ? Array.Empty<string>() : functionSections[1].Split(',');
+            var paramNames = functionSections.Length <= 1
+                ? Array.Empty<string>()
+                : functionSections[1].Split(comma, StringSplitOptions.TrimEntries);
 
             if (paramNames.Length <= 0)
             {
@@ -76,10 +79,12 @@ public class FunctionService : IFunctionService
             {
                 var paramName = paramNames[i];
 
-                paramStr += $"{paramName}: {f.Value[i].ToString().ToLower()}";
+                var endSection = i < paramNames.Length - 1 ? $"{comma} " : string.Empty;
+
+                paramStr += $"{paramName}: {f.Value[i].ToString().ToLower()}{endSection}";
             }
 
-            return $"{funcName}({paramStr})";
+            return $"{funcName}({paramStr.TrimEnd(comma)})";
         }).ToReadOnlyCollection();
     }
 

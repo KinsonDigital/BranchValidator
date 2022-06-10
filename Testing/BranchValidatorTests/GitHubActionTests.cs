@@ -191,6 +191,20 @@ public class GitHubActionTests
         // Assert
         onCompletedExecuted.Should().BeTrue();
     }
+
+    [Fact]
+    public void Dispose_WhenInvoked_DisposesOfAction()
+    {
+        // Arrange
+        var action = CreateAction();
+
+        // Act
+        action.Dispose();
+        action.Dispose();
+
+        // Assert
+        this.mockBranchNameObservable.VerifyOnce(m => m.Dispose());
+    }
     #endregion
 
     /// <summary>

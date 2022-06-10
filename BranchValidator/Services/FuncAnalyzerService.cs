@@ -114,7 +114,7 @@ public class FuncAnalyzerService : IAnalyzerService
         if (actualFuncParams.Length != expectedFuncParamCount)
         {
             var paramMsg = "Incorrect number of function arguments.";
-            paramMsg += $"The function '{funcName}' currently has '{actualFuncParams}' parameters but is expecting '{expectedFuncParamCount}'.";
+            paramMsg += $"{Environment.NewLine}The function '{funcName}' currently has '{actualFuncParams.Length}' parameters but is expecting '{expectedFuncParamCount}'.";
 
             return (false, paramMsg);
         }

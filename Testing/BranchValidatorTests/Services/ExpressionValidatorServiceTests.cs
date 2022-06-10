@@ -72,18 +72,24 @@ public class ExpressionValidatorServiceTests
         act.msg.Should().Be("The expression must not be null or empty.");
     }
 
-    [Fact]
-    public void Validate_WithMultiFunctionExpressions_ReturnsCorrectResult()
+    [Theory]
+    [InlineData(true, "expression valid")]
+    [InlineData(false, "expression invalid")]
+    public void Validate_WithDifferentAnalyzerResults_ReturnsCorrectResult(
+        bool expectedValid,
+        string expectedMsg)
     {
         // Arrange
+        this.mockAnalyzerB.Setup(m => m.Analyze("test-expression"))
+            .Returns((expectedValid, expectedMsg));
         var service = CreateService();
 
         // Act
-        var actual = service.Validate("f1() && f2() || f3() && f4()");
+        var actual = service.Validate("test-expression");
 
         // Assert
-        actual.isValid.Should().BeTrue();
-        actual.msg.Should().Be("expression valid");
+        actual.isValid.Should().Be(expectedValid);
+        actual.msg.Should().Be(expectedMsg);
     }
     #endregion
 

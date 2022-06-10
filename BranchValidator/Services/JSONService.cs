@@ -2,6 +2,7 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -9,6 +10,7 @@ using System.Text.Json.Serialization;
 namespace BranchValidator.Services;
 
 /// <inheritdoc/>
+[ExcludeFromCodeCoverage]
 public class JSONService : IJSONService
 {
     private readonly JsonSerializerOptions options;
