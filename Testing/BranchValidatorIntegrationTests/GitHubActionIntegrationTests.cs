@@ -1,4 +1,4 @@
-// <copyright file="GitHubActionIntegrationTests.cs" company="KinsonDigital">
+﻿// <copyright file="GitHubActionIntegrationTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -15,6 +15,9 @@ namespace BranchValidatorIntegrationTests;
 /// </summary>
 public class GitHubActionIntegrationTests : IDisposable
 {
+    private const string AndOperator = "&&";
+    private const string OrOperator = "||";
+
     private readonly GitHubAction action;
 
     /// <summary>
@@ -22,16 +25,16 @@ public class GitHubActionIntegrationTests : IDisposable
     /// </summary>
     public GitHubActionIntegrationTests()
     {
+        var consoleService = new GitHubConsoleService();
+        var outputService = new ActionOutputService(consoleService);
         var analyzerFactory = new AnalyzerFactory();
         var expressionValidationService = new ExpressionValidatorService(analyzerFactory);
-        var methodExecutor = new MethodExecutor();
         var jsonService = new JSONService();
         var resourceLoaderService = new TextResourceLoaderService();
+        var methodExecutor = new MethodExecutor();
         var updateBranchNameObservable = new UpdateBranchNameObservable();
         var functionDefinitions = new FunctionDefinitions(updateBranchNameObservable);
         var functionService = new FunctionService(jsonService, resourceLoaderService, methodExecutor, functionDefinitions);
-        var consoleService = new GitHubConsoleService();
-        var outputService = new ActionOutputService(consoleService);
         var expressionExecutorService = new ExpressionExecutorService(expressionValidationService, functionService);
 
         this.action = new GitHubAction(consoleService, outputService, expressionExecutorService, functionService, updateBranchNameObservable);
@@ -121,8 +124,47 @@ public class GitHubActionIntegrationTests : IDisposable
             .WithMessage($"The function '{funcName}' returned a value of 'false'.");
     }
 
+    [Theory]
+    [InlineData("contains('-') && isSectionNum(8, '-')", "feature/123-test-branch")]
+    [InlineData("startsWith('feature/') || startsWith('preview')", "feature/123-branch")]
+    public async void Run_WithValidBranchesAndOperators_ReturnsCorrectResult(string expression, string branchName)
+    {
+        CheckForOps(expression);
+        // Arrange
+        bool? branchIsValid = null;
+        var actionInputs = new ActionInputs
+        {
+            BranchName = branchName,
+            ValidationLogic = expression,
+            FailWhenNotValid = true,
+        };
+
+        // Act & Assert
+        var act = () => this.action.Run(
+            actionInputs,
+            result =>
+            {
+                branchIsValid = result;
+            }, e => throw e);
+
+        // Assert
+        await act.Should().NotThrowAsync();
+        branchIsValid.Should().BeTrue();
+    }
+
     /// <summary>
     /// Disposes of the action.
     /// </summary>
     public void Dispose() => this.action.Dispose();
+
+    /// <summary>
+    /// Asserts that the given <c>string</c> <paramref name="value"/> contains operators for testing to work properly.
+    /// </summary>
+    /// <param name="value">The value to check.</param>
+    private void CheckForOps(string value)
+    {
+        (value.Contains(AndOperator) || value.Contains(OrOperator))
+            .Should()
+            .BeTrue("this unit test requires operators to exist in the expression for proper testing.");
+    }
 }

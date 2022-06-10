@@ -1,4 +1,4 @@
-﻿// <copyright file="ExpressionExecutorServiceTests.cs" company="KinsonDigital">
+// <copyright file="ExpressionExecutorServiceTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -129,20 +129,27 @@ public class ExpressionExecutorServiceTests
         actual.msg.Should().Be(expectedMsg);
     }
 
-    [Fact]
-    public void Execute_WithOnlyOrOperatorsAnd2Functions_ReturnsCorrectResult()
+    [Theory]
+    [InlineData("funA('is-2-branch') || funB(3)", true, true, true, "branch valid")]
+    [InlineData("funA('is-2-branch') || funB(3)", true, false, true, "branch valid")]
+    [InlineData("funA('is-2-branch') || funB(3)", false, true, true, "branch valid")]
+    [InlineData("funA('is-2-branch') || funB(3)", false, false, false, "branch invalid")]
+    public void Execute_WithOnlyOrOperatorsAnd2Functions_ReturnsCorrectResult(
+        string expression,
+        bool funAValidResult,
+        bool funBValidResult,
+        bool expectedExpressionValidResult,
+        string expectedExpressionMsgResult)
     {
         // Arrange
-        const string expression = "funA('is-2-branch') || funB(3)";
+        const string leftFuncName = "funA";
+        const string rightFuncName = "funB";
         const string branchName = "is-2-branch";
-        const bool expectedFuncValid = true;
-        const bool expectedExecutionValid = true;
-        const string expectedMsg = "branch valid";
 
-        this.mockFunctionService.Setup(m => m.Execute("funA", It.IsAny<string[]>()))
-            .Returns((expectedFuncValid, expectedMsg));
-        this.mockFunctionService.Setup(m => m.Execute("funB", It.IsAny<string[]>()))
-            .Returns((expectedFuncValid, expectedMsg));
+        this.mockFunctionService.Setup(m => m.Execute(leftFuncName, It.IsAny<string[]>()))
+            .Returns((funAValidResult, string.Empty));
+        this.mockFunctionService.Setup(m => m.Execute(rightFuncName, It.IsAny<string[]>()))
+            .Returns((funBValidResult, string.Empty));
 
         var service = CreateService();
 
@@ -150,16 +157,51 @@ public class ExpressionExecutorServiceTests
         var actual = service.Execute(expression, branchName);
 
         // Assert
-        this.mockFunctionService.VerifyOnce(m => m.Execute("funA", "'is-2-branch'"));
-        this.mockFunctionService.VerifyOnce(m => m.Execute("funB", "3"));
-        actual.valid.Should().Be(expectedExecutionValid);
-        actual.msg.Should().Be(expectedMsg);
+        this.mockFunctionService.VerifyOnce(m => m.Execute(leftFuncName, "'is-2-branch'"));
+        this.mockFunctionService.VerifyOnce(m => m.Execute(rightFuncName, "3"));
+        actual.valid.Should().Be(expectedExpressionValidResult);
+        actual.msg.Should().Be(expectedExpressionMsgResult);
     }
 
     [Theory]
+    [InlineData("funA('is-2-branch') && funB(3)", true, true, true, "branch valid")]
+    [InlineData("funA('is-2-branch') && funB(3)", true, false, false, "branch invalid")]
+    [InlineData("funA('is-2-branch') && funB(3)", false, true, false, "branch invalid")]
+    [InlineData("funA('is-2-branch') && funB(3)", false, false, false, "branch invalid")]
+    public void Execute_WithOnlyAndOperatorsAnd2Functions_ReturnsCorrectResult(
+        string expression,
+        bool funAValidResult,
+        bool funBValidResult,
+        bool expectedExpressionValidResult,
+        string expectedExpressionMsgResult)
+    {
+        // Arrange
+        const string leftFuncName = "funA";
+        const string rightFuncName = "funB";
+        const string branchName = "is-2-branch";
+
+        this.mockFunctionService.Setup(m => m.Execute(leftFuncName, It.IsAny<string[]>()))
+            .Returns((funAValidResult, string.Empty));
+        this.mockFunctionService.Setup(m => m.Execute(rightFuncName, It.IsAny<string[]>()))
+            .Returns((funBValidResult, string.Empty));
+
+        var service = CreateService();
+
+        // Act
+        var actual = service.Execute(expression, branchName);
+
+        // Assert
+        this.mockFunctionService.VerifyOnce(m => m.Execute(leftFuncName, "'is-2-branch'"));
+        this.mockFunctionService.VerifyOnce(m => m.Execute(rightFuncName, "3"));
+        actual.valid.Should().Be(expectedExpressionValidResult);
+        actual.msg.Should().Be(expectedExpressionMsgResult);
+    }
+
+    [Theory(Skip = "Waiting for implementation of script execution with C#")]
     [InlineData(true, false, true, false, true, true, "branch valid")]
     [InlineData(true, false, false, false, false, false, "branch invalid")]
     [InlineData(true, false, false, true, false, false, "branch invalid")]
+    [InlineData(true, true, true, false, true, true, "branch invalid")]
     public void Execute_WithBothOperatorTypesAnd2Functions_ReturnsCorrectResult(
         bool funcAValidResult,
         bool funcBValidResult,

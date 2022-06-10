@@ -1,4 +1,4 @@
-﻿// <copyright file="ExpressionExecutorService.cs" company="KinsonDigital">
+// <copyright file="ExpressionExecutorService.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -55,9 +55,9 @@ public class ExpressionExecutorService : IExpressionExecutorService
         var doesNotContainAndOps = expression.DoesNotContain(AndOperator);
         var doesNotContainOrOps = expression.DoesNotContain(OrOperator);
 
-        var doesNotContainsOps = doesNotContainAndOps && doesNotContainOrOps;
+        var doesNotContainOps = doesNotContainAndOps && doesNotContainOrOps;
 
-        if (doesNotContainsOps)
+        if (doesNotContainOps)
         {
             var funcName = expression.GetUpToChar(LeftParen);
             var funcResult = ProcessFunc(expression);
@@ -107,6 +107,7 @@ public class ExpressionExecutorService : IExpressionExecutorService
             var processItem = processItems[i];
             bool processResult;
 
+            // TODO: Convert to ternary operator
             if (processItem.Contains(OrOperator))
             {
                 processResult = ProcessOrOperations(processItem);
@@ -119,7 +120,24 @@ public class ExpressionExecutorService : IExpressionExecutorService
             processItems[i] = processResult.ToString().ToLower();
         }
 
-        var expressionResult = processItems.All(i => i == "true");
+        var onlyContainsAndOps = expression.Contains(AndOperator) && expression.DoesNotContain(OrOperator);
+        var onlyContainsOrOps = expression.Contains(OrOperator) && expression.DoesNotContain(AndOperator);
+
+        var expressionResult = true;
+
+        if (onlyContainsAndOps)
+        {
+            expressionResult = processItems.All(i => i == "true");
+        }
+        else if (onlyContainsOrOps)
+        {
+            expressionResult = processItems.Any(i => i == "true");
+        }
+        else
+        {
+            throw new NotImplementedException("Need to implement if both ops exist?");
+        }
+
 
         return (expressionResult, expressionResult ? "branch valid" : "branch invalid");
     }
