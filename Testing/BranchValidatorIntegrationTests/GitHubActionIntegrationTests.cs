@@ -1,4 +1,4 @@
-﻿// <copyright file="GitHubActionIntegrationTests.cs" company="KinsonDigital">
+// <copyright file="GitHubActionIntegrationTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -57,7 +57,7 @@ public class GitHubActionIntegrationTests : IDisposable
     [InlineData("lenLessThan(200)", "feature/123-test-branch")]
     [InlineData("isBefore('123', 'branch')", "feature/123-test-branch")]
     [InlineData("isAfter('test', 'feature')", "feature/123-test-branch")]
-    public async void Execute_WithValidBranches_ReturnsCorrectResult(string expression, string branchName)
+    public async void Run_WithValidBranches_ReturnsCorrectResult(string expression, string branchName)
     {
         // Arrange
         bool? branchIsValid = null;
@@ -100,7 +100,7 @@ public class GitHubActionIntegrationTests : IDisposable
     [InlineData("lenLessThan(10)", "lenLessThan", "feature/123-test-branch")]
     [InlineData("isBefore('branch', '123')", "isBefore", "feature/123-test-branch")]
     [InlineData("isAfter('feature', 'test')", "isAfter", "feature/123-test-branch")]
-    public async void Execute_WithInvalidBranches_FailsActionWithException(
+    public async void Run_WithInvalidBranches_FailsActionWithException(
         string expression,
         string funcName,
         string branchName)
