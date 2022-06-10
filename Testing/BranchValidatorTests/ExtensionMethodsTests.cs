@@ -14,6 +14,20 @@ namespace BranchValidatorTests;
 public class ExtensionMethodsTests
 {
     #region Method Tests
+    [Fact]
+    public void ToReadOnlyCollection_WhenInvoked_ReturnsCorrectResult()
+    {
+        // Arrange
+        var items = new[] { 1, 2, 3, 4 };
+
+        // Act
+        var actual = items.ToReadOnlyCollection();
+
+        // Assert
+        actual.Should().HaveCount(4);
+        actual.Should().BeEquivalentTo(new[] { 1, 2, 3, 4 });
+    }
+
     [Theory]
     [InlineData(null, "")]
     [InlineData("", "")]

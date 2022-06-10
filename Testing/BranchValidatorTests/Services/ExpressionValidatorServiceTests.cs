@@ -2,6 +2,7 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
+using BranchValidator;
 using BranchValidator.Factories;
 using BranchValidator.Services;
 using BranchValidator.Services.Interfaces;
