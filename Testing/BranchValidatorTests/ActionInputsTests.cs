@@ -1,4 +1,4 @@
-﻿// <copyright file="ActionInputTests.cs" company="KinsonDigital">
+﻿// <copyright file="ActionInputsTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -14,7 +14,7 @@ namespace BranchValidatorTests;
 /// <summary>
 /// Tests the <see cref="ActionInputs"/> class.
 /// </summary>
-public class ActionInputTests
+public class ActionInputsTests
 {
     #region Contructor Tests
     [Fact]
