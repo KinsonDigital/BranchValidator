@@ -16,7 +16,7 @@ namespace BranchValidatorTests;
 /// </summary>
 public class ActionInputTests
 {
-    #region Prop Tests
+    #region Contructor Tests
     [Fact]
     public void Ctor_WhenConstructed_PropsHaveCorrectDefaultValuesAndDecoratedWithAttributes()
     {
@@ -29,15 +29,57 @@ public class ActionInputTests
         inputs.GetAttrFromProp<OptionAttribute>(nameof(ActionInputs.BranchName))
             .AssertOptionAttrProps("branch-name", true, string.Empty, "The name of the GIT branch.");
 
-        inputs.BranchName.Should().BeEmpty();
+        inputs.ValidationLogic.Should().BeEmpty();
         typeof(ActionInputs).GetProperty(nameof(ActionInputs.ValidationLogic)).Should().BeDecoratedWith<OptionAttribute>();
         inputs.GetAttrFromProp<OptionAttribute>(nameof(ActionInputs.ValidationLogic))
             .AssertOptionAttrProps("validation-logic", true, string.Empty, "The logic expression to use to validate the branch name.");
 
-        inputs.BranchName.Should().BeEmpty();
+        inputs.FailWhenNotValid.Should().BeTrue();
         typeof(ActionInputs).GetProperty(nameof(ActionInputs.FailWhenNotValid)).Should().BeDecoratedWith<OptionAttribute>();
         inputs.GetAttrFromProp<OptionAttribute>(nameof(ActionInputs.FailWhenNotValid))
             .AssertOptionAttrProps("fail-when-not-valid", false, true, "If true, will fail the job if the branch name is not valid.");
+    }
+    #endregion
+
+    #region Prop Tests
+    [Fact]
+    public void BranchName_WhenSettingValue_ReturnsCorrectResult()
+    {
+        // Arrange
+        var inputs = new ActionInputs();
+
+        // Act
+        inputs.BranchName = "test-branch";
+
+        // Assert
+        inputs.BranchName.Should().Be("test-branch");
+    }
+
+    [Fact]
+    public void ValidationLogic_WhenSettingValue_ReturnsCorrectResult()
+    {
+        // Arrange
+        var inputs = new ActionInputs();
+
+        // Act
+        inputs.ValidationLogic = "test-logic";
+
+        // Assert
+        inputs.ValidationLogic.Should().Be("test-logic");
+    }
+
+    [Fact]
+    public void FailWhenNotValid_WhenSettingValue_ReturnsCorrectResult()
+    {
+        // Arrange
+        var inputs = new ActionInputs();
+        var expected = !inputs.FailWhenNotValid;
+
+        // Act
+        inputs.FailWhenNotValid = !inputs.FailWhenNotValid;
+
+        // Assert
+        inputs.FailWhenNotValid.Should().Be(expected);
     }
     #endregion
 }
