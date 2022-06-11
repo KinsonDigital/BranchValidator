@@ -1,9 +1,12 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31019.194
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BranchValidator", "BranchValidator\BranchValidator.csproj", "{6B7D8AB5-2EB6-4B9E-A219-44BAA2016BED}"
+	ProjectSection(ProjectDependencies) = postProject
+		{10D490EC-47A4-43BC-AC85-C4D2D9A93111} = {10D490EC-47A4-43BC-AC85-C4D2D9A93111}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5F6905A4-928D-4A81-9D9B-B273A27B3A92}"
 	ProjectSection(SolutionItems) = preProject
@@ -42,6 +45,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Pull Request Templates", "P
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BranchValidatorIntegrationTests", "Testing\BranchValidatorIntegrationTests\BranchValidatorIntegrationTests.csproj", "{FEAF2CD0-88B7-4BBC-BEA9-36BE1B2A54C5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScriptGenerator", "Tooling\ScriptGenerator\ScriptGenerator.csproj", "{10D490EC-47A4-43BC-AC85-C4D2D9A93111}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tooling", "Tooling", "{9FCCAAD2-2BDF-46C2-8616-A5CDE75ED18E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -60,6 +67,10 @@ Global
 		{FEAF2CD0-88B7-4BBC-BEA9-36BE1B2A54C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FEAF2CD0-88B7-4BBC-BEA9-36BE1B2A54C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FEAF2CD0-88B7-4BBC-BEA9-36BE1B2A54C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10D490EC-47A4-43BC-AC85-C4D2D9A93111}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10D490EC-47A4-43BC-AC85-C4D2D9A93111}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10D490EC-47A4-43BC-AC85-C4D2D9A93111}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10D490EC-47A4-43BC-AC85-C4D2D9A93111}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -73,5 +84,6 @@ Global
 		{2C56562A-E5F8-43AD-A99F-049FEA733577} = {5F6905A4-928D-4A81-9D9B-B273A27B3A92}
 		{DC46D789-4072-4F81-B83C-CEF24FFD7229} = {5F6905A4-928D-4A81-9D9B-B273A27B3A92}
 		{FEAF2CD0-88B7-4BBC-BEA9-36BE1B2A54C5} = {0D648979-F6A2-4DBD-ABE7-BDCB9E0EE4BE}
+		{10D490EC-47A4-43BC-AC85-C4D2D9A93111} = {9FCCAAD2-2BDF-46C2-8616-A5CDE75ED18E}
 	EndGlobalSection
 EndGlobal
