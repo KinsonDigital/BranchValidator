@@ -3,41 +3,36 @@
 // </copyright>
 
 using System.Diagnostics.CodeAnalysis;
-using BranchValidator.Observables.Core;
+using System.Text.RegularExpressions;
 
 namespace BranchValidator;
 
-/// <inheritdoc/>
+/// <summary>
+/// Holds all of the functions that can be used in an expression and
+/// acts like a container to build the C# script for execution during runtime.
+/// </summary>
 [SuppressMessage("Requirements", "CA1822:Mark members as static", Justification = "Methods cannot be static due to reflection requirements and invocation.")]
 [SuppressMessage("ReSharper", "MemberCanBeMadeStatic.Global", Justification = "Methods cannot be static due to reflection requirements and invocation.")]
-public class FunctionDefinitions : IFunctionDefinitions
+public class FunctionDefinitions
 {
     private static readonly char[] Numbers =
     {
         '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
     };
-    private IDisposable? branchNameUnsubscriber;
-    private string branchName = string.Empty;
-    private bool isDisposed;
+    private readonly string branchName;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="FunctionDefinitions"/> class.
     /// </summary>
-    /// <param name="branchNameObservable">Receives push notifications of branch name updates.</param>
-    public FunctionDefinitions(IBranchNameObservable branchNameObservable) =>
-        this.branchNameUnsubscriber = branchNameObservable.Subscribe(new Observer<string>(
-            onNext: branchNameValue =>
-            {
-                this.branchName = branchNameValue;
-            }, onCompleted: () =>
-            {
-                this.branchNameUnsubscriber?.Dispose();
-            }, onError: _ =>
-            {
-                this.branchNameUnsubscriber?.Dispose();
-                this.branchNameUnsubscriber = null;
-            }));
+    /// <param name="branchName">The name of the branch.</param>
+    public FunctionDefinitions(string branchName) => this.branchName = branchName;
 
+#pragma warning disable SA1005
+#pragma warning disable SA1515
+#pragma warning disable SA1514
+// ReSharper disable ArrangeMethodOrOperatorBody
+
+    //<script-function>
     /// <inheritdoc/>
     public bool EqualTo(string value)
     {
@@ -72,7 +67,7 @@ public class FunctionDefinitions : IFunctionDefinitions
 
         for (var i = startPos; i <= endPos; i++)
         {
-            if (Numbers.DoesNotContain(this.branchName[(int)i]))
+            if (Numbers.Contains(this.branchName[(int)i]) is false)
             {
                 return false;
             }
@@ -107,37 +102,70 @@ public class FunctionDefinitions : IFunctionDefinitions
     }
 
     /// <inheritdoc/>
-    public bool Contains(string value) => this.branchName.Contains(value);
+    public bool Contains(string value)
+    {
+        return this.branchName.Contains(value);
+    }
 
     /// <inheritdoc/>
-    public bool NotContains(string value) => this.branchName.DoesNotContain(value);
+    public bool NotContains(string value)
+    {
+        return this.branchName.Contains(value) is false;
+    }
 
     /// <inheritdoc/>
-    public bool ExistTotal(string value, uint total) => this.branchName.Count(value) == total;
+    public bool ExistTotal(string value, uint total)
+    {
+        return Count(this.branchName, value) == total;
+    }
 
     /// <inheritdoc/>
-    public bool ExistsLessThan(string value, uint total) => this.branchName.Count(value) < total;
+    public bool ExistsLessThan(string value, uint total)
+    {
+        return Count(this.branchName, value) < total;
+    }
 
     /// <inheritdoc/>
-    public bool ExistsGreaterThan(string value, uint total) => this.branchName.Count(value) > total;
+    public bool ExistsGreaterThan(string value, uint total)
+    {
+        return Count(this.branchName, value) > total;
+    }
 
     /// <inheritdoc/>
-    public bool StartsWith(string value) => this.branchName.StartsWith(value);
+    public bool StartsWith(string value)
+    {
+        return this.branchName.StartsWith(value);
+    }
 
     /// <inheritdoc/>
-    public bool NotStartsWith(string value) => !this.branchName.StartsWith(value);
+    public bool NotStartsWith(string value)
+    {
+        return !this.branchName.StartsWith(value);
+    }
 
     /// <inheritdoc/>
-    public bool EndsWith(string value) => this.branchName.EndsWith(value);
+    public bool EndsWith(string value)
+    {
+        return this.branchName.EndsWith(value);
+    }
 
     /// <inheritdoc/>
-    public bool NotEndsWith(string value) => !this.branchName.EndsWith(value);
+    public bool NotEndsWith(string value)
+    {
+        return !this.branchName.EndsWith(value);
+    }
 
     /// <inheritdoc/>
-    public bool StartsWithNum() => !string.IsNullOrEmpty(this.branchName) && Numbers.Contains(this.branchName[0]);
+    public bool StartsWithNum()
+    {
+        return !string.IsNullOrEmpty(this.branchName) && Numbers.Contains(this.branchName[0]);
+    }
 
     /// <inheritdoc/>
-    public bool EndsWithNum() => !string.IsNullOrEmpty(this.branchName) && Numbers.Contains(this.branchName[^1]);
+    public bool EndsWithNum()
+    {
+        return !string.IsNullOrEmpty(this.branchName) && Numbers.Contains(this.branchName[^1]);
+    }
 
     /// <inheritdoc/>
     public bool LenLessThan(uint length)
@@ -189,16 +217,26 @@ public class FunctionDefinitions : IFunctionDefinitions
         return valueIndex > afterIndex;
     }
 
-    /// <inheritdoc/>
-    public void Dispose()
+    private static int Count(string thisStr, string value)
     {
-        if (this.isDisposed)
+        // Go through each character and escape it if needed
+        for (var i = 0; i < value.Length; i++)
         {
-            return;
+            var character = value[i];
+
+            if (character == '|')
+            {
+                value = value.Insert(i, @"\");
+                i++;
+            }
         }
 
-        this.branchNameUnsubscriber?.Dispose();
-
-        this.isDisposed = true;
+        return Regex.Matches(thisStr, value, RegexOptions.IgnoreCase).Count;
     }
+    //</script-function>
+
+// ReSharper restore ArrangeMethodOrOperatorBody
+#pragma warning restore SA1005
+#pragma warning restore SA1515
+#pragma warning restore SA1514
 }

@@ -2,11 +2,10 @@
 
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
-        <LangVersion>10.0</LangVersion>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+
         <IsPackable>false</IsPackable>
-        <RootNamespace>BranchValidatorTests</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
@@ -37,21 +36,24 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="TestData\ProjFileTestSample.csproj.xml">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="TestData\OnlyVersionTag.csproj.xml">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\..\BranchValidator\BranchValidator.csproj" />
+      <ProjectReference Include="..\..\Tooling\ScriptGenerator\ScriptGenerator.csproj" />
     </ItemGroup>
 
     <ItemGroup>
       <None Remove="stylecop.json" />
       <AdditionalFiles Include="stylecop.json" />
+      <None Update="TestData\SingleScriptFunction.txt">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="TestData\2ScriptFunctions.txt">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="TestData\SingleScriptFunction.txt">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Compile>
     </ItemGroup>
 
 </Project>

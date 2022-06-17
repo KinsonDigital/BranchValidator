@@ -19,7 +19,6 @@ public class FunctionServiceTests
     private readonly Mock<IMethodExecutor> mockMethodExecutor;
     private readonly Mock<IJSONService> mockJSONService;
     private readonly Mock<IEmbeddedResourceLoaderService<string>> mockResourceLoaderService;
-    private readonly Mock<IFunctionDefinitions> mockFunctionDefinitions;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="FunctionServiceTests"/> class.
@@ -33,8 +32,7 @@ public class FunctionServiceTests
             .Returns(() => new Dictionary<string, DataTypes[]>());
 
         this.mockResourceLoaderService = new Mock<IEmbeddedResourceLoaderService<string>>();
-        this.mockFunctionDefinitions = new Mock<IFunctionDefinitions>();
-    }
+     }
 
     #region Constructor Tests
     [Fact]
@@ -46,8 +44,7 @@ public class FunctionServiceTests
             _ = new FunctionService(
                 null,
                 this.mockResourceLoaderService.Object,
-                this.mockMethodExecutor.Object,
-                this.mockFunctionDefinitions.Object);
+                this.mockMethodExecutor.Object);
         };
 
         // Assert
@@ -65,8 +62,7 @@ public class FunctionServiceTests
             _ = new FunctionService(
                 this.mockJSONService.Object,
                 null,
-                this.mockMethodExecutor.Object,
-                this.mockFunctionDefinitions.Object);
+                this.mockMethodExecutor.Object );
         };
 
         // Assert
@@ -84,33 +80,13 @@ public class FunctionServiceTests
             _ = new FunctionService(
                 this.mockJSONService.Object,
                 this.mockResourceLoaderService.Object,
-                null,
-                this.mockFunctionDefinitions.Object);
-        };
-
-        // Assert
-        act.Should()
-            .Throw<ArgumentNullException>()
-            .WithMessage("The parameter must not be null. (Parameter 'methodExecutor')");
-    }
-
-    [Fact]
-    public void Ctor_WithNullFunctionDefinitionsParam_ThrowsException()
-    {
-        // Arrange & Act
-        var act = () =>
-        {
-            _ = new FunctionService(
-                this.mockJSONService.Object,
-                this.mockResourceLoaderService.Object,
-                this.mockMethodExecutor.Object,
                 null);
         };
 
         // Assert
         act.Should()
             .Throw<ArgumentNullException>()
-            .WithMessage("The parameter must not be null. (Parameter 'functionDefinitions')");
+            .WithMessage("The parameter must not be null. (Parameter 'methodExecutor')");
     }
 
     [Fact]
@@ -315,6 +291,5 @@ public class FunctionServiceTests
     private FunctionService CreateService()
         => new (this.mockJSONService.Object,
             this.mockResourceLoaderService.Object,
-            this.mockMethodExecutor.Object,
-            this.mockFunctionDefinitions.Object);
+            this.mockMethodExecutor.Object);
 }

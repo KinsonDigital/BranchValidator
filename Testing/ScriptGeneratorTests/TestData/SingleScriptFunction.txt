@@ -1,0 +1,35 @@
+﻿// <copyright file="SingleScriptFunction.cs" company="KinsonDigital">
+// Copyright (c) KinsonDigital. All rights reserved.
+// </copyright>
+
+using System.Diagnostics.CodeAnalysis;
+// ReSharper disable CheckNamespace
+// ReSharper disable UnusedMember.Global
+// ReSharper disable UnusedParameter.Global
+// ReSharper disable UnusedType.Global
+namespace SampleNamespace;
+
+[SuppressMessage("Requirements", "CA1822:Mark members as static", Justification = "Ignored because this is just sample test data.")]
+[SuppressMessage("ReSharper", "MemberCanBeMadeStatic.Global", Justification = "Ignored because this is just sample test data.")]
+[SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1512:Single-line comments should not be followed by blank line", Justification = "Ignored because this is just sample test data.")]
+[SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1513:Closing brace should be followed by blank line", Justification = "Ignored because this is just sample test data.")]
+public class FunctionDefinitions
+{
+    /// <summary>
+    /// Initializes a new instance of the <see cref="FunctionDefinitions"/> class.
+    /// </summary>
+    public FunctionDefinitions()
+    {
+    }
+
+    //<script-function>
+    public bool TestFunction(string value)
+    {
+        return value == this.branchName;
+    }
+    //</script-function>
+
+    public void Dispose()
+    {
+    }
+}

@@ -7,5 +7,3 @@ global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.Hosting;
 global using static CommandLine.Parser;
 global using IBranchNameObservable = BranchValidator.Observables.Core.IObservable<string>;
-
-// global using Microsoft.Extensions.FileSystemGlobbing;  // This can be very useful
