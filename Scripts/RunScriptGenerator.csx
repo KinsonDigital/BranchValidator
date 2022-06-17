@@ -5,7 +5,7 @@ if (Args.Count <= 0)
 {
     WriteLine("No arguments passed to the script.");
     WriteLine("Generator Tool Not Executed!!");
-    return 0;
+    return 100;
 }
 
 for (int i = 0; i < Args.Count; i++)
@@ -16,10 +16,10 @@ for (int i = 0; i < Args.Count; i++)
 var toolPath = Args[0];
 
 // If the file does not exist, exit with an error
-if (File.Exists(toolPath))
+if (File.Exists(toolPath) is false)
 {
     Console.WriteLine($"The generator tool path file '{toolPath}' does not exist.");
-    return 100;
+    return 200;
 }
 
 var sourceFilePath = @"../../../../../BranchValidator/FunctionDefinitions.cs";

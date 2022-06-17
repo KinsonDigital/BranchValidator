@@ -5,5 +5,7 @@ namespace BranchValidator.Services;
 
 public class ScriptService : IScriptService
 {
-    public bool Execute(string expression) => CSharpScript.EvaluateAsync<bool>(expression).Result;
+    // TODO: Load the code form the ExpressionFunction class file for execution
+
+    public bool Execute(string script) => CSharpScript.EvaluateAsync<bool>(script).Result;
 }

@@ -14,6 +14,7 @@ public class GeneratorService : IGeneratorService
     private readonly IDirectory directory;
     private readonly IFile file;
     private readonly IPath path;
+    private readonly IConsoleService consoleService;
     private readonly IFunctionExtractorService funcExtractorService;
     private readonly IRelativePathResolverService pathResolver;
     private readonly IScriptTemplateService scriptTemplateService;
@@ -23,6 +24,7 @@ public class GeneratorService : IGeneratorService
         IDirectory directory,
         IFile file,
         IPath path,
+        IConsoleService consoleService,
         IFunctionExtractorService funcExtractorService,
         IRelativePathResolverService pathResolver,
         IScriptTemplateService scriptTemplateService,
@@ -31,6 +33,8 @@ public class GeneratorService : IGeneratorService
         this.directory = directory ?? throw new ArgumentNullException(nameof(directory), NullParamMsg);
         this.file = file ?? throw new ArgumentNullException(nameof(file), NullParamMsg);
         this.path = path ?? throw new ArgumentNullException(nameof(path), NullParamMsg);
+        // TODO: Add null check unit test
+        this.consoleService = consoleService ?? throw new ArgumentNullException(nameof(consoleService), NullParamMsg);
         this.funcExtractorService = funcExtractorService ?? throw new ArgumentNullException(nameof(funcExtractorService), NullParamMsg);
         this.pathResolver = pathResolver ?? throw new ArgumentNullException(nameof(pathResolver), NullParamMsg);
         // TODO: Add null check unit test
@@ -51,12 +55,20 @@ public class GeneratorService : IGeneratorService
     /// </exception>
     public void GenerateScript(string srcFilePath, string destDir, string destFileName)
     {
+        // TODO: Test for invocation of this
+        this.consoleService.WriteLine($"Original Source File Path: {srcFilePath}");
+        this.consoleService.WriteLine($"Original Destination Directory Path: {destDir}");
+        this.consoleService.WriteLine($"Original Destination File Name: {destFileName}");
+
         if (string.IsNullOrEmpty(srcFilePath))
         {
             throw new ArgumentNullException(nameof(srcFilePath), "The parameter must not be null or empty.");
         }
 
         srcFilePath = this.pathResolver.Resolve(srcFilePath);
+
+        // TODO: Test for invocation of this
+        this.consoleService.WriteLine($"Resolving Source File Path To: {srcFilePath}");
 
         if (string.IsNullOrEmpty(destDir))
         {
@@ -77,6 +89,9 @@ public class GeneratorService : IGeneratorService
         destDir = destDir
             .TrimEnd(this.path.DirectorySeparatorChar)
             .TrimEnd(this.path.AltDirectorySeparatorChar);
+
+        // TODO: Test for invocation of this
+        this.consoleService.WriteLine($"Resolving Destination Directory Path To: {destDir}");
 
         if (string.IsNullOrEmpty(destFileName))
         {
@@ -111,7 +126,12 @@ public class GeneratorService : IGeneratorService
 
         script = script.Replace(FunctionCode, functionCode);
 
+        // TODO: Test for invocation of this
+
         var fullDestFilePath = $"{destDir}{this.path.AltDirectorySeparatorChar}{DestFileName}";
+
+        this.consoleService.WriteLine($"Resolving Full Destination File Path To: {fullDestFilePath}");
+
         this.file.WriteAllText(fullDestFilePath, script);
     }
 }

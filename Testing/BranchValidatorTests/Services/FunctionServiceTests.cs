@@ -16,7 +16,6 @@ namespace BranchValidatorTests.Services;
 /// </summary>
 public class FunctionServiceTests
 {
-    private readonly Mock<IMethodExecutor> mockMethodExecutor;
     private readonly Mock<IJSONService> mockJSONService;
     private readonly Mock<IEmbeddedResourceLoaderService<string>> mockResourceLoaderService;
 
@@ -25,8 +24,6 @@ public class FunctionServiceTests
     /// </summary>
     public FunctionServiceTests()
     {
-        this.mockMethodExecutor = new Mock<IMethodExecutor>();
-
         this.mockJSONService = new Mock<IJSONService>();
         this.mockJSONService.Setup(m => m.Deserialize<Dictionary<string, DataTypes[]>>(It.IsAny<string>()))
             .Returns(() => new Dictionary<string, DataTypes[]>());
@@ -43,8 +40,7 @@ public class FunctionServiceTests
         {
             _ = new FunctionService(
                 null,
-                this.mockResourceLoaderService.Object,
-                this.mockMethodExecutor.Object);
+                this.mockResourceLoaderService.Object);
         };
 
         // Assert
@@ -61,32 +57,13 @@ public class FunctionServiceTests
         {
             _ = new FunctionService(
                 this.mockJSONService.Object,
-                null,
-                this.mockMethodExecutor.Object );
-        };
-
-        // Assert
-        act.Should()
-            .Throw<ArgumentNullException>()
-            .WithMessage("The parameter must not be null. (Parameter 'resourceLoaderService')");
-    }
-
-    [Fact]
-    public void Ctor_WithNullMethodExecutorParam_ThrowsException()
-    {
-        // Arrange & Act
-        var act = () =>
-        {
-            _ = new FunctionService(
-                this.mockJSONService.Object,
-                this.mockResourceLoaderService.Object,
                 null);
         };
 
         // Assert
         act.Should()
             .Throw<ArgumentNullException>()
-            .WithMessage("The parameter must not be null. (Parameter 'methodExecutor')");
+            .WithMessage("The parameter must not be null. (Parameter 'resourceLoaderService')");
     }
 
     [Fact]
@@ -264,9 +241,6 @@ public class FunctionServiceTests
                 };
             });
 
-        this.mockMethodExecutor.Setup(m => m.ExecuteMethod(It.IsAny<object>(), It.IsAny<string>(), It.IsAny<string[]>()))
-            .Returns((actualValid, "test-msg"));
-
         var argValues = new List<string>();
         argValues.AddRange(paramList.Split(',', StringSplitOptions.TrimEntries));
         argValues.Add(branchName);
@@ -279,8 +253,6 @@ public class FunctionServiceTests
         // Assert
         actual.valid.Should().Be(actualValid);
         actual.msg.Should().Be("test-msg");
-
-        this.mockMethodExecutor.VerifyOnce(m => m.ExecuteMethod(It.IsAny<object>(), expectedMethodName, argValues.ToArray()));
     }
     #endregion
 
@@ -290,6 +262,5 @@ public class FunctionServiceTests
     /// <returns>The instance to test.</returns>
     private FunctionService CreateService()
         => new (this.mockJSONService.Object,
-            this.mockResourceLoaderService.Object,
-            this.mockMethodExecutor.Object);
+            this.mockResourceLoaderService.Object);
 }

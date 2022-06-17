@@ -7,24 +7,24 @@ using BranchValidator.Services.Interfaces;
 
 namespace BranchValidator.Services;
 
+// TODO: Delete this service.  This does some validation of the function existing.  This will now be done with an IAnalyzerService implementation
+// named FunctionExistsAnalyzerService
+
 /// <inheritdoc/>
 public class FunctionService : IFunctionService
 {
     private const char FuncNameParamSeparator = ':';
     private const string FunctionDefFileName = "func-defs.json";
     private readonly Dictionary<string, DataTypes[]>? validFunctions;
-    private readonly IMethodExecutor methodExecutor;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="FunctionService"/> class.
     /// </summary>
     /// <param name="jsonService">Serializes and deserializes JSON data.</param>
     /// <param name="resourceLoaderService">Loads resources.</param>
-    /// <param name="methodExecutor">Executes methods on an object using reflection.</param>
     public FunctionService(
         IJSONService jsonService,
-        IEmbeddedResourceLoaderService<string> resourceLoaderService,
-        IMethodExecutor methodExecutor)
+        IEmbeddedResourceLoaderService<string> resourceLoaderService)
     {
         const char comma = ',';
         if (jsonService is null)
@@ -36,8 +36,6 @@ public class FunctionService : IFunctionService
         {
             throw new ArgumentNullException(nameof(resourceLoaderService), "The parameter must not be null.");
         }
-
-        this.methodExecutor = methodExecutor ?? throw new ArgumentNullException(nameof(methodExecutor), "The parameter must not be null.");
 
         var rawFuncDefData = resourceLoaderService.LoadResource(FunctionDefFileName);
         this.validFunctions = jsonService.Deserialize<Dictionary<string, DataTypes[]>>(rawFuncDefData);

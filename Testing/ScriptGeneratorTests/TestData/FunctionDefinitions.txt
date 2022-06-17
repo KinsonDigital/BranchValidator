@@ -1,0 +1,14 @@
+﻿public class FunctionDefinitions
+{
+    [ExpressionFunction(nameof(FuncA))]
+    public bool FuncA(string value)
+    {
+        return true;
+    }
+
+    [ExpressionFunction(nameof(FuncB))]
+    public bool FuncB(string value)
+    {
+        return true;
+    }
+}

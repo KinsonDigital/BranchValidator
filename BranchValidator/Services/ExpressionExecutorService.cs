@@ -17,6 +17,9 @@ public class ExpressionExecutorService : IExpressionExecutorService
     private readonly IExpressionValidatorService expressionValidatorService;
     private readonly IFunctionService functionService;
 
+    // TODO: Need to inject the IScriptService to execute the script once it has been analyzed
+    // and the script created
+
     /// <summary>
     /// Initializes a new instance of the <see cref="ExpressionExecutorService"/> class.
     /// </summary>
@@ -52,84 +55,7 @@ public class ExpressionExecutorService : IExpressionExecutorService
             return validationResult;
         }
 
-        var doesNotContainAndOps = expression.DoesNotContain(AndOperator);
-        var doesNotContainOrOps = expression.DoesNotContain(OrOperator);
-
-        var doesNotContainOps = doesNotContainAndOps && doesNotContainOrOps;
-
-        if (doesNotContainOps)
-        {
-            var funcName = expression.GetUpToChar(LeftParen);
-            var funcResult = ProcessFunc(expression);
-
-            return (funcResult, $"The function '{funcName}' returned a value of '{funcResult.ToString().ToLower()}'.");
-        }
-
-        bool ProcessFunc(string function)
-        {
-            var funcParams = new List<string>();
-            funcParams.AddRange(ExtractArgs(function));
-
-            if (funcParams.All(string.IsNullOrEmpty))
-            {
-                funcParams.Clear();
-            }
-
-            var result = this.functionService.Execute(function.GetUpToChar(LeftParen), funcParams.ToArray()).valid;
-
-            return result;
-        }
-
-        bool ProcessOrOperations(string orFunctions)
-        {
-            var functions = orFunctions.Split(OrOperator, StringSplitOptions.TrimEntries);
-
-            for (var i = 0; i < functions.Length; i++)
-            {
-                var funcResult = ProcessFunc(functions[i]);
-
-                functions[i] = funcResult.ToString().ToLower();
-            }
-
-            return functions.Any(f => f == "true"); // TODO: Create constance for "true" and "false" values
-        }
-
-        var processItems = expression.Split(AndOperator, StringSplitOptions.TrimEntries);
-
-        // If there is only one item with or operators in it, then no AND operators existed
-        if (processItems.Length == 1 && processItems[0].Contains(OrOperator))
-        {
-            processItems = expression.Split(OrOperator, StringSplitOptions.TrimEntries);
-        }
-
-        for (var i = 0; i < processItems.Length; i++)
-        {
-            var processItem = processItems[i];
-
-            var processResult = processItem.Contains(OrOperator)
-                ? ProcessOrOperations(processItem)
-                : ProcessFunc(processItem);
-
-            processItems[i] = processResult.ToString().ToLower();
-        }
-
-        var onlyContainsAndOps = expression.Contains(AndOperator) && expression.DoesNotContain(OrOperator);
-        var onlyContainsOrOps = expression.Contains(OrOperator) && expression.DoesNotContain(AndOperator);
-
-        bool expressionResult;
-
-        if (onlyContainsAndOps)
-        {
-            expressionResult = processItems.All(i => i == "true");
-        }
-        else if (onlyContainsOrOps)
-        {
-            expressionResult = processItems.Any(i => i == "true");
-        }
-        else
-        {
-            throw new NotImplementedException("Need to implement if both ops exist?");
-        }
+        var expressionResult = false;
 
         return (expressionResult, expressionResult ? "branch valid" : "branch invalid");
     }

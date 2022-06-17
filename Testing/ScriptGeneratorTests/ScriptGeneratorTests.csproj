@@ -48,10 +48,16 @@
       <None Update="TestData\2ScriptFunctions.txt">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="TestData\FunctionDefinitions.txt">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>
       <Compile Update="TestData\SingleScriptFunction.txt">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Compile>
+      <Compile Update="TestData\FunctionDefinitions.txt">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Compile>
     </ItemGroup>

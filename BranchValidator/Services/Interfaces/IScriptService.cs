@@ -2,5 +2,5 @@
 
 public interface IScriptService
 {
-    bool Execute(string expression);
+    bool Execute(string script);
 }

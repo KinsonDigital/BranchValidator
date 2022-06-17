@@ -10,15 +10,15 @@ namespace BranchValidator.Services.Interfaces;
 public interface IAnalyzerService
 {
     /// <summary>
-    /// Analyzes the given <paramref name="expression"/> and returns a result.
+    /// Analyzes the given <paramref name="value"/> and returns a result.
     /// </summary>
-    /// <param name="expression">The expression to analyze.</param>
+    /// <param name="value">The expression to analyze.</param>
     /// <returns>
     ///     Tuple Result:
     /// <list type="bullet">
-    ///     <item><c>valid:</c> <c>true</c> if the <paramref name="expression"/> is valid.</item>
+    ///     <item><c>valid:</c> <c>true</c> if the <paramref name="value"/> is valid.</item>
     ///     <item><c>msg:</c> Additional information about result.</item>
     /// </list>
     /// </returns>
-    (bool valid, string msg) Analyze(string expression);
+    (bool valid, string msg) Analyze(string value);
 }

@@ -1,6 +1,6 @@
 ﻿namespace ScriptGenerator.Services;
 
-public class RemoveInheritCodeDocs : IStringMutation
+public class RemoveInheritCodeDocsMutation : IStringMutation
 {
     public string Mutate(string value)
     {

@@ -32,4 +32,8 @@
       </Compile>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\BranchValidator\BranchValidator.csproj" />
+    </ItemGroup>
+
 </Project>

@@ -6,6 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using BranchValidator.Services.Interfaces;
 
 namespace BranchValidator.Services;
 

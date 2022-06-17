@@ -41,4 +41,98 @@ public static class ExtensionMethods
 
         return default!;
     }
+
+    public static bool IsBefore(this string value, char beforeChar, char afterChar)
+    {
+        if (string.IsNullOrEmpty(value))
+        {
+            return false;
+        }
+
+        var beforeCharIndex = value.IndexOf(beforeChar);
+        var afterCharIndex = value.IndexOf(afterChar);
+
+        if (beforeCharIndex == -1)
+        {
+            return false;
+        }
+
+        if (afterCharIndex == -1)
+        {
+            return true;
+        }
+
+        return beforeCharIndex < afterCharIndex;
+    }
+
+    public static bool IsBefore(this string value, string beforeStr, char afterChar)
+    {
+        if (string.IsNullOrEmpty(value))
+        {
+            return false;
+        }
+
+        var beforeStrIndex = value.IndexOf(beforeStr, StringComparison.Ordinal);
+
+        if (beforeStrIndex == -1)
+        {
+            return false;
+        }
+
+        var afterCharIndex = value.IndexOf(afterChar);
+
+        if (afterCharIndex == -1)
+        {
+            return true;
+        }
+
+        return beforeStrIndex < afterCharIndex;
+    }
+
+    public static bool IsAfter(this string value, char afterChar, char beforeChar)
+    {
+        if (string.IsNullOrEmpty(value))
+        {
+            return false;
+        }
+
+        var beforeCharIndex = value.IndexOf(beforeChar);
+        var afterCharIndex = value.IndexOf(afterChar);
+
+        if (afterCharIndex == -1)
+        {
+            return false;
+        }
+
+        if (beforeCharIndex == -1)
+        {
+            return true;
+        }
+
+        return beforeCharIndex < afterCharIndex;
+    }
+
+    public static bool IsAfter(this string value, string afterStr, char beforeChar)
+    {
+        if (string.IsNullOrEmpty(value))
+        {
+            return false;
+        }
+
+        var afterStrIndex = value.IndexOf(afterStr, StringComparison.Ordinal);
+
+        if (afterStrIndex == -1)
+        {
+            return false;
+        }
+
+        var beforeCharIndex = value.IndexOf(beforeChar);
+
+        if (beforeCharIndex == -1)
+        {
+            return true;
+        }
+
+        return beforeCharIndex < afterStrIndex;
+    }
 }

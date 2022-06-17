@@ -2,7 +2,7 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-namespace BranchValidator.Services;
+namespace BranchValidator.Services.Interfaces;
 
 /// <summary>
 /// Loads JSON file data.

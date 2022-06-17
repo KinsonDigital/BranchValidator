@@ -31,9 +31,8 @@ public class GitHubActionIntegrationTests : IDisposable
         var expressionValidationService = new ExpressionValidatorService(analyzerFactory);
         var jsonService = new JSONService();
         var resourceLoaderService = new TextResourceLoaderService();
-        var methodExecutor = new MethodExecutor();
         var updateBranchNameObservable = new UpdateBranchNameObservable();
-        var functionService = new FunctionService(jsonService, resourceLoaderService, methodExecutor);
+        var functionService = new FunctionService(jsonService, resourceLoaderService);
         var expressionExecutorService = new ExpressionExecutorService(expressionValidationService, functionService);
 
         this.action = new GitHubAction(consoleService, outputService, expressionExecutorService, functionService, updateBranchNameObservable);

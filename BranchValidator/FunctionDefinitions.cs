@@ -43,6 +43,7 @@ public class FunctionDefinitions
     /// <remarks>
     ///     The comparison is case sensitive.
     /// </remarks>
+    [ExpressionFunction(nameof(EqualTo))]
     public bool EqualTo(string value)
     {
         if (string.IsNullOrEmpty(value) && string.IsNullOrEmpty(this.branchName))
@@ -71,6 +72,7 @@ public class FunctionDefinitions
     ///     </item>
     /// </list>
     /// </remarks>
+    [ExpressionFunction(nameof(EqualTo))]
     public bool IsCharNum(uint charPos)
     {
         if (string.IsNullOrEmpty(this.branchName))
@@ -99,6 +101,7 @@ public class FunctionDefinitions
     ///     </item>
     /// </list>
     /// </remarks>
+    [ExpressionFunction(nameof(EqualTo))]
     public bool IsSectionNum(uint startPos, uint endPos)
     {
         if (string.IsNullOrEmpty(this.branchName))
@@ -170,6 +173,7 @@ public class FunctionDefinitions
     ///         </item>
     ///     </list>
     /// </remarks>
+    [ExpressionFunction(nameof(EqualTo))]
     public bool IsSectionNum(uint startPos, string upToChar)
     {
         if (string.IsNullOrEmpty(this.branchName) || string.IsNullOrEmpty(upToChar))
@@ -202,6 +206,7 @@ public class FunctionDefinitions
     /// <remarks>
     ///     The search is case sensitive.
     /// </remarks>
+    [ExpressionFunction(nameof(EqualTo))]
     public bool Contains(string value)
     {
         return this.branchName.Contains(value);
@@ -215,6 +220,7 @@ public class FunctionDefinitions
     /// <remarks>
     ///     The search is case sensitive.
     /// </remarks>
+    [ExpressionFunction(nameof(EqualTo))]
     public bool NotContains(string value)
     {
         return this.branchName.Contains(value) is false;
@@ -230,6 +236,7 @@ public class FunctionDefinitions
     /// <remarks>
     ///     The search is case sensitive.
     /// </remarks>
+    [ExpressionFunction(nameof(EqualTo))]
     public bool ExistTotal(string value, uint total)
     {
         return Count(this.branchName, value) == total;
@@ -242,6 +249,7 @@ public class FunctionDefinitions
     /// <param name="value">The value to check for.</param>
     /// <param name="total">The total number of times to check that the <paramref name="value"/> exists.</param>
     /// <returns><c>true</c> if the <paramref name="value"/> exists greater than the specified number of times.</returns>
+    [ExpressionFunction(nameof(EqualTo))]
     public bool ExistsLessThan(string value, uint total)
     {
         return Count(this.branchName, value) < total;
@@ -254,6 +262,7 @@ public class FunctionDefinitions
     /// <param name="value">The value to check for.</param>
     /// <param name="total">The total number of times to check that the <paramref name="value"/> exists.</param>
     /// <returns><c>true</c> if the <paramref name="value"/> exists greater than the specified number of times.</returns>
+    [ExpressionFunction(nameof(EqualTo))]
     public bool ExistsGreaterThan(string value, uint total)
     {
         return Count(this.branchName, value) > total;
@@ -267,6 +276,7 @@ public class FunctionDefinitions
     /// <remarks>
     ///     The match for the <paramref name="value"/> is case sensitive.
     /// </remarks>
+    [ExpressionFunction(nameof(EqualTo))]
     public bool StartsWith(string value)
     {
         return this.branchName.StartsWith(value);
@@ -280,6 +290,7 @@ public class FunctionDefinitions
     /// <remarks>
     ///     The match for the <paramref name="value"/> is case sensitive.
     /// </remarks>
+    [ExpressionFunction(nameof(EqualTo))]
     public bool NotStartsWith(string value)
     {
         return !this.branchName.StartsWith(value);
@@ -293,6 +304,7 @@ public class FunctionDefinitions
     /// <remarks>
     ///     The match for the <paramref name="value"/> is case sensitive.
     /// </remarks>
+    [ExpressionFunction(nameof(EqualTo))]
     public bool EndsWith(string value)
     {
         return this.branchName.EndsWith(value);
@@ -306,6 +318,7 @@ public class FunctionDefinitions
     /// <remarks>
     ///     The match for the <paramref name="value"/> is case sensitive.
     /// </remarks>
+    [ExpressionFunction(nameof(EqualTo))]
     public bool NotEndsWith(string value)
     {
         return !this.branchName.EndsWith(value);
@@ -315,6 +328,7 @@ public class FunctionDefinitions
     /// Returns a value indicating whether or not the branch name starts with a number.
     /// </summary>
     /// <returns><c>true</c> if the branch starts with a number.</returns>
+    [ExpressionFunction(nameof(EqualTo))]
     public bool StartsWithNum()
     {
         return !string.IsNullOrEmpty(this.branchName) && Numbers.Contains(this.branchName[0]);
@@ -324,6 +338,7 @@ public class FunctionDefinitions
     /// Returns a value indicating whether or not the branch name ends with a number.
     /// </summary>
     /// <returns><c>true</c> if the branch ends with a number.</returns>
+    [ExpressionFunction(nameof(EqualTo))]
     public bool EndsWithNum()
     {
         return !string.IsNullOrEmpty(this.branchName) && Numbers.Contains(this.branchName[^1]);
@@ -337,6 +352,7 @@ public class FunctionDefinitions
     /// <remarks>
     ///     If the <paramref name="length"/> value is less than 0, then 0 will be used.
     /// </remarks>
+    [ExpressionFunction(nameof(EqualTo))]
     public bool LenLessThan(uint length)
     {
         if (string.IsNullOrEmpty(this.branchName))
@@ -352,6 +368,7 @@ public class FunctionDefinitions
     /// </summary>
     /// <param name="length">The length to compare to the length of the branch.</param>
     /// <returns><c>true</c> if the length of the branch is greater than the given <paramref name="length"/>.</returns>
+    [ExpressionFunction(nameof(EqualTo))]
     public bool LenGreaterThan(uint length)
     {
         if (string.IsNullOrEmpty(this.branchName))
@@ -369,6 +386,7 @@ public class FunctionDefinitions
     /// <param name="value">The <c>string</c> located before <paramref name="after"/> <c>string</c>.</param>
     /// <param name="after">The <c>string</c> located after the <paramref name="value"/> <c>string</c>.</param>
     /// <returns><c>true</c> if the <paramref name="value"/> <c>string</c> is located before the <paramref name="after"/> <c>string</c>.</returns>
+    [ExpressionFunction(nameof(EqualTo))]
     public bool IsBefore(string value, string after)
     {
         if (string.IsNullOrEmpty(this.branchName))
@@ -389,6 +407,7 @@ public class FunctionDefinitions
     /// <param name="value">The <c>string</c> located after <paramref name="before"/> <c>string</c>.</param>
     /// <param name="before">The <c>string</c> located before the <paramref name="value"/> <c>string</c>.</param>
     /// <returns><c>true</c> if the <paramref name="value"/> <c>string</c> is located after the <paramref name="before"/> <c>string</c>.</returns>
+    [ExpressionFunction(nameof(EqualTo))]
     public bool IsAfter(string value, string before)
     {
         if (string.IsNullOrEmpty(this.branchName))

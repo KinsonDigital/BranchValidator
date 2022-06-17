@@ -38,8 +38,9 @@ public static class Program
                 services.AddSingleton<IAppService, AppService>();
                 services.AddSingleton<IGitHubConsoleService, GitHubConsoleService>();
                 services.AddSingleton<IActionOutputService, ActionOutputService>();
+                services.AddSingleton<IMethodNamesService, MethodNamesService>();
                 services.AddSingleton<IArgParsingService<ActionInputs>, ArgParsingService>();
-                services.AddSingleton<IMethodExecutor, MethodExecutor>();
+                services.AddSingleton<IFunctionNamesExtractorService, FunctionNamesExtractorService>();
                 services.AddSingleton<IFunctionService, FunctionService>();
                 services.AddSingleton<IExpressionValidatorService, ExpressionValidatorService>();
                 services.AddSingleton<IAnalyzerFactory, AnalyzerFactory>();

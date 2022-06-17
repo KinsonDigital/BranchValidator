@@ -1,8 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-// ReSharper disable once InconsistentNaming
+// TODO: Move all service interfaces into an interface folder inside of the services folder
 
-using System.Diagnostics;
 using System.IO.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -10,9 +9,6 @@ using ScriptGenerator;
 using ScriptGenerator.Factories;
 using ScriptGenerator.Services;
 
-// var basePath = $@"K:\SOFTWARE DEVELOPMENT\PERSONAL\BranchValidator\Tooling\";
-// var fileName = $"Hello{data}.txt";
-// var fullPath = $"{basePath}{fileName}";
 var fileSystem = new FileSystem();
 
 IHost host = Host.CreateDefaultBuilder(args)
@@ -38,11 +34,6 @@ IAppService appService = host.Services.GetRequiredServiceAndHandleError<IAppServ
 IConsoleService consoleService = host.Services.GetRequiredServiceAndHandleError<IConsoleService>();
 IGeneratorService generatorService = host.Services.GetRequiredServiceAndHandleError<IGeneratorService>();
 
-var process = new Process();
-process.StartInfo.FileName = "calc.exe";
-process.StartInfo.Arguments = "";
-process.Start();
-
 try
 {
     await argParsingService.ParseArguments(
@@ -61,5 +52,5 @@ try
 }
 catch (Exception e)
 {
-    Debugger.Break();
+    appService.ExitWithException(e);
 }

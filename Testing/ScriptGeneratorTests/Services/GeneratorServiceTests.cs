@@ -18,6 +18,7 @@ public class GeneratorServiceTests
     private readonly Mock<IDirectory> mockDir;
     private readonly Mock<IFile> mockFile;
     private readonly Mock<IPath> mockPath;
+    private readonly Mock<IConsoleService> mockConsoleService;
     private readonly Mock<IFunctionExtractorService> mockFunctionExtractorService;
     private readonly Mock<IRelativePathResolverService> mockRelativePathResolverService;
     private readonly Mock<IScriptTemplateService> mockScriptTemplateService;
@@ -37,6 +38,8 @@ public class GeneratorServiceTests
         this.mockFile.Setup(m => m.Exists(It.IsAny<string>())).Returns(true);
 
         this.mockPath = new Mock<IPath>();
+
+        this.mockConsoleService = new Mock<IConsoleService>();
 
         this.mockFunctionExtractorService = new Mock<IFunctionExtractorService>();
         this.mockRelativePathResolverService = new Mock<IRelativePathResolverService>();
@@ -70,6 +73,7 @@ public class GeneratorServiceTests
                 null,
                 this.mockFile.Object,
                 this.mockPath.Object,
+                this.mockConsoleService.Object,
                 this.mockFunctionExtractorService.Object,
                 this.mockRelativePathResolverService.Object,
                 this.mockScriptTemplateService.Object,
@@ -92,6 +96,7 @@ public class GeneratorServiceTests
                 this.mockDir.Object,
                 null,
                 this.mockPath.Object,
+                this.mockConsoleService.Object,
                 this.mockFunctionExtractorService.Object,
                 this.mockRelativePathResolverService.Object,
                 this.mockScriptTemplateService.Object,
@@ -114,6 +119,7 @@ public class GeneratorServiceTests
                 this.mockDir.Object,
                 this.mockFile.Object,
                 null,
+                this.mockConsoleService.Object,
                 this.mockFunctionExtractorService.Object,
                 this.mockRelativePathResolverService.Object,
                 this.mockScriptTemplateService.Object,
@@ -136,6 +142,7 @@ public class GeneratorServiceTests
                 this.mockDir.Object,
                 this.mockFile.Object,
                 this.mockPath.Object,
+                this.mockConsoleService.Object,
                 null,
                 this.mockRelativePathResolverService.Object,
                 this.mockScriptTemplateService.Object,
@@ -158,6 +165,7 @@ public class GeneratorServiceTests
                 this.mockDir.Object,
                 this.mockFile.Object,
                 this.mockPath.Object,
+                this.mockConsoleService.Object,
                 this.mockFunctionExtractorService.Object,
                 null,
                 this.mockScriptTemplateService.Object,
@@ -323,6 +331,7 @@ public class GeneratorServiceTests
         => new (this.mockDir.Object,
             this.mockFile.Object,
             this.mockPath.Object,
+            this.mockConsoleService.Object,
             this.mockFunctionExtractorService.Object,
             this.mockRelativePathResolverService.Object,
             this.mockScriptTemplateService.Object,
