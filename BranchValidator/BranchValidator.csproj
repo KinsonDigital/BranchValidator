@@ -52,7 +52,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="dotnet-script &quot;$(SolutionDir)$(SolutionName)\RunScriptGenerator.csx&quot;" />
+    <Exec Command="cd $(SolutionDir)Scripts &amp;&amp; dotnet-script RunScriptGenerator.csx &quot;$(SolutionDir)Tooling\ScriptGenerator\$(OutDir)ScriptGenerator.exe&quot;" />
   </Target>
 
 </Project>
