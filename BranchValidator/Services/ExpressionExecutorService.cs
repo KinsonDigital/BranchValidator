@@ -105,17 +105,10 @@ public class ExpressionExecutorService : IExpressionExecutorService
         for (var i = 0; i < processItems.Length; i++)
         {
             var processItem = processItems[i];
-            bool processResult;
 
-            // TODO: Convert to ternary operator
-            if (processItem.Contains(OrOperator))
-            {
-                processResult = ProcessOrOperations(processItem);
-            }
-            else
-            {
-                processResult = ProcessFunc(processItem);
-            }
+            var processResult = processItem.Contains(OrOperator)
+                ? ProcessOrOperations(processItem)
+                : ProcessFunc(processItem);
 
             processItems[i] = processResult.ToString().ToLower();
         }
@@ -123,7 +116,7 @@ public class ExpressionExecutorService : IExpressionExecutorService
         var onlyContainsAndOps = expression.Contains(AndOperator) && expression.DoesNotContain(OrOperator);
         var onlyContainsOrOps = expression.Contains(OrOperator) && expression.DoesNotContain(AndOperator);
 
-        var expressionResult = true;
+        bool expressionResult;
 
         if (onlyContainsAndOps)
         {
@@ -137,7 +130,6 @@ public class ExpressionExecutorService : IExpressionExecutorService
         {
             throw new NotImplementedException("Need to implement if both ops exist?");
         }
-
 
         return (expressionResult, expressionResult ? "branch valid" : "branch invalid");
     }

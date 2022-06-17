@@ -17,7 +17,7 @@ charset = utf-8-bom
 
 [*.cs]
 # Expression-bodied members
-csharp_style_expression_bodied_methods = true:none
+
 
 ###############################
 # C# Formatting Rules         #

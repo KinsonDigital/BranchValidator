@@ -31,6 +31,7 @@ public static class Program
         host = Host.CreateDefaultBuilder(args)
             .ConfigureServices((_, services) =>
             {
+                services.AddSingleton<IScriptService, ScriptService>();
                 services.AddSingleton<IBranchNameObservable, UpdateBranchNameObservable>();
                 services.AddSingleton<IJSONService, JSONService>();
                 services.AddSingleton<IEmbeddedResourceLoaderService<string>, TextResourceLoaderService>();
@@ -39,7 +40,6 @@ public static class Program
                 services.AddSingleton<IActionOutputService, ActionOutputService>();
                 services.AddSingleton<IArgParsingService<ActionInputs>, ArgParsingService>();
                 services.AddSingleton<IMethodExecutor, MethodExecutor>();
-                services.AddSingleton<IFunctionDefinitions, FunctionDefinitions>();
                 services.AddSingleton<IFunctionService, FunctionService>();
                 services.AddSingleton<IExpressionValidatorService, ExpressionValidatorService>();
                 services.AddSingleton<IAnalyzerFactory, AnalyzerFactory>();

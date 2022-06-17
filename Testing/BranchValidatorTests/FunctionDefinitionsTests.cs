@@ -3,9 +3,7 @@
 // </copyright>
 
 using BranchValidator;
-using BranchValidatorTests.Helpers;
 using FluentAssertions;
-using Moq;
 
 namespace BranchValidatorTests;
 
@@ -14,72 +12,7 @@ namespace BranchValidatorTests;
 /// </summary>
 public class FunctionDefinitionsTests
 {
-    private readonly Mock<IDisposable> unsubscriber;
-    private readonly Mock<IBranchNameObservable> mockBranchNameObservable;
-    private IStringObserver observer = null!;
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="FunctionDefinitionsTests"/> class.
-    /// </summary>
-    public FunctionDefinitionsTests()
-    {
-        this.unsubscriber = new Mock<IDisposable>();
-        this.mockBranchNameObservable = new Mock<IBranchNameObservable>();
-        this.mockBranchNameObservable.Setup(m => m.Subscribe(It.IsAny<IStringObserver>()))
-            .Returns(() => this.unsubscriber.Object)
-            .Callback<IStringObserver>(observerValue =>
-            {
-                observerValue.Should().NotBeNull();
-
-                this.observer = observerValue;
-            });
-    }
-
-    #region Constructor Tests
-    [Fact]
-    public void Observer_WhenOnCompletedIsInvoked_DisposesUnsubscriber()
-    {
-        // Arrange
-        var unused = CreateDefinitions();
-
-        // Act
-        this.observer.OnCompleted();
-        this.observer.OnCompleted();
-
-        // Assert
-        this.unsubscriber.VerifyOnce(m => m.Dispose());
-    }
-
-    [Fact]
-    public void Observer_WhenOnOnErrorIsInvoked_DisposesUnsubscriber()
-    {
-        // Arrange
-        var unused = CreateDefinitions();
-
-        // Act
-        this.observer.OnError(new Exception("test-exception"));
-        this.observer.OnError(new Exception("test-exception"));
-
-        // Assert
-        this.unsubscriber.VerifyOnce(m => m.Dispose());
-    }
-    #endregion
-
     #region Method Tests
-    [Fact]
-    public void Dispose_WhenInvoked_DisposesOfObject()
-    {
-        // Arrange
-        var definitions = CreateDefinitions();
-
-        // Act
-        definitions.Dispose();
-        definitions.Dispose();
-
-        // Assert
-        this.unsubscriber.VerifyOnce(m => m.Dispose());
-    }
-
     [Theory]
     [InlineData("my-branch", "my-branch", true)]
     [InlineData(null, "", true)]
@@ -95,8 +28,7 @@ public class FunctionDefinitionsTests
         bool expected)
     {
         // Arrange
-        var definitions = CreateDefinitions();
-        this.observer.OnNext(branchName);
+        var definitions = new FunctionDefinitions(branchName);
 
         // Act
         var actual = definitions.EqualTo(value);
@@ -116,8 +48,7 @@ public class FunctionDefinitionsTests
         bool expected)
     {
         // Arrange
-        var definitions = CreateDefinitions();
-        this.observer.OnNext(branchName);
+        var definitions = new FunctionDefinitions(branchName);
 
         // Act
         var actual = definitions.IsCharNum(charPos);
@@ -141,8 +72,7 @@ public class FunctionDefinitionsTests
         bool expected)
     {
         // Arrange
-        var definitions = CreateDefinitions();
-        this.observer.OnNext(branchName);
+        var definitions = new FunctionDefinitions(branchName);
 
         // Act
         var actual = definitions.IsSectionNum(startPos, endPos);
@@ -170,8 +100,7 @@ public class FunctionDefinitionsTests
         bool expected)
     {
         // Arrange
-        var definitions = CreateDefinitions();
-        this.observer.OnNext(branchName);
+        var definitions = new FunctionDefinitions(branchName);
 
         // Act
         var actual = definitions.IsSectionNum(startPos, upToChar);
@@ -189,8 +118,7 @@ public class FunctionDefinitionsTests
         bool expected)
     {
         // Arrange
-        var definitions = CreateDefinitions();
-        this.observer.OnNext(branchName);
+        var definitions = new FunctionDefinitions(branchName);
 
         // Act
         var actual = definitions.Contains(value);
@@ -208,8 +136,7 @@ public class FunctionDefinitionsTests
         bool expected)
     {
         // Arrange
-        var definitions = CreateDefinitions();
-        this.observer.OnNext(branchName);
+        var definitions = new FunctionDefinitions(branchName);
 
         // Act
         var actual = definitions.NotContains(value);
@@ -231,8 +158,7 @@ public class FunctionDefinitionsTests
         bool expected)
     {
         // Arrange
-        var definitions = CreateDefinitions();
-        this.observer.OnNext(branchName);
+        var definitions = new FunctionDefinitions(branchName);
 
         // Act
         var actual = definitions.ExistTotal(value, total);
@@ -252,8 +178,7 @@ public class FunctionDefinitionsTests
         bool expected)
     {
         // Arrange
-        var definitions = CreateDefinitions();
-        this.observer.OnNext(branchName);
+        var definitions = new FunctionDefinitions(branchName);
 
         // Act
         var actual = definitions.ExistsLessThan(value, total);
@@ -272,8 +197,7 @@ public class FunctionDefinitionsTests
         bool expected)
     {
         // Arrange
-        var definitions = CreateDefinitions();
-        this.observer.OnNext(branchName);
+        var definitions = new FunctionDefinitions(branchName);
 
         // Act
         var actual = definitions.ExistsGreaterThan(value, total);
@@ -291,8 +215,7 @@ public class FunctionDefinitionsTests
         bool expected)
     {
         // Arrange
-        var definitions = CreateDefinitions();
-        this.observer.OnNext(branchName);
+        var definitions = new FunctionDefinitions(branchName);
 
         // Act
         var actual = definitions.StartsWith(value);
@@ -310,8 +233,7 @@ public class FunctionDefinitionsTests
         bool expected)
     {
         // Arrange
-        var definitions = CreateDefinitions();
-        this.observer.OnNext(branchName);
+        var definitions = new FunctionDefinitions(branchName);
 
         // Act
         var actual = definitions.NotStartsWith(value);
@@ -329,8 +251,7 @@ public class FunctionDefinitionsTests
         bool expected)
     {
         // Arrange
-        var definitions = CreateDefinitions();
-        this.observer.OnNext(branchName);
+        var definitions = new FunctionDefinitions(branchName);
 
         // Act
         var actual = definitions.EndsWith(value);
@@ -348,8 +269,7 @@ public class FunctionDefinitionsTests
         bool expected)
     {
         // Arrange
-        var definitions = CreateDefinitions();
-        this.observer.OnNext(branchName);
+        var definitions = new FunctionDefinitions(branchName);
 
         // Act
         var actual = definitions.NotEndsWith(value);
@@ -368,8 +288,7 @@ public class FunctionDefinitionsTests
         bool expected)
     {
         // Arrange
-        var definitions = CreateDefinitions();
-        this.observer.OnNext(branchName);
+        var definitions = new FunctionDefinitions(branchName);
 
         // Act
         var actual = definitions.StartsWithNum();
@@ -388,8 +307,7 @@ public class FunctionDefinitionsTests
         bool expected)
     {
         // Arrange
-        var definitions = CreateDefinitions();
-        this.observer.OnNext(branchName);
+        var definitions = new FunctionDefinitions(branchName);
 
         // Act
         var actual = definitions.EndsWithNum();
@@ -410,8 +328,7 @@ public class FunctionDefinitionsTests
         bool expected)
     {
         // Arrange
-        var definitions = CreateDefinitions();
-        this.observer.OnNext(branchName);
+        var definitions = new FunctionDefinitions(branchName);
 
         // Act
         var actual = definitions.LenLessThan(value);
@@ -431,8 +348,7 @@ public class FunctionDefinitionsTests
         bool expected)
     {
         // Arrange
-        var definitions = CreateDefinitions();
-        this.observer.OnNext(branchName);
+        var definitions = new FunctionDefinitions(branchName);
 
         // Act
         var actual = definitions.LenGreaterThan(value);
@@ -453,8 +369,7 @@ public class FunctionDefinitionsTests
         bool expected)
     {
         // Arrange
-        var definitions = CreateDefinitions();
-        this.observer.OnNext(branchName);
+        var definitions = new FunctionDefinitions(branchName);
 
         // Act
         var actual = definitions.IsBefore(value, after);
@@ -475,8 +390,7 @@ public class FunctionDefinitionsTests
         bool expected)
     {
         // Arrange
-        var definitions = CreateDefinitions();
-        this.observer.OnNext(branchName);
+        var definitions = new FunctionDefinitions(branchName);
 
         // Act
         var actual = definitions.IsAfter(value, after);
@@ -485,10 +399,4 @@ public class FunctionDefinitionsTests
         actual.Should().Be(expected);
     }
     #endregion
-
-    /// <summary>
-    /// Creates a new instance of <see cref="FunctionDefinitions"/> for the purpose of testing.
-    /// </summary>
-    /// <returns>The instance to test.</returns>
-    private FunctionDefinitions CreateDefinitions() => new (this.mockBranchNameObservable.Object);
 }
