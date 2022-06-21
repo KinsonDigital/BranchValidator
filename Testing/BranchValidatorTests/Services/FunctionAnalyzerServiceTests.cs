@@ -1,4 +1,4 @@
-﻿// <copyright file="FunctionAnalyzerServiceTests.cs" company="KinsonDigital">
+// <copyright file="FunctionAnalyzerServiceTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -16,7 +16,7 @@ namespace BranchValidatorTests.Services;
 public class FunctionAnalyzerServiceTests
 {
     private readonly Mock<IFunctionNamesExtractorService> mockFunctionNamesExtractorService;
-    private readonly Mock<ICSharpMethodNamesService> mockMethodNamesService;
+    private readonly Mock<ICSharpMethodService> mockCSharpMethodService;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="FunctionAnalyzerServiceTests"/> class.
@@ -24,7 +24,7 @@ public class FunctionAnalyzerServiceTests
     public FunctionAnalyzerServiceTests()
     {
         this.mockFunctionNamesExtractorService = new Mock<IFunctionNamesExtractorService>();
-        this.mockMethodNamesService = new Mock<ICSharpMethodNamesService>();
+        this.mockCSharpMethodService = new Mock<ICSharpMethodService>();
     }
 
     #region Method Tests
@@ -35,7 +35,8 @@ public class FunctionAnalyzerServiceTests
         const string expression = "funA() && funB()";
         this.mockFunctionNamesExtractorService.Setup(m => m.ExtractNames(expression))
             .Returns(new[] { "funA", "funB" });
-        this.mockMethodNamesService.Setup(m => m.GetMethodNames(nameof(FunctionDefinitions)))
+        this.mockFunctionExtractorService.Setup(m => m.ExtractFunctions(expression))
+        this.mockCSharpMethodService.Setup(m => m.GetMethodNames(nameof(FunctionDefinitions)))
             .Returns(new[] { "FunA", "FunB" });
         var service = CreateService();
 
@@ -54,7 +55,7 @@ public class FunctionAnalyzerServiceTests
         const string expression = "funA() && funB() && funC()";
         this.mockFunctionNamesExtractorService.Setup(m => m.ExtractNames(expression))
             .Returns(new[] { "funA", "funB", "funC" });
-        this.mockMethodNamesService.Setup(m => m.GetMethodNames(nameof(FunctionDefinitions)))
+        this.mockCSharpMethodService.Setup(m => m.GetMethodNames(nameof(FunctionDefinitions)))
             .Returns(new[] { "FunA", "FunB" });
         var service = CreateService();
 
@@ -72,5 +73,5 @@ public class FunctionAnalyzerServiceTests
     /// </summary>
     /// <returns>The instance to test.</returns>
     private FunctionAnalyzerService CreateService()
-        => new (this.mockFunctionNamesExtractorService.Object, this.mockMethodNamesService.Object);
+        => new (this.mockFunctionNamesExtractorService.Object, this.mockCSharpMethodService.Object);
 }

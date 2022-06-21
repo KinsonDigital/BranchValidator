@@ -16,7 +16,7 @@ public class ExpressionExecutorService : IExpressionExecutorService
 
     private readonly IExpressionValidatorService expressionValidatorService;
     private readonly IFunctionService functionService;
-    private readonly ICSharpMethodNamesService csharpMethodNamesService;
+    private readonly ICSharpMethodService csharpMethodService;
     private readonly IEmbeddedResourceLoaderService<string> resourceLoaderService;
     private readonly IScriptService<bool> scriptService;
 
@@ -31,14 +31,14 @@ public class ExpressionExecutorService : IExpressionExecutorService
     public ExpressionExecutorService(
         IExpressionValidatorService expressionValidatorService,
         IFunctionService functionService, // TODO: This will be getting removed
-        ICSharpMethodNamesService csharpMethodNamesService,
+        ICSharpMethodService csharpMethodService,
         IEmbeddedResourceLoaderService<string> resourceLoaderService,
         IScriptService<bool> scriptService)
     {
         // TODO: null check and unit test these ctor params
         this.expressionValidatorService = expressionValidatorService;
         this.functionService = functionService;
-        this.csharpMethodNamesService = csharpMethodNamesService;
+        this.csharpMethodService = csharpMethodService;
         this.scriptService = scriptService;
         this.resourceLoaderService = resourceLoaderService;
     }
@@ -69,7 +69,7 @@ public class ExpressionExecutorService : IExpressionExecutorService
 
         script = script.Replace(BranchInjectionPoint, branchName);
 
-        var methodNames = this.csharpMethodNamesService.GetMethodNames(nameof(FunctionDefinitions));
+        var methodNames = this.csharpMethodService.GetMethodNames(nameof(FunctionDefinitions));
 
         foreach (var methodName in methodNames)
         {
