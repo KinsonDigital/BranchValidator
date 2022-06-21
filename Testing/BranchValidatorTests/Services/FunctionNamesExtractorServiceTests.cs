@@ -3,9 +3,7 @@
 // </copyright>
 
 using BranchValidator.Services;
-using BranchValidator.Services.Interfaces;
 using FluentAssertions;
-using Moq;
 
 namespace BranchValidatorTests.Services;
 
@@ -14,13 +12,6 @@ namespace BranchValidatorTests.Services;
 /// </summary>
 public class FunctionNamesExtractorServiceTests
 {
-    private readonly Mock<IExpressionValidatorService> mockExpressionValidatorService;
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="FunctionNamesExtractorServiceTests"/> class.
-    /// </summary>
-    public FunctionNamesExtractorServiceTests() => this.mockExpressionValidatorService = new Mock<IExpressionValidatorService>();
-
     #region Method Tests
     [Theory]
     [InlineData(null, new string[0])]
@@ -34,9 +25,7 @@ public class FunctionNamesExtractorServiceTests
         string[] expected)
     {
         // Arrange
-        this.mockExpressionValidatorService.Setup(m => m.Validate(expression))
-            .Returns((true, string.Empty));
-        var service = new FunctionNamesExtractorService(this.mockExpressionValidatorService.Object);
+        var service = new FunctionNamesExtractorService();
 
         // Act
         var actual = service.ExtractNames(expression);

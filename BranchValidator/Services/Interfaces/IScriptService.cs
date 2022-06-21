@@ -1,6 +1,6 @@
 ﻿namespace BranchValidator.Services.Interfaces;
 
-public interface IScriptService
+public interface IScriptService<T>
 {
-    bool Execute(string script);
+    T Execute(string scriptSrc);
 }

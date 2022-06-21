@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using BranchValidator.Services.Interfaces;
+﻿using BranchValidator.Services.Interfaces;
 
 namespace BranchValidator.Services;
 
@@ -51,8 +50,12 @@ public class FunctionAnalyzerService : IAnalyzerService
             return result;
         }).ToArray();
 
-        var functionNames = this.funNamesExtractService.ExtractNames(expression);
+        var expressionFunNames = this.funNamesExtractService.ExtractNames(expression);
 
-        return (true, "result");
+        var nonExistingFunctions = expressionFunNames.Where(f => methodNames.DoesNotContain(f)).ToArray();
+
+        return nonExistingFunctions.Length == 0
+            ? (true, "All Functions Found")
+            : (false, $"The expression function '{nonExistingFunctions[0]}' is not a usable function.");
     }
 }

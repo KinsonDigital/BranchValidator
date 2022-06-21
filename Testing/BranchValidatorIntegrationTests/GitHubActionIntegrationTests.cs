@@ -3,9 +3,9 @@
 // </copyright>
 
 using BranchValidator;
-using BranchValidator.Factories;
 using BranchValidator.Observables;
 using BranchValidator.Services;
+using BranchValidator.Services.Interfaces;
 using FluentAssertions;
 
 namespace BranchValidatorIntegrationTests;
@@ -27,13 +27,37 @@ public class GitHubActionIntegrationTests : IDisposable
     {
         var consoleService = new GitHubConsoleService();
         var outputService = new ActionOutputService(consoleService);
-        var analyzerFactory = new AnalyzerFactory();
-        var expressionValidationService = new ExpressionValidatorService(analyzerFactory);
+        var funMethodNameExtractorService = new FunctionNamesExtractorService();
+        var methodNamesService = new MethodNamesService();
+
+        var parenAnalyzerService = new ParenAnalyzerService();
+        var quoteAnalyzerService = new QuoteAnalyzerService();
+        var operatorAnalyzerService = new OperatorAnalyzerService();
+        var funAnalyzerService = new FunctionAnalyzerService(funMethodNameExtractorService, methodNamesService);
+
+        var analyzers = new IAnalyzerService[]
+        {
+            parenAnalyzerService,
+            quoteAnalyzerService,
+            operatorAnalyzerService,
+            funAnalyzerService,
+        }.ToReadOnlyCollection();
+
+        var expressionValidationService = new ExpressionValidatorService(analyzers);
+
+        // TODO: Cleanup
+        // var analyzerFactory = new AnalyzerFactory();
         var jsonService = new JSONService();
         var resourceLoaderService = new TextResourceLoaderService();
         var updateBranchNameObservable = new UpdateBranchNameObservable();
-        var functionService = new FunctionService(jsonService, resourceLoaderService);
-        var expressionExecutorService = new ExpressionExecutorService(expressionValidationService, functionService);
+        var functionService = new FunctionService(jsonService, resourceLoaderService); // TODO: Will be deleted
+        var scriptService = new ScriptService<bool>();
+        var expressionExecutorService = new ExpressionExecutorService(
+            expressionValidationService,
+            functionService,
+            methodNamesService,
+            resourceLoaderService,
+            scriptService);
 
         this.action = new GitHubAction(consoleService, outputService, expressionExecutorService, functionService, updateBranchNameObservable);
     }

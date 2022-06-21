@@ -9,13 +9,16 @@ namespace BranchValidator.Services;
 /// <inheritdoc/>
 public class ExpressionExecutorService : IExpressionExecutorService
 {
-    private const string AndOperator = "&&";
-    private const string OrOperator = "||";
-    private const char LeftParen = '(';
-    private const char RightParen = ')';
+    private const string ExpressionFunctionsClassName = "ExpressionFunctions";
+    private const string ExpressionFunctionsScript = $"{ExpressionFunctionsClassName}.cs";
+    private const string BranchInjectionPoint = "//<branch-name/>";
+    private const string ExpressionInjectionPoint = "//<expression/>";
 
     private readonly IExpressionValidatorService expressionValidatorService;
     private readonly IFunctionService functionService;
+    private readonly IMethodNamesService methodNamesService;
+    private readonly IEmbeddedResourceLoaderService<string> resourceLoaderService;
+    private readonly IScriptService<bool> scriptService;
 
     // TODO: Need to inject the IScriptService to execute the script once it has been analyzed
     // and the script created
@@ -27,10 +30,17 @@ public class ExpressionExecutorService : IExpressionExecutorService
     /// <param name="functionService">Executes functions.</param>
     public ExpressionExecutorService(
         IExpressionValidatorService expressionValidatorService,
-        IFunctionService functionService)
+        IFunctionService functionService, // TODO: This will be getting removed
+        IMethodNamesService methodNamesService,
+        IEmbeddedResourceLoaderService<string> resourceLoaderService,
+        IScriptService<bool> scriptService)
     {
+        // TODO: null check and unit test these ctor params
         this.expressionValidatorService = expressionValidatorService;
         this.functionService = functionService;
+        this.methodNamesService = methodNamesService;
+        this.scriptService = scriptService;
+        this.resourceLoaderService = resourceLoaderService;
     }
 
     /// <inheritdoc/>
@@ -55,22 +65,25 @@ public class ExpressionExecutorService : IExpressionExecutorService
             return validationResult;
         }
 
-        var expressionResult = false;
+        var script = this.resourceLoaderService.LoadResource(ExpressionFunctionsScript);
+
+        script = script.Replace(BranchInjectionPoint, branchName);
+
+        var methodNames = this.methodNamesService.GetMethodNames(nameof(FunctionDefinitions));
+
+        foreach (var methodName in methodNames)
+        {
+            var expressionFunName = $"{methodName[0].ToString().ToLower()}{methodName.Substring(1, methodName.Length - 1)}";
+            expression = expression.Replace(expressionFunName, $"{ExpressionFunctionsClassName}.{methodName}");
+        }
+
+        // Replace the single quotes with double quotes
+        expression = expression.Replace("'", "\"");
+
+        script = script.Replace(ExpressionInjectionPoint, $"return {expression};");
+
+        var expressionResult = this.scriptService.Execute(script);
 
         return (expressionResult, expressionResult ? "branch valid" : "branch invalid");
-    }
-
-    /// <summary>
-    /// Extracts the list of argument values from an expression that contains a single function.
-    /// </summary>
-    /// <param name="function">The function containing the arguments.</param>
-    /// <returns>The list of argument values.</returns>
-    private static IEnumerable<string> ExtractArgs(string function)
-    {
-        var allFuncParams = function.GetBetween(LeftParen, RightParen);
-
-        return allFuncParams.Contains(',')
-            ? allFuncParams.Split(',', StringSplitOptions.TrimEntries)
-            : new[] { allFuncParams };
     }
 }

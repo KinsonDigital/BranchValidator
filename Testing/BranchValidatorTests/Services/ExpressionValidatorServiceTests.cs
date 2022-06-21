@@ -2,8 +2,8 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
+using System.Collections.ObjectModel;
 using BranchValidator;
-using BranchValidator.Factories;
 using BranchValidator.Services;
 using BranchValidator.Services.Interfaces;
 using FluentAssertions;
@@ -17,9 +17,10 @@ namespace BranchValidatorTests.Services;
 /// </summary>
 public class ExpressionValidatorServiceTests
 {
-    private readonly Mock<IAnalyzerFactory> mockAnalyzerFactory;
+    // private readonly Mock<IAnalyzerFactory> mockAnalyzerFactory; // TODO: Remove
     private readonly Mock<IAnalyzerService> mockAnalyzerA;
     private readonly Mock<IAnalyzerService> mockAnalyzerB;
+    private readonly ReadOnlyCollection<IAnalyzerService> mockedAnalyers;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ExpressionValidatorServiceTests"/> class.
@@ -34,9 +35,7 @@ public class ExpressionValidatorServiceTests
         this.mockAnalyzerB.Setup(m => m.Analyze(It.IsAny<string>()))
             .Returns((true, string.Empty));
 
-        this.mockAnalyzerFactory = new Mock<IAnalyzerFactory>();
-        this.mockAnalyzerFactory.Setup(m => m.CreateAnalyzers())
-            .Returns(() => new[] { this.mockAnalyzerA.Object, this.mockAnalyzerB.Object }.ToReadOnlyCollection());
+        this.mockedAnalyers = new[] { this.mockAnalyzerA.Object, this.mockAnalyzerB.Object }.ToReadOnlyCollection();
     }
 
     #region Constructor Tests
@@ -52,7 +51,7 @@ public class ExpressionValidatorServiceTests
         // Assert
         act.Should()
             .Throw<ArgumentNullException>()
-            .WithMessage("The parameter must not be null. (Parameter 'analyzerFactory')");
+            .WithMessage("The parameter must not be null. (Parameter 'analyzers')");
     }
     #endregion
 
@@ -98,5 +97,5 @@ public class ExpressionValidatorServiceTests
     /// Creates a new instance of <see cref="ExpressionValidatorService"/> for the purpose of testing.
     /// </summary>
     /// <returns>The instance to test.</returns>
-    private ExpressionValidatorService CreateService() => new (this.mockAnalyzerFactory.Object);
+    private ExpressionValidatorService CreateService() => new (this.mockedAnalyers);
 }

@@ -17,6 +17,7 @@
 
 /*THIS SCRIPT IS AUTO-GENERATED AND SHOULD NOT BE CHANGED MANUALLY*/
 
+using System;
 using System.Text.RegularExpressions;
 
 public static class ExpressionFunctions
@@ -68,7 +69,7 @@ public static class ExpressionFunctions
             return false;
         }
 
-        return charPos <= BranchName.Length - 1 && Numbers.Contains(BranchName[(int)charPos]);
+        return charPos <= BranchName.Length - 1 && MemoryExtensions.Contains(Numbers, BranchName[(int)charPos]);
     }
 
     /// <summary>
@@ -100,7 +101,7 @@ public static class ExpressionFunctions
 
         for (var i = startPos; i <= endPos; i++)
         {
-            if (Numbers.Contains(BranchName[(int)i]) is false)
+            if (MemoryExtensions.Contains(Numbers, BranchName[(int)i]) is false)
             {
                 return false;
             }
@@ -181,7 +182,7 @@ public static class ExpressionFunctions
 
         var section = BranchName.Substring((int)startPos, upToCharIndex - (int)startPos);
 
-        return !string.IsNullOrEmpty(section) && section.All(c => Numbers.Contains(c));
+        return !string.IsNullOrEmpty(section) && All(section, c => MemoryExtensions.Contains(Numbers, c));
     }
 
     /// <summary>
@@ -307,7 +308,7 @@ public static class ExpressionFunctions
     /// <returns><c>true</c> if the branch starts with a number.</returns>
     public static bool StartsWithNum()
     {
-        return !string.IsNullOrEmpty(BranchName) && Numbers.Contains(BranchName[0]);
+        return !string.IsNullOrEmpty(BranchName) && MemoryExtensions.Contains(Numbers, BranchName[0]);
     }
 
     /// <summary>
@@ -316,7 +317,7 @@ public static class ExpressionFunctions
     /// <returns><c>true</c> if the branch ends with a number.</returns>
     public static bool EndsWithNum()
     {
-        return !string.IsNullOrEmpty(BranchName) && Numbers.Contains(BranchName[^1]);
+        return !string.IsNullOrEmpty(BranchName) && MemoryExtensions.Contains(Numbers, BranchName[^1]);
     }
 
     /// <summary>
@@ -415,6 +416,19 @@ public static class ExpressionFunctions
         }
 
         return Regex.Matches(thisStr, value, RegexOptions.IgnoreCase).Count;
+    }
+
+    private static bool All(string value, Func<char, bool> predicate)
+    {
+        foreach (var character in value)
+        {
+            if (predicate(character) is false)
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
 

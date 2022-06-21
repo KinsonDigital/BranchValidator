@@ -30,7 +30,7 @@ public class TextResourceLoaderService : IEmbeddedResourceLoaderService<string>
         var resources = assembly.GetManifestResourceNames();
 
         var shaderSrcResource = (from r in resources
-            where r.EndsWith(name.ToLower(), StringComparison.Ordinal)
+            where r.ToLower().EndsWith(name.ToLower(), StringComparison.Ordinal)
             select r).SingleOrDefault();
 
         if (resources is null || resources.Length <= 0 || string.IsNullOrEmpty(shaderSrcResource))

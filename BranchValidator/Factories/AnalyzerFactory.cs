@@ -9,16 +9,17 @@ using BranchValidator.Services.Interfaces;
 namespace BranchValidator.Factories;
 
 /// <inheritdoc/>
-public class AnalyzerFactory : IAnalyzerFactory
+public static class AnalyzerFactory
 {
     /// <inheritdoc/>
-    public ReadOnlyCollection<IAnalyzerService> CreateAnalyzers()
+    public static ReadOnlyCollection<IAnalyzerService> CreateAnalyzers()
     {
         var result = new IAnalyzerService[]
         {
-            new ParenAnalyzerService(),
-            new QuoteAnalyzerService(),
-            new OperatorAnalyzerService(),
+            // Program.AppServiceProvider.GetRequiredService<ParenAnalyzerService>(),
+            // Program.AppServiceProvider.GetRequiredService<QuoteAnalyzerService>(),
+            // Program.AppServiceProvider.GetRequiredService<OperatorAnalyzerService>(),
+            // Program.AppServiceProvider.GetRequiredService<FunctionAnalyzerService>(),
         };
 
         return result.ToReadOnlyCollection();

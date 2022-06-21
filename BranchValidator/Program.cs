@@ -4,7 +4,6 @@
 
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
-using BranchValidator.Factories;
 using BranchValidator.Observables;
 using BranchValidator.Services;
 using BranchValidator.Services.Interfaces;
@@ -19,7 +18,21 @@ namespace BranchValidator;
 [ExcludeFromCodeCoverage]
 public static class Program
 {
-    private static IHost host = null!;
+    private static IHost? host;
+    private static IServiceProvider? appServiceProvider;
+
+    public static IServiceProvider AppServiceProvider
+    {
+        get
+        {
+            if (appServiceProvider is null)
+            {
+                throw new InvalidOperationException("The application service provider must be created first before getting services.");
+            }
+
+            return appServiceProvider;
+        }
+    }
 
     /// <summary>
     /// The main entry point of the GitHub action.
@@ -31,7 +44,7 @@ public static class Program
         host = Host.CreateDefaultBuilder(args)
             .ConfigureServices((_, services) =>
             {
-                services.AddSingleton<IScriptService, ScriptService>();
+                services.AddSingleton<IScriptService<bool>, ScriptService<bool>>();
                 services.AddSingleton<IBranchNameObservable, UpdateBranchNameObservable>();
                 services.AddSingleton<IJSONService, JSONService>();
                 services.AddSingleton<IEmbeddedResourceLoaderService<string>, TextResourceLoaderService>();
@@ -43,10 +56,26 @@ public static class Program
                 services.AddSingleton<IFunctionNamesExtractorService, FunctionNamesExtractorService>();
                 services.AddSingleton<IFunctionService, FunctionService>();
                 services.AddSingleton<IExpressionValidatorService, ExpressionValidatorService>();
-                services.AddSingleton<IAnalyzerFactory, AnalyzerFactory>();
                 services.AddSingleton<IExpressionExecutorService, ExpressionExecutorService>();
+                services.AddSingleton(serviceProvider =>
+                {
+                    var funNameExtractorService = serviceProvider.GetRequiredService<IFunctionNamesExtractorService>();
+                    var methodNamesService = serviceProvider.GetRequiredService<IMethodNamesService>();
+
+                    var result = new IAnalyzerService[]
+                    {
+                        new ParenAnalyzerService(),
+                        new QuoteAnalyzerService(),
+                        new OperatorAnalyzerService(),
+                        new FunctionAnalyzerService(funNameExtractorService, methodNamesService),
+                    };
+
+                    return result.ToReadOnlyCollection();
+                });
                 services.AddSingleton<IGitHubAction<bool>, GitHubAction>();
             }).Build();
+
+        appServiceProvider = host.Services;
 
         var appService = host.Services.GetRequiredService<IAppService>();
         var consoleService = host.Services.GetRequiredService<IGitHubConsoleService>();

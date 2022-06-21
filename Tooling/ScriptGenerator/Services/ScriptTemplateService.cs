@@ -37,6 +37,7 @@ public class ScriptTemplateService : IScriptTemplateService
         script.AppendLine();
         script.AppendLine("/*THIS SCRIPT IS AUTO-GENERATED AND SHOULD NOT BE CHANGED MANUALLY*/");
         script.AppendLine();
+        script.AppendLine("using System;");
         script.AppendLine("using System.Text.RegularExpressions;");
         script.AppendLine();
         script.AppendLine("public static class ExpressionFunctions");

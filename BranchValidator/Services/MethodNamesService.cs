@@ -20,8 +20,15 @@ public class MethodNamesService : IMethodNamesService
             throw new ArgumentNullException(nameof(className), "The parameter must not be null or empty.");
         }
 
-        var functionsClass = Assembly.GetExecutingAssembly()
-            .GetTypes().FirstOrDefault(t => t.Name == className);
+        var assembly = AppDomain.CurrentDomain.GetAssemblies()
+            .FirstOrDefault(a => a.FullName != null && a.FullName.StartsWith($"{nameof(BranchValidator)}, Version"));
+
+        if (assembly is null)
+        {
+            throw new InvalidOperationException($"The assembly '{nameof(BranchValidator)}' was not found.");
+        }
+
+        var functionsClass = assembly.GetTypes().FirstOrDefault(t => t.Name == className);
 
         if (functionsClass is null)
         {

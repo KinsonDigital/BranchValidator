@@ -80,7 +80,7 @@ public class FunctionDefinitions
             return false;
         }
 
-        return charPos <= this.branchName.Length - 1 && Numbers.Contains(this.branchName[(int)charPos]);
+        return charPos <= this.branchName.Length - 1 && MemoryExtensions.Contains(Numbers, this.branchName[(int)charPos]);
     }
 
     /// <summary>
@@ -113,7 +113,7 @@ public class FunctionDefinitions
 
         for (var i = startPos; i <= endPos; i++)
         {
-            if (Numbers.Contains(this.branchName[(int)i]) is false)
+            if (MemoryExtensions.Contains(Numbers, this.branchName[(int)i]) is false)
             {
                 return false;
             }
@@ -195,7 +195,7 @@ public class FunctionDefinitions
 
         var section = this.branchName.Substring((int)startPos, upToCharIndex - (int)startPos);
 
-        return !string.IsNullOrEmpty(section) && section.All(c => Numbers.Contains(c));
+        return !string.IsNullOrEmpty(section) && All(section, c => MemoryExtensions.Contains(Numbers, c));
     }
 
     /// <summary>
@@ -331,7 +331,7 @@ public class FunctionDefinitions
     [ExpressionFunction(nameof(EqualTo))]
     public bool StartsWithNum()
     {
-        return !string.IsNullOrEmpty(this.branchName) && Numbers.Contains(this.branchName[0]);
+        return !string.IsNullOrEmpty(this.branchName) && MemoryExtensions.Contains(Numbers, this.branchName[0]);
     }
 
     /// <summary>
@@ -341,7 +341,7 @@ public class FunctionDefinitions
     [ExpressionFunction(nameof(EqualTo))]
     public bool EndsWithNum()
     {
-        return !string.IsNullOrEmpty(this.branchName) && Numbers.Contains(this.branchName[^1]);
+        return !string.IsNullOrEmpty(this.branchName) && MemoryExtensions.Contains(Numbers, this.branchName[^1]);
     }
 
     /// <summary>
@@ -444,6 +444,19 @@ public class FunctionDefinitions
         }
 
         return Regex.Matches(thisStr, value, RegexOptions.IgnoreCase).Count;
+    }
+
+    private static bool All(string value, Func<char, bool> predicate)
+    {
+        foreach (var character in value)
+        {
+            if (predicate(character) is false)
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
     //</script-function>
 

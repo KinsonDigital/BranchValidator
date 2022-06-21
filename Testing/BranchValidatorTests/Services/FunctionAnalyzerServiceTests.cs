@@ -32,7 +32,7 @@ public class FunctionAnalyzerServiceTests
     public void Analyze_WhenInvoked_ReturnsCorrectResult()
     {
         // Arrange
-        var expression = "funA() && funB()";
+        const string expression = "funA() && funB()";
         this.mockFunctionNamesExtractorService.Setup(m => m.ExtractNames(expression))
             .Returns(new[] { "funA", "funB" });
         this.mockMethodNamesService.Setup(m => m.GetMethodNames(nameof(FunctionDefinitions)))
@@ -43,8 +43,27 @@ public class FunctionAnalyzerServiceTests
         var actual = service.Analyze(expression);
 
         // Assert
-        actual.valid.Should().Be(true);
+        actual.valid.Should().BeTrue();
         actual.msg.Should().Be("All Functions Found");
+    }
+
+    [Fact]
+    public void Analyze_WhenCSharpMethodImplementationForExpressionFunctionDoesNotExist_ReturnsCorrectResult()
+    {
+        // Arrange
+        const string expression = "funA() && funB() && funC()";
+        this.mockFunctionNamesExtractorService.Setup(m => m.ExtractNames(expression))
+            .Returns(new[] { "funA", "funB", "funC" });
+        this.mockMethodNamesService.Setup(m => m.GetMethodNames(nameof(FunctionDefinitions)))
+            .Returns(new[] { "FunA", "FunB" });
+        var service = CreateService();
+
+        // Act
+        var actual = service.Analyze(expression);
+
+        // Assert
+        actual.valid.Should().BeFalse();
+        actual.msg.Should().Be("The expression function 'funC' is not a usable function.");
     }
     #endregion
 

@@ -2,8 +2,8 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
+using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
-using BranchValidator.Factories;
 using BranchValidator.Services.Interfaces;
 
 namespace BranchValidator.Services;
@@ -22,8 +22,9 @@ namespace BranchValidator.Services;
 /// <inheritdoc/>
 public class ExpressionValidatorService : IExpressionValidatorService
 {
-    private readonly IAnalyzerFactory analyzerFactory;
+    // private readonly IAnalyzerFactory analyzerFactory;
     private readonly Dictionary<string, (bool isValid, string msg)> validationResults = new ();
+    private readonly ReadOnlyCollection<IAnalyzerService> analyzers;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ExpressionValidatorService"/> class.
@@ -31,9 +32,11 @@ public class ExpressionValidatorService : IExpressionValidatorService
     /// <param name="analyzerFactory">Creates analyzers.</param>
     /// <exception cref="ArgumentNullException">Thrown if the <paramref name="analyzerFactory"/> parameter is null.</exception>
     [ExcludeFromCodeCoverage]
-    public ExpressionValidatorService(IAnalyzerFactory analyzerFactory)
-        => this.analyzerFactory =
-            analyzerFactory ?? throw new ArgumentNullException(nameof(analyzerFactory), "The parameter must not be null.");
+    public ExpressionValidatorService(ReadOnlyCollection<IAnalyzerService> analyzers)
+        => this.analyzers = analyzers ?? throw new ArgumentNullException(nameof(analyzers), "The parameter must not be null.");
+    // public ExpressionValidatorService(IAnalyzerFactory analyzerFactory)
+    //     => this.analyzerFactory =
+    //         analyzerFactory ?? throw new ArgumentNullException(nameof(analyzerFactory), "The parameter must not be null.");
 
     /// <inheritdoc/>
     public (bool isValid, string msg) Validate(string expression)
@@ -50,9 +53,7 @@ public class ExpressionValidatorService : IExpressionValidatorService
 
         expression = expression.Trim();
 
-        var analyzers = this.analyzerFactory.CreateAnalyzers();
-
-        foreach (IAnalyzerService analyzer in analyzers)
+        foreach (IAnalyzerService analyzer in this.analyzers)
         {
             var result = analyzer.Analyze(expression);
 

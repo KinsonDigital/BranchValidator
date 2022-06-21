@@ -13,6 +13,9 @@ public class ExpressionExecutorServiceTests
 {
     private readonly Mock<IExpressionValidatorService> mockValidationService;
     private readonly Mock<IFunctionService> mockFunctionService;
+    private readonly Mock<IEmbeddedResourceLoaderService<string>> mockResourceLoader;
+    private readonly Mock<IScriptService<bool>> mockScriptService;
+    private readonly Mock<IMethodNamesService> mockMethodNameService;
 
     public ExpressionExecutorServiceTests()
     {
@@ -21,6 +24,9 @@ public class ExpressionExecutorServiceTests
             .Returns((true, "expression valid"));
 
         this.mockFunctionService = new Mock<IFunctionService>();
+        this.mockMethodNameService = new Mock<IMethodNamesService>();
+        this.mockScriptService = new Mock<IScriptService<bool>>();
+        this.mockResourceLoader = new Mock<IEmbeddedResourceLoaderService<string>>();
     }
 
     #region Method Tests
@@ -78,5 +84,10 @@ public class ExpressionExecutorServiceTests
     /// Creates a new instance of the <see cref="ExpressionExecutorService"/> for the purpose of testing.
     /// </summary>
     /// <returns>The instance to test.</returns>
-    private ExpressionExecutorService CreateService() => new (this.mockValidationService.Object, this.mockFunctionService.Object);
+    private ExpressionExecutorService CreateService()
+        => new (this.mockValidationService.Object,
+        this.mockFunctionService.Object,
+        this.mockMethodNameService.Object,
+        this.mockResourceLoader.Object,
+        this.mockScriptService.Object);
 }

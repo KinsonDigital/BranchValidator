@@ -2,7 +2,6 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-using System.Dynamic;
 using BranchValidator.Services.Interfaces;
 
 namespace BranchValidator.Services;
@@ -14,14 +13,14 @@ public class FunctionNamesExtractorService : IFunctionNamesExtractorService
     private const string OrOperator = "||";
     private const char LeftParen = '(';
 
-    private readonly IExpressionValidatorService expressionValidatorService;
-
     /// <summary>
     /// Initializes a new instance of the <see cref="FunctionNamesExtractorService"/> class.
     /// </summary>
     /// <param name="expressionValidatorService"></param>
-    public FunctionNamesExtractorService(IExpressionValidatorService expressionValidatorService)
-        => this.expressionValidatorService = expressionValidatorService;
+    public FunctionNamesExtractorService()
+    {
+
+    }
 
     /// <inheritdoc/>
     public IEnumerable<string> ExtractNames(string expression)
@@ -30,12 +29,6 @@ public class FunctionNamesExtractorService : IFunctionNamesExtractorService
         {
             return Array.Empty<string>();
         }
-
-        if (this.expressionValidatorService.Validate(expression).isValid is false)
-        {
-            return Array.Empty<string>();
-        }
-
 
         const StringSplitOptions splitOptions = StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries;
         var doesNotContainAnyOperators = expression.Contains(AndOperator) is false && expression.Contains(OrOperator) is false;
