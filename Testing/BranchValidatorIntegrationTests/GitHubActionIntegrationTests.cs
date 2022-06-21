@@ -28,7 +28,7 @@ public class GitHubActionIntegrationTests : IDisposable
         var consoleService = new GitHubConsoleService();
         var outputService = new ActionOutputService(consoleService);
         var funMethodNameExtractorService = new FunctionNamesExtractorService();
-        var methodNamesService = new MethodNamesService();
+        var methodNamesService = new CSharpMethodNamesService();
 
         var parenAnalyzerService = new ParenAnalyzerService();
         var quoteAnalyzerService = new QuoteAnalyzerService();

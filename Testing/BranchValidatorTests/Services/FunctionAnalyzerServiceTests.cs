@@ -16,7 +16,7 @@ namespace BranchValidatorTests.Services;
 public class FunctionAnalyzerServiceTests
 {
     private readonly Mock<IFunctionNamesExtractorService> mockFunctionNamesExtractorService;
-    private readonly Mock<IMethodNamesService> mockMethodNamesService;
+    private readonly Mock<ICSharpMethodNamesService> mockMethodNamesService;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="FunctionAnalyzerServiceTests"/> class.
@@ -24,7 +24,7 @@ public class FunctionAnalyzerServiceTests
     public FunctionAnalyzerServiceTests()
     {
         this.mockFunctionNamesExtractorService = new Mock<IFunctionNamesExtractorService>();
-        this.mockMethodNamesService = new Mock<IMethodNamesService>();
+        this.mockMethodNamesService = new Mock<ICSharpMethodNamesService>();
     }
 
     #region Method Tests
@@ -73,5 +73,4 @@ public class FunctionAnalyzerServiceTests
     /// <returns>The instance to test.</returns>
     private FunctionAnalyzerService CreateService()
         => new (this.mockFunctionNamesExtractorService.Object, this.mockMethodNamesService.Object);
-
 }

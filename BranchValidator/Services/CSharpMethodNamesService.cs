@@ -1,4 +1,4 @@
-﻿// <copyright file="MethodNamesService.cs" company="KinsonDigital">
+﻿// <copyright file="CSharpMethodNamesService.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -10,7 +10,7 @@ namespace BranchValidator.Services;
 
 /// <inheritdoc/>
 [ExcludeFromCodeCoverage]
-public class MethodNamesService : IMethodNamesService
+public class CSharpMethodNamesService : ICSharpMethodNamesService
 {
     /// <inheritdoc/>
     public IEnumerable<string> GetMethodNames(string className)
@@ -32,7 +32,7 @@ public class MethodNamesService : IMethodNamesService
 
         if (functionsClass is null)
         {
-            throw new InvalidOperationException($"The '{nameof(MethodNamesService)}' could not find the class name '{className}'.");
+            throw new InvalidOperationException($"The '{nameof(CSharpMethodNamesService)}' could not find the class name '{className}'.");
         }
 
         bool ContainExpressionFunctionAttribute(MethodInfo methodInfo)

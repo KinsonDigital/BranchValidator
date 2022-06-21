@@ -15,7 +15,7 @@ public class ExpressionExecutorServiceTests
     private readonly Mock<IFunctionService> mockFunctionService;
     private readonly Mock<IEmbeddedResourceLoaderService<string>> mockResourceLoader;
     private readonly Mock<IScriptService<bool>> mockScriptService;
-    private readonly Mock<IMethodNamesService> mockMethodNameService;
+    private readonly Mock<ICSharpMethodNamesService> mockMethodNameService;
 
     public ExpressionExecutorServiceTests()
     {
@@ -24,7 +24,7 @@ public class ExpressionExecutorServiceTests
             .Returns((true, "expression valid"));
 
         this.mockFunctionService = new Mock<IFunctionService>();
-        this.mockMethodNameService = new Mock<IMethodNamesService>();
+        this.mockMethodNameService = new Mock<ICSharpMethodNamesService>();
         this.mockScriptService = new Mock<IScriptService<bool>>();
         this.mockResourceLoader = new Mock<IEmbeddedResourceLoaderService<string>>();
     }

@@ -7,7 +7,7 @@ namespace BranchValidator.Services.Interfaces;
 /// <summary>
 /// Gets a list of method names from a class that are marked as valid expression functions.
 /// </summary>
-public interface IMethodNamesService
+public interface ICSharpMethodNamesService
 {
     /// <summary>
     /// Returns a list of method names from a class that matches the given <paramref name="className"/>

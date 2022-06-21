@@ -51,7 +51,7 @@ public static class Program
                 services.AddSingleton<IAppService, AppService>();
                 services.AddSingleton<IGitHubConsoleService, GitHubConsoleService>();
                 services.AddSingleton<IActionOutputService, ActionOutputService>();
-                services.AddSingleton<IMethodNamesService, MethodNamesService>();
+                services.AddSingleton<ICSharpMethodNamesService, CSharpMethodNamesService>();
                 services.AddSingleton<IArgParsingService<ActionInputs>, ArgParsingService>();
                 services.AddSingleton<IFunctionNamesExtractorService, FunctionNamesExtractorService>();
                 services.AddSingleton<IFunctionService, FunctionService>();
@@ -60,7 +60,7 @@ public static class Program
                 services.AddSingleton(serviceProvider =>
                 {
                     var funNameExtractorService = serviceProvider.GetRequiredService<IFunctionNamesExtractorService>();
-                    var methodNamesService = serviceProvider.GetRequiredService<IMethodNamesService>();
+                    var methodNamesService = serviceProvider.GetRequiredService<ICSharpMethodNamesService>();
 
                     var result = new IAnalyzerService[]
                     {

@@ -5,32 +5,32 @@ namespace BranchValidator.Services;
 public class FunctionAnalyzerService : IAnalyzerService
 {
     private readonly IFunctionNamesExtractorService funNamesExtractService;
-    private readonly IMethodNamesService methodNamesService;
+    private readonly ICSharpMethodNamesService csharpMethodNamesService;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="FunctionAnalyzerService"/> class.
     /// </summary>
     /// <param name="funNamesExtractService"></param>
-    /// <param name="methodNamesService"></param>
+    /// <param name="csharpMethodNamesService"></param>
     public FunctionAnalyzerService(
         IFunctionNamesExtractorService funNamesExtractService,
-        IMethodNamesService methodNamesService)
+        ICSharpMethodNamesService csharpMethodNamesService)
     {
         // TODO: Unit test ctor params for null
         this.funNamesExtractService = funNamesExtractService;
-        this.methodNamesService = methodNamesService;
+        this.csharpMethodNamesService = csharpMethodNamesService;
     }
 
 
     /* TODO: Need to analyze the parameters.
-        1. This means getting method param information to verify it matches.
+        1. This means getting method arg information to verify it matches.
         2. This also means verifying data type.
         3. This means that we check if no parameter exists as well.
     */
 
     public (bool valid, string msg) Analyze(string expression)
     {
-        var methodNames = this.methodNamesService.GetMethodNames(nameof(FunctionDefinitions)).ToArray();
+        var methodNames = this.csharpMethodNamesService.GetMethodNames(nameof(FunctionDefinitions)).ToArray();
 
         // Lower case the first character of each method name to matching the casing of the expression function names before validation
         methodNames = methodNames.Select(name =>
