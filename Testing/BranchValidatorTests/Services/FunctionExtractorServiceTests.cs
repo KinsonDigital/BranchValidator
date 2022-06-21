@@ -1,4 +1,4 @@
-﻿// <copyright file="FunctionExtractorServiceTests.cs" company="KinsonDigital">
+// <copyright file="FunctionExtractorServiceTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -20,7 +20,7 @@ public class FunctionExtractorServiceTests
     [InlineData("funA() && funB()", new[] { "funA", "funB" })]
     [InlineData("funA() || funB() && funC()", new[] { "funA", "funB", "funC" })]
     [InlineData("funA() && funB() || funC() || funD() && funE()", new[] { "funA", "funB", "funC", "funD", "funE" })]
-    public void Analyze_WhenInvoked_ReturnsCorrectResult(
+    public void ExtractNames_WhenInvoked_ReturnsCorrectResult(
         string expression,
         string[] expected)
     {

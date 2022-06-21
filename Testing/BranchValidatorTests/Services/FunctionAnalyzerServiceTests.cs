@@ -15,7 +15,7 @@ namespace BranchValidatorTests.Services;
 /// </summary>
 public class FunctionAnalyzerServiceTests
 {
-    private readonly Mock<IFunctionNamesExtractorService> mockFunctionNamesExtractorService;
+    private readonly Mock<IFunctionExtractorService> mockFunctionExtractorService;
     private readonly Mock<ICSharpMethodService> mockCSharpMethodService;
 
     /// <summary>
@@ -23,7 +23,7 @@ public class FunctionAnalyzerServiceTests
     /// </summary>
     public FunctionAnalyzerServiceTests()
     {
-        this.mockFunctionNamesExtractorService = new Mock<IFunctionNamesExtractorService>();
+        this.mockFunctionExtractorService = new Mock<IFunctionExtractorService>();
         this.mockCSharpMethodService = new Mock<ICSharpMethodService>();
     }
 
@@ -33,7 +33,7 @@ public class FunctionAnalyzerServiceTests
     {
         // Arrange
         const string expression = "funA() && funB()";
-        this.mockFunctionNamesExtractorService.Setup(m => m.ExtractNames(expression))
+        this.mockFunctionExtractorService.Setup(m => m.ExtractNames(expression))
             .Returns(new[] { "funA", "funB" });
         this.mockFunctionExtractorService.Setup(m => m.ExtractFunctions(expression))
         this.mockCSharpMethodService.Setup(m => m.GetMethodNames(nameof(FunctionDefinitions)))
@@ -53,7 +53,7 @@ public class FunctionAnalyzerServiceTests
     {
         // Arrange
         const string expression = "funA() && funB() && funC()";
-        this.mockFunctionNamesExtractorService.Setup(m => m.ExtractNames(expression))
+        this.mockFunctionExtractorService.Setup(m => m.ExtractNames(expression))
             .Returns(new[] { "funA", "funB", "funC" });
         this.mockCSharpMethodService.Setup(m => m.GetMethodNames(nameof(FunctionDefinitions)))
             .Returns(new[] { "FunA", "FunB" });
@@ -73,5 +73,5 @@ public class FunctionAnalyzerServiceTests
     /// </summary>
     /// <returns>The instance to test.</returns>
     private FunctionAnalyzerService CreateService()
-        => new (this.mockFunctionNamesExtractorService.Object, this.mockCSharpMethodService.Object);
+        => new (this.mockFunctionExtractorService.Object, this.mockCSharpMethodService.Object);
 }

@@ -1,23 +1,23 @@
-﻿using BranchValidator.Services.Interfaces;
+using BranchValidator.Services.Interfaces;
 
 namespace BranchValidator.Services;
 
 public class FunctionAnalyzerService : IAnalyzerService
 {
-    private readonly IFunctionNamesExtractorService funNamesExtractService;
+    private const char LeftParen = '(';
     private readonly ICSharpMethodNamesService csharpMethodNamesService;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="FunctionAnalyzerService"/> class.
     /// </summary>
-    /// <param name="funNamesExtractService"></param>
+    /// <param name="functionExtractService"></param>
     /// <param name="csharpMethodNamesService"></param>
     public FunctionAnalyzerService(
-        IFunctionNamesExtractorService funNamesExtractService,
+        IFunctionExtractorService functionExtractService,
         ICSharpMethodNamesService csharpMethodNamesService)
     {
         // TODO: Unit test ctor params for null
-        this.funNamesExtractService = funNamesExtractService;
+        this.functionExtractService = functionExtractService;
         this.csharpMethodNamesService = csharpMethodNamesService;
     }
 
@@ -50,7 +50,7 @@ public class FunctionAnalyzerService : IAnalyzerService
             return result;
         }).ToArray();
 
-        var expressionFunNames = this.funNamesExtractService.ExtractNames(expression);
+        var expressionFunNames = this.functionExtractService.ExtractNames(expression);
 
         var nonExistingFunctions = expressionFunNames.Where(f => methodNames.DoesNotContain(f)).ToArray();
 

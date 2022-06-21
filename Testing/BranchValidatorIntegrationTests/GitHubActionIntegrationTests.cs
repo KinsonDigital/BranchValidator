@@ -1,4 +1,4 @@
-// <copyright file="GitHubActionIntegrationTests.cs" company="KinsonDigital">
+﻿// <copyright file="GitHubActionIntegrationTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -27,7 +27,7 @@ public class GitHubActionIntegrationTests : IDisposable
     {
         var consoleService = new GitHubConsoleService();
         var outputService = new ActionOutputService(consoleService);
-        var funMethodNameExtractorService = new FunctionNamesExtractorService();
+        var funMethodNameExtractorService = new FunctionExtractorService();
         var methodNamesService = new CSharpMethodService();
 
         var parenAnalyzerService = new ParenAnalyzerService();
