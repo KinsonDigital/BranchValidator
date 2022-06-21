@@ -1,4 +1,4 @@
-﻿// <copyright file="FunctionNamesExtractorService.cs" company="KinsonDigital">
+﻿// <copyright file="FunctionExtractorService.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -7,17 +7,17 @@ using BranchValidator.Services.Interfaces;
 namespace BranchValidator.Services;
 
 /// <inheritdoc/>
-public class FunctionNamesExtractorService : IFunctionNamesExtractorService
+public class FunctionExtractorService : IFunctionNamesExtractorService
 {
     private const string AndOperator = "&&";
     private const string OrOperator = "||";
     private const char LeftParen = '(';
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="FunctionNamesExtractorService"/> class.
+    /// Initializes a new instance of the <see cref="FunctionExtractorService"/> class.
     /// </summary>
     /// <param name="expressionValidatorService"></param>
-    public FunctionNamesExtractorService()
+    public FunctionExtractorService()
     {
 
     }

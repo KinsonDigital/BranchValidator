@@ -1,4 +1,4 @@
-﻿// <copyright file="FunctionNamesExtractorServiceTests.cs" company="KinsonDigital">
+﻿// <copyright file="FunctionExtractorServiceTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -8,9 +8,9 @@ using FluentAssertions;
 namespace BranchValidatorTests.Services;
 
 /// <summary>
-/// Tests the <see cref="FunctionNamesExtractorService"/> class.
+/// Tests the <see cref="FunctionExtractorService"/> class.
 /// </summary>
-public class FunctionNamesExtractorServiceTests
+public class FunctionExtractorServiceTests
 {
     #region Method Tests
     [Theory]
@@ -25,7 +25,7 @@ public class FunctionNamesExtractorServiceTests
         string[] expected)
     {
         // Arrange
-        var service = new FunctionNamesExtractorService();
+        var service = new FunctionExtractorService();
 
         // Act
         var actual = service.ExtractNames(expression);
