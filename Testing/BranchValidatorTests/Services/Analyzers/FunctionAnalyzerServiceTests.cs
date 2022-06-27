@@ -3,12 +3,12 @@
 // </copyright>
 
 using BranchValidator;
-using BranchValidator.Services;
+using BranchValidator.Services.Analyzers;
 using BranchValidator.Services.Interfaces;
 using FluentAssertions;
 using Moq;
 
-namespace BranchValidatorTests.Services;
+namespace BranchValidatorTests.Services.Analyzers;
 
 /// <summary>
 /// Tests the <see cref="FunctionAnalyzerService"/> class.

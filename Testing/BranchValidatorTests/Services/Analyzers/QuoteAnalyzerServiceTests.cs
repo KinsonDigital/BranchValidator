@@ -2,10 +2,10 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-using BranchValidator.Services;
+using BranchValidator.Services.Analyzers;
 using FluentAssertions;
 
-namespace BranchValidatorTests.Services;
+namespace BranchValidatorTests.Services.Analyzers;
 
 public class QuoteAnalyzerServiceTests
 {

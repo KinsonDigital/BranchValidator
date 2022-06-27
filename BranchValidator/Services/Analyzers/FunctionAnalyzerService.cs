@@ -1,6 +1,6 @@
 ﻿using BranchValidator.Services.Interfaces;
 
-namespace BranchValidator.Services;
+namespace BranchValidator.Services.Analyzers;
 
 public class FunctionAnalyzerService : IAnalyzerService
 {

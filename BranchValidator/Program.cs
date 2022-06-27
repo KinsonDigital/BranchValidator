@@ -6,6 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using BranchValidator.Observables;
 using BranchValidator.Services;
+using BranchValidator.Services.Analyzers;
 using BranchValidator.Services.Interfaces;
 
 [assembly: InternalsVisibleTo("BranchValidatorTests", AllInternalsVisible = true)]

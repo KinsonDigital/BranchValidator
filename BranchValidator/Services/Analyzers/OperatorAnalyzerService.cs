@@ -4,7 +4,7 @@
 
 using BranchValidator.Services.Interfaces;
 
-namespace BranchValidator.Services;
+namespace BranchValidator.Services.Analyzers;
 
 /// <summary>
 /// Analyzes a textual expression to validate that it does not start or end with any && or || operators
