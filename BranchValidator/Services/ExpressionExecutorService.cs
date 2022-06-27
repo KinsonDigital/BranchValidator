@@ -15,7 +15,6 @@ public class ExpressionExecutorService : IExpressionExecutorService
     private const string ExpressionInjectionPoint = "//<expression/>";
 
     private readonly IExpressionValidatorService expressionValidatorService;
-    private readonly IFunctionService functionService;
     private readonly ICSharpMethodService csharpMethodService;
     private readonly IEmbeddedResourceLoaderService<string> resourceLoaderService;
     private readonly IScriptService<bool> scriptService;
@@ -27,17 +26,14 @@ public class ExpressionExecutorService : IExpressionExecutorService
     /// Initializes a new instance of the <see cref="ExpressionExecutorService"/> class.
     /// </summary>
     /// <param name="expressionValidatorService">Validates expressions.</param>
-    /// <param name="functionService">Executes functions.</param>
     public ExpressionExecutorService(
         IExpressionValidatorService expressionValidatorService,
-        IFunctionService functionService, // TODO: This will be getting removed
         ICSharpMethodService csharpMethodService,
         IEmbeddedResourceLoaderService<string> resourceLoaderService,
         IScriptService<bool> scriptService)
     {
         // TODO: null check and unit test these ctor params
         this.expressionValidatorService = expressionValidatorService;
-        this.functionService = functionService;
         this.csharpMethodService = csharpMethodService;
         this.scriptService = scriptService;
         this.resourceLoaderService = resourceLoaderService;
@@ -67,19 +63,21 @@ public class ExpressionExecutorService : IExpressionExecutorService
 
         var script = this.resourceLoaderService.LoadResource(ExpressionFunctionsScript);
 
+        // Inject the branch name
         script = script.Replace(BranchInjectionPoint, branchName);
 
         var methodNames = this.csharpMethodService.GetMethodNames(nameof(FunctionDefinitions));
 
         foreach (var methodName in methodNames)
         {
-            var expressionFunName = $"{methodName[0].ToString().ToLower()}{methodName.Substring(1, methodName.Length - 1)}";
+            var expressionFunName = $"{methodName[0].ToLower()}{methodName[1..]}";
             expression = expression.Replace(expressionFunName, $"{ExpressionFunctionsClassName}.{methodName}");
         }
 
         // Replace the single quotes with double quotes
         expression = expression.Replace("'", "\"");
 
+        // Inject the expression
         script = script.Replace(ExpressionInjectionPoint, $"return {expression};");
 
         var expressionResult = this.scriptService.Execute(script);

@@ -46,21 +46,19 @@ public static class Program
             {
                 services.AddSingleton<IScriptService<bool>, ScriptService<bool>>();
                 services.AddSingleton<IBranchNameObservable, UpdateBranchNameObservable>();
-                services.AddSingleton<IJSONService, JSONService>();
                 services.AddSingleton<IEmbeddedResourceLoaderService<string>, TextResourceLoaderService>();
                 services.AddSingleton<IAppService, AppService>();
                 services.AddSingleton<IGitHubConsoleService, GitHubConsoleService>();
                 services.AddSingleton<IActionOutputService, ActionOutputService>();
-                services.AddSingleton<ICSharpMethodNamesService, CSharpMethodNamesService>();
+                services.AddSingleton<ICSharpMethodService, CSharpMethodService>();
                 services.AddSingleton<IArgParsingService<ActionInputs>, ArgParsingService>();
-                services.AddSingleton<IFunctionNamesExtractorService, FunctionNamesExtractorService>();
-                services.AddSingleton<IFunctionService, FunctionService>();
+                services.AddSingleton<IFunctionExtractorService, FunctionExtractorService>();
                 services.AddSingleton<IExpressionValidatorService, ExpressionValidatorService>();
                 services.AddSingleton<IExpressionExecutorService, ExpressionExecutorService>();
                 services.AddSingleton(serviceProvider =>
                 {
-                    var funNameExtractorService = serviceProvider.GetRequiredService<IFunctionNamesExtractorService>();
-                    var methodNamesService = serviceProvider.GetRequiredService<ICSharpMethodNamesService>();
+                    var funNameExtractorService = serviceProvider.GetRequiredService<IFunctionExtractorService>();
+                    var methodNamesService = serviceProvider.GetRequiredService<ICSharpMethodService>();
 
                     var result = new IAnalyzerService[]
                     {

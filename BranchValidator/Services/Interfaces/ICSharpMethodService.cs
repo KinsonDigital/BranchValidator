@@ -16,4 +16,8 @@ public interface ICSharpMethodService
     /// <param name="className">The name of the class.</param>
     /// <returns>The list of method names.</returns>
     IEnumerable<string> GetMethodNames(string className);
+
+    Dictionary<string, Type[]> GetMethodParamTypes(string className, string methodName);
+
+    IEnumerable<string> GetMethodSignatures(string className);
 }

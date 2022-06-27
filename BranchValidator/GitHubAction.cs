@@ -13,7 +13,8 @@ public sealed class GitHubAction : IGitHubAction<bool>
     private readonly IGitHubConsoleService consoleService;
     private readonly IActionOutputService outputService;
     private readonly IExpressionExecutorService expressionExecutorService;
-    private readonly IFunctionService functionService;
+    private readonly ICSharpMethodService csharpMethodService;
+    private readonly IParsingService parsingService;
     private readonly IBranchNameObservable branchNameObservable;
     private bool isDisposed;
 
@@ -23,19 +24,20 @@ public sealed class GitHubAction : IGitHubAction<bool>
     /// <param name="expressionExecutorService">Executes expressions.</param>
     /// <param name="consoleService">Prints messages to the GitHub console.</param>
     /// <param name="outputService">Sets the GitHub action outputs.</param>
-    /// <param name="functionService">Holds information about the available functions.</param>
     /// <param name="branchNameObservable">Sends a push notification of the branch name.</param>
     public GitHubAction(
         IGitHubConsoleService consoleService,
         IActionOutputService outputService,
         IExpressionExecutorService expressionExecutorService,
-        IFunctionService functionService,
+        ICSharpMethodService csharpMethodService,
+        IParsingService parsingService,
         IBranchNameObservable branchNameObservable)
     {
         this.consoleService = consoleService;
         this.outputService = outputService;
         this.expressionExecutorService = expressionExecutorService;
-        this.functionService = functionService;
+        this.csharpMethodService = csharpMethodService;
+        this.parsingService = parsingService;
         this.branchNameObservable = branchNameObservable;
     }
 
@@ -49,9 +51,12 @@ public sealed class GitHubAction : IGitHubAction<bool>
         this.branchNameObservable.PushNotification(inputs.BranchName);
         this.branchNameObservable.UnsubscribeAll();
 
-        var functionSignatures = this.functionService.FunctionSignatures;
+        var methodSignatures = this.csharpMethodService.GetMethodSignatures(nameof(FunctionDefinitions))
+            .ToArray();
 
-        this.consoleService.WriteGroup("Available Functions", functionSignatures.ToArray());
+        var functionSignatures = methodSignatures.Select(s => this.parsingService.ToExpressionFunctionSignature(s)).ToArray();
+
+        this.consoleService.WriteGroup("Available Functions", functionSignatures);
 
         try
         {

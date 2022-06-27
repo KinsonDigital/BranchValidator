@@ -5,7 +5,7 @@
 namespace BranchValidator.Services.Interfaces;
 
 /// <summary>
-/// Extracts the names of functions from an expression.
+/// Extracts different pieces of function signatures from functions in an expression.
 /// </summary>
 public interface IFunctionExtractorService
 {
@@ -28,4 +28,18 @@ public interface IFunctionExtractorService
     /// A function signature is the name, left parenthesis, right parenthesis, and the argument value.
     /// </remarks>
     IEnumerable<string> ExtractFunctions(string expression);
+
+    /// <summary>
+    /// Extracts all of the function argument values from a function in the given <paramref name="functionSignature"/>.
+    /// </summary>
+    /// <param name="functionSignature">The function signature.</param>
+    /// <returns>The list of function argument values.</returns>
+    IEnumerable<string> ExtractArgValues(string functionSignature);
+
+    /// <summary>
+    /// Extracts all of the function argument data types from the given <paramref name="functionSignature"/>.
+    /// </summary>
+    /// <param name="functionSignature">The function signature that possibly contains the arguments.</param>
+    /// <returns>A list of function argument data types.</returns>
+    IEnumerable<Type> ExtractArgDataTypes(string functionSignature);
 }

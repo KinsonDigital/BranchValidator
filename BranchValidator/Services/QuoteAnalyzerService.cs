@@ -11,6 +11,8 @@ namespace BranchValidator.Services;
 /// </summary>
 public class QuoteAnalyzerService : IAnalyzerService
 {
+    private const char LeftParen = '(';
+    private const char RightParen = ')';
     private const char SingleQuote = '\'';
     private const char DoubleQuote = '"';
 
@@ -68,6 +70,17 @@ public class QuoteAnalyzerService : IAnalyzerService
             return (false, "Expression missing a double quote.");
         }
 
-        return validResult;
+        var onlySingleQuotes = containsSingleQuotes && containsDoubleQuotes is false;
+        var onlyDoubleQuotes = containsSingleQuotes is false && containsDoubleQuotes;
+
+        var quoteToCheck = onlySingleQuotes && onlyDoubleQuotes is false
+            ? '\''
+            : '"';
+
+        var anyQuotesNotBetween = expression.AnyNotBetween(quoteToCheck, LeftParen, RightParen);
+
+        return anyQuotesNotBetween
+            ? (false, "Single and double quotes must only exist inside of a function argument list.")
+            : validResult;
     }
 }

@@ -12,10 +12,9 @@ namespace BranchValidatorTests.Services;
 public class ExpressionExecutorServiceTests
 {
     private readonly Mock<IExpressionValidatorService> mockValidationService;
-    private readonly Mock<IFunctionService> mockFunctionService;
     private readonly Mock<IEmbeddedResourceLoaderService<string>> mockResourceLoader;
     private readonly Mock<IScriptService<bool>> mockScriptService;
-    private readonly Mock<ICSharpMethodService> mockMethodNameService;
+    private readonly Mock<ICSharpMethodService> mockMethodService;
 
     public ExpressionExecutorServiceTests()
     {
@@ -23,8 +22,7 @@ public class ExpressionExecutorServiceTests
         this.mockValidationService.Setup(m => m.Validate(It.IsAny<string>()))
             .Returns((true, "expression valid"));
 
-        this.mockFunctionService = new Mock<IFunctionService>();
-        this.mockMethodNameService = new Mock<ICSharpMethodService>();
+        this.mockMethodService = new Mock<ICSharpMethodService>();
         this.mockScriptService = new Mock<IScriptService<bool>>();
         this.mockResourceLoader = new Mock<IEmbeddedResourceLoaderService<string>>();
     }
@@ -78,7 +76,7 @@ public class ExpressionExecutorServiceTests
         actual.valid.Should().BeFalse();
         actual.msg.Should().Be("The branch name must not be null or empty.");
     }
-     #endregion
+    #endregion
 
     /// <summary>
     /// Creates a new instance of the <see cref="ExpressionExecutorService"/> for the purpose of testing.
@@ -86,8 +84,7 @@ public class ExpressionExecutorServiceTests
     /// <returns>The instance to test.</returns>
     private ExpressionExecutorService CreateService()
         => new (this.mockValidationService.Object,
-        this.mockFunctionService.Object,
-        this.mockMethodNameService.Object,
+        this.mockMethodService.Object,
         this.mockResourceLoader.Object,
         this.mockScriptService.Object);
 }

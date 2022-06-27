@@ -39,6 +39,7 @@ public class ScriptTemplateServiceTests
         expectedStrBuilder.AppendLine();
         expectedStrBuilder.AppendLine("/*THIS SCRIPT IS AUTO-GENERATED AND SHOULD NOT BE CHANGED MANUALLY*/");
         expectedStrBuilder.AppendLine();
+        expectedStrBuilder.AppendLine("using System;");
         expectedStrBuilder.AppendLine("using System.Text.RegularExpressions;");
         expectedStrBuilder.AppendLine();
         expectedStrBuilder.AppendLine("public static class ExpressionFunctions");

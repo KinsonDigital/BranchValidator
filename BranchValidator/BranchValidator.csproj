@@ -44,7 +44,6 @@
 
   <ItemGroup>
     <None Remove="FunctionDefinitions\func-defs.json" />
-    <EmbeddedResource Include="FunctionDefinitions\func-defs.json" />
     <Compile Remove="RuntimeScripts\ExpressionFunctions.cs" />
     <EmbeddedResource Include="RuntimeScripts\ExpressionFunctions.cs" />
   </ItemGroup>

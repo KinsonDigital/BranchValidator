@@ -1,5 +1,4 @@
-﻿using System;
-using BranchValidator.Services.Interfaces;
+﻿using BranchValidator.Services.Interfaces;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
 

@@ -4,6 +4,8 @@
 
 namespace BranchValidator;
 
+// TODO: Can probably be deleted once the FunctionService code is removed
+
 /// <summary>
 /// The different types of data.
 /// </summary>

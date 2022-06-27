@@ -19,8 +19,9 @@ public class GitHubActionTests
     private readonly Mock<IGitHubConsoleService> mockConsoleService;
     private readonly Mock<IActionOutputService> mockActionOutputService;
     private readonly Mock<IExpressionExecutorService> mockExpressionExecutorService;
-    private readonly Mock<IFunctionService> mockFunctionService;
+    private readonly Mock<ICSharpMethodService> mockCSharpMethodService;
     private readonly Mock<IBranchNameObservable> mockBranchNameObservable;
+    private readonly Mock<IParsingService> mockParsingService;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="GitHubActionTests"/> class.
@@ -30,12 +31,9 @@ public class GitHubActionTests
         this.mockConsoleService = new Mock<IGitHubConsoleService>();
         this.mockActionOutputService = new Mock<IActionOutputService>();
         this.mockExpressionExecutorService = new Mock<IExpressionExecutorService>();
-
-        this.mockFunctionService = new Mock<IFunctionService>();
-        this.mockFunctionService.SetupGet(p => p.FunctionSignatures)
-            .Returns(() => new[] { "equalTo(value: string)" }.ToReadOnlyCollection());
-
+        this.mockCSharpMethodService = new Mock<ICSharpMethodService>();
         this.mockBranchNameObservable = new Mock<IBranchNameObservable>();
+        this.mockParsingService = new Mock<IParsingService>();
     }
 
     #region Method Tests
@@ -57,8 +55,15 @@ public class GitHubActionTests
     public async void Run_WhenInvoked_PrintsFunctionList()
     {
         // Arrange
-        const string functionListMsg = "equalTo(value: string)";
+        const string functionSignature = "equalTo(value: string): bool";
+        const string methodSignature = "System.Boolean EqualTo(System.String value)";
+        var expected = new[] { functionSignature };
+        var methodSignatures = new[] { methodSignature };
 
+        this.mockCSharpMethodService.Setup(m => m.GetMethodSignatures(nameof(FunctionDefinitions)))
+            .Returns(methodSignatures);
+        this.mockParsingService.Setup(m => m.ToExpressionFunctionSignature(methodSignature))
+            .Returns(functionSignature);
         var inputs = CreateInputs();
         var action = CreateAction();
 
@@ -66,7 +71,7 @@ public class GitHubActionTests
         await action.Run(inputs, _ => { }, _ => { });
 
         // Assert
-        this.mockConsoleService.VerifyOnce(m => m.WriteGroup("Available Functions", new[] { functionListMsg }));
+        this.mockConsoleService.VerifyOnce(m => m.WriteGroup("Available Functions", expected));
     }
 
     [Theory]
@@ -229,6 +234,7 @@ public class GitHubActionTests
         => new (this.mockConsoleService.Object,
             this.mockActionOutputService.Object,
             this.mockExpressionExecutorService.Object,
-            this.mockFunctionService.Object,
+            this.mockCSharpMethodService.Object,
+            this.mockParsingService.Object,
             this.mockBranchNameObservable.Object);
 }

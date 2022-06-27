@@ -13,6 +13,30 @@ namespace BranchValidatorTests;
 /// </summary>
 public class ExtensionMethodsTests
 {
+    private char[] letters;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ExtensionMethodsTests"/> class.
+    /// </summary>
+    public ExtensionMethodsTests()
+    {
+        //65-90
+        //97-122
+        var letterValues = new List<char>();
+
+        for (var i = 'a'; i < 'z'; i++)
+        {
+            letterValues.Add(i);
+        }
+
+        // for (var i = 'A'; i < 'Z'; i++)
+        // {
+        //     letterValues.Add(i);
+        // }
+
+        this.letters = letterValues.ToArray();
+    }
+
     #region Method Tests
     [Fact]
     public void ToReadOnlyCollection_WhenInvoked_ReturnsCorrectResult()
@@ -177,6 +201,32 @@ public class ExtensionMethodsTests
         actual.Should().Be(expected);
     }
 
+    [Fact]
+    public void ToUpper_WhenInvoked_ReturnsCorrectResult()
+    {
+        // Arrange
+        const char expected = 'k';
+
+        // Act
+        var actual = expected.ToUpper();
+
+        // Assert
+        actual.Should().Be('K');
+    }
+
+    [Fact]
+    public void ToLower_WhenInvoked_ReturnsCorrectResult()
+    {
+        // Arrange
+        const char expected = 'K';
+
+        // Act
+        var actual = expected.ToLower();
+
+        // Assert
+        actual.Should().Be('k');
+    }
+
     [Theory]
     [InlineData("is(test)value", "test")]
     [InlineData("(istestvalue)", "istestvalue")]
@@ -247,6 +297,56 @@ public class ExtensionMethodsTests
     {
         // Act
         var actual = thisString.IsNotBetween(value, leftPos, rightPos);
+
+        // Assert
+        actual.Should().Be(expected);
+    }
+
+    [Theory]
+    [InlineData("funA('value')", '\'', '(', ')', true)]
+    [InlineData("funA'value')", '\'', '(', ')', false)]
+    [InlineData("funA('value'", '\'', '(', ')', false)]
+    [InlineData("funA(123)", '\'', '(', ')', false)]
+    [InlineData("fun'A(value')", '\'', '(', ')', false)]
+    [InlineData("funA('value)'", '\'', '(', ')', false)]
+    [InlineData("funA('value') && funB('other-value'", '\'', '(', ')', false)]
+    [InlineData("funA('value') && funB'other-value')", '\'', '(', ')', false)]
+    [InlineData("funA('value') && funB('other-value')", '\'', '(', ')', true)]
+    [InlineData("funA('value') && funB(123)", '\'', '(', ')', true)]
+    public void AllIsBetween_WhenInvoked_ReturnsCorrectResult(
+        string thisString,
+        char value,
+        char leftChar,
+        char rightChar,
+        bool expected)
+    {
+        // Act
+        var actual = thisString.AllIsBetween(value, leftChar, rightChar);
+
+        // Assert
+        actual.Should().Be(expected);
+    }
+
+    [Theory]
+    [InlineData("funA('value')", '\'', '(', ')', false)]
+    [InlineData("funA'value')", '\'', '(', ')', true)]
+    [InlineData("funA('value'", '\'', '(', ')', true)]
+    [InlineData("funA(123)", '\'', '(', ')', true)]
+    [InlineData("fun'A(value')", '\'', '(', ')', true)]
+    [InlineData("funA('value)'", '\'', '(', ')', true)]
+    [InlineData("funA('value') && funB('other-value'", '\'', '(', ')', true)]
+    [InlineData("funA('value') && funB'other-value')", '\'', '(', ')', true)]
+    [InlineData("funA('value') && funB('other-value')", '\'', '(', ')', false)]
+    [InlineData("funA('value') && funB(123)", '\'', '(', ')', false)]
+    public void AnyNotBetween_WhenInvoked_ReturnsCorrectResult(
+        string thisString,
+        char value,
+        char leftChar,
+        char rightChar,
+        bool expected)
+    {
+        // Act
+        var actual = thisString.AnyNotBetween(value, leftChar, rightChar);
 
         // Assert
         actual.Should().Be(expected);

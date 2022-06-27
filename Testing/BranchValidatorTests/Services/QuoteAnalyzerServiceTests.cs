@@ -11,14 +11,17 @@ public class QuoteAnalyzerServiceTests
 {
     #region Method Tests
     [Theory]
-    [InlineData("contains-\"both\"-'quote'-types", false, "Cannot use both single and double quotes in an expression.")]
-    [InlineData("this-is-'sample-expression", false, "Expression missing a single quote.")]
-    [InlineData("this-is-\"sample-expression", false, "Expression missing a double quote.")]
+    [InlineData("funA(\"'both'\")", false, "Cannot use both single and double quotes in an expression.")]
+    [InlineData("funA('value)", false, "Expression missing a single quote.")]
+    [InlineData("funA(\"value)", false, "Expression missing a double quote.")]
+    [InlineData("fun'A(value')", false, "Single and double quotes must only exist inside of a function argument list.")]
+    [InlineData("fun\"A(value\")", false, "Single and double quotes must only exist inside of a function argument list.")]
     [InlineData(null, true, "")]
     [InlineData("", true, "")]
-    [InlineData("contains-no-quotes", true, "")]
-    [InlineData("even-'number'-of-single-quotes", true, "")]
-    [InlineData("even-\"number\"-of-double-quotes", true, "")]
+    [InlineData("funA()", true, "")]
+    [InlineData("funA(123)", true, "")]
+    [InlineData("funA('value')", true, "")]
+    [InlineData("funB(\"value\")", true, "")]
     public void Analyze_WhenInvoked_ReturnsCorrectResult(
         string expression,
         bool expectedValidResult,

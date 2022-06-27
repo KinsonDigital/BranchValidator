@@ -49,7 +49,7 @@ public static class ExtensionMethods
 
         if (LowerCaseLetters.Contains(value[0]))
         {
-            value = $"{value[0].ToString().ToUpper()}{value.Substring(1, value.Length - 1)}";
+            value = $"{value[0].ToUpper()}{value[1..]}";
         }
 
         return value;
@@ -157,6 +157,20 @@ public static class ExtensionMethods
     }
 
     /// <summary>
+    /// Converts the given <c>char</c> <paramref name="value"/> to an upper case letter.
+    /// </summary>
+    /// <param name="value">The value to convert.</param>
+    /// <returns>The upper case version of the <paramref name="value"/>.</returns>
+    public static char ToUpper(this char value) => value.ToString().ToUpper()[0];
+
+    /// <summary>
+    /// Converts the given <c>char</c> <paramref name="value"/> to an upper case letter.
+    /// </summary>
+    /// <param name="value">The value to convert.</param>
+    /// <returns>The upper case version of the <paramref name="value"/>.</returns>
+    public static char ToLower(this char value) => value.ToString().ToLower()[0];
+
+    /// <summary>
     /// Gets all of the string data between the <paramref name="leftChar"/> and <paramref name="rightChar"/>
     /// for this string.
     /// </summary>
@@ -237,6 +251,84 @@ public static class ExtensionMethods
     /// </remarks>
     public static bool IsNotBetween(this string thisStr, string value, uint startPos, uint endPos)
         => !IsBetween(thisStr, value, startPos, endPos);
+
+    /// <summary>
+    /// Returns a value indicating if all occurrences of the given <c>char</c> <paramref name="value"/> is located
+    /// between the given <paramref name="leftChar"/> and <paramref name="rightChar"/>.
+    /// </summary>
+    /// <param name="thisStr">The string to process.</param>
+    /// <param name="value">The <c>char</c> value to search for.</param>
+    /// <param name="leftChar">The <c>char</c> that should be to the left of the given <paramref name="value"/>.</param>
+    /// <param name="rightChar">The <c>char</c> that should be to the right of the given <paramref name="value"/>.</param>
+    /// <returns>
+    ///     True if all occurrences of the given <paramref name="value"/> are between the <paramref name="leftChar"/> and <paramref name="rightChar"/>.
+    /// </returns>
+    public static bool AllIsBetween(this string thisStr, char value, char leftChar, char rightChar)
+    {
+        if (string.IsNullOrEmpty(thisStr))
+        {
+            return false;
+        }
+
+        if (thisStr.Contains(value) is false)
+        {
+            return false;
+        }
+
+        var totalLeftChar = thisStr.Count(c => c == leftChar);
+        var totalRightChar = thisStr.Count(c => c == rightChar);
+
+        if (totalLeftChar != totalRightChar)
+        {
+            return false;
+        }
+
+        var inBounds = false;
+
+        for (var i = 0; i < thisStr.Length; i++)
+        {
+            var character = thisStr[i];
+
+            if (inBounds)
+            {
+                if (character == value)
+                {
+                    continue;
+                }
+            }
+            else
+            {
+                if (character == value)
+                {
+                    return false;
+                }
+            }
+
+            if (character == leftChar)
+            {
+                inBounds = true;
+            }
+            else if (character == rightChar)
+            {
+                inBounds = false;
+            }
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// Returns a value indicating if all of the occurrences of the given <c>char</c> <paramref name="value"/> is are not located
+    /// between the given <paramref name="leftChar"/> and <paramref name="rightChar"/>.
+    /// </summary>
+    /// <param name="thisStr">The string to process.</param>
+    /// <param name="value">The <c>char</c> value to search for.</param>
+    /// <param name="leftChar">The <c>char</c> that might not be to the left of the given <paramref name="value"/>.</param>
+    /// <param name="rightChar">The <c>char</c> that might not be to the right of the given <paramref name="value"/>.</param>
+    /// <returns>
+    ///     True if any occurence of the given <paramref name="value"/> is not between the <paramref name="leftChar"/> and <paramref name="rightChar"/>.
+    /// </returns>
+    public static bool AnyNotBetween(this string thisStr, char value, char leftChar, char rightChar) => !AllIsBetween(thisStr, value, leftChar, rightChar);
 
     /// <summary>
     /// Returns a value indicating whether or not the given <c>string</c> <paramref name="value"/> is
