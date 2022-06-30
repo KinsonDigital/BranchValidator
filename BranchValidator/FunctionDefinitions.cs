@@ -20,6 +20,7 @@ public class FunctionDefinitions
         '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
     };
     private readonly string branchName;
+    private static readonly List<string> FunctionResults = new ();
 
     /// <summary>
     /// Initializes a new instance of the <see cref="FunctionDefinitions"/> class.
@@ -46,12 +47,11 @@ public class FunctionDefinitions
     [ExpressionFunction(nameof(EqualTo))]
     public bool EqualTo(string value)
     {
-        if (string.IsNullOrEmpty(value) && string.IsNullOrEmpty(this.branchName))
-        {
-            return true;
-        }
+        var result = (string.IsNullOrEmpty(value) && string.IsNullOrEmpty(this.branchName)) || value == this.branchName;
 
-        return value == this.branchName;
+        RegisterFunctionResult($"{nameof(EqualTo)}({typeof(string)})", result);
+
+        return result;
     }
 
     /// <summary>
@@ -72,15 +72,19 @@ public class FunctionDefinitions
     ///     </item>
     /// </list>
     /// </remarks>
-    [ExpressionFunction(nameof(EqualTo))]
+    [ExpressionFunction(nameof(IsCharNum))]
     public bool IsCharNum(uint charPos)
     {
-        if (string.IsNullOrEmpty(this.branchName))
-        {
-            return false;
-        }
+        var notNullOrEmpty = !string.IsNullOrEmpty(this.branchName);
 
-        return charPos <= this.branchName.Length - 1 && MemoryExtensions.Contains(Numbers, this.branchName[(int)charPos]);
+        var branch = notNullOrEmpty ? this.branchName : string.Empty;
+
+        var isCharNum = charPos <= branch.Length - 1 && MemoryExtensions.Contains(Numbers, branch[(int)charPos]);
+
+        var result = notNullOrEmpty && isCharNum;
+        RegisterFunctionResult($"{nameof(IsCharNum)}({typeof(uint)})", result);
+
+        return result;
     }
 
     /// <summary>
@@ -101,25 +105,32 @@ public class FunctionDefinitions
     ///     </item>
     /// </list>
     /// </remarks>
-    [ExpressionFunction(nameof(EqualTo))]
+    [ExpressionFunction(nameof(IsSectionNum))]
     public bool IsSectionNum(uint startPos, uint endPos)
     {
-        if (string.IsNullOrEmpty(this.branchName))
-        {
-            return false;
-        }
+        var branchNotNullOrEmpty = !string.IsNullOrEmpty(this.branchName);
+        var branch = branchNotNullOrEmpty ? this.branchName : string.Empty;
+        var sectionIsNum = true;
 
-        endPos = endPos > this.branchName.Length - 1 ? (uint)this.branchName.Length - 1u : endPos;
+        // Readjust to the end position to the end position if the end position goes past the end of the branch name
+        var intEndPos = endPos > branch.Length - 1 ? branch.Length - 1 : (int)endPos;
 
-        for (var i = startPos; i <= endPos; i++)
+        for (var i = startPos; i <= intEndPos; i++)
         {
-            if (MemoryExtensions.Contains(Numbers, this.branchName[(int)i]) is false)
+            if (MemoryExtensions.Contains(Numbers, branch[(int)i]))
             {
-                return false;
+                continue;
             }
+
+            sectionIsNum = false;
+            break;
         }
 
-        return true;
+        var result = branchNotNullOrEmpty && sectionIsNum;
+
+        RegisterFunctionResult($"{nameof(IsSectionNum)}({typeof(uint)}, {typeof(uint)})", result);
+
+        return result;
     }
 
     /// <summary>
@@ -173,29 +184,35 @@ public class FunctionDefinitions
     ///         </item>
     ///     </list>
     /// </remarks>
-    [ExpressionFunction(nameof(EqualTo))]
+    [ExpressionFunction(nameof(IsSectionNum))]
     public bool IsSectionNum(uint startPos, string upToChar)
     {
-        if (string.IsNullOrEmpty(this.branchName) || string.IsNullOrEmpty(upToChar))
-        {
-            return false;
-        }
+        var branchNotNullOrEmpty = !string.IsNullOrEmpty(this.branchName);
+        var branch = branchNotNullOrEmpty ? this.branchName : string.Empty;
+        var upToCharNotNullOrEmpty = !string.IsNullOrEmpty(upToChar);
+        var startPosNotPastEndOfBranch = startPos < branch.Length - 1;
 
-        if (startPos > this.branchName.Length - 1)
-        {
-            return false;
-        }
+        startPos = startPosNotPastEndOfBranch ? startPos : 0;
 
-        var upToCharIndex = this.branchName.IndexOf(upToChar[0], (int)startPos);
+        var upToCharIndex = upToCharNotNullOrEmpty
+            ? branch.IndexOf(upToChar[0], (int)startPos)
+            : -1;
 
-        if (upToCharIndex == -1)
-        {
-            return false;
-        }
+        upToCharIndex = upToCharIndex == -1 ? 0 : upToCharIndex;
 
-        var section = this.branchName.Substring((int)startPos, upToCharIndex - (int)startPos);
+        var section = branch.Substring((int)startPos,  Math.Abs(upToCharIndex - (int)startPos));
 
-        return !string.IsNullOrEmpty(section) && All(section, c => MemoryExtensions.Contains(Numbers, c));
+        var entireSectionIsNum = All(section, c => MemoryExtensions.Contains(Numbers, c));
+
+        var result = branchNotNullOrEmpty &&
+                     upToCharNotNullOrEmpty &&
+                     startPosNotPastEndOfBranch &&
+                     upToCharNotNullOrEmpty &&
+                     entireSectionIsNum;
+
+        RegisterFunctionResult($"{nameof(IsSectionNum)}({typeof(uint)}, {typeof(string)})", result);
+
+        return result;
     }
 
     /// <summary>
@@ -206,10 +223,17 @@ public class FunctionDefinitions
     /// <remarks>
     ///     The search is case sensitive.
     /// </remarks>
-    [ExpressionFunction(nameof(EqualTo))]
+    [ExpressionFunction(nameof(Contains))]
     public bool Contains(string value)
     {
-        return this.branchName.Contains(value);
+        var branchNotNullOrEmpty = !string.IsNullOrEmpty(this.branchName);
+        var branch = branchNotNullOrEmpty ? this.branchName : string.Empty;
+        var contains= branch.Contains(value);
+        var result = branchNotNullOrEmpty && contains;
+
+        RegisterFunctionResult($"{nameof(Contains)}({typeof(string)})", result);
+
+        return result;
     }
 
     /// <summary>
@@ -220,10 +244,17 @@ public class FunctionDefinitions
     /// <remarks>
     ///     The search is case sensitive.
     /// </remarks>
-    [ExpressionFunction(nameof(EqualTo))]
+    [ExpressionFunction(nameof(NotContains))]
     public bool NotContains(string value)
     {
-        return this.branchName.Contains(value) is false;
+        var branchNotNullOrEmpty = !string.IsNullOrEmpty(this.branchName);
+        var branch = branchNotNullOrEmpty ? this.branchName : string.Empty;
+        var doesNotContain= branch.Contains(value) is false;
+        var result = branchNotNullOrEmpty && doesNotContain;
+
+        RegisterFunctionResult($"{nameof(NotContains)}({typeof(string)})", result);
+
+        return result;
     }
 
     /// <summary>
@@ -236,10 +267,17 @@ public class FunctionDefinitions
     /// <remarks>
     ///     The search is case sensitive.
     /// </remarks>
-    [ExpressionFunction(nameof(EqualTo))]
+    [ExpressionFunction(nameof(ExistTotal))]
     public bool ExistTotal(string value, uint total)
     {
-        return Count(this.branchName, value) == total;
+        var branchIsNotNullOrEmpty = !string.IsNullOrEmpty(this.branchName);
+        var totalExists = Count(this.branchName, value) == total;
+
+        var result = branchIsNotNullOrEmpty && totalExists;
+
+        RegisterFunctionResult($"{nameof(ExistTotal)}({typeof(string)}, {typeof(uint)})", result);
+
+        return result;
     }
 
     /// <summary>
@@ -249,10 +287,17 @@ public class FunctionDefinitions
     /// <param name="value">The value to check for.</param>
     /// <param name="total">The total number of times to check that the <paramref name="value"/> exists.</param>
     /// <returns><c>true</c> if the <paramref name="value"/> exists greater than the specified number of times.</returns>
-    [ExpressionFunction(nameof(EqualTo))]
+    [ExpressionFunction(nameof(ExistsLessThan))]
     public bool ExistsLessThan(string value, uint total)
     {
-        return Count(this.branchName, value) < total;
+        var branchIsNotNullOrEmpty = !string.IsNullOrEmpty(this.branchName);
+        var isLessThan = Count(this.branchName, value) < total;
+
+        var result = branchIsNotNullOrEmpty && isLessThan;
+
+        RegisterFunctionResult($"{nameof(ExistsLessThan)}({typeof(string)}, {typeof(uint)})", result);
+
+        return result;
     }
 
     /// <summary>
@@ -262,10 +307,17 @@ public class FunctionDefinitions
     /// <param name="value">The value to check for.</param>
     /// <param name="total">The total number of times to check that the <paramref name="value"/> exists.</param>
     /// <returns><c>true</c> if the <paramref name="value"/> exists greater than the specified number of times.</returns>
-    [ExpressionFunction(nameof(EqualTo))]
+    [ExpressionFunction(nameof(ExistsGreaterThan))]
     public bool ExistsGreaterThan(string value, uint total)
     {
-        return Count(this.branchName, value) > total;
+        var branchIsNotNullOrEmpty = !string.IsNullOrEmpty(this.branchName);
+        var isGreaterThan = Count(this.branchName, value) > total;
+
+        var result = branchIsNotNullOrEmpty && isGreaterThan;
+
+        RegisterFunctionResult($"{nameof(ExistsGreaterThan)}({typeof(string)}, {typeof(uint)})", result);
+
+        return result;
     }
 
     /// <summary>
@@ -276,10 +328,17 @@ public class FunctionDefinitions
     /// <remarks>
     ///     The match for the <paramref name="value"/> is case sensitive.
     /// </remarks>
-    [ExpressionFunction(nameof(EqualTo))]
+    [ExpressionFunction(nameof(StartsWith))]
     public bool StartsWith(string value)
     {
-        return this.branchName.StartsWith(value);
+        var branchIsNotNullOrEmpty = !string.IsNullOrEmpty(this.branchName);
+        var branch = branchIsNotNullOrEmpty ? this.branchName : string.Empty;
+        var startsWith = branch.StartsWith(value);
+        var result = branchIsNotNullOrEmpty && startsWith;
+
+        RegisterFunctionResult($"{nameof(StartsWith)}({typeof(string)})", result);
+
+        return result;
     }
 
     /// <summary>
@@ -290,10 +349,18 @@ public class FunctionDefinitions
     /// <remarks>
     ///     The match for the <paramref name="value"/> is case sensitive.
     /// </remarks>
-    [ExpressionFunction(nameof(EqualTo))]
+    [ExpressionFunction(nameof(NotStartsWith))]
     public bool NotStartsWith(string value)
     {
-        return !this.branchName.StartsWith(value);
+        var branchIsNotNullOrEmpty = !string.IsNullOrEmpty(this.branchName);
+
+        var branch = branchIsNotNullOrEmpty ? this.branchName : string.Empty;
+        var startsWith = !branch.StartsWith(value);
+        var result = branchIsNotNullOrEmpty && startsWith;
+
+        RegisterFunctionResult($"{nameof(NotStartsWith)}({typeof(string)})", result);
+
+        return result;
     }
 
     /// <summary>
@@ -304,10 +371,17 @@ public class FunctionDefinitions
     /// <remarks>
     ///     The match for the <paramref name="value"/> is case sensitive.
     /// </remarks>
-    [ExpressionFunction(nameof(EqualTo))]
+    [ExpressionFunction(nameof(EndsWith))]
     public bool EndsWith(string value)
     {
-        return this.branchName.EndsWith(value);
+        var branchIsNotNullOrEmpty = !string.IsNullOrEmpty(this.branchName);
+        var branch = branchIsNotNullOrEmpty ? this.branchName : string.Empty;
+        var endsWith = branch.EndsWith(value);
+        var result = branchIsNotNullOrEmpty && endsWith;
+
+        RegisterFunctionResult($"{nameof(endsWith)}({typeof(string)})", result);
+
+        return result;
     }
 
     /// <summary>
@@ -318,30 +392,53 @@ public class FunctionDefinitions
     /// <remarks>
     ///     The match for the <paramref name="value"/> is case sensitive.
     /// </remarks>
-    [ExpressionFunction(nameof(EqualTo))]
+    [ExpressionFunction(nameof(NotEndsWith))]
     public bool NotEndsWith(string value)
     {
-        return !this.branchName.EndsWith(value);
+        var branchIsNotNullOrEmpty = !string.IsNullOrEmpty(this.branchName);
+        var branch = branchIsNotNullOrEmpty ? this.branchName : string.Empty;
+        var doesNotEndWith = !branch.EndsWith(value);
+        var result = branchIsNotNullOrEmpty && doesNotEndWith;
+
+        RegisterFunctionResult($"{nameof(NotEndsWith)}({typeof(string)})", result);
+
+        return result;
     }
 
     /// <summary>
     /// Returns a value indicating whether or not the branch name starts with a number.
     /// </summary>
     /// <returns><c>true</c> if the branch starts with a number.</returns>
-    [ExpressionFunction(nameof(EqualTo))]
+    [ExpressionFunction(nameof(StartsWithNum))]
     public bool StartsWithNum()
     {
-        return !string.IsNullOrEmpty(this.branchName) && MemoryExtensions.Contains(Numbers, this.branchName[0]);
+        var branchIsNotNullOrEmpty = !string.IsNullOrEmpty(this.branchName);
+        var branch = branchIsNotNullOrEmpty ? this.branchName : string.Empty;
+        var startsWithNum = branchIsNotNullOrEmpty && MemoryExtensions.Contains(Numbers, branch[0]);
+
+        var result = branchIsNotNullOrEmpty && startsWithNum;
+
+        RegisterFunctionResult($"{nameof(StartsWithNum)}()", result);
+
+        return result;
     }
 
     /// <summary>
     /// Returns a value indicating whether or not the branch name ends with a number.
     /// </summary>
     /// <returns><c>true</c> if the branch ends with a number.</returns>
-    [ExpressionFunction(nameof(EqualTo))]
+    [ExpressionFunction(nameof(EndsWithNum))]
     public bool EndsWithNum()
     {
-        return !string.IsNullOrEmpty(this.branchName) && MemoryExtensions.Contains(Numbers, this.branchName[^1]);
+        var branchIsNotNullOrEmpty = !string.IsNullOrEmpty(this.branchName);
+        var branch = branchIsNotNullOrEmpty ? this.branchName : string.Empty;
+        var endsWithNum = branchIsNotNullOrEmpty && MemoryExtensions.Contains(Numbers, branch[^1]);
+
+        var result = branchIsNotNullOrEmpty && endsWithNum;
+
+        RegisterFunctionResult($"{nameof(EndsWithNum)}()", result);
+
+        return result;
     }
 
     /// <summary>
@@ -352,15 +449,18 @@ public class FunctionDefinitions
     /// <remarks>
     ///     If the <paramref name="length"/> value is less than 0, then 0 will be used.
     /// </remarks>
-    [ExpressionFunction(nameof(EqualTo))]
+    [ExpressionFunction(nameof(LenLessThan))]
     public bool LenLessThan(uint length)
     {
-        if (string.IsNullOrEmpty(this.branchName))
-        {
-            return false;
-        }
+        var branchIsNotNullOrEmpty = !string.IsNullOrEmpty(this.branchName);
+        var branch = branchIsNotNullOrEmpty ? this.branchName : string.Empty;
+        var lengthIsLessThan = branch.Length < length;
 
-        return this.branchName.Length < length;
+        var result = branchIsNotNullOrEmpty && lengthIsLessThan;
+
+        RegisterFunctionResult($"{nameof(LenLessThan)}({typeof(uint)})", result);
+
+        return result;
     }
 
     /// <summary>
@@ -368,15 +468,18 @@ public class FunctionDefinitions
     /// </summary>
     /// <param name="length">The length to compare to the length of the branch.</param>
     /// <returns><c>true</c> if the length of the branch is greater than the given <paramref name="length"/>.</returns>
-    [ExpressionFunction(nameof(EqualTo))]
+    [ExpressionFunction(nameof(LenGreaterThan))]
     public bool LenGreaterThan(uint length)
     {
-        if (string.IsNullOrEmpty(this.branchName))
-        {
-            return length > 0;
-        }
+        var branchIsNotNullOrEmpty = !string.IsNullOrEmpty(this.branchName);
+        var branch = branchIsNotNullOrEmpty ? this.branchName : string.Empty;
+        var lengthIsGreaterThan = branch.Length > length;
 
-        return this.branchName.Length > length;
+        var result = branchIsNotNullOrEmpty && lengthIsGreaterThan;
+
+        RegisterFunctionResult($"{nameof(LenGreaterThan)}({typeof(uint)})", result);
+
+        return result;
     }
 
     /// <summary>
@@ -386,18 +489,20 @@ public class FunctionDefinitions
     /// <param name="value">The <c>string</c> located before <paramref name="after"/> <c>string</c>.</param>
     /// <param name="after">The <c>string</c> located after the <paramref name="value"/> <c>string</c>.</param>
     /// <returns><c>true</c> if the <paramref name="value"/> <c>string</c> is located before the <paramref name="after"/> <c>string</c>.</returns>
-    [ExpressionFunction(nameof(EqualTo))]
+    [ExpressionFunction(nameof(IsBefore))]
     public bool IsBefore(string value, string after)
     {
-        if (string.IsNullOrEmpty(this.branchName))
-        {
-            return false;
-        }
+        var branchIsNotNullOrEmpty = !string.IsNullOrEmpty(this.branchName);
+        var branch = branchIsNotNullOrEmpty ? this.branchName : string.Empty;
+        var valueIndex = branch.IndexOf(value, StringComparison.Ordinal);
+        var afterIndex = branch.IndexOf(after, StringComparison.Ordinal);
+        var isBefore = valueIndex < afterIndex;
 
-        var valueIndex = this.branchName.IndexOf(value, StringComparison.Ordinal);
-        var afterIndex = this.branchName.IndexOf(after, StringComparison.Ordinal);
+        var result = branchIsNotNullOrEmpty && isBefore;
 
-        return valueIndex < afterIndex;
+        RegisterFunctionResult($"{nameof(IsBefore)}({typeof(string)}, {typeof(string)})", result);
+
+        return result;
     }
 
     /// <summary>
@@ -407,18 +512,46 @@ public class FunctionDefinitions
     /// <param name="value">The <c>string</c> located after <paramref name="before"/> <c>string</c>.</param>
     /// <param name="before">The <c>string</c> located before the <paramref name="value"/> <c>string</c>.</param>
     /// <returns><c>true</c> if the <paramref name="value"/> <c>string</c> is located after the <paramref name="before"/> <c>string</c>.</returns>
-    [ExpressionFunction(nameof(EqualTo))]
+    [ExpressionFunction(nameof(IsAfter))]
     public bool IsAfter(string value, string before)
     {
-        if (string.IsNullOrEmpty(this.branchName))
-        {
-            return false;
-        }
+        var branchIsNotNullOrEmpty = !string.IsNullOrEmpty(this.branchName);
+        var branch = branchIsNotNullOrEmpty ? this.branchName : string.Empty;
+        var valueIndex = branch.IndexOf(value, StringComparison.Ordinal);
+        var beforeIndex = branch.IndexOf(before, StringComparison.Ordinal);
+        var isBefore = valueIndex > beforeIndex;
 
-        var valueIndex = this.branchName.IndexOf(value, StringComparison.Ordinal);
-        var afterIndex = this.branchName.IndexOf(before, StringComparison.Ordinal);
+        var result = branchIsNotNullOrEmpty && isBefore;
 
-        return valueIndex > afterIndex;
+        RegisterFunctionResult($"{nameof(IsAfter)}({typeof(string)}, {typeof(string)})", result);
+
+        return result;
+    }
+
+    /// <summary>
+    /// Registers the given function <paramref name="name"/> and its associated result.
+    /// </summary>
+    /// <param name="name">The name of the function.</param>
+    /// <param name="result">The result of the function.</param>
+    private static void RegisterFunctionResult(string name, bool result)
+    {
+        var newName = $"{name[0].ToString().ToLower()}{name[1..]}";
+
+        // Replace types if they exist
+        newName = newName.Replace($"{typeof(int)}", "number");
+        newName = newName.Replace($"{typeof(uint)}", "number");
+        newName = newName.Replace($"{typeof(string)}", "string");
+
+        FunctionResults.Add($"{newName} -> {result.ToString().ToLower()}");
+    }
+
+    /// <summary>
+    /// Gets the results of all the functions.
+    /// </summary>
+    /// <returns>The result of all the functions.</returns>
+    public static string[] GetFunctionResults()
+    {
+        return FunctionResults.ToArray();
     }
 
     /// <summary>
@@ -429,6 +562,11 @@ public class FunctionDefinitions
     /// <returns>The number of times the <paramref name="value"/> exists.</returns>
     private static int Count(string thisStr, string value)
     {
+        if (string.IsNullOrEmpty(thisStr))
+        {
+            return 0;
+        }
+
         // Go through each character and escape it if needed
         for (var i = 0; i < value.Length; i++)
         {
@@ -446,8 +584,20 @@ public class FunctionDefinitions
         return Regex.Matches(thisStr, value, RegexOptions.IgnoreCase).Count;
     }
 
+    /// <summary>
+    /// Returns true if all of the characters in the given <c>string</c> <paramref name="value"/> return <c>true</c>
+    /// in the given <paramref name="predicate"/>.
+    /// </summary>
+    /// <param name="value">The value to check.</param>
+    /// <param name="predicate">The predicate to use for checking each <c>character</c>.</param>
+    /// <returns><c>true</c> if the <paramref name="predicate"/> returned <c>true</c> for every <c>character</c>.</returns>
     private static bool All(string value, Func<char, bool> predicate)
     {
+        if (string.IsNullOrEmpty(value))
+        {
+            return false;
+        }
+
         foreach (var character in value)
         {
             if (predicate(character) is false)

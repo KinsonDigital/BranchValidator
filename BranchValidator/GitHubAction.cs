@@ -12,6 +12,7 @@ public sealed class GitHubAction : IGitHubAction<bool>
 {
     private readonly IGitHubConsoleService consoleService;
     private readonly IActionOutputService outputService;
+    private readonly IExpressionValidatorService expressionValidatorService;
     private readonly IExpressionExecutorService expressionExecutorService;
     private readonly ICSharpMethodService csharpMethodService;
     private readonly IParsingService parsingService;
@@ -28,13 +29,16 @@ public sealed class GitHubAction : IGitHubAction<bool>
     public GitHubAction(
         IGitHubConsoleService consoleService,
         IActionOutputService outputService,
+        IExpressionValidatorService expressionValidatorService,
         IExpressionExecutorService expressionExecutorService,
         ICSharpMethodService csharpMethodService,
         IParsingService parsingService,
         IBranchNameObservable branchNameObservable)
     {
+        // TODO: Check if any of these are null.  Write unti tests
         this.consoleService = consoleService;
         this.outputService = outputService;
+        this.expressionValidatorService = expressionValidatorService;
         this.expressionExecutorService = expressionExecutorService;
         this.csharpMethodService = csharpMethodService;
         this.parsingService = parsingService;
@@ -68,6 +72,16 @@ public sealed class GitHubAction : IGitHubAction<bool>
             if (string.IsNullOrEmpty(inputs.ValidationLogic))
             {
                 throw new InvalidActionInput("The 'validation-logic' action input cannot be null or empty.");
+            }
+
+            var validSyntaxResult = this.expressionValidatorService.Validate(inputs.ValidationLogic);
+
+            if (validSyntaxResult.isValid is false)
+            {
+                var exceptionMsg = $"Invalid Syntax:{Environment.NewLine}";
+                exceptionMsg += $"\t{validSyntaxResult.msg}";
+
+                throw new Exception(exceptionMsg);
             }
 
             (bool branchIsValid, string msg) logicResult = this.expressionExecutorService.Execute(inputs.ValidationLogic, inputs.BranchName);

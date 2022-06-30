@@ -44,12 +44,15 @@
 
   <ItemGroup>
     <None Remove="FunctionDefinitions\func-defs.json" />
-    <Compile Remove="RuntimeScripts\ExpressionFunctions.cs" />
-    <EmbeddedResource Include="RuntimeScripts\ExpressionFunctions.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="RuntimeScripts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="RuntimeScripts\ExpressionFunctions.cs" />
+    <EmbeddedResource Include="RuntimeScripts\ExpressionFunctions.cs" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

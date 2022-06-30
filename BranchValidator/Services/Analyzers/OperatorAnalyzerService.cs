@@ -27,7 +27,7 @@ public class OperatorAnalyzerService : IAnalyzerService
     /// <returns>
     ///     A result from analyzing the expression.
     ///     Tuple.valid = <c>true</c> means it is valid.
-    ///     Tuple.msg = a message about the pass or failure.
+    ///     Tuple.msg = A message about the pass or failure.
     /// </returns>
     /// <remarks>
     /// Things to consider:
@@ -111,6 +111,16 @@ public class OperatorAnalyzerService : IAnalyzerService
         return AnalyzeOperatorsBetweenFunctions(expression);
     }
 
+    /// <summary>
+    /// Analyzes the operators themselves between the functions in the given <paramref name="expression"/>.
+    /// </summary>
+    /// <param name="expression">The expression to analyze.</param>
+    /// <returns>
+    ///     A result from analyzing the expression.
+    ///     Tuple.valid = <c>true</c> means the operators are valid.
+    ///     Tuple.msg = A message about the pass or failure.
+    ///     // TODO: Go through each analyzer code doc and format it better.  Refer to NegativeNumberAnalyzer for reference.
+    /// </returns>
     private (bool valid, string msg) AnalyzeOperatorsBetweenFunctions(string expression)
     {
         var validResult = (true, "expression valid");

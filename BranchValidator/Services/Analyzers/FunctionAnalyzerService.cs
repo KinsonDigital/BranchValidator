@@ -54,8 +54,14 @@ public class FunctionAnalyzerService : IAnalyzerService
             var methodsWithParamsDataTypes
                 = this.csharpMethodService.GetMethodParamTypes(nameof(FunctionDefinitions), csharpMethodName).ToArray();
 
-            var noMethodsWithCorrectParamCount = methodsWithParamsDataTypes.All(m => m.Value.Length != expressionFuncArgDataTypes.Length);
-            if (noMethodsWithCorrectParamCount)
+            var methodWithMatchingParamCount = methodsWithParamsDataTypes.Any(m =>
+            {
+                var methodName = m.Key.GetUpToChar(':');
+                methodName = $"{methodName[0].ToLower()}{methodName[1..]}";
+
+                return methodName == expressionFuncName && m.Value.Length == expressionFuncArgDataTypes.Length;
+            });
+            if (methodWithMatchingParamCount is false)
             {
                 return (false, "The expression function is missing an argument.");
             }

@@ -29,14 +29,11 @@ public class ExpressionValidatorService : IExpressionValidatorService
     /// <summary>
     /// Initializes a new instance of the <see cref="ExpressionValidatorService"/> class.
     /// </summary>
-    /// <param name="analyzerFactory">Creates analyzers.</param>
-    /// <exception cref="ArgumentNullException">Thrown if the <paramref name="analyzerFactory"/> parameter is null.</exception>
+    /// <param name="analyzers">The analyzers to execute.</param>
+    /// <exception cref="ArgumentNullException">Thrown if the <paramref name="analyzers"/> parameter is null.</exception>
     [ExcludeFromCodeCoverage]
     public ExpressionValidatorService(ReadOnlyCollection<IAnalyzerService> analyzers)
         => this.analyzers = analyzers ?? throw new ArgumentNullException(nameof(analyzers), "The parameter must not be null.");
-    // public ExpressionValidatorService(IAnalyzerFactory analyzerFactory)
-    //     => this.analyzerFactory =
-    //         analyzerFactory ?? throw new ArgumentNullException(nameof(analyzerFactory), "The parameter must not be null.");
 
     /// <inheritdoc/>
     public (bool isValid, string msg) Validate(string expression)

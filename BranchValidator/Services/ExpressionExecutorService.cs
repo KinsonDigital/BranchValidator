@@ -2,6 +2,7 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
+using System.Text;
 using BranchValidator.Services.Interfaces;
 
 namespace BranchValidator.Services;
@@ -14,10 +15,9 @@ public class ExpressionExecutorService : IExpressionExecutorService
     private const string BranchInjectionPoint = "//<branch-name/>";
     private const string ExpressionInjectionPoint = "//<expression/>";
 
-    private readonly IExpressionValidatorService expressionValidatorService;
     private readonly ICSharpMethodService csharpMethodService;
     private readonly IEmbeddedResourceLoaderService<string> resourceLoaderService;
-    private readonly IScriptService<bool> scriptService;
+    private readonly IScriptService<(bool result, string[] funcResults)> scriptService;
 
     // TODO: Need to inject the IScriptService to execute the script once it has been analyzed
     // and the script created
@@ -27,13 +27,11 @@ public class ExpressionExecutorService : IExpressionExecutorService
     /// </summary>
     /// <param name="expressionValidatorService">Validates expressions.</param>
     public ExpressionExecutorService(
-        IExpressionValidatorService expressionValidatorService,
         ICSharpMethodService csharpMethodService,
         IEmbeddedResourceLoaderService<string> resourceLoaderService,
-        IScriptService<bool> scriptService)
+        IScriptService<(bool result, string[] funcResults)> scriptService)
     {
         // TODO: null check and unit test these ctor params
-        this.expressionValidatorService = expressionValidatorService;
         this.csharpMethodService = csharpMethodService;
         this.scriptService = scriptService;
         this.resourceLoaderService = resourceLoaderService;
@@ -54,13 +52,6 @@ public class ExpressionExecutorService : IExpressionExecutorService
 
         expression = expression.Trim();
 
-        var validationResult = this.expressionValidatorService.Validate(expression);
-
-        if (validationResult.isValid is false)
-        {
-            return validationResult;
-        }
-
         var script = this.resourceLoaderService.LoadResource(ExpressionFunctionsScript);
 
         // Inject the branch name
@@ -78,10 +69,20 @@ public class ExpressionExecutorService : IExpressionExecutorService
         expression = expression.Replace("'", "\"");
 
         // Inject the expression
-        script = script.Replace(ExpressionInjectionPoint, $"return {expression};");
+        script = script.Replace(ExpressionInjectionPoint, $"return ({expression}, {ExpressionFunctionsClassName}.GetFunctionResults());");
 
         var expressionResult = this.scriptService.Execute(script);
 
-        return (expressionResult, expressionResult ? "branch valid" : "branch invalid");
+        var msgResultBuilder = new StringBuilder();
+        msgResultBuilder.AppendLine("Function Results:");
+
+        foreach (var funcResult in expressionResult.funcResults)
+        {
+            msgResultBuilder.AppendLine($"\t{funcResult}");
+        }
+
+        var msgResult = msgResultBuilder.ToString().TrimEnd('\r', '\n');
+
+        return (expressionResult.result, msgResult);
     }
 }

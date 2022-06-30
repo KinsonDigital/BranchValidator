@@ -35,6 +35,7 @@ public class GitHubActionIntegrationTests : IDisposable
         var quoteAnalyzerService = new QuoteAnalyzerService();
         var operatorAnalyzerService = new OperatorAnalyzerService();
         var funAnalyzerService = new FunctionAnalyzerService(funMethodNameExtractorService, methodNamesService);
+        var negativeNumberAnalyzerService = new NegativeNumberAnalyzer();
 
         var analyzers = new IAnalyzerService[]
         {
@@ -42,6 +43,7 @@ public class GitHubActionIntegrationTests : IDisposable
             quoteAnalyzerService,
             operatorAnalyzerService,
             funAnalyzerService,
+            negativeNumberAnalyzerService,
         }.ToReadOnlyCollection();
 
         var expressionValidationService = new ExpressionValidatorService(analyzers);
@@ -49,9 +51,8 @@ public class GitHubActionIntegrationTests : IDisposable
         var resourceLoaderService = new TextResourceLoaderService();
         var csharpMethodService = new CSharpMethodService();
         var updateBranchNameObservable = new UpdateBranchNameObservable();
-        var scriptService = new ScriptService<bool>();
+        var scriptService = new ScriptService<(bool result, string[] funcResults)>();
         var expressionExecutorService = new ExpressionExecutorService(
-            expressionValidationService,
             methodNamesService,
             resourceLoaderService,
             scriptService);
@@ -60,6 +61,7 @@ public class GitHubActionIntegrationTests : IDisposable
         this.action = new GitHubAction(
             consoleService,
             outputService,
+            expressionValidationService,
             expressionExecutorService,
             csharpMethodService,
             parsingService,
@@ -111,30 +113,59 @@ public class GitHubActionIntegrationTests : IDisposable
     }
 
     [Theory]
-    // [InlineData("equalTo('not-equal-branch')", "equalTo", "test-branch")]
-    // [InlineData("isCharNum(4)", "isCharNum", "feature/123-test-branch")]
-    [InlineData("isCharNum(-8)", "isCharNum", "feature/123-test-branch")]
-    // [InlineData("isSectionNum(4, 8)", "isSectionNum", "feature/123-test-branch")]
-    // [InlineData("contains('not-contained')", "contains", "feature/123-test-branch")]
-    // [InlineData("notContains('123-test')", "notContains", "feature/123-test-branch")]
-    // [InlineData("existTotal('456-test', 1)", "existTotal", "feature/123-test-branch")]
-    // [InlineData("existsLessThan('123-test', 2)", "existsLessThan", "feature/123-test-123-test-branch")]
-    // [InlineData("existsGreaterThan('test', 2)", "existsGreaterThan", "feature/123-test-123-test-branch")]
-    // [InlineData("startsWith('123')", "startsWith", "feature/123-test-branch")]
-    // [InlineData("notStartsWith('feature/123')", "notStartsWith", "feature/123-test-branch")]
-    // [InlineData("endsWith('123')", "endsWith", "feature/123-test-branch")]
-    // [InlineData("notEndsWith('test-branch')", "notEndsWith", "feature/123-test-branch")]
-    // [InlineData("startsWithNum()", "startsWithNum", "feature/123-test-branch")]
-    // [InlineData("endsWithNum()", "endsWithNum", "feature/123-test-branch")]
-    // [InlineData("lenLessThan(10)", "lenLessThan", "feature/123-test-branch")]
-    // [InlineData("isBefore('branch', '123')", "isBefore", "feature/123-test-branch")]
-    // [InlineData("isAfter('feature', 'test')", "isAfter", "feature/123-test-branch")]
-    public async void Run_WithInvalidBranches_FailsActionWithException(
+    [InlineData("isCharNum(-8)", "Negative number argument values not aloud.")]
+    [InlineData("isCharNum8)", "The expression is missing a '('.")]
+    [InlineData("isCharNum(8", "The expression is missing a ')'.")]
+    [InlineData("isCharNum((8)", "The expression is missing a ')'.")]
+    [InlineData("isCharNum(8))", "The expression is missing a '('.")]
+    [InlineData("(8)", "The expression cannot start with a '(' or ')' parenthesis.")]
+    [InlineData("isCharNum()", "The expression function is missing an argument.")] // Missing a parameter
+    public async void Run_WithExpressionSyntaxErrors_ReturnsCorrectInvalidResult(
         string expression,
-        string funcName,
-        string branchName)
+        string expectedAnalyzerMsg)
     {
         // Arrange
+        var expectedMsg = $"Invalid Syntax:{Environment.NewLine}\t{expectedAnalyzerMsg}";
+        var actionInputs = new ActionInputs
+        {
+            BranchName = "test-branch",
+            ValidationLogic = expression,
+            FailWhenNotValid = true,
+        };
+
+        // Act & Assert
+        var act = () => this.action.Run(actionInputs, _ => { }, e => throw e);
+
+        // Assert
+        await act.Should().ThrowAsync<Exception>()
+            .WithMessage(expectedMsg);
+    }
+
+    [Theory]
+    [InlineData("equalTo('not-equal-branch')", "test-branch", "equalTo(string)")]
+    [InlineData("isCharNum(4)", "feature/123-test-branch", "isCharNum(number)")]
+    [InlineData("isSectionNum(4, 8)", "feature/123-test-branch", "isSectionNum(number, number)")]
+    [InlineData("contains('not-contained')", "feature/123-test-branch", "contains(string)")]
+    [InlineData("notContains('123-test')", "feature/123-test-branch", "notContains(string)")]
+    [InlineData("existTotal('456-test', 1)", "feature/123-test-branch", "existTotal(string, number)")]
+    [InlineData("existsLessThan('123-test', 2)", "feature/123-test-123-test-branch", "existsLessThan(string, number)")]
+    [InlineData("existsGreaterThan('test', 2)", "feature/123-test-123-test-branch", "existsGreaterThan(string, number)")]
+    [InlineData("startsWith('123')", "feature/123-test-branch", "startsWith(string)")]
+    [InlineData("notStartsWith('feature/123')", "feature/123-test-branch", "notStartsWith(string)")]
+    [InlineData("endsWith('123')", "feature/123-test-branch", "endsWith(string)")]
+    [InlineData("notEndsWith('test-branch')", "feature/123-test-branch", "notEndsWith(string)")]
+    [InlineData("startsWithNum()", "feature/123-test-branch", "startsWithNum()")]
+    [InlineData("endsWithNum()", "feature/123-test-branch", "endsWithNum()")]
+    [InlineData("lenLessThan(10)", "feature/123-test-branch", "lenLessThan(number)")]
+    [InlineData("isBefore('branch', '123')", "feature/123-test-branch", "isBefore(string, string)")]
+    [InlineData("isAfter('feature', 'test')", "feature/123-test-branch", "isAfter(string, string)")]
+    public async void Run_WithInvalidBranches_FailsActionWithException(
+        string expression,
+        string branchName,
+        string funcSignature)
+    {
+        // Arrange
+        var expectedMsg = $"Function Results:{Environment.NewLine}\t{funcSignature} -> False";
         var actionInputs = new ActionInputs
         {
             BranchName = branchName,
@@ -147,7 +178,7 @@ public class GitHubActionIntegrationTests : IDisposable
 
         // Assert
         await act.Should().ThrowAsync<Exception>()
-            .WithMessage("branch invalid");
+            .WithMessage(expectedMsg);
     }
 
     [Theory]

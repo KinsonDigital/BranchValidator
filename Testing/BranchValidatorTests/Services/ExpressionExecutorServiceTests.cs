@@ -11,20 +11,18 @@ namespace BranchValidatorTests.Services;
 
 public class ExpressionExecutorServiceTests
 {
-    private readonly Mock<IExpressionValidatorService> mockValidationService;
     private readonly Mock<IEmbeddedResourceLoaderService<string>> mockResourceLoader;
-    private readonly Mock<IScriptService<bool>> mockScriptService;
+    private readonly Mock<IScriptService<(bool result, string[] funcResults)>> mockScriptService;
     private readonly Mock<ICSharpMethodService> mockMethodService;
 
     public ExpressionExecutorServiceTests()
     {
-        this.mockValidationService = new Mock<IExpressionValidatorService>();
-        this.mockValidationService.Setup(m => m.Validate(It.IsAny<string>()))
-            .Returns((true, "expression valid"));
-
         this.mockMethodService = new Mock<ICSharpMethodService>();
-        this.mockScriptService = new Mock<IScriptService<bool>>();
+        this.mockScriptService = new Mock<IScriptService<(bool result, string[] funcResults)>>();
+
         this.mockResourceLoader = new Mock<IEmbeddedResourceLoaderService<string>>();
+        this.mockResourceLoader.Setup(m => m.LoadResource("ExpressionFunctions.cs"))
+            .Returns(string.Empty);
     }
 
     #region Method Tests
@@ -32,17 +30,21 @@ public class ExpressionExecutorServiceTests
     public void Execute_WithInvalidExpression_ReturnsCorrectResult()
     {
         // Arrange
-        this.mockValidationService.Setup(m => m.Validate("test-expression"))
-            .Returns((false, "expression invalid"));
+        const string funcName = "funA";
+        const string expression = $"{funcName}()";
+        var expectedMsg = $"Function Results:{Environment.NewLine}\t{funcName}() -> true";
+
+        this.mockScriptService.Setup(m => m.Execute(It.IsAny<string>()))
+            .Returns((false, new[] { $"{expression} -> true" }));
 
         var service = CreateService();
 
         // Act
-        var actual = service.Execute("test-expression", "test-branch");
+        var actual = service.Execute("funA()", "test-branch");
 
         // Assert
         actual.valid.Should().BeFalse();
-        actual.msg.Should().Be("expression invalid");
+        actual.msg.Should().Be(expectedMsg);
     }
 
     [Theory]
@@ -83,8 +85,7 @@ public class ExpressionExecutorServiceTests
     /// </summary>
     /// <returns>The instance to test.</returns>
     private ExpressionExecutorService CreateService()
-        => new (this.mockValidationService.Object,
-        this.mockMethodService.Object,
+        => new (this.mockMethodService.Object,
         this.mockResourceLoader.Object,
         this.mockScriptService.Object);
 }

@@ -52,6 +52,7 @@ public class CSharpMethodService : ICSharpMethodService
             var method = possibleMethods[i];
             var parameters = method.GetParameters();
 
+            // The ':i + 1' section of the key is there to keep the dictionary keys unique for overloaded methods/expression functions
             result.Add($"{method.Name}:{i + 1}", parameters.Select(parameter => parameter.ParameterType).ToArray());
         }
 

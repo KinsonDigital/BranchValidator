@@ -38,6 +38,7 @@ public class FunctionDefinitionsTests
     }
 
     [Theory]
+    [InlineData(8, null, false)]
     [InlineData(8, "", false)]
     [InlineData(4, "feature/123-my-branch", false)]
     [InlineData(400, "feature/123-my-branch", false)]
@@ -83,7 +84,9 @@ public class FunctionDefinitionsTests
 
     [Theory]
     [InlineData(null, 0, "-", false)]
+    [InlineData(null, 1000, "-", false)]
     [InlineData("", 0, "-", false)]
+    [InlineData("", 2000, "-", false)]
     [InlineData("feature/123-test-branch", 8, null, false)]
     [InlineData("feature/123-test-branch", 8, "", false)]
     [InlineData("feature/123testbranch", 8, "-", false)]
@@ -110,8 +113,10 @@ public class FunctionDefinitionsTests
     }
 
     [Theory]
-    [InlineData("feature/123-test-branch", "123-test", true)]
+    [InlineData(null, "123-test", false)]
+    [InlineData("", "123-test", false)]
     [InlineData("feature/123-test-branch", "is-not-contained", false)]
+    [InlineData("feature/123-test-branch", "123-test", true)]
     public void Contains_WhenInvoked_ReturnsCorrectResult(
         string branchName,
         string value,
@@ -128,6 +133,8 @@ public class FunctionDefinitionsTests
     }
 
     [Theory]
+    [InlineData(null, "123-test", false)]
+    [InlineData("", "123-test", false)]
     [InlineData("feature/123-test-branch", "123-test", false)]
     [InlineData("feature/123-test-branch", "is-not-contained", true)]
     public void NotContains_WhenInvoked_ReturnsCorrectResult(
@@ -146,6 +153,8 @@ public class FunctionDefinitionsTests
     }
 
     [Theory]
+    [InlineData(null, "test", 1, false)]
+    [InlineData("", "test", 1, false)]
     [InlineData("feature/123-branch", "test", 1, false)]
     [InlineData("feature/123-branch", "a", 2, true)]
     [InlineData("feature/123-test-branch-test", "test", 4, false)]
@@ -168,6 +177,8 @@ public class FunctionDefinitionsTests
     }
 
     [Theory]
+    [InlineData(null, "test", 1, false)]
+    [InlineData("", "test", 1, false)]
     [InlineData("feature/123-test-branch", "123", 2, true)]
     [InlineData("feature/123-branch", "test", 200, true)]
     [InlineData("feature/123-test-branch", "123", 1, false)]
@@ -188,6 +199,8 @@ public class FunctionDefinitionsTests
     }
 
     [Theory]
+    [InlineData(null, "test", 1, false)]
+    [InlineData("", "test", 1, false)]
     [InlineData("feature/123-test-123-branch-123", "123", 2, true)]
     [InlineData("feature/123-test-branch", "123", 1, false)]
     public void ExistsGreaterThan_WhenInvoked_ReturnsCorrectResult(
@@ -207,6 +220,8 @@ public class FunctionDefinitionsTests
     }
 
     [Theory]
+    [InlineData(null, "test", false)]
+    [InlineData("", "test", false)]
     [InlineData("feature/123-test-123-branch-123", "feature/123", true)]
     [InlineData("feature/123-test-branch", "123", false)]
     public void StartsWith_WhenInvoked_ReturnsCorrectResult(
@@ -225,6 +240,8 @@ public class FunctionDefinitionsTests
     }
 
     [Theory]
+    [InlineData(null, "test", false)]
+    [InlineData("", "test", false)]
     [InlineData("feature/123-test-branch", "123", true)]
     [InlineData("feature/123-test-123-branch-123", "feature/123", false)]
     public void NotStartsWith_WhenInvoked_ReturnsCorrectResult(
@@ -243,6 +260,8 @@ public class FunctionDefinitionsTests
     }
 
     [Theory]
+    [InlineData(null, "test", false)]
+    [InlineData("", "test", false)]
     [InlineData("feature/123-test-branch", "branch", true)]
     [InlineData("feature/123-test-branch", "123", false)]
     public void EndsWith_WhenInvoked_ReturnsCorrectResult(
@@ -261,6 +280,8 @@ public class FunctionDefinitionsTests
     }
 
     [Theory]
+    [InlineData(null, "test", false)]
+    [InlineData("", "test", false)]
     [InlineData("feature/123-test-branch", "123", true)]
     [InlineData("feature/123-test-branch", "branch", false)]
     public void NotEndsWith_WhenInvoked_ReturnsCorrectResult(
@@ -279,10 +300,10 @@ public class FunctionDefinitionsTests
     }
 
     [Theory]
-    [InlineData("123-test-branch", true)]
     [InlineData(null, false)]
     [InlineData("", false)]
     [InlineData("feature/123-test-branch", false)]
+    [InlineData("123-test-branch", true)]
     public void StartsWithNum_WhenInvoked_ReturnsCorrectResult(
         string branchName,
         bool expected)
@@ -298,10 +319,10 @@ public class FunctionDefinitionsTests
     }
 
     [Theory]
-    [InlineData("feature/123-test-branch-456", true)]
     [InlineData(null, false)]
     [InlineData("", false)]
     [InlineData("feature/123-test-branch", false)]
+    [InlineData("feature/123-test-branch-456", true)]
     public void EndsWithNum_WhenInvoked_ReturnsCorrectResult(
         string branchName,
         bool expected)
@@ -317,11 +338,11 @@ public class FunctionDefinitionsTests
     }
 
     [Theory]
-    [InlineData("feature/123-test-branch", 200, true)]
     [InlineData(null, 0, false)]
     [InlineData("", 0, false)]
     [InlineData("feature/123-test-branch", 10, false)]
     [InlineData("feature/123-test-branch", 23, false)]
+    [InlineData("feature/123-test-branch", 200, true)]
     public void LenLessThan_WhenInvoked_ReturnsCorrectResult(
         string branchName,
         uint value,
@@ -338,10 +359,10 @@ public class FunctionDefinitionsTests
     }
 
     [Theory]
-    [InlineData("feature/123-test-branch", 10, true)]
     [InlineData(null, 0, false)]
     [InlineData("", 0, false)]
     [InlineData("feature/123-test-branch", 100, false)]
+    [InlineData("feature/123-test-branch", 10, true)]
     public void LenGreaterThan_WhenInvoked_ReturnsCorrectResult(
         string branchName,
         uint value,
@@ -358,10 +379,10 @@ public class FunctionDefinitionsTests
     }
 
     [Theory]
-    [InlineData("feature/123-test-branch", "123", "branch", true)]
     [InlineData(null, "123", "branch", false)]
     [InlineData("", "123", "branch", false)]
     [InlineData("feature/123-test-branch", "branch", "123", false)]
+    [InlineData("feature/123-test-branch", "123", "branch", true)]
     public void IsBefore_WhenInvoked_ReturnsCorrectResult(
         string branchName,
         string value,
@@ -379,10 +400,10 @@ public class FunctionDefinitionsTests
     }
 
     [Theory]
-    [InlineData("feature/123-test-branch", "branch", "123", true)]
     [InlineData(null, "123", "branch", false)]
     [InlineData("", "123", "branch", false)]
     [InlineData("feature/123-test-branch", "123", "branch", false)]
+    [InlineData("feature/123-test-branch", "branch", "123", true)]
     public void IsAfter_WhenInvoked_ReturnsCorrectResult(
         string branchName,
         string value,

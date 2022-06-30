@@ -18,6 +18,7 @@ public class GitHubActionTests
 {
     private readonly Mock<IGitHubConsoleService> mockConsoleService;
     private readonly Mock<IActionOutputService> mockActionOutputService;
+    private readonly Mock<IExpressionValidatorService> mockValidationService;
     private readonly Mock<IExpressionExecutorService> mockExpressionExecutorService;
     private readonly Mock<ICSharpMethodService> mockCSharpMethodService;
     private readonly Mock<IBranchNameObservable> mockBranchNameObservable;
@@ -30,6 +31,11 @@ public class GitHubActionTests
     {
         this.mockConsoleService = new Mock<IGitHubConsoleService>();
         this.mockActionOutputService = new Mock<IActionOutputService>();
+
+        this.mockValidationService = new Mock<IExpressionValidatorService>();
+        this.mockValidationService.Setup(m => m.Validate(It.IsAny<string>()))
+            .Returns((true, string.Empty));
+
         this.mockExpressionExecutorService = new Mock<IExpressionExecutorService>();
         this.mockCSharpMethodService = new Mock<ICSharpMethodService>();
         this.mockBranchNameObservable = new Mock<IBranchNameObservable>();
@@ -111,15 +117,20 @@ public class GitHubActionTests
     [Theory]
     [InlineData("valid-branch", "The branch 'valid-branch' is valid.", true)]
     [InlineData("invalid-branch", "The branch 'invalid-branch' is invalid.", false)]
-    public async void Run_WithValidBranch_CorrectlySetsOutput(
+    public async void Run_WithValidOrInvalidBranch_CorrectlySetsOutput(
         string branchName,
         string expectedMsgResult,
         bool expectedValidResult)
     {
         // Arrange
-        var inputs = CreateInputs(validationLogic: $"funA('{branchName}')", branchName: branchName, failWhenNotValid: false);
+        var validationLogic = $"funA('{branchName}')";
+        var inputs = CreateInputs(validationLogic: validationLogic, branchName: branchName, failWhenNotValid: false);
+
+        this.mockValidationService.Setup(m => m.Validate(validationLogic))
+            .Returns((true, string.Empty));
         this.mockExpressionExecutorService.Setup(m => m.Execute(inputs.ValidationLogic, inputs.BranchName))
             .Returns((expectedValidResult, expectedMsgResult));
+
         var action = CreateAction();
 
         // Act
@@ -134,7 +145,7 @@ public class GitHubActionTests
     }
 
     [Fact]
-    public async void Run_WhenFailingActionForInvalidBranchesWithInvalidBranch_FailsActionWithException()
+    public async void Run_WithFailWhenNotValidSettingSetToTrue_FailsActionWithException()
     {
         // Arrange
         var inputs = CreateInputs();
@@ -151,7 +162,7 @@ public class GitHubActionTests
     }
 
     [Fact]
-    public async void Run_WhenNotFailingActionForInvalidBranches_DoesNotFailAction()
+    public async void Run_WithFailWhenNotValidSettingSetToFalse_DoesNotFailAction()
     {
         // Arrange
         var inputs = CreateInputs(failWhenNotValid: false);
@@ -233,6 +244,7 @@ public class GitHubActionTests
     private GitHubAction CreateAction()
         => new (this.mockConsoleService.Object,
             this.mockActionOutputService.Object,
+            this.mockValidationService.Object,
             this.mockExpressionExecutorService.Object,
             this.mockCSharpMethodService.Object,
             this.mockParsingService.Object,

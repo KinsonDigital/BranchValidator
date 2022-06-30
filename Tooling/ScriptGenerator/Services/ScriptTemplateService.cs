@@ -39,11 +39,13 @@ public class ScriptTemplateService : IScriptTemplateService
         script.AppendLine();
         script.AppendLine("using System;");
         script.AppendLine("using System.Text.RegularExpressions;");
+        script.AppendLine("using System.Collections.Generic;");
         script.AppendLine();
         script.AppendLine("public static class ExpressionFunctions");
         script.AppendLine("{");
             script.AppendLine("\tprivate const string BranchName = \"//<branch-name/>\";");
             script.AppendLine("\tprivate static readonly char[] Numbers = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', };");
+            script.AppendLine("\tprivate static readonly List<string> FunctionResults = new ();");
             script.AppendLine();
             script.AppendLine(FunctionCode);
             script.AppendLine("}");

@@ -45,7 +45,7 @@ public static class Program
         host = Host.CreateDefaultBuilder(args)
             .ConfigureServices((_, services) =>
             {
-                services.AddSingleton<IScriptService<bool>, ScriptService<bool>>();
+                services.AddSingleton<IScriptService<(bool result, string[] funcResults)>, ScriptService<(bool result, string[] funcResults)>>();
                 services.AddSingleton<IBranchNameObservable, UpdateBranchNameObservable>();
                 services.AddSingleton<IEmbeddedResourceLoaderService<string>, TextResourceLoaderService>();
                 services.AddSingleton<IAppService, AppService>();
@@ -67,6 +67,7 @@ public static class Program
                         new QuoteAnalyzerService(),
                         new OperatorAnalyzerService(),
                         new FunctionAnalyzerService(funNameExtractorService, methodNamesService),
+                        new NegativeNumberAnalyzer(),
                     };
 
                     return result.ToReadOnlyCollection();
