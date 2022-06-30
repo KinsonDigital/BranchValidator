@@ -27,6 +27,38 @@ public class FunctionAnalyzerServiceTests
         this.mockCSharpMethodService = new Mock<ICSharpMethodService>();
     }
 
+    #region Constructor Tests
+    [Fact]
+    public void Ctor_WithNullFunctionExtractorServiceParam_ThrowsException()
+    {
+        // Arrange & Act
+        var act = () =>
+        {
+            _ = new FunctionAnalyzerService(null, this.mockCSharpMethodService.Object);
+        };
+
+        // Assert
+        act.Should()
+            .Throw<ArgumentNullException>()
+            .WithMessage("The constructor parameter must not be null. (Parameter 'functionExtractorService')");
+    }
+
+    [Fact]
+    public void Ctor_WithNullCSharpMethodServiceParam_ThrowsException()
+    {
+        // Arrange & Act
+        var act = () =>
+        {
+            _ = new FunctionAnalyzerService(this.mockFunctionExtractorService.Object, null);
+        };
+
+        // Assert
+        act.Should()
+            .Throw<ArgumentNullException>()
+            .WithMessage("The constructor parameter must not be null. (Parameter 'csharpMethodService')");
+    }
+    #endregion
+
     #region Method Tests
     [Fact]
     public void Analyze_WhenInvoked_ReturnsCorrectResult()

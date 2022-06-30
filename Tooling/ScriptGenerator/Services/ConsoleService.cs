@@ -6,6 +6,8 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace ScriptGenerator.Services;
 
+// TODO: Find everything that is shared between more than 1 project and create a core library project for it
+
 /// <inheritdoc/>
 [ExcludeFromCodeCoverage]
 public class ConsoleService : IConsoleService

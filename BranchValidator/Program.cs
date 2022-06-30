@@ -2,6 +2,8 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
+// TODO: Replace all null checks in projects with Guard pattern
+
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using BranchValidator.Observables;

@@ -1,35 +1,33 @@
-﻿using BranchValidator.Services.Interfaces;
+﻿// <copyright file="FunctionAnalyzerService.cs" company="KinsonDigital">
+// Copyright (c) KinsonDigital. All rights reserved.
+// </copyright>
+
+using BranchValidator.Services.Interfaces;
 
 namespace BranchValidator.Services.Analyzers;
 
+/// <inheritdoc/>
 public class FunctionAnalyzerService : IAnalyzerService
 {
     private const char LeftParen = '(';
-    private const char RightParen = ')';
     private readonly ICSharpMethodService csharpMethodService;
-    private readonly IFunctionExtractorService functionExtractService;
+    private readonly IFunctionExtractorService functionExtractorService;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="FunctionAnalyzerService"/> class.
     /// </summary>
-    /// <param name="functionExtractService"></param>
-    /// <param name="csharpMethodService"></param>
+    /// <param name="functionExtractorService">Extracts functions from expressions.</param>
+    /// <param name="csharpMethodService">Provides data about <c>C#</c> methods.</param>
     public FunctionAnalyzerService(
-        IFunctionExtractorService functionExtractService,
+        IFunctionExtractorService functionExtractorService,
         ICSharpMethodService csharpMethodService)
     {
-        // TODO: Unit test ctor params for null
-        this.functionExtractService = functionExtractService;
-        this.csharpMethodService = csharpMethodService;
+        // TODO: Add guard here
+        this.functionExtractorService = functionExtractorService ?? throw new ArgumentNullException(nameof(functionExtractorService), "The constructor parameter must not be null.");
+        this.csharpMethodService = csharpMethodService ?? throw new ArgumentNullException(nameof(csharpMethodService), "The constructor parameter must not be null.");
     }
 
-
-    /* TODO: Need to analyze the parameters.
-        1. This means getting method arg information to verify it matches.
-        2. This also means verifying data type.
-        3. This means that we check if no parameter exists as well.
-    */
-
+    /// <inheritdoc/>
     public (bool valid, string msg) Analyze(string expression)
     {
         var allFunctionsExistResult = AllFunctionsExist(expression);
@@ -39,14 +37,14 @@ public class FunctionAnalyzerService : IAnalyzerService
             return allFunctionsExistResult;
         }
 
-        var functionSignatures = this.functionExtractService.ExtractFunctions(expression);
+        var functionSignatures = this.functionExtractorService.ExtractFunctions(expression);
 
         foreach (var functionSignature in functionSignatures)
         {
             var expressionFuncName = functionSignature.GetUpToChar(LeftParen);
             var csharpMethodName = $"{expressionFuncName[0].ToUpper()}{expressionFuncName[1..]}";
             var expressionFuncArgDataTypes
-                = this.functionExtractService.ExtractArgDataTypes(functionSignature).ToArray();
+                = this.functionExtractorService.ExtractArgDataTypes(functionSignature).ToArray();
 
             // This dictionary can hold more then one method with some param data types.
             // This is due to the possibility of the CSharp method being overloaded which
@@ -81,7 +79,7 @@ public class FunctionAnalyzerService : IAnalyzerService
                 }
 
                 return (false,
-                    $"The value at argument position '{ i + 1}' for the expression function '{expressionFuncName}' has an incorrect data type.");
+                    $"The value at argument position '{i + 1}' for the expression function '{expressionFuncName}' has an incorrect data type.");
             }
         }
 
@@ -110,7 +108,7 @@ public class FunctionAnalyzerService : IAnalyzerService
             return result;
         }).ToArray();
 
-        var expressionFunNames = this.functionExtractService.ExtractNames(expression);
+        var expressionFunNames = this.functionExtractorService.ExtractNames(expression);
 
         var nonExistingFunctions = expressionFunNames.Where(f => methodNames.DoesNotContain(f)).ToArray();
 
