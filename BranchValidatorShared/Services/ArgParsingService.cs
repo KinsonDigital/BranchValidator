@@ -20,6 +20,11 @@ public sealed class ArgParsingService<T> : IArgParsingService<T>
         Func<T, Task> onSuccess,
         Action<string[]> onFailure)
     {
+        if (this.isDisposed)
+        {
+            throw new InvalidOperationException($"The '{nameof(ArgParsingService<T>)}' has already been disposed of.");
+        }
+
         var parser = Parser.Default.ParseArguments(() => inputs, args);
 
         parser.WithNotParsed(errors =>
