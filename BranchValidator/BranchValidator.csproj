@@ -55,8 +55,8 @@
     <Compile Remove="RuntimeScripts\ExpressionFunctions.cs" />
     <EmbeddedResource Include="RuntimeScripts\ExpressionFunctions.cs" />
   </ItemGroup>
-
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    
+  <Target Name="PostBuild" Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'" AfterTargets="PostBuildEvent">
     <Exec Command="cd $(SolutionDir)Scripts &amp;&amp; dotnet-script RunScriptGenerator.csx &quot;$(SolutionDir)Tooling\ScriptGenerator\$(OutDir)ScriptGenerator.exe&quot;" />
   </Target>
 
