@@ -15,9 +15,9 @@ public class GitHubConsoleService : ConsoleService
     public override void StartGroup(string name)
     {
 #if DEBUG
-        Console.WriteLine($"::group::{(string.IsNullOrEmpty(name) ? "Group" : name)}");
-#else
         base.StartGroup(name);
+#else
+        Console.WriteLine($"::group::{(string.IsNullOrEmpty(name) ? "Group" : name)}");
 #endif
     }
 
