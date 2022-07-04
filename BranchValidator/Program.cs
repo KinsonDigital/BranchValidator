@@ -103,6 +103,8 @@ public static class Program
                         host.Dispose();
                         Default.Dispose();
                         gitHubAction.Dispose();
+
+                        consoleService.WriteError("TEST ERROR HAS OCCURRED");
                         appService.ExitWithException(e);
                     });
             }, errors =>

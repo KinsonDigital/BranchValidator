@@ -75,6 +75,7 @@ public sealed class GitHubAction : IGitHubAction<bool>
         var functionSignatures = methodSignatures.Select(s => this.parsingService.ToExpressionFunctionSignature(s)).ToArray();
 
         this.consoleService.WriteGroup("Available Functions", functionSignatures);
+        this.consoleService.BlankLine();
 
         try
         {

@@ -204,7 +204,7 @@ public class GitHubActionTests
 
         // Assert
         this.mockConsoleService.VerifyOnce(m => m.WriteLine("Welcome To The BranchValidator GitHub Action!!"));
-        this.mockConsoleService.Verify(m => m.BlankLine(), Times.Exactly(2));
+        this.mockConsoleService.Verify(m => m.BlankLine(), Times.Exactly(3));
     }
 
     [Fact]
@@ -287,7 +287,7 @@ public class GitHubActionTests
         await action.Run(inputs, _ => { }, _ => { });
 
         // Assert
-        this.mockConsoleService.Verify(m => m.BlankLine(), Times.Exactly(4));
+        this.mockConsoleService.Verify(m => m.BlankLine(), Times.Exactly(5));
         this.mockConsoleService.VerifyOnce(m => m.WriteLine(expectedMsgResult));
         this.mockActionOutputService.VerifyOnce(m => m.SetOutputValue("valid-branch", expectedValidResult.ToString().ToLower()));
         this.mockBranchNameObservable.VerifyOnce(m => m.PushNotification(branchName));
