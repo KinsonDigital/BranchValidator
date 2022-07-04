@@ -24,6 +24,7 @@ public class AppService : IAppService
 #if DEBUG // Kept here to pause console for debugging purposes
         this.consoleService.PauseConsole();
 #endif
+        this.consoleService.WriteLine($"Exit Code: {code}");
         Environment.Exit(code);
     }
 
