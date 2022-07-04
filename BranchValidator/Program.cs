@@ -39,6 +39,7 @@ public static class Program
                 services.AddSingleton<IConsoleService, GitHubConsoleService>();
                 services.AddSingleton<IActionOutputService, ActionOutputService>();
                 services.AddSingleton<ICSharpMethodService, CSharpMethodService>();
+                services.AddSingleton<IParsingService, ParsingService>();
                 services.AddSingleton<IArgParsingService<ActionInputs>, ArgParsingService<ActionInputs>>();
                 services.AddSingleton<IFunctionExtractorService, FunctionExtractorService>();
                 services.AddSingleton<IExpressionValidatorService, ExpressionValidatorService>();
@@ -72,9 +73,7 @@ public static class Program
         }
         catch (Exception e)
         {
-#if DEBUG
             appService.ExitWithException(e);
-#endif
         }
 
         var argParsingService = host.Services.GetRequiredService<IArgParsingService<ActionInputs>>();
