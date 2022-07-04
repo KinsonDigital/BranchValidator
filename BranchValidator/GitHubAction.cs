@@ -102,6 +102,8 @@ public sealed class GitHubAction : IGitHubAction<bool>
 
             this.consoleService.WriteLine("Expression validation complete.");
 
+            this.consoleService.BlankLine();
+
             this.consoleService.WriteLine("Executing expression . . .");
 
             (bool branchIsValid, string msg) logicResult = this.expressionExecutorService.Execute(inputs.ValidationLogic, inputs.BranchName);
