@@ -97,7 +97,10 @@ public sealed class GitHubAction : IGitHubAction<bool>
                 var exceptionMsg = $"Invalid Syntax:{Environment.NewLine}";
                 exceptionMsg += $"\t{validSyntaxResult.msg}";
 
-                throw new Exception(exceptionMsg);
+                throw new Exception(exceptionMsg)
+                {
+                    HResult = 500,
+                };
             }
 
             this.consoleService.WriteLine("Expression validation complete.");
@@ -113,7 +116,10 @@ public sealed class GitHubAction : IGitHubAction<bool>
 
             if (inputs.FailWhenNotValid is true && logicResult.branchIsValid is false)
             {
-                throw new Exception(logicResult.msg);
+                throw new Exception(logicResult.msg)
+                {
+                    HResult = 600,
+                };
             }
 
             this.consoleService.BlankLine();

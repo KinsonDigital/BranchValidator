@@ -104,6 +104,7 @@ public static class Program
                         Default.Dispose();
                         gitHubAction.Dispose();
 
+                        e.HResult = 400;
                         appService.ExitWithException(e);
                     });
             }, errors =>
