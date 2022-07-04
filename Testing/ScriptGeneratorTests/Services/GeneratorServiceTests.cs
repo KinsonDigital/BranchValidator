@@ -4,9 +4,12 @@
 
 using System.IO.Abstractions;
 using System.Text;
+using BranchValidatorShared.Services;
 using FluentAssertions;
 using Moq;
 using ScriptGenerator.Services;
+using ScriptGenerator.Services.Interfaces;
+using TestingShared;
 
 namespace ScriptGeneratorTests.Services;
 
@@ -19,11 +22,9 @@ public class GeneratorServiceTests
     private readonly Mock<IFile> mockFile;
     private readonly Mock<IPath> mockPath;
     private readonly Mock<IConsoleService> mockConsoleService;
-    private readonly Mock<IFunctionExtractorService> mockFunctionExtractorService;
+    private readonly Mock<IMethodExtractorService> mockMethodExtractorService;
     private readonly Mock<IRelativePathResolverService> mockRelativePathResolverService;
     private readonly Mock<IScriptTemplateService> mockScriptTemplateService;
-    private readonly Mock<IStringMutation> mockMutationA;
-    private readonly Mock<IStringMutation> mockMutationB;
     private readonly IStringMutation[] mockMutations;
 
     /// <summary>
@@ -41,24 +42,24 @@ public class GeneratorServiceTests
 
         this.mockConsoleService = new Mock<IConsoleService>();
 
-        this.mockFunctionExtractorService = new Mock<IFunctionExtractorService>();
+        this.mockMethodExtractorService = new Mock<IMethodExtractorService>();
         this.mockRelativePathResolverService = new Mock<IRelativePathResolverService>();
 
         this.mockScriptTemplateService = new Mock<IScriptTemplateService>();
         this.mockScriptTemplateService.Setup(m => m.CreateTemplate()).Returns(string.Empty);
 
-        this.mockMutationA = new Mock<IStringMutation>();
-        this.mockMutationA.Setup(m => m.Mutate(It.IsAny<string>()))
+        var mockMutationA = new Mock<IStringMutation>();
+        mockMutationA.Setup(m => m.Mutate(It.IsAny<string>()))
             .Returns<string>(value => value);
 
-        this.mockMutationB = new Mock<IStringMutation>();
-        this.mockMutationB.Setup(m => m.Mutate(It.IsAny<string>()))
+        var mockMutationB = new Mock<IStringMutation>();
+        mockMutationB.Setup(m => m.Mutate(It.IsAny<string>()))
             .Returns<string>(value => value);
 
         this.mockMutations = new[]
         {
-            this.mockMutationA.Object,
-            this.mockMutationB.Object,
+            mockMutationA.Object,
+            mockMutationB.Object,
         };
     }
 
@@ -74,7 +75,7 @@ public class GeneratorServiceTests
                 this.mockFile.Object,
                 this.mockPath.Object,
                 this.mockConsoleService.Object,
-                this.mockFunctionExtractorService.Object,
+                this.mockMethodExtractorService.Object,
                 this.mockRelativePathResolverService.Object,
                 this.mockScriptTemplateService.Object,
                 this.mockMutations);
@@ -97,7 +98,7 @@ public class GeneratorServiceTests
                 null,
                 this.mockPath.Object,
                 this.mockConsoleService.Object,
-                this.mockFunctionExtractorService.Object,
+                this.mockMethodExtractorService.Object,
                 this.mockRelativePathResolverService.Object,
                 this.mockScriptTemplateService.Object,
                 this.mockMutations);
@@ -120,7 +121,7 @@ public class GeneratorServiceTests
                 this.mockFile.Object,
                 null,
                 this.mockConsoleService.Object,
-                this.mockFunctionExtractorService.Object,
+                this.mockMethodExtractorService.Object,
                 this.mockRelativePathResolverService.Object,
                 this.mockScriptTemplateService.Object,
                 this.mockMutations);
@@ -133,7 +134,30 @@ public class GeneratorServiceTests
     }
 
     [Fact]
-    public void Ctor_WithNullFuncExtractorServiceParam_ThrowsException()
+    public void Ctor_WithConsoleServiceParam_ThrowsException()
+    {
+        // Arrange & Act
+        var act = () =>
+        {
+            _ = new GeneratorService(
+                this.mockDir.Object,
+                this.mockFile.Object,
+                this.mockPath.Object,
+                null,
+                this.mockMethodExtractorService.Object,
+                this.mockRelativePathResolverService.Object,
+                this.mockScriptTemplateService.Object,
+                this.mockMutations);
+        };
+
+        // Assert
+        act.Should()
+            .Throw<ArgumentNullException>()
+            .WithMessage("The parameter must not be null. (Parameter 'consoleService')");
+    }
+
+    [Fact]
+    public void Ctor_WithNullMethodExtractorServiceParam_ThrowsException()
     {
         // Arrange & Act
         var act = () =>
@@ -152,7 +176,7 @@ public class GeneratorServiceTests
         // Assert
         act.Should()
             .Throw<ArgumentNullException>()
-            .WithMessage("The parameter must not be null. (Parameter 'funcExtractorService')");
+            .WithMessage("The parameter must not be null. (Parameter 'methodExtractorService')");
     }
 
     [Fact]
@@ -166,7 +190,7 @@ public class GeneratorServiceTests
                 this.mockFile.Object,
                 this.mockPath.Object,
                 this.mockConsoleService.Object,
-                this.mockFunctionExtractorService.Object,
+                this.mockMethodExtractorService.Object,
                 null,
                 this.mockScriptTemplateService.Object,
                 this.mockMutations);
@@ -176,6 +200,52 @@ public class GeneratorServiceTests
         act.Should()
             .Throw<ArgumentNullException>()
             .WithMessage("The parameter must not be null. (Parameter 'pathResolver')");
+    }
+
+    [Fact]
+    public void Ctor_WithNullScriptTemplateServiceParam_ThrowsException()
+    {
+        // Arrange & Act
+        var act = () =>
+        {
+            _ = new GeneratorService(
+                this.mockDir.Object,
+                this.mockFile.Object,
+                this.mockPath.Object,
+                this.mockConsoleService.Object,
+                this.mockMethodExtractorService.Object,
+                this.mockRelativePathResolverService.Object,
+                null,
+                this.mockMutations);
+        };
+
+        // Assert
+        act.Should()
+            .Throw<ArgumentNullException>()
+            .WithMessage("The parameter must not be null. (Parameter 'scriptTemplateService')");
+    }
+
+    [Fact]
+    public void Ctor_WithNullScriptMutationsParam_ThrowsException()
+    {
+        // Arrange & Act
+        var act = () =>
+        {
+            _ = new GeneratorService(
+                this.mockDir.Object,
+                this.mockFile.Object,
+                this.mockPath.Object,
+                this.mockConsoleService.Object,
+                this.mockMethodExtractorService.Object,
+                this.mockRelativePathResolverService.Object,
+                this.mockScriptTemplateService.Object,
+                null);
+        };
+
+        // Assert
+        act.Should()
+            .Throw<ArgumentNullException>()
+            .WithMessage("The parameter must not be null. (Parameter 'scriptMutations')");
     }
     #endregion
 
@@ -230,7 +300,7 @@ public class GeneratorServiceTests
         service.GenerateScript(srcFilePath, destDir, "test-file.cs");
 
         // Assert
-        this.mockDir.Verify(m => m.CreateDirectory(destDir), Times.Once);
+        this.mockDir.VerifyOnce(m => m.CreateDirectory(destDir));
     }
 
     [Theory]
@@ -304,7 +374,7 @@ public class GeneratorServiceTests
         expected = expected.Replace(funcCodeInjectionPoint, expectedFuncCode);
 
         this.mockScriptTemplateService.Setup(m => m.CreateTemplate()).Returns(scriptTemplateStrBuilder.ToString);
-        this.mockFunctionExtractorService.Setup(m => m.Extract(srcFilePath))
+        this.mockMethodExtractorService.Setup(m => m.Extract(srcFilePath))
             .Returns(expectedFuncCode);
         this.mockDir.Setup(m => m.GetCurrentDirectory()).Returns(currentWorkingDir);
         this.mockPath.SetupGet(p => p.AltDirectorySeparatorChar).Returns('/');
@@ -318,8 +388,13 @@ public class GeneratorServiceTests
         service.GenerateScript(srcFilePath, destDir, destFileName);
 
         // Assert
-        this.mockFunctionExtractorService.Verify(m => m.Extract(srcFilePath), Times.Once);
-        this.mockFile.Verify(m => m.WriteAllText(expectedDestFilePath, expected), Times.Once);
+        this.mockMethodExtractorService.VerifyOnce(m => m.Extract(srcFilePath));
+        this.mockFile.VerifyOnce(m => m.WriteAllText(expectedDestFilePath, expected));
+        this.mockConsoleService.VerifyOnce(m => m.WriteLine($"Original Source File Path: {srcFilePath}"));
+        this.mockConsoleService.VerifyOnce(m => m.WriteLine($"Original Destination Directory Path: {destDir}"));
+        this.mockConsoleService.VerifyOnce(m => m.WriteLine($"Original Destination File Name: {destFileName}"));
+        this.mockConsoleService.VerifyOnce(m => m.WriteLine($"Resolving Destination Directory Path To: C:/base-dir/destination-dir"));
+        this.mockConsoleService.VerifyOnce(m => m.WriteLine($"Resolving Full Destination File Path To: {expectedDestFilePath}"));
     }
     #endregion
 
@@ -332,7 +407,7 @@ public class GeneratorServiceTests
             this.mockFile.Object,
             this.mockPath.Object,
             this.mockConsoleService.Object,
-            this.mockFunctionExtractorService.Object,
+            this.mockMethodExtractorService.Object,
             this.mockRelativePathResolverService.Object,
             this.mockScriptTemplateService.Object,
             this.mockMutations);

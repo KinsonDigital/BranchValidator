@@ -4,14 +4,16 @@
 
 using BranchValidator.Exceptions;
 using BranchValidator.Services.Interfaces;
+using BranchValidatorShared;
+using BranchValidatorShared.Services;
 
 namespace BranchValidator;
 
 /// <inheritdoc/>
 public sealed class GitHubAction : IGitHubAction<bool>
 {
-    private readonly IGitHubConsoleService consoleService;
-    private readonly IActionOutputService outputService;
+    private readonly IConsoleService consoleService;
+    private readonly IActionOutputService actionOutputService;
     private readonly IExpressionValidatorService expressionValidatorService;
     private readonly IExpressionExecutorService expressionExecutorService;
     private readonly ICSharpMethodService csharpMethodService;
@@ -22,22 +24,32 @@ public sealed class GitHubAction : IGitHubAction<bool>
     /// <summary>
     /// Initializes a new instance of the <see cref="GitHubAction"/> class.
     /// </summary>
-    /// <param name="expressionExecutorService">Executes expressions.</param>
     /// <param name="consoleService">Prints messages to the GitHub console.</param>
-    /// <param name="outputService">Sets the GitHub action outputs.</param>
+    /// <param name="actionOutputService">Sets the GitHub action outputs.</param>
+    /// <param name="expressionValidatorService">Validates expression syntax.</param>
+    /// <param name="expressionExecutorService">Executes expressions.</param>
+    /// <param name="csharpMethodService">Provides data about <c>C#</c> methods.</param>
+    /// <param name="parsingService">Provides parsing functionality.</param>
     /// <param name="branchNameObservable">Sends a push notification of the branch name.</param>
     public GitHubAction(
-        IGitHubConsoleService consoleService,
-        IActionOutputService outputService,
+        IConsoleService consoleService,
+        IActionOutputService actionOutputService,
         IExpressionValidatorService expressionValidatorService,
         IExpressionExecutorService expressionExecutorService,
         ICSharpMethodService csharpMethodService,
         IParsingService parsingService,
         IBranchNameObservable branchNameObservable)
     {
-        // TODO: Check if any of these are null.  Write unti tests
+        EnsureThat.ParamIsNotNull(consoleService);
+        EnsureThat.ParamIsNotNull(actionOutputService);
+        EnsureThat.ParamIsNotNull(expressionValidatorService);
+        EnsureThat.ParamIsNotNull(expressionExecutorService);
+        EnsureThat.ParamIsNotNull(csharpMethodService);
+        EnsureThat.ParamIsNotNull(parsingService);
+        EnsureThat.ParamIsNotNull(branchNameObservable);
+
         this.consoleService = consoleService;
-        this.outputService = outputService;
+        this.actionOutputService = actionOutputService;
         this.expressionValidatorService = expressionValidatorService;
         this.expressionExecutorService = expressionExecutorService;
         this.csharpMethodService = csharpMethodService;
@@ -46,7 +58,9 @@ public sealed class GitHubAction : IGitHubAction<bool>
     }
 
     /// <inheritdoc/>
+#pragma warning disable CS1998
     public async Task Run(ActionInputs inputs, Action<bool> onCompleted, Action<Exception> onError)
+#pragma warning restore CS1998
     {
         var branchIsValid = false;
         ShowWelcomeMessage();
@@ -95,7 +109,7 @@ public sealed class GitHubAction : IGitHubAction<bool>
             this.consoleService.BlankLine();
             this.consoleService.WriteLine(logicResult.msg);
 
-            this.outputService.SetOutputValue("valid-branch", logicResult.branchIsValid.ToString().ToLower());
+            this.actionOutputService.SetOutputValue("valid-branch", logicResult.branchIsValid.ToString().ToLower());
         }
         catch (Exception e)
         {

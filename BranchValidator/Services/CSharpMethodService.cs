@@ -6,6 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Text;
 using BranchValidator.Services.Interfaces;
+using BranchValidatorShared;
 
 namespace BranchValidator.Services;
 
@@ -26,6 +27,7 @@ public class CSharpMethodService : ICSharpMethodService
         return GetMethods(className).Select(m => m.Name).ToArray();
     }
 
+    /// <inheritdoc/>
     public Dictionary<string, Type[]> GetMethodParamTypes(string className, string methodName)
     {
         if (string.IsNullOrEmpty(className))
@@ -59,6 +61,7 @@ public class CSharpMethodService : ICSharpMethodService
         return result;
     }
 
+    /// <inheritdoc/>
     public IEnumerable<string> GetMethodSignatures(string className)
     {
         var result = new List<string>();
@@ -82,6 +85,14 @@ public class CSharpMethodService : ICSharpMethodService
         return result;
     }
 
+    /// <summary>
+    /// Returns a list of <see cref="MethodInfo"/> for a class that matches the given <paramref name="className"/>.
+    /// </summary>
+    /// <param name="className">The name of the class.</param>
+    /// <returns>A list of information for each method in a class.</returns>
+    /// <exception cref="InvalidOperationException">
+    ///     Thrown if a class with the <paramref name="className"/> is not found.
+    /// </exception>
     private IEnumerable<MethodInfo> GetMethods(string className)
     {
         var assembly = GetAssembly();
@@ -104,16 +115,27 @@ public class CSharpMethodService : ICSharpMethodService
             .Select(m => m).ToArray();
     }
 
-    // TODO: Create code docs for rest of this class
+    /// <summary>
+    /// Returns the <see cref="BranchValidator"/> <see cref="Assembly"/> that is currently in the application domain.
+    /// </summary>
+    /// <returns>The <see cref="BranchValidator"/> assembly.</returns>
+    /// <exception cref="InvalidOperationException">
+    ///     Thrown if a <see cref="BranchValidator"/> <see cref="Assembly"/> could not be found.
+    /// </exception>
+    /// <remarks>
+    ///     The found <see cref="Assembly"/> is cached for later use for extra performance.
+    /// </remarks>
     private Assembly GetAssembly()
     {
-        if (this.cachedAssembly is null)
+        if (this.cachedAssembly is not null)
         {
-            var foundAssembly = AppDomain.CurrentDomain.GetAssemblies()
-                .FirstOrDefault(a => a.FullName != null && a.FullName.StartsWith($"{nameof(BranchValidator)}, Version"));
-
-            this.cachedAssembly = foundAssembly ?? throw new InvalidOperationException($"The assembly '{nameof(BranchValidator)}' was not found.");
+            return this.cachedAssembly;
         }
+
+        var foundAssembly = AppDomain.CurrentDomain.GetAssemblies()
+            .FirstOrDefault(a => a.FullName != null && a.FullName.StartsWith($"{nameof(BranchValidator)}, Version"));
+
+        this.cachedAssembly = foundAssembly ?? throw new InvalidOperationException($"The assembly '{nameof(BranchValidator)}' was not found.");
 
         return this.cachedAssembly;
     }

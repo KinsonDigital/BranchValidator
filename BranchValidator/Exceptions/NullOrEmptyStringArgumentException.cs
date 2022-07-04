@@ -5,7 +5,7 @@
 namespace BranchValidator.Exceptions;
 
 /// <summary>
-/// Occurs when a string is null or empty.
+/// Occurs when a<c>string</c>is null or empty.
 /// </summary>
 public class NullOrEmptyStringArgumentException : Exception
 {

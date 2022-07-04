@@ -1,4 +1,8 @@
-﻿namespace ScriptGenerator.Services;
+﻿// <copyright file="IFileLoaderService.cs" company="KinsonDigital">
+// Copyright (c) KinsonDigital. All rights reserved.
+// </copyright>
+
+namespace ScriptGenerator.Services.Interfaces;
 
 /// <summary>
 /// Loads file data.

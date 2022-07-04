@@ -1,24 +1,25 @@
-﻿// <copyright file="FunctionExtractorService.cs" company="KinsonDigital">
+﻿// <copyright file="MethodExtractorService.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
 using System.Text;
 using ScriptGenerator.Exceptions;
+using ScriptGenerator.Services.Interfaces;
 
 namespace ScriptGenerator.Services;
 
 /// <inheritdoc/>
-public class FunctionExtractorService : IFunctionExtractorService
+public class MethodExtractorService : IMethodExtractorService
 {
     private const string ScriptFunctionStart = "//<script-function>";
     private const string ScriptFunctionEnd = "//</script-function>";
     private readonly IFileLoaderService<string[]> fileLoaderService;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="FunctionExtractorService"/> class.
+    /// Initializes a new instance of the <see cref="MethodExtractorService"/> class.
     /// </summary>
     /// <param name="fileLoaderService">Loads textual files.</param>
-    public FunctionExtractorService(IFileLoaderService<string[]> fileLoaderService)
+    public MethodExtractorService(IFileLoaderService<string[]> fileLoaderService)
         => this.fileLoaderService = fileLoaderService;
 
     /// <inheritdoc/>

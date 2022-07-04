@@ -4,9 +4,9 @@
 
 using BranchValidator.Observables.Core;
 using BranchValidatorTests.Fakes;
-using BranchValidatorTests.Helpers;
 using FluentAssertions;
 using Moq;
+using TestingShared;
 
 namespace BranchValidatorTests.Observables.Core;
 

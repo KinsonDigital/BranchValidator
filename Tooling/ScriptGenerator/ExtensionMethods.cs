@@ -22,6 +22,14 @@ public static class ExtensionMethods
     public static bool OnlyContains(this string value, IEnumerable<char> characters)
         => !string.IsNullOrEmpty(value) && value.All(characters.Contains);
 
+    /// <summary>
+    /// Get service of type <typeparamref name="T"/> from the <see cref="IServiceProvider"/> and
+    /// handles an error when no service of type <typeparamref name="T"/> exists.
+    /// </summary>
+    /// <typeparam name="T">The type of service object to get.</typeparam>
+    /// <param name="provider">The <see cref="IServiceProvider"/> to retrieve the service object from.</param>
+    /// <returns>A service object of type <typeparamref name="T"/>.</returns>
+    /// <exception cref="System.InvalidOperationException">There is no service of type <typeparamref name="T"/>.</exception>
     [ExcludeFromCodeCoverage]
     public static T GetRequiredServiceAndHandleError<T>(this IServiceProvider provider)
         where T : notnull
@@ -42,6 +50,14 @@ public static class ExtensionMethods
         return default!;
     }
 
+    /// <summary>
+    /// Returns a value indicating whether or not the first occurence of the given <paramref name="beforeChar"/>
+    /// is located positionally before the given <paramref name="afterChar"/>.
+    /// </summary>
+    /// <param name="value">This <c>string</c> to search for the <paramref name="beforeChar"/> and <paramref name="afterChar"/>.</param>
+    /// <param name="beforeChar">The <c>char</c> that might be located before the <paramref name="afterChar"/>.</param>
+    /// <param name="afterChar">The <c>char</c> that might be located after the <paramref name="beforeChar"/>.</param>
+    /// <returns><c>true</c> if the <paramref name="beforeChar"/> is located before the <paramref name="afterChar"/>.</returns>
     public static bool IsBefore(this string value, char beforeChar, char afterChar)
     {
         if (string.IsNullOrEmpty(value))
@@ -65,6 +81,14 @@ public static class ExtensionMethods
         return beforeCharIndex < afterCharIndex;
     }
 
+    /// <summary>
+    /// Returns a value indicating whether or not the first occurence of the given <paramref name="beforeStr"/>
+    /// is located positionally before the given <paramref name="afterChar"/>.
+    /// </summary>
+    /// <param name="value">This <c>string</c> to search for the <paramref name="beforeStr"/> and <paramref name="afterChar"/>.</param>
+    /// <param name="beforeStr">The <c>char</c> that might be located before the <paramref name="afterChar"/>.</param>
+    /// <param name="afterChar">The <c>char</c> that might be located after the <paramref name="beforeStr"/>.</param>
+    /// <returns><c>true</c> if the <paramref name="beforeStr"/> is located before the <paramref name="afterChar"/>.</returns>
     public static bool IsBefore(this string value, string beforeStr, char afterChar)
     {
         if (string.IsNullOrEmpty(value))
@@ -89,6 +113,14 @@ public static class ExtensionMethods
         return beforeStrIndex < afterCharIndex;
     }
 
+    /// <summary>
+    /// Returns a value indicating whether or not the first occurence of the given <paramref name="afterChar"/>
+    /// is located positionally after the given <paramref name="beforeChar"/>.
+    /// </summary>
+    /// <param name="value">This <c>string</c> to search for the <paramref name="afterChar"/> and <paramref name="beforeChar"/>.</param>
+    /// <param name="afterChar">The <c>char</c> that might be located after the <paramref name="beforeChar"/>.</param>
+    /// <param name="beforeChar">The <c>char</c> that might be located before the <paramref name="afterChar"/>.</param>
+    /// <returns><c>true</c> if the <paramref name="afterChar"/> is located after the <paramref name="beforeChar"/>.</returns>
     public static bool IsAfter(this string value, char afterChar, char beforeChar)
     {
         if (string.IsNullOrEmpty(value))
@@ -112,6 +144,14 @@ public static class ExtensionMethods
         return beforeCharIndex < afterCharIndex;
     }
 
+    /// <summary>
+    /// Returns a value indicating whether or not the first occurence of the given <paramref name="afterStr"/>
+    /// is located positionally after the given <paramref name="beforeChar"/>.
+    /// </summary>
+    /// <param name="value">This <c>string</c> to search for the <paramref name="afterStr"/> and <paramref name="beforeChar"/>.</param>
+    /// <param name="afterStr">The <c>char</c> that might be located after the <paramref name="beforeChar"/>.</param>
+    /// <param name="beforeChar">The <c>char</c> that might be located before the <paramref name="afterStr"/>.</param>
+    /// <returns><c>true</c> if the <paramref name="afterStr"/> is located after the <paramref name="beforeChar"/>.</returns>
     public static bool IsAfter(this string value, string afterStr, char beforeChar)
     {
         if (string.IsNullOrEmpty(value))

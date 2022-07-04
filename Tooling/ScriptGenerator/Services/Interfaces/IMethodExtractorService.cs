@@ -1,13 +1,13 @@
-﻿// <copyright file="IFunctionExtractorService.cs" company="KinsonDigital">
+﻿// <copyright file="IMethodExtractorService.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-namespace ScriptGenerator.Services;
+namespace ScriptGenerator.Services.Interfaces;
 
 /// <summary>
 /// Generates script functions.
 /// </summary>
-public interface IFunctionExtractorService
+public interface IMethodExtractorService
 {
     /// <summary>
     /// Generate script functions from the code in the file at the given <paramref name="filePath"/>.

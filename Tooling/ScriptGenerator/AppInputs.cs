@@ -1,4 +1,8 @@
-﻿using CommandLine;
+﻿// <copyright file="AppInputs.cs" company="KinsonDigital">
+// Copyright (c) KinsonDigital. All rights reserved.
+// </copyright>
+
+using CommandLine;
 
 namespace ScriptGenerator;
 

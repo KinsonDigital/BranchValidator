@@ -3,6 +3,7 @@
 // </copyright>
 
 using System.IO.Abstractions;
+using ScriptGenerator.Services.Interfaces;
 
 namespace ScriptGenerator.Services;
 
@@ -11,10 +12,15 @@ public class RelativePathResolverService : IRelativePathResolverService
 {
     private const char BackSlash = '\\';
     private const char ForwardSlash = '/';
-    private readonly IDirectory dir;
+    private readonly IDirectory directory;
 
-    public RelativePathResolverService(IDirectory dir) => this.dir = dir;
+    /// <summary>
+    /// Initializes a new instance of the <see cref="RelativePathResolverService"/> class.
+    /// </summary>
+    /// <param name="directory">Provides directory functionality.</param>
+    public RelativePathResolverService(IDirectory directory) => this.directory = directory;
 
+    /// <inheritdoc/>
     public string Resolve(string path)
     {
         if (string.IsNullOrEmpty(path))
@@ -28,7 +34,7 @@ public class RelativePathResolverService : IRelativePathResolverService
 
         if (path.StartsWith($".{ForwardSlash}"))
         {
-            var currentWorkingDir = this.dir.GetCurrentDirectory().Replace(BackSlash, ForwardSlash);
+            var currentWorkingDir = this.directory.GetCurrentDirectory().Replace(BackSlash, ForwardSlash);
 
             path = path.TrimStart('.').TrimStart(ForwardSlash);
             path = $"{currentWorkingDir}{ForwardSlash}{path}";
@@ -36,7 +42,7 @@ public class RelativePathResolverService : IRelativePathResolverService
         else if (path.StartsWith($"..{ForwardSlash}"))
         {
             var parentDirCount = path.Split(ForwardSlash).Count(i => i == "..");
-            var currentWorkingDir = this.dir.GetCurrentDirectory().Replace(BackSlash, ForwardSlash);
+            var currentWorkingDir = this.directory.GetCurrentDirectory().Replace(BackSlash, ForwardSlash);
 
             var workingDirSections = currentWorkingDir.Split(ForwardSlash);
             var ignoredDirs = new List<string>();

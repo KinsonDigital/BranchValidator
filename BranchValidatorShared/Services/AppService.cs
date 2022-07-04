@@ -3,27 +3,26 @@
 // </copyright>
 
 using System.Diagnostics.CodeAnalysis;
-using BranchValidator.Services.Interfaces;
 
-namespace BranchValidator.Services;
+namespace BranchValidatorShared.Services;
 
 /// <inheritdoc/>
 [ExcludeFromCodeCoverage]
 public class AppService : IAppService
 {
-    private readonly IGitHubConsoleService gitHubConsoleService;
+    private readonly IConsoleService consoleService;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AppService"/> class.
     /// </summary>
-    /// <param name="gitHubConsoleService">Writes to the console.</param>
-    public AppService(IGitHubConsoleService gitHubConsoleService) => this.gitHubConsoleService = gitHubConsoleService;
+    /// <param name="consoleService">Writes to the console.</param>
+    public AppService(IConsoleService consoleService) => this.consoleService = consoleService;
 
     /// <inheritdoc/>
     public void Exit(int code)
     {
 #if DEBUG // Kept here to pause console for debugging purposes
-        this.gitHubConsoleService.PauseConsole();
+        this.consoleService.PauseConsole();
 #endif
         Environment.Exit(code);
     }
@@ -34,9 +33,9 @@ public class AppService : IAppService
     /// <inheritdoc/>
     public void ExitWithException(Exception exception)
     {
-        this.gitHubConsoleService.BlankLine();
-        this.gitHubConsoleService.WriteError(exception.Message);
-        this.gitHubConsoleService.BlankLine();
+        this.consoleService.BlankLine();
+        this.consoleService.WriteError(exception.Message);
+        this.consoleService.BlankLine();
         Exit(exception.HResult);
     }
 }

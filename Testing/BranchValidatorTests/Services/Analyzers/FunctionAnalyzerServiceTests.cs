@@ -40,7 +40,7 @@ public class FunctionAnalyzerServiceTests
         // Assert
         act.Should()
             .Throw<ArgumentNullException>()
-            .WithMessage("The constructor parameter must not be null. (Parameter 'functionExtractorService')");
+            .WithMessage("The parameter must not be null. (Parameter 'functionExtractorService')");
     }
 
     [Fact]
@@ -55,7 +55,7 @@ public class FunctionAnalyzerServiceTests
         // Assert
         act.Should()
             .Throw<ArgumentNullException>()
-            .WithMessage("The constructor parameter must not be null. (Parameter 'csharpMethodService')");
+            .WithMessage("The parameter must not be null. (Parameter 'csharpMethodService')");
     }
     #endregion
 
@@ -64,13 +64,16 @@ public class FunctionAnalyzerServiceTests
     public void Analyze_WhenInvoked_ReturnsCorrectResult()
     {
         // Arrange
-        const string leftFuncSignature = "funA('a-value')";
-        const string rightFuncSignature = "funB(123, 'b-value')";
+        const string expFunAName = "funA";
+        const string expFunBName = "funB";
+        const string leftFuncSignature = $"{expFunAName}('a-value')";
+        const string rightFuncSignature = $"{expFunBName}(123, 'b-value')";
         const string expression = $"{leftFuncSignature} && {rightFuncSignature}";
         const string methodAName = "FunA";
         const string methodBName = "FunB";
+
         this.mockFunctionExtractorService.Setup(m => m.ExtractNames(expression))
-            .Returns(new[] { "funA", "funB" });
+            .Returns(new[] { expFunAName, expFunBName });
         this.mockFunctionExtractorService.Setup(m => m.ExtractArgDataTypes(leftFuncSignature))
             .Returns(new[] { typeof(string) });
         this.mockFunctionExtractorService.Setup(m => m.ExtractArgDataTypes(rightFuncSignature))
@@ -84,6 +87,8 @@ public class FunctionAnalyzerServiceTests
             {
                 { $"{methodAName}:1", new[] { typeof(string) } },
             });
+
+        // Mock C# method B as having an overload
         this.mockCSharpMethodService.Setup(m => m.GetMethodParamTypes(nameof(FunctionDefinitions), methodBName))
             .Returns(() => new Dictionary<string, Type[]>
             {

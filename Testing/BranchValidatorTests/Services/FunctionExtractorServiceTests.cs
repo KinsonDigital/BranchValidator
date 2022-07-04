@@ -96,10 +96,14 @@ public class FunctionExtractorServiceTests
     }
 
     [Theory]
-    [InlineData("", new string[0])]
+    [InlineData("", new Type[0])]
+    [InlineData("funA('valueA')", new[] { typeof(string) })]
+    [InlineData("funA(\"valueB\")", new[] { typeof(string) })]
+    [InlineData("funA(123)", new[] { typeof(uint) })]
+    [InlineData("funA('valueC', \"valueD\", 456)", new[] { typeof(string), typeof(string), typeof(uint) })]
     public void ExtractArgDataTypes_WhenInvoked_ReturnsCorrectResult(
         string functionSignature,
-        string[] expected)
+        Type[] expected)
     {
         // Arrange
         var service = new FunctionExtractorService();

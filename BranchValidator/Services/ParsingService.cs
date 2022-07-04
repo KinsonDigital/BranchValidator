@@ -1,4 +1,8 @@
-﻿using BranchValidator.Services.Interfaces;
+﻿// <copyright file="ParsingService.cs" company="KinsonDigital">
+// Copyright (c) KinsonDigital. All rights reserved.
+// </copyright>
+
+using BranchValidator.Services.Interfaces;
 
 namespace BranchValidator.Services;
 

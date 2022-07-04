@@ -2,14 +2,13 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-// TODO: Replace all null checks in projects with Guard pattern
-
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using BranchValidator.Observables;
 using BranchValidator.Services;
 using BranchValidator.Services.Analyzers;
 using BranchValidator.Services.Interfaces;
+using BranchValidatorShared.Services;
 
 [assembly: InternalsVisibleTo("BranchValidatorTests", AllInternalsVisible = true)]
 
@@ -22,20 +21,6 @@ namespace BranchValidator;
 public static class Program
 {
     private static IHost? host;
-    private static IServiceProvider? appServiceProvider;
-
-    public static IServiceProvider AppServiceProvider
-    {
-        get
-        {
-            if (appServiceProvider is null)
-            {
-                throw new InvalidOperationException("The application service provider must be created first before getting services.");
-            }
-
-            return appServiceProvider;
-        }
-    }
 
     /// <summary>
     /// The main entry point of the GitHub action.
@@ -51,10 +36,10 @@ public static class Program
                 services.AddSingleton<IBranchNameObservable, UpdateBranchNameObservable>();
                 services.AddSingleton<IEmbeddedResourceLoaderService<string>, TextResourceLoaderService>();
                 services.AddSingleton<IAppService, AppService>();
-                services.AddSingleton<IGitHubConsoleService, GitHubConsoleService>();
+                services.AddSingleton<IConsoleService, GitHubConsoleService>();
                 services.AddSingleton<IActionOutputService, ActionOutputService>();
                 services.AddSingleton<ICSharpMethodService, CSharpMethodService>();
-                services.AddSingleton<IArgParsingService<ActionInputs>, ArgParsingService>();
+                services.AddSingleton<IArgParsingService<ActionInputs>, ArgParsingService<ActionInputs>>();
                 services.AddSingleton<IFunctionExtractorService, FunctionExtractorService>();
                 services.AddSingleton<IExpressionValidatorService, ExpressionValidatorService>();
                 services.AddSingleton<IExpressionExecutorService, ExpressionExecutorService>();
@@ -77,10 +62,8 @@ public static class Program
                 services.AddSingleton<IGitHubAction<bool>, GitHubAction>();
             }).Build();
 
-        appServiceProvider = host.Services;
-
         var appService = host.Services.GetRequiredService<IAppService>();
-        var consoleService = host.Services.GetRequiredService<IGitHubConsoleService>();
+        var consoleService = host.Services.GetRequiredService<IConsoleService>();
         IGitHubAction<bool>? gitHubAction = null;
 
         try

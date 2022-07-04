@@ -3,111 +3,45 @@
 // </copyright>
 
 using System.Diagnostics.CodeAnalysis;
-using BranchValidator.Services.Interfaces;
+using BranchValidatorShared.Services;
 
 namespace BranchValidator.Services;
 
 /// <inheritdoc/>
 [ExcludeFromCodeCoverage]
-public class GitHubConsoleService : IGitHubConsoleService
+public class GitHubConsoleService : ConsoleService
 {
-    private const char GroupExpanded = '▼';
-
     /// <inheritdoc/>
-    public void Write(string value, bool newLineAfter)
+    public override void StartGroup(string name)
     {
-        Console.Write($"{value}");
-
-        if (newLineAfter)
-        {
-            Console.WriteLine();
-        }
-    }
-
-    /// <inheritdoc/>
-    public void WriteLine(string value) => Console.WriteLine(value);
-
-    /// <inheritdoc/>
-    public void WriteLine(uint tabs, string value)
-    {
-        var allTabs = string.Empty;
-
-        for (var i = 0; i < tabs; i++)
-        {
-            allTabs += "\t";
-        }
-
-        Console.WriteLine($"{allTabs}{value}");
-    }
-
-    /// <inheritdoc/>
-    public void BlankLine() => Console.WriteLine();
-
-    /// <inheritdoc/>
-    public void StartGroup(string name)
-    {
-        // ReSharper disable once RedundantAssignment
-        var groupStart = "::group::";
-
 #if DEBUG
-        groupStart = $"{GroupExpanded} ";
+        Console.WriteLine($"::group::{(string.IsNullOrEmpty(name) ? "Group" : name)}");
+#else
+        base.StartGroup(name);
 #endif
-
-        Console.WriteLine($"{groupStart}{(string.IsNullOrEmpty(name) ? "Group" : name)}");
     }
 
     /// <inheritdoc/>
-    public void EndGroup()
+    public override void EndGroup()
     {
-#if RELEASE
+#if DEBUG
+        base.EndGroup();
+#else
         Console.WriteLine("::endgroup::");
 #endif
     }
 
     /// <inheritdoc/>
-    public void WriteGroup(string title, string content)
+    public override void WriteError(string value)
     {
-        StartGroup(title);
-        WriteLine(content);
-        EndGroup();
-    }
-
-    /// <inheritdoc/>
-    public void WriteGroup(string title, string[] contentLines)
-    {
-        StartGroup(title);
-
-        for (var i = 0; i < contentLines.Length; i++)
-        {
-            var newContentLine = contentLines[i];
 #if DEBUG
-            // Add a tab character if in debug mode
-            newContentLine = $"|{(i == contentLines.Length - 1 ? "__" : string.Empty)}\t{newContentLine}";
-#endif
-            WriteLine(newContentLine);
-        }
-
-        EndGroup();
-    }
-
-    /// <inheritdoc/>
-    public void WriteError(string value)
-    {
-        // ReSharper disable once RedundantAssignment
-        var errorGroup = "::error::";
+        base.WriteError(value);
+#else
+        const string errorGroup = "::error::";
         var currentClr = Console.ForegroundColor;
-
-#if DEBUG
-        errorGroup = "ERROR > ";
-        Console.ForegroundColor = ConsoleColor.Red;
-#endif
 
         Console.WriteLine($"{errorGroup}{value}");
         Console.ForegroundColor = currentClr;
-    }
-
-#if DEBUG
-    /// <inheritdoc/>
-    public void PauseConsole() => Console.ReadLine();
 #endif
+    }
 }

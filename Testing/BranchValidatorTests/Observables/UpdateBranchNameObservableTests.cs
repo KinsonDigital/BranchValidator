@@ -4,6 +4,7 @@
 
 using BranchValidator.Observables;
 using Moq;
+using TestingShared;
 
 namespace BranchValidatorTests.Observables;
 
@@ -17,19 +18,18 @@ public class UpdateBranchNameObservableTests
     public void PushNotification_WhenInvoked_SendsPushNotification()
     {
         // Arrange
-        // var observer = new Mock<CoreObserver>();
         var observer = new Mock<IStringObserver>();
 
         var observable = new UpdateBranchNameObservable();
         observable.Subscribe(observer.Object);
 
-        var data = "test-data";
+        const string data = "test-data";
 
         // Act
         observable.PushNotification(data);
 
         // Assert
-        observer.Verify(m => m.OnNext(data), Times.Once());
+        observer.VerifyOnce(m => m.OnNext(data));
     }
     #endregion
 }

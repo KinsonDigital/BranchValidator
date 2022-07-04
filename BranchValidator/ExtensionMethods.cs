@@ -115,7 +115,7 @@ public static class ExtensionMethods
     /// Returns a value indicating whether or not a specified substring does not occur within this string.
     /// </summary>
     /// <param name="thisStr">The value container.</param>
-    /// <param name="value">The string to seek.</param>
+    /// <param name="value">The<c>string</c>to seek.</param>
     /// <returns><c>true</c> if the value parameter does not occur within this string.</returns>
     public static bool DoesNotContain(this string thisStr, string value)
     {
@@ -136,7 +136,7 @@ public static class ExtensionMethods
     /// Returns the text data from this <c>string</c> up to the first occurrence of the given <paramref name="character"/>.
     /// </summary>
     /// <param name="value">The value that holds the <c>string</c> to return.</param>
-    /// <param name="character">The character that is the end of the string to return.</param>
+    /// <param name="character">The character that is the end of the<c>string</c>to return.</param>
     /// <returns>All of the <c>string</c> data before the <paramref name="character"/>.</returns>
     public static string GetUpToChar(this string value, char character)
     {
@@ -171,11 +171,11 @@ public static class ExtensionMethods
     public static char ToLower(this char value) => value.ToString().ToLower()[0];
 
     /// <summary>
-    /// Gets all of the string data between the <paramref name="leftChar"/> and <paramref name="rightChar"/>
+    /// Gets all of the<c>string</c>data between the <paramref name="leftChar"/> and <paramref name="rightChar"/>
     /// for this string.
     /// </summary>
-    /// <param name="value">The string to seek in.</param>
-    /// <param name="leftChar">The <see cref="char"/> on the left of the string to get.</param>
+    /// <param name="value">The<c>string</c>to seek in.</param>
+    /// <param name="leftChar">The <see cref="char"/> on the left of the<c>string</c>to get.</param>
     /// <param name="rightChar">The <see cref="char"/> on the right of the string to get.</param>
     /// <returns>
     ///     The string that exists between the <paramref name="leftChar"/> and <paramref name="rightChar"/>.

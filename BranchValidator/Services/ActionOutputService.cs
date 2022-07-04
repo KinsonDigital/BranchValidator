@@ -4,19 +4,20 @@
 
 using BranchValidator.Exceptions;
 using BranchValidator.Services.Interfaces;
+using BranchValidatorShared.Services;
 
 namespace BranchValidator.Services;
 
 /// <inheritdoc/>
 public class ActionOutputService : IActionOutputService
 {
-    private readonly IGitHubConsoleService gitHubConsoleService;
+    private readonly IConsoleService consoleService;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ActionOutputService"/> class.
     /// </summary>
-    /// <param name="gitHubConsoleService">Writes to the console.</param>
-    public ActionOutputService(IGitHubConsoleService gitHubConsoleService) => this.gitHubConsoleService = gitHubConsoleService;
+    /// <param name="consoleService">Writes to the console.</param>
+    public ActionOutputService(IConsoleService consoleService) => this.consoleService = consoleService;
 
     /// <inheritdoc/>
     public void SetOutputValue(string name, string value)
@@ -26,6 +27,6 @@ public class ActionOutputService : IActionOutputService
             throw new NullOrEmptyStringArgumentException($"The parameter '{nameof(name)}' must not be null or empty.");
         }
 
-        this.gitHubConsoleService.WriteLine($"::set-output name={name}::{value}");
+        this.consoleService.WriteLine($"::set-output name={name}::{value}");
     }
 }

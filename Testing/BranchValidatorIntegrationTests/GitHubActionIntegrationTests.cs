@@ -214,14 +214,12 @@ public class GitHubActionIntegrationTests : IDisposable
     /// </summary>
     public void Dispose() => this.action.Dispose();
 
-    /// <summary>
+     /// <summary>
     /// Asserts that the given <c>string</c> <paramref name="value"/> contains operators for testing to work properly.
     /// </summary>
     /// <param name="value">The value to check.</param>
-    private void CheckForOps(string value)
-    {
-        (value.Contains(AndOperator) || value.Contains(OrOperator))
-            .Should()
-            .BeTrue("this unit test requires operators to exist in the expression for proper testing.");
-    }
+    private static void CheckForOps(string value)
+        => (value.Contains(AndOperator) || value.Contains(OrOperator))
+        .Should()
+        .BeTrue("this unit test requires operators to exist in the expression for proper testing.");
 }

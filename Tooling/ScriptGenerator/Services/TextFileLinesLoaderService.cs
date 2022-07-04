@@ -4,6 +4,7 @@
 
 using System.Diagnostics.CodeAnalysis;
 using System.IO.Abstractions;
+using ScriptGenerator.Services.Interfaces;
 
 namespace ScriptGenerator.Services;
 

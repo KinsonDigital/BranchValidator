@@ -1,9 +1,18 @@
-﻿using BranchValidator;
+﻿// <copyright file="RemoveExpressionAttributeMutation.cs" company="KinsonDigital">
+// Copyright (c) KinsonDigital. All rights reserved.
+// </copyright>
+
+using BranchValidatorShared;
+using ScriptGenerator.Services.Interfaces;
 
 namespace ScriptGenerator.Services;
 
+/// <summary>
+/// Removes all lines of text from a <c>string</c> that contain the <see cref="ExpressionFunctionAttribute"/>.
+/// </summary>
 public class RemoveExpressionAttributeMutation : IStringMutation
 {
+    /// <inheritdoc/>
     public string Mutate(string value)
     {
         value = value.Replace("\r\n", "\n");

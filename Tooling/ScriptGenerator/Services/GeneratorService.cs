@@ -3,44 +3,67 @@
 // </copyright>
 
 using System.IO.Abstractions;
+using BranchValidatorShared;
+using BranchValidatorShared.Services;
+using ScriptGenerator.Services.Interfaces;
 
 namespace ScriptGenerator.Services;
 
+/// <inheritdoc/>
 public class GeneratorService : IGeneratorService
 {
-    private const string NullParamMsg = "The parameter must not be null.";
     private const string DestFileName = "ExpressionFunctions.cs";
     private const string FunctionCode = "//<function-code/>";
     private readonly IDirectory directory;
     private readonly IFile file;
     private readonly IPath path;
     private readonly IConsoleService consoleService;
-    private readonly IFunctionExtractorService funcExtractorService;
+    private readonly IMethodExtractorService methodExtractorService;
     private readonly IRelativePathResolverService pathResolver;
     private readonly IScriptTemplateService scriptTemplateService;
     private readonly IStringMutation[] scriptMutations;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="GeneratorService"/> class.
+    /// </summary>
+    /// <param name="directory">Provides directory functionality.</param>
+    /// <param name="file">Provides file functionality.</param>
+    /// <param name="path">Provides path functionality.</param>
+    /// <param name="consoleService">Writes messages to the console.</param>
+    /// <param name="methodExtractorService">Extracts methods from <c>C#</c> source code.</param>
+    /// <param name="pathResolver">Resolves paths.</param>
+    /// <param name="scriptTemplateService">Creates script templates.</param>
+    /// <param name="scriptMutations">A list of mutations to be performed on a script.</param>
+    /// <exception cref="ArgumentNullException">
+    ///     Thrown if any of the constructor parameters are null.
+    /// </exception>
     public GeneratorService(
         IDirectory directory,
         IFile file,
         IPath path,
         IConsoleService consoleService,
-        IFunctionExtractorService funcExtractorService,
+        IMethodExtractorService methodExtractorService,
         IRelativePathResolverService pathResolver,
         IScriptTemplateService scriptTemplateService,
         IStringMutation[] scriptMutations)
     {
-        this.directory = directory ?? throw new ArgumentNullException(nameof(directory), NullParamMsg);
-        this.file = file ?? throw new ArgumentNullException(nameof(file), NullParamMsg);
-        this.path = path ?? throw new ArgumentNullException(nameof(path), NullParamMsg);
-        // TODO: Add null check unit test
-        this.consoleService = consoleService ?? throw new ArgumentNullException(nameof(consoleService), NullParamMsg);
-        this.funcExtractorService = funcExtractorService ?? throw new ArgumentNullException(nameof(funcExtractorService), NullParamMsg);
-        this.pathResolver = pathResolver ?? throw new ArgumentNullException(nameof(pathResolver), NullParamMsg);
-        // TODO: Add null check unit test
-        this.scriptTemplateService = scriptTemplateService ?? throw new ArgumentNullException(nameof(scriptTemplateService), NullParamMsg);
-        // TODO: Add null check unit test
-        this.scriptMutations = scriptMutations ?? throw new ArgumentNullException(nameof(scriptMutations), NullParamMsg);
+        EnsureThat.ParamIsNotNull(directory);
+        EnsureThat.ParamIsNotNull(file);
+        EnsureThat.ParamIsNotNull(path);
+        EnsureThat.ParamIsNotNull(consoleService);
+        EnsureThat.ParamIsNotNull(methodExtractorService);
+        EnsureThat.ParamIsNotNull(pathResolver);
+        EnsureThat.ParamIsNotNull(scriptTemplateService);
+        EnsureThat.ParamIsNotNull(scriptMutations);
+
+        this.directory = directory;
+        this.file = file;
+        this.path = path;
+        this.consoleService = consoleService;
+        this.methodExtractorService = methodExtractorService;
+        this.pathResolver = pathResolver;
+        this.scriptTemplateService = scriptTemplateService;
+        this.scriptMutations = scriptMutations;
     }
 
     /// <inheritdoc/>
@@ -55,7 +78,6 @@ public class GeneratorService : IGeneratorService
     /// </exception>
     public void GenerateScript(string srcFilePath, string destDir, string destFileName)
     {
-        // TODO: Test for invocation of this
         this.consoleService.WriteLine($"Original Source File Path: {srcFilePath}");
         this.consoleService.WriteLine($"Original Destination Directory Path: {destDir}");
         this.consoleService.WriteLine($"Original Destination File Name: {destFileName}");
@@ -67,7 +89,6 @@ public class GeneratorService : IGeneratorService
 
         srcFilePath = this.pathResolver.Resolve(srcFilePath);
 
-        // TODO: Test for invocation of this
         this.consoleService.WriteLine($"Resolving Source File Path To: {srcFilePath}");
 
         if (string.IsNullOrEmpty(destDir))
@@ -90,7 +111,6 @@ public class GeneratorService : IGeneratorService
             .TrimEnd(this.path.DirectorySeparatorChar)
             .TrimEnd(this.path.AltDirectorySeparatorChar);
 
-        // TODO: Test for invocation of this
         this.consoleService.WriteLine($"Resolving Destination Directory Path To: {destDir}");
 
         if (string.IsNullOrEmpty(destFileName))
@@ -117,16 +137,13 @@ public class GeneratorService : IGeneratorService
             throw new FileNotFoundException("The source code file was not found.", srcFilePath);
         }
 
-        var functionCode = this.funcExtractorService.Extract(srcFilePath);
+        var functionCode = this.methodExtractorService.Extract(srcFilePath);
 
         // Apply all of the mutations
         functionCode = this.scriptMutations.Aggregate(functionCode, (current, mutation) => mutation.Mutate(current));
 
         var script = this.scriptTemplateService.CreateTemplate();
-
         script = script.Replace(FunctionCode, functionCode);
-
-        // TODO: Test for invocation of this
 
         var fullDestFilePath = $"{destDir}{this.path.AltDirectorySeparatorChar}{DestFileName}";
 

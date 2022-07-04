@@ -13,30 +13,6 @@ namespace BranchValidatorTests;
 /// </summary>
 public class ExtensionMethodsTests
 {
-    private char[] letters;
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="ExtensionMethodsTests"/> class.
-    /// </summary>
-    public ExtensionMethodsTests()
-    {
-        //65-90
-        //97-122
-        var letterValues = new List<char>();
-
-        for (var i = 'a'; i < 'z'; i++)
-        {
-            letterValues.Add(i);
-        }
-
-        // for (var i = 'A'; i < 'Z'; i++)
-        // {
-        //     letterValues.Add(i);
-        // }
-
-        this.letters = letterValues.ToArray();
-    }
-
     #region Method Tests
     [Fact]
     public void ToReadOnlyCollection_WhenInvoked_ReturnsCorrectResult()
@@ -438,7 +414,7 @@ public class ExtensionMethodsTests
     [Theory]
     [InlineData("123", "456", true, "")] // Function Example: isSectionNum(8, 10)
     [InlineData("123", "'-'", true, "")] // Function Example: isSectionNum(8, '-')
-    // Validation would catch that quotes to no exist, but this is just checking the param value without caring about the analyzers
+    // Validation would catch that quotes do not exist, but this is just checking the param value without caring about the analyzers
     [InlineData("123", "-", true, "")] // Function Example: isSectionNum(8, -)
     public void GetMethod_WithOverloadedMethods_ReturnsCorrectResult(
         string param1Value,

@@ -2,7 +2,7 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-namespace ScriptGenerator.Services;
+namespace ScriptGenerator.Services.Interfaces;
 
 /// <summary>
 /// Creates a script template for the purpose of execution.

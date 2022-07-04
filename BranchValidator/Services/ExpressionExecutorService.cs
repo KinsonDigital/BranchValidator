@@ -4,6 +4,7 @@
 
 using System.Text;
 using BranchValidator.Services.Interfaces;
+using BranchValidatorShared;
 
 namespace BranchValidator.Services;
 
@@ -19,22 +20,24 @@ public class ExpressionExecutorService : IExpressionExecutorService
     private readonly IEmbeddedResourceLoaderService<string> resourceLoaderService;
     private readonly IScriptService<(bool result, string[] funcResults)> scriptService;
 
-    // TODO: Need to inject the IScriptService to execute the script once it has been analyzed
-    // and the script created
-
     /// <summary>
     /// Initializes a new instance of the <see cref="ExpressionExecutorService"/> class.
     /// </summary>
-    /// <param name="expressionValidatorService">Validates expressions.</param>
+    /// <param name="csharpMethodService">Provides data about <c>C#</c> methods.</param>
+    /// <param name="resourceLoaderService">Loads embedded resources.</param>
+    /// <param name="scriptService">Executes <c>C#</c> methods.</param>
     public ExpressionExecutorService(
         ICSharpMethodService csharpMethodService,
         IEmbeddedResourceLoaderService<string> resourceLoaderService,
         IScriptService<(bool result, string[] funcResults)> scriptService)
     {
-        // TODO: null check and unit test these ctor params
+        EnsureThat.ParamIsNotNull(csharpMethodService);
+        EnsureThat.ParamIsNotNull(resourceLoaderService);
+        EnsureThat.ParamIsNotNull(scriptService);
+
         this.csharpMethodService = csharpMethodService;
-        this.scriptService = scriptService;
         this.resourceLoaderService = resourceLoaderService;
+        this.scriptService = scriptService;
     }
 
     /// <inheritdoc/>

@@ -23,9 +23,18 @@ using System.Collections.Generic;
 
 public static class ExpressionFunctions
 {
+	private static readonly List<string> FunctionResults = new ();
 	private const string BranchName = "//<branch-name/>";
 	private static readonly char[] Numbers = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', };
-	private static readonly List<string> FunctionResults = new ();
+
+    /// <summary>
+    /// Gets the results of all the functions.
+    /// </summary>
+    /// <returns>The result of all the functions.</returns>
+    public static string[] GetFunctionResults()
+    {
+        return FunctionResults.ToArray();
+    }
 
     /// <summary>
     /// Returns a value indicating whether or not a branch with the given branch name
@@ -215,7 +224,7 @@ public static class ExpressionFunctions
     {
         var branchNotNullOrEmpty = !string.IsNullOrEmpty(BranchName);
         var branch = branchNotNullOrEmpty ? BranchName : string.Empty;
-        var contains= branch.Contains(value);
+        var contains = branch.Contains(value);
         var result = branchNotNullOrEmpty && contains;
 
         RegisterFunctionResult($"{nameof(Contains)}({typeof(string)})", result);
@@ -235,7 +244,7 @@ public static class ExpressionFunctions
     {
         var branchNotNullOrEmpty = !string.IsNullOrEmpty(BranchName);
         var branch = branchNotNullOrEmpty ? BranchName : string.Empty;
-        var doesNotContain= branch.Contains(value) is false;
+        var doesNotContain = branch.Contains(value) is false;
         var result = branchNotNullOrEmpty && doesNotContain;
 
         RegisterFunctionResult($"{nameof(NotContains)}({typeof(string)})", result);
@@ -516,15 +525,6 @@ public static class ExpressionFunctions
         newName = newName.Replace($"{typeof(string)}", "string");
 
         FunctionResults.Add($"{newName} -> {result.ToString().ToLower()}");
-    }
-
-    /// <summary>
-    /// Gets the results of all the functions.
-    /// </summary>
-    /// <returns>The result of all the functions.</returns>
-    public static string[] GetFunctionResults()
-    {
-        return FunctionResults.ToArray();
     }
 
     /// <summary>

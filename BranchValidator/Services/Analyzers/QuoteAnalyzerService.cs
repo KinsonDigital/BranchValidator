@@ -23,8 +23,12 @@ public class QuoteAnalyzerService : IAnalyzerService
     /// <param name="expression">The expression to analyze.</param>
     /// <returns>
     ///     A result from analyzing the expression.
-    ///     Tuple.valid = <c>true</c> means it is valid.
-    ///     Tuple.msg = a message about the pass or failure.
+    ///     <para>
+    ///         <c>Tuple.valid</c> = <c>true</c> means it is valid.
+    ///     </para>
+    ///     <para>
+    ///         <c>Tuple.msg</c> = A message about the pass or failure.
+    ///     </para>
     /// </returns>
     /// <remarks>
     /// Things to consider:

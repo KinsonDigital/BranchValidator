@@ -1,7 +1,17 @@
-﻿namespace ScriptGenerator.Services;
+﻿// <copyright file="RemoveInheritCodeDocsMutation.cs" company="KinsonDigital">
+// Copyright (c) KinsonDigital. All rights reserved.
+// </copyright>
 
+using ScriptGenerator.Services.Interfaces;
+
+namespace ScriptGenerator.Services;
+
+/// <summary>
+/// Removes any test lines from a <c>string</c> that contains inherit XML documentation code.
+/// </summary>
 public class RemoveInheritCodeDocsMutation : IStringMutation
 {
+    /// <inheritdoc/>
     public string Mutate(string value)
     {
         value = value.Replace("\r\n", "\n");

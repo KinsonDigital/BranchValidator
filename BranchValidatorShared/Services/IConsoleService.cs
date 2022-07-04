@@ -2,23 +2,13 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-namespace ScriptGenerator.Services;
+namespace BranchValidatorShared.Services;
 
 /// <summary>
-/// Provides helper methods for GitHub console related operations.
+/// Provides functionality for writing to a console.
 /// </summary>
 public interface IConsoleService
 {
-    /// <summary>
-    /// Writes the given <paramref name="value"/> to the console.
-    /// </summary>
-    /// <param name="value">The value to write.</param>
-    /// <param name="newLineAfter">
-    ///     If <b>true</b>, the console will be moved down to the next line after
-    ///     the <paramref name="value"/> has been written to the console.
-    /// </param>
-    void Write(string value, bool newLineAfter = false);
-
     /// <summary>
     /// Writes the given <paramref name="value"/> to the console on its own line.
     /// </summary>
@@ -26,10 +16,10 @@ public interface IConsoleService
     void WriteLine(string value);
 
     /// <summary>
-    /// Writes the given <paramref name="value"/> to the console on its own line with the given
-    /// number of <paramref name="tabs"/> pre-appended to the <paramref name="value"/>.
+    /// Writes the given <paramref name="value"/> to the console on its own line that is
+    /// prefixed with the given number of <paramref name="tabs"/>.
     /// </summary>
-    /// <param name="tabs">The number of tabs to add before the <paramref name="value"/>.</param>
+    /// <param name="tabs">The number of tabs to prefix the given <paramref name="value"/>.</param>
     /// <param name="value">The value to write.</param>
     void WriteLine(uint tabs, string value);
 

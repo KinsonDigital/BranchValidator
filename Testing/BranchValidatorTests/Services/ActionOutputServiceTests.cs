@@ -4,10 +4,10 @@
 
 using BranchValidator.Exceptions;
 using BranchValidator.Services;
-using BranchValidator.Services.Interfaces;
-using BranchValidatorTests.Helpers;
+using BranchValidatorShared.Services;
 using FluentAssertions;
 using Moq;
+using TestingShared;
 
 namespace BranchValidatorTests.Services;
 
@@ -16,12 +16,12 @@ namespace BranchValidatorTests.Services;
 /// </summary>
 public class ActionOutputServiceTests
 {
-    private readonly Mock<IGitHubConsoleService> mockConsoleService;
+    private readonly Mock<IConsoleService> mockConsoleService;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ActionOutputServiceTests"/> class.
     /// </summary>
-    public ActionOutputServiceTests() => this.mockConsoleService = new Mock<IGitHubConsoleService>();
+    public ActionOutputServiceTests() => this.mockConsoleService = new Mock<IConsoleService>();
 
     #region Method Tests
     [Fact]
@@ -57,5 +57,5 @@ public class ActionOutputServiceTests
     /// Creates a new instance of <see cref="ActionOutputService"/> for the purpose of testing.
     /// </summary>
     /// <returns>The instance to test.</returns>
-    private ActionOutputService CreateService() => new ActionOutputService(this.mockConsoleService.Object);
+    private ActionOutputService CreateService() => new (this.mockConsoleService.Object);
 }

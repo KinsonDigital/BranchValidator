@@ -3,6 +3,7 @@
 // </copyright>
 
 using BranchValidator.Services.Interfaces;
+using BranchValidatorShared;
 
 namespace BranchValidator.Services.Analyzers;
 
@@ -22,15 +23,17 @@ public class FunctionAnalyzerService : IAnalyzerService
         IFunctionExtractorService functionExtractorService,
         ICSharpMethodService csharpMethodService)
     {
-        // TODO: Add guard here
-        this.functionExtractorService = functionExtractorService ?? throw new ArgumentNullException(nameof(functionExtractorService), "The constructor parameter must not be null.");
-        this.csharpMethodService = csharpMethodService ?? throw new ArgumentNullException(nameof(csharpMethodService), "The constructor parameter must not be null.");
+        EnsureThat.ParamIsNotNull(functionExtractorService);
+        EnsureThat.ParamIsNotNull(csharpMethodService);
+
+        this.functionExtractorService = functionExtractorService;
+        this.csharpMethodService = csharpMethodService;
     }
 
     /// <inheritdoc/>
     public (bool valid, string msg) Analyze(string expression)
     {
-        var allFunctionsExistResult = AllFunctionsExist(expression);
+        var allFunctionsExistResult = AllMethodsExist(expression);
 
         if (allFunctionsExistResult.valid is false)
         {
@@ -86,27 +89,26 @@ public class FunctionAnalyzerService : IAnalyzerService
         return (true, string.Empty);
     }
 
-    private (bool valid, string msg) AllFunctionsExist(string expression)
+    /// <summary>
+    /// Returns a result indicating if all of the <c>C#</c> equivalent methods for the expression
+    /// function methods in the given <paramref name="expression"/> exist.
+    /// </summary>
+    /// <param name="expression">The expression to analyze.</param>
+    /// <returns>
+    ///     A result from analyzing the expression.
+    ///     <para>
+    ///         <c>Tuple.valid</c> = <c>true</c> if the methods exist in the <paramref name="expression"/>.
+    ///     </para>
+    ///     <para>
+    ///         <c>Tuple.msg</c> = A message about the pass or failure.
+    ///     </para>
+    /// </returns>
+    private (bool valid, string msg) AllMethodsExist(string expression)
     {
         var methodNames = this.csharpMethodService.GetMethodNames(nameof(FunctionDefinitions)).ToArray();
 
         // Lower case the first character of each method name to matching the casing of the expression function names before validation
-        methodNames = methodNames.Select(name =>
-        {
-            if (string.IsNullOrEmpty(name))
-            {
-                return string.Empty;
-            }
-
-            var result = string.Empty;
-
-            for (var i = 0; i < name.Length; i++)
-            {
-                result += i == 0 ? name[i].ToLower() : name[i];
-            }
-
-            return result;
-        }).ToArray();
+        methodNames = methodNames.Select(name => $"{name[0].ToLower()}{name[1..]}").ToArray();
 
         var expressionFunNames = this.functionExtractorService.ExtractNames(expression);
 

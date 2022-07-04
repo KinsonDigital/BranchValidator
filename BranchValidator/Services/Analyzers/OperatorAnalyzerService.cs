@@ -117,9 +117,12 @@ public class OperatorAnalyzerService : IAnalyzerService
     /// <param name="expression">The expression to analyze.</param>
     /// <returns>
     ///     A result from analyzing the expression.
-    ///     Tuple.valid = <c>true</c> means the operators are valid.
-    ///     Tuple.msg = A message about the pass or failure.
-    ///     // TODO: Go through each analyzer code doc and format it better.  Refer to NegativeNumberAnalyzer for reference.
+    ///     <para>
+    ///         <c>Tuple.valid</c> = <c>true</c> means the operators ar valid.
+    ///     </para>
+    ///     <para>
+    ///         <c>Tuple.msg</c> = A message about the pass or failure.
+    ///     </para>
     /// </returns>
     private (bool valid, string msg) AnalyzeOperatorsBetweenFunctions(string expression)
     {

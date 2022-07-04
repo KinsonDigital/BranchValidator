@@ -5,9 +5,10 @@
 using BranchValidator;
 using BranchValidator.Exceptions;
 using BranchValidator.Services.Interfaces;
-using BranchValidatorTests.Helpers;
+using BranchValidatorShared.Services;
 using FluentAssertions;
 using Moq;
+using TestingShared;
 
 namespace BranchValidatorTests;
 
@@ -16,9 +17,9 @@ namespace BranchValidatorTests;
 /// </summary>
 public class GitHubActionTests
 {
-    private readonly Mock<IGitHubConsoleService> mockConsoleService;
+    private readonly Mock<IConsoleService> mockConsoleService;
     private readonly Mock<IActionOutputService> mockActionOutputService;
-    private readonly Mock<IExpressionValidatorService> mockValidationService;
+    private readonly Mock<IExpressionValidatorService> mockExpressionValidationService;
     private readonly Mock<IExpressionExecutorService> mockExpressionExecutorService;
     private readonly Mock<ICSharpMethodService> mockCSharpMethodService;
     private readonly Mock<IBranchNameObservable> mockBranchNameObservable;
@@ -29,11 +30,11 @@ public class GitHubActionTests
     /// </summary>
     public GitHubActionTests()
     {
-        this.mockConsoleService = new Mock<IGitHubConsoleService>();
+        this.mockConsoleService = new Mock<IConsoleService>();
         this.mockActionOutputService = new Mock<IActionOutputService>();
 
-        this.mockValidationService = new Mock<IExpressionValidatorService>();
-        this.mockValidationService.Setup(m => m.Validate(It.IsAny<string>()))
+        this.mockExpressionValidationService = new Mock<IExpressionValidatorService>();
+        this.mockExpressionValidationService.Setup(m => m.Validate(It.IsAny<string>()))
             .Returns((true, string.Empty));
 
         this.mockExpressionExecutorService = new Mock<IExpressionExecutorService>();
@@ -41,6 +42,155 @@ public class GitHubActionTests
         this.mockBranchNameObservable = new Mock<IBranchNameObservable>();
         this.mockParsingService = new Mock<IParsingService>();
     }
+
+    #region Constructor Tests
+    [Fact]
+    public void Ctor_WithNullConsoleServiceParam_ThrowsException()
+    {
+        // Arrange & Act
+        var act = () =>
+        {
+            _ = new GitHubAction(null,
+                this.mockActionOutputService.Object,
+                this.mockExpressionValidationService.Object,
+                this.mockExpressionExecutorService.Object,
+                this.mockCSharpMethodService.Object,
+                this.mockParsingService.Object,
+                this.mockBranchNameObservable.Object);
+        };
+
+        // Assert
+        act.Should()
+            .Throw<ArgumentNullException>()
+            .WithMessage("The parameter must not be null. (Parameter 'consoleService')");
+    }
+
+    [Fact]
+    public void Ctor_WithNullActionOutputServiceParam_ThrowsException()
+    {
+        // Arrange & Act
+        var act = () =>
+        {
+            _ = new GitHubAction(this.mockConsoleService.Object,
+                null,
+                this.mockExpressionValidationService.Object,
+                this.mockExpressionExecutorService.Object,
+                this.mockCSharpMethodService.Object,
+                this.mockParsingService.Object,
+                this.mockBranchNameObservable.Object);
+        };
+
+        // Assert
+        act.Should()
+            .Throw<ArgumentNullException>()
+            .WithMessage("The parameter must not be null. (Parameter 'actionOutputService')");
+    }
+
+    [Fact]
+    public void Ctor_WithNullExpressionValidatorServiceParam_ThrowsException()
+    {
+        // Arrange & Act
+        var act = () =>
+        {
+            _ = new GitHubAction(this.mockConsoleService.Object,
+                this.mockActionOutputService.Object,
+                null,
+                this.mockExpressionExecutorService.Object,
+                this.mockCSharpMethodService.Object,
+                this.mockParsingService.Object,
+                this.mockBranchNameObservable.Object);
+        };
+
+        // Assert
+        act.Should()
+            .Throw<ArgumentNullException>()
+            .WithMessage("The parameter must not be null. (Parameter 'expressionValidatorService')");
+    }
+
+    [Fact]
+    public void Ctor_WithNullExpressionExecutorServiceParam_ThrowsException()
+    {
+        // Arrange & Act
+        var act = () =>
+        {
+            _ = new GitHubAction(this.mockConsoleService.Object,
+                this.mockActionOutputService.Object,
+                this.mockExpressionValidationService.Object,
+                null,
+                this.mockCSharpMethodService.Object,
+                this.mockParsingService.Object,
+                this.mockBranchNameObservable.Object);
+        };
+
+        // Assert
+        act.Should()
+            .Throw<ArgumentNullException>()
+            .WithMessage("The parameter must not be null. (Parameter 'expressionExecutorService')");
+    }
+
+    [Fact]
+    public void Ctor_WithNullCSharpMethodServiceParam_ThrowsException()
+    {
+        // Arrange & Act
+        var act = () =>
+        {
+            _ = new GitHubAction(this.mockConsoleService.Object,
+                this.mockActionOutputService.Object,
+                this.mockExpressionValidationService.Object,
+                this.mockExpressionExecutorService.Object,
+                null,
+                this.mockParsingService.Object,
+                this.mockBranchNameObservable.Object);
+        };
+
+        // Assert
+        act.Should()
+            .Throw<ArgumentNullException>()
+            .WithMessage("The parameter must not be null. (Parameter 'csharpMethodService')");
+    }
+
+    [Fact]
+    public void Ctor_WithNullParsingServiceParam_ThrowsException()
+    {
+        // Arrange & Act
+        var act = () =>
+        {
+            _ = new GitHubAction(this.mockConsoleService.Object,
+                this.mockActionOutputService.Object,
+                this.mockExpressionValidationService.Object,
+                this.mockExpressionExecutorService.Object,
+                this.mockCSharpMethodService.Object,
+                null,
+                this.mockBranchNameObservable.Object);
+        };
+
+        // Assert
+        act.Should()
+            .Throw<ArgumentNullException>()
+            .WithMessage("The parameter must not be null. (Parameter 'parsingService')");
+    }
+
+    [Fact]
+    public void Ctor_WithNullBranchNameObservableParam_ThrowsException()
+    {
+        // Arrange & Act
+        var act = () =>
+        {
+            _ = new GitHubAction(this.mockConsoleService.Object,
+                this.mockActionOutputService.Object,
+                this.mockExpressionValidationService.Object,
+                this.mockExpressionExecutorService.Object,
+                this.mockCSharpMethodService.Object,
+                this.mockParsingService.Object,
+                null);
+        };
+
+        // Assert
+        act.Should()
+            .Throw<ArgumentNullException>()
+            .WithMessage("The parameter must not be null. (Parameter 'branchNameObservable')");
+    }
+    #endregion
 
     #region Method Tests
     [Fact]
@@ -126,7 +276,7 @@ public class GitHubActionTests
         var validationLogic = $"funA('{branchName}')";
         var inputs = CreateInputs(validationLogic: validationLogic, branchName: branchName, failWhenNotValid: false);
 
-        this.mockValidationService.Setup(m => m.Validate(validationLogic))
+        this.mockExpressionValidationService.Setup(m => m.Validate(validationLogic))
             .Returns((true, string.Empty));
         this.mockExpressionExecutorService.Setup(m => m.Execute(inputs.ValidationLogic, inputs.BranchName))
             .Returns((expectedValidResult, expectedMsgResult));
@@ -244,7 +394,7 @@ public class GitHubActionTests
     private GitHubAction CreateAction()
         => new (this.mockConsoleService.Object,
             this.mockActionOutputService.Object,
-            this.mockValidationService.Object,
+            this.mockExpressionValidationService.Object,
             this.mockExpressionExecutorService.Object,
             this.mockCSharpMethodService.Object,
             this.mockParsingService.Object,

@@ -1,13 +1,15 @@
-﻿// See https://aka.ms/new-console-template for more information
-
-// TODO: Move all service interfaces into an interface folder inside of the services folder
+﻿// <copyright file="Program.cs" company="KinsonDigital">
+// Copyright (c) KinsonDigital. All rights reserved.
+// </copyright>
 
 using System.IO.Abstractions;
+using BranchValidatorShared.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ScriptGenerator;
 using ScriptGenerator.Factories;
 using ScriptGenerator.Services;
+using ScriptGenerator.Services.Interfaces;
 
 var fileSystem = new FileSystem();
 
@@ -22,10 +24,10 @@ IHost host = Host.CreateDefaultBuilder(args)
         services.AddSingleton<IConsoleService, ConsoleService>();
         services.AddSingleton(_ => MutationFactory.CreateMutations());
         services.AddSingleton<IRelativePathResolverService, RelativePathResolverService>();
-        services.AddSingleton<IArgParsingService<AppInputs>, ArgParsingService>();
+        services.AddSingleton<IArgParsingService<AppInputs>, ArgParsingService<AppInputs>>();
         services.AddSingleton<IFileLoaderService<string>, TextFileLoaderService>();
         services.AddSingleton<IFileLoaderService<string[]>, TextFileLinesLoaderService>();
-        services.AddSingleton<IFunctionExtractorService, FunctionExtractorService>();
+        services.AddSingleton<IMethodExtractorService, MethodExtractorService>();
         services.AddSingleton<IGeneratorService, GeneratorService>();
     }).Build();
 
@@ -39,9 +41,10 @@ try
     await argParsingService.ParseArguments(
         new AppInputs(),
         args,
-        async inputs =>
+        inputs =>
         {
             generatorService.GenerateScript(inputs.SourceFilePath, inputs.DestinationDirPath, inputs.FileName);
+            return Task.CompletedTask;
         }, errors =>
         {
             foreach (var error in errors)

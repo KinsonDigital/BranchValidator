@@ -4,6 +4,7 @@
 
 using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
+using BranchValidatorShared;
 
 namespace BranchValidator;
 
@@ -15,12 +16,12 @@ namespace BranchValidator;
 [SuppressMessage("ReSharper", "MemberCanBeMadeStatic.Global", Justification = "Methods cannot be static due to reflection requirements and invocation.")]
 public class FunctionDefinitions
 {
+    private static readonly List<string> FunctionResults = new ();
     private static readonly char[] Numbers =
     {
         '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
     };
     private readonly string branchName;
-    private static readonly List<string> FunctionResults = new ();
 
     /// <summary>
     /// Initializes a new instance of the <see cref="FunctionDefinitions"/> class.
@@ -35,6 +36,15 @@ public class FunctionDefinitions
 // ReSharper disable ArrangeMethodOrOperatorBody
 
     //<script-function>
+    /// <summary>
+    /// Gets the results of all the functions.
+    /// </summary>
+    /// <returns>The result of all the functions.</returns>
+    public static string[] GetFunctionResults()
+    {
+        return FunctionResults.ToArray();
+    }
+
     /// <summary>
     /// Returns a value indicating whether or not a branch with the given branch name
     /// matches the given <paramref name="value"/>.
@@ -228,7 +238,7 @@ public class FunctionDefinitions
     {
         var branchNotNullOrEmpty = !string.IsNullOrEmpty(this.branchName);
         var branch = branchNotNullOrEmpty ? this.branchName : string.Empty;
-        var contains= branch.Contains(value);
+        var contains = branch.Contains(value);
         var result = branchNotNullOrEmpty && contains;
 
         RegisterFunctionResult($"{nameof(Contains)}({typeof(string)})", result);
@@ -249,7 +259,7 @@ public class FunctionDefinitions
     {
         var branchNotNullOrEmpty = !string.IsNullOrEmpty(this.branchName);
         var branch = branchNotNullOrEmpty ? this.branchName : string.Empty;
-        var doesNotContain= branch.Contains(value) is false;
+        var doesNotContain = branch.Contains(value) is false;
         var result = branchNotNullOrEmpty && doesNotContain;
 
         RegisterFunctionResult($"{nameof(NotContains)}({typeof(string)})", result);
@@ -543,15 +553,6 @@ public class FunctionDefinitions
         newName = newName.Replace($"{typeof(string)}", "string");
 
         FunctionResults.Add($"{newName} -> {result.ToString().ToLower()}");
-    }
-
-    /// <summary>
-    /// Gets the results of all the functions.
-    /// </summary>
-    /// <returns>The result of all the functions.</returns>
-    public static string[] GetFunctionResults()
-    {
-        return FunctionResults.ToArray();
     }
 
     /// <summary>

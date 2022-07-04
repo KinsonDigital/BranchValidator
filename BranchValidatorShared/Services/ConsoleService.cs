@@ -2,34 +2,18 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-using System.Diagnostics.CodeAnalysis;
-
-namespace ScriptGenerator.Services;
-
-// TODO: Find everything that is shared between more than 1 project and create a core library project for it
+namespace BranchValidatorShared.Services;
 
 /// <inheritdoc/>
-[ExcludeFromCodeCoverage]
 public class ConsoleService : IConsoleService
 {
     private const char GroupExpanded = '▼';
 
     /// <inheritdoc/>
-    public void Write(string value, bool newLineAfter)
-    {
-        Console.Write($"{value}");
-
-        if (newLineAfter)
-        {
-            Console.WriteLine();
-        }
-    }
+    public virtual void WriteLine(string value) => Console.WriteLine(value);
 
     /// <inheritdoc/>
-    public void WriteLine(string value) => Console.WriteLine(value);
-
-    /// <inheritdoc/>
-    public void WriteLine(uint tabs, string value)
+    public virtual void WriteLine(uint tabs, string value)
     {
         var allTabs = string.Empty;
 
@@ -42,16 +26,16 @@ public class ConsoleService : IConsoleService
     }
 
     /// <inheritdoc/>
-    public void BlankLine() => Console.WriteLine();
+    public virtual void BlankLine() => Console.WriteLine();
 
     /// <inheritdoc/>
-    public void StartGroup(string name) => Console.WriteLine($"{GroupExpanded}{(string.IsNullOrEmpty(name) ? "Group" : name)}");
+    public virtual void StartGroup(string name) => Console.WriteLine($"{GroupExpanded}{(string.IsNullOrEmpty(name) ? "Group" : name)}");
 
     /// <inheritdoc/>
-    public void EndGroup() => Console.WriteLine("__");
+    public virtual void EndGroup() => Console.WriteLine("__");
 
     /// <inheritdoc/>
-    public void WriteGroup(string title, string content)
+    public virtual void WriteGroup(string title, string content)
     {
         StartGroup(title);
         WriteLine(content);
@@ -59,7 +43,7 @@ public class ConsoleService : IConsoleService
     }
 
     /// <inheritdoc/>
-    public void WriteGroup(string title, string[] contentLines)
+    public virtual void WriteGroup(string title, string[] contentLines)
     {
         StartGroup(title);
 
@@ -74,7 +58,7 @@ public class ConsoleService : IConsoleService
     }
 
     /// <inheritdoc/>
-    public void WriteError(string value)
+    public virtual void WriteError(string value)
     {
         var currentClr = Console.ForegroundColor;
         Console.ForegroundColor = ConsoleColor.Red;

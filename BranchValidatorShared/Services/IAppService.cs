@@ -2,7 +2,7 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-namespace BranchValidator.Services.Interfaces;
+namespace BranchValidatorShared.Services;
 
 /// <summary>
 /// Provides application type functionality.

@@ -2,7 +2,7 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-namespace BranchValidator.Services.Interfaces;
+namespace BranchValidatorShared.Services;
 
 /// <summary>
 /// Parses arguments and responds based on successful or unsuccessful parsing.

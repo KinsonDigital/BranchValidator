@@ -1,4 +1,4 @@
-﻿// <copyright file="FunctionExtractorServiceTests.cs" company="KinsonDigital">
+﻿// <copyright file="MethodExtractorServiceTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -6,21 +6,22 @@ using FluentAssertions;
 using Moq;
 using ScriptGenerator.Exceptions;
 using ScriptGenerator.Services;
+using ScriptGenerator.Services.Interfaces;
 using ScriptGeneratorTests.Helpers;
 
 namespace ScriptGeneratorTests.Services;
 
 /// <summary>
-/// Tests the <see cref="FunctionExtractorService"/> class.
+/// Tests the <see cref="MethodExtractorService"/> class.
 /// </summary>
-public class FunctionExtractorServiceTests
+public class MethodExtractorServiceTests
 {
     private readonly Mock<IFileLoaderService<string[]>> mockFileLoaderService;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="FunctionExtractorServiceTests"/> class.
+    /// Initializes a new instance of the <see cref="MethodExtractorServiceTests"/> class.
     /// </summary>
-    public FunctionExtractorServiceTests() => this.mockFileLoaderService = new Mock<IFileLoaderService<string[]>>();
+    public MethodExtractorServiceTests() => this.mockFileLoaderService = new Mock<IFileLoaderService<string[]>>();
 
     #region Method Tests
     [Theory]
@@ -175,8 +176,8 @@ public class FunctionExtractorServiceTests
     #endregion
 
     /// <summary>
-    /// Creates a new instance of <see cref="FunctionExtractorService"/> for the purpose of testing.
+    /// Creates a new instance of <see cref="MethodExtractorService"/> for the purpose of testing.
     /// </summary>
     /// <returns>The instance to test.</returns>
-    private FunctionExtractorService CreateService() => new (this.mockFileLoaderService.Object);
+    private MethodExtractorService CreateService() => new (this.mockFileLoaderService.Object);
 }

@@ -3,24 +3,24 @@
 // </copyright>
 
 using System.Diagnostics.CodeAnalysis;
-using BranchValidator.Services.Interfaces;
+using CommandLine;
 
-namespace BranchValidator.Services;
+namespace BranchValidatorShared.Services;
 
 /// <inheritdoc/>
 [ExcludeFromCodeCoverage]
-public sealed class ArgParsingService : IArgParsingService<ActionInputs>
+public sealed class ArgParsingService<T> : IArgParsingService<T>
 {
     private bool isDisposed;
 
     /// <inheritdoc/>
     public async Task ParseArguments(
-        ActionInputs inputs,
+        T inputs,
         IEnumerable<string> args,
-        Func<ActionInputs, Task> onSuccess,
+        Func<T, Task> onSuccess,
         Action<string[]> onFailure)
     {
-        var parser = Default.ParseArguments(() => inputs, args);
+        var parser = Parser.Default.ParseArguments(() => inputs, args);
 
         parser.WithNotParsed(errors =>
         {
@@ -60,7 +60,7 @@ public sealed class ArgParsingService : IArgParsingService<ActionInputs>
             return;
         }
 
-        Default.Dispose();
+        Parser.Default.Dispose();
 
         this.isDisposed = true;
     }

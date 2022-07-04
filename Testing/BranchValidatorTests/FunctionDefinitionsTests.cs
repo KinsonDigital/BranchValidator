@@ -32,9 +32,11 @@ public class FunctionDefinitionsTests
 
         // Act
         var actual = definitions.EqualTo(value);
+        var actualFunctionResults = FunctionDefinitions.GetFunctionResults();
 
         // Assert
         actual.Should().Be(expected);
+        actualFunctionResults.Should().Contain($"equalTo(string) -> {expected.ToString().ToLower()}");
     }
 
     [Theory]
@@ -53,9 +55,11 @@ public class FunctionDefinitionsTests
 
         // Act
         var actual = definitions.IsCharNum(charPos);
+        var actualFunctionResults = FunctionDefinitions.GetFunctionResults();
 
         // Assert
         actual.Should().Be(expected);
+        actualFunctionResults.Should().Contain($"isCharNum(number) -> {expected.ToString().ToLower()}");
     }
 
     [Theory]
@@ -77,9 +81,11 @@ public class FunctionDefinitionsTests
 
         // Act
         var actual = definitions.IsSectionNum(startPos, endPos);
+        var actualFunctionResults = FunctionDefinitions.GetFunctionResults();
 
         // Assert
         actual.Should().Be(expected);
+        actualFunctionResults.Should().Contain($"isSectionNum(number, number) -> {expected.ToString().ToLower()}");
     }
 
     [Theory]
@@ -107,9 +113,11 @@ public class FunctionDefinitionsTests
 
         // Act
         var actual = definitions.IsSectionNum(startPos, upToChar);
+        var actualFunctionResults = FunctionDefinitions.GetFunctionResults();
 
         // Assert
         actual.Should().Be(expected);
+        actualFunctionResults.Should().Contain($"isSectionNum(number, string) -> {expected.ToString().ToLower()}");
     }
 
     [Theory]
@@ -127,9 +135,11 @@ public class FunctionDefinitionsTests
 
         // Act
         var actual = definitions.Contains(value);
+        var actualFunctionResults = FunctionDefinitions.GetFunctionResults();
 
         // Assert
         actual.Should().Be(expected);
+        actualFunctionResults.Should().Contain($"contains(string) -> {expected.ToString().ToLower()}");
     }
 
     [Theory]
@@ -147,9 +157,11 @@ public class FunctionDefinitionsTests
 
         // Act
         var actual = definitions.NotContains(value);
+        var actualFunctionResults = FunctionDefinitions.GetFunctionResults();
 
         // Assert
         actual.Should().Be(expected);
+        actualFunctionResults.Should().Contain($"notContains(string) -> {expected.ToString().ToLower()}");
     }
 
     [Theory]
@@ -171,9 +183,11 @@ public class FunctionDefinitionsTests
 
         // Act
         var actual = definitions.ExistTotal(value, total);
+        var actualFunctionResults = FunctionDefinitions.GetFunctionResults();
 
         // Assert
         actual.Should().Be(expected);
+        actualFunctionResults.Should().Contain($"existTotal(string, number) -> {expected.ToString().ToLower()}");
     }
 
     [Theory]
@@ -193,9 +207,11 @@ public class FunctionDefinitionsTests
 
         // Act
         var actual = definitions.ExistsLessThan(value, total);
+        var actualFunctionResults = FunctionDefinitions.GetFunctionResults();
 
         // Assert
         actual.Should().Be(expected);
+        actualFunctionResults.Should().Contain($"existsLessThan(string, number) -> {expected.ToString().ToLower()}");
     }
 
     [Theory]
@@ -214,9 +230,11 @@ public class FunctionDefinitionsTests
 
         // Act
         var actual = definitions.ExistsGreaterThan(value, total);
+        var actualFunctionResults = FunctionDefinitions.GetFunctionResults();
 
         // Assert
         actual.Should().Be(expected);
+        actualFunctionResults.Should().Contain($"existsGreaterThan(string, number) -> {expected.ToString().ToLower()}");
     }
 
     [Theory]
@@ -234,9 +252,11 @@ public class FunctionDefinitionsTests
 
         // Act
         var actual = definitions.StartsWith(value);
+        var actualFunctionResults = FunctionDefinitions.GetFunctionResults();
 
         // Assert
         actual.Should().Be(expected);
+        actualFunctionResults.Should().Contain($"startsWith(string) -> {expected.ToString().ToLower()}");
     }
 
     [Theory]
@@ -254,9 +274,11 @@ public class FunctionDefinitionsTests
 
         // Act
         var actual = definitions.NotStartsWith(value);
+        var actualFunctionResults = FunctionDefinitions.GetFunctionResults();
 
         // Assert
         actual.Should().Be(expected);
+        actualFunctionResults.Should().Contain($"notStartsWith(string) -> {expected.ToString().ToLower()}");
     }
 
     [Theory]
@@ -274,9 +296,11 @@ public class FunctionDefinitionsTests
 
         // Act
         var actual = definitions.EndsWith(value);
+        var actualFunctionResults = FunctionDefinitions.GetFunctionResults();
 
         // Assert
         actual.Should().Be(expected);
+        actualFunctionResults.Should().Contain($"endsWith(string) -> {expected.ToString().ToLower()}");
     }
 
     [Theory]
@@ -294,9 +318,11 @@ public class FunctionDefinitionsTests
 
         // Act
         var actual = definitions.NotEndsWith(value);
+        var actualFunctionResults = FunctionDefinitions.GetFunctionResults();
 
         // Assert
         actual.Should().Be(expected);
+        actualFunctionResults.Should().Contain($"notEndsWith(string) -> {expected.ToString().ToLower()}");
     }
 
     [Theory]
@@ -313,9 +339,11 @@ public class FunctionDefinitionsTests
 
         // Act
         var actual = definitions.StartsWithNum();
+        var actualFunctionResults = FunctionDefinitions.GetFunctionResults();
 
         // Assert
         actual.Should().Be(expected);
+        actualFunctionResults.Should().Contain($"startsWithNum() -> {expected.ToString().ToLower()}");
     }
 
     [Theory]
@@ -332,9 +360,11 @@ public class FunctionDefinitionsTests
 
         // Act
         var actual = definitions.EndsWithNum();
+        var actualFunctionResults = FunctionDefinitions.GetFunctionResults();
 
         // Assert
         actual.Should().Be(expected);
+        actualFunctionResults.Should().Contain($"endsWithNum() -> {expected.ToString().ToLower()}");
     }
 
     [Theory]
@@ -353,9 +383,11 @@ public class FunctionDefinitionsTests
 
         // Act
         var actual = definitions.LenLessThan(value);
+        var actualFunctionResults = FunctionDefinitions.GetFunctionResults();
 
         // Assert
         actual.Should().Be(expected);
+        actualFunctionResults.Should().Contain($"lenLessThan(number) -> {expected.ToString().ToLower()}");
     }
 
     [Theory]
@@ -373,9 +405,11 @@ public class FunctionDefinitionsTests
 
         // Act
         var actual = definitions.LenGreaterThan(value);
+        var actualFunctionResults = FunctionDefinitions.GetFunctionResults();
 
         // Assert
         actual.Should().Be(expected);
+        actualFunctionResults.Should().Contain($"lenGreaterThan(number) -> {expected.ToString().ToLower()}");
     }
 
     [Theory]
@@ -394,9 +428,11 @@ public class FunctionDefinitionsTests
 
         // Act
         var actual = definitions.IsBefore(value, after);
+        var actualFunctionResults = FunctionDefinitions.GetFunctionResults();
 
         // Assert
         actual.Should().Be(expected);
+        actualFunctionResults.Should().Contain($"isBefore(string, string) -> {expected.ToString().ToLower()}");
     }
 
     [Theory]
@@ -415,9 +451,11 @@ public class FunctionDefinitionsTests
 
         // Act
         var actual = definitions.IsAfter(value, after);
+        var actualFunctionResults = FunctionDefinitions.GetFunctionResults();
 
         // Assert
         actual.Should().Be(expected);
+        actualFunctionResults.Should().Contain($"isAfter(string, string) -> {expected.ToString().ToLower()}");
     }
     #endregion
 }
