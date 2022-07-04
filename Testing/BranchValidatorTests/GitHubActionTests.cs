@@ -204,7 +204,7 @@ public class GitHubActionTests
 
         // Assert
         this.mockConsoleService.VerifyOnce(m => m.WriteLine("Welcome To The BranchValidator GitHub Action!!"));
-        this.mockConsoleService.VerifyOnce(m => m.BlankLine());
+        this.mockConsoleService.Verify(m => m.BlankLine(), Times.Exactly(2));
     }
 
     [Fact]
@@ -287,7 +287,7 @@ public class GitHubActionTests
         await action.Run(inputs, _ => { }, _ => { });
 
         // Assert
-        this.mockConsoleService.Verify(m => m.BlankLine(), Times.Exactly(2));
+        this.mockConsoleService.Verify(m => m.BlankLine(), Times.Exactly(4));
         this.mockConsoleService.VerifyOnce(m => m.WriteLine(expectedMsgResult));
         this.mockActionOutputService.VerifyOnce(m => m.SetOutputValue("valid-branch", expectedValidResult.ToString().ToLower()));
         this.mockBranchNameObservable.VerifyOnce(m => m.PushNotification(branchName));
@@ -325,6 +325,7 @@ public class GitHubActionTests
 
         // Assert
         await act.Should().NotThrowAsync();
+        this.mockConsoleService.VerifyOnce(m => m.WriteLine("Branch Invalid: branch invalid"));
     }
 
     [Fact]
@@ -356,6 +357,27 @@ public class GitHubActionTests
 
         // Assert
         onCompletedExecuted.Should().BeTrue();
+    }
+
+    [Fact]
+    public async void Run_WhenInvoked_PrintsActionStatusMessagesToConsole()
+    {
+        // Arrange
+        this.mockExpressionExecutorService.Setup(m => m.Execute(It.IsAny<string>(), It.IsAny<string>()))
+            .Returns((true, string.Empty));
+
+        var inputs = CreateInputs(failWhenNotValid: false);
+        var action = CreateAction();
+
+        // Act
+        await action.Run(inputs, _ => { }, _ => { });
+
+        // Assert
+        this.mockConsoleService.VerifyOnce(m => m.WriteLine("Validating expression . . ."));
+        this.mockConsoleService.VerifyOnce(m => m.WriteLine("Expression validation complete."));
+        this.mockConsoleService.VerifyOnce(m => m.WriteLine("Executing expression . . ."));
+        this.mockConsoleService.VerifyOnce(m => m.WriteLine("Expression execution complete."));
+        this.mockConsoleService.VerifyOnce(m => m.WriteLine("Branch Valid"));
     }
 
     [Fact]

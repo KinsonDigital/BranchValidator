@@ -88,6 +88,7 @@ public sealed class GitHubAction : IGitHubAction<bool>
                 throw new InvalidActionInput("The 'validation-logic' action input cannot be null or empty.");
             }
 
+            this.consoleService.WriteLine("Validating expression . . .");
             var validSyntaxResult = this.expressionValidatorService.Validate(inputs.ValidationLogic);
 
             if (validSyntaxResult.isValid is false)
@@ -98,13 +99,27 @@ public sealed class GitHubAction : IGitHubAction<bool>
                 throw new Exception(exceptionMsg);
             }
 
+            this.consoleService.WriteLine("Expression validation complete.");
+
+            this.consoleService.WriteLine("Executing expression . . .");
+
             (bool branchIsValid, string msg) logicResult = this.expressionExecutorService.Execute(inputs.ValidationLogic, inputs.BranchName);
             branchIsValid = logicResult.branchIsValid;
+
+            this.consoleService.WriteLine("Expression execution complete.");
 
             if (inputs.FailWhenNotValid is true && logicResult.branchIsValid is false)
             {
                 throw new Exception(logicResult.msg);
             }
+
+            this.consoleService.BlankLine();
+
+            var executionResult = logicResult.branchIsValid
+                ? "Branch Valid"
+                : $"Branch Invalid: {logicResult.msg}";
+
+            this.consoleService.WriteLine(executionResult);
 
             this.consoleService.BlankLine();
             this.consoleService.WriteLine(logicResult.msg);
@@ -136,6 +151,7 @@ public sealed class GitHubAction : IGitHubAction<bool>
     /// </summary>
     private void ShowWelcomeMessage()
     {
+        this.consoleService.BlankLine();
         this.consoleService.WriteLine("Welcome To The BranchValidator GitHub Action!!");
         this.consoleService.BlankLine();
     }
