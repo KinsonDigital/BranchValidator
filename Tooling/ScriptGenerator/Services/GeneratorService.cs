@@ -101,15 +101,14 @@ public class GeneratorService : IGeneratorService
         if (destDir.StartsWith($".{this.path.DirectorySeparatorChar}") ||
             destDir.StartsWith($".{this.path.AltDirectorySeparatorChar}"))
         {
-            destDir = destDir.TrimStart('.')
-                .TrimStart(this.path.DirectorySeparatorChar)
-                .TrimStart(this.path.AltDirectorySeparatorChar);
+            destDir = destDir[2..];
             destDir = $"{this.directory.GetCurrentDirectory()}{this.path.AltDirectorySeparatorChar}{destDir}";
         }
 
-        destDir = destDir
-            .TrimEnd(this.path.DirectorySeparatorChar)
-            .TrimEnd(this.path.AltDirectorySeparatorChar);
+        if (destDir.EndsWith(this.path.DirectorySeparatorChar) || destDir.EndsWith(this.path.AltDirectorySeparatorChar))
+        {
+            destDir = destDir[..^1];
+        }
 
         this.consoleService.WriteLine($"Resolving Destination Directory Path To: {destDir}");
 
@@ -126,9 +125,7 @@ public class GeneratorService : IGeneratorService
         if (srcFilePath.StartsWith($".{this.path.DirectorySeparatorChar}") ||
             srcFilePath.StartsWith($".{this.path.AltDirectorySeparatorChar}"))
         {
-            srcFilePath = srcFilePath.TrimStart('.')
-                .TrimStart(this.path.DirectorySeparatorChar)
-                .TrimStart(this.path.AltDirectorySeparatorChar);
+            srcFilePath = srcFilePath[2..];
             srcFilePath = $"{this.directory.GetCurrentDirectory()}{this.path.AltDirectorySeparatorChar}{srcFilePath}";
         }
 
