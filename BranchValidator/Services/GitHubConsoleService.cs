@@ -37,11 +37,7 @@ public class GitHubConsoleService : ConsoleService
 #if DEBUG
         base.WriteError(value);
 #else
-        const string errorGroup = "::error::";
-        var currentClr = Console.ForegroundColor;
-
-        Console.WriteLine($"{errorGroup}{value}");
-        Console.ForegroundColor = currentClr;
+        Console.WriteLine($"::error::{value}");
 #endif
     }
 }

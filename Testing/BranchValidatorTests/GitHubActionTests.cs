@@ -284,10 +284,10 @@ public class GitHubActionTests
     }
 
     [Theory]
-    [InlineData("", "valid-branch", "The branch 'valid-branch' is valid.", true)]
-    [InlineData("refs/heads/", "valid-branch", "The branch 'valid-branch' is valid.", true)]
-    [InlineData("REFS/HEADS/", "refs/heads/valid-branch", "The branch 'valid-branch' is valid.", true)]
-    [InlineData("refs/heads/", "REFS/HEADS/VALID-BRANCH", "The branch 'valid-branch' is valid.", true)]
+    [InlineData("", "valid-branch", "Branch Valid", true)]
+    [InlineData("refs/heads/", "valid-branch", "Branch Valid", true)]
+    [InlineData("REFS/HEADS/", "refs/heads/valid-branch", "Branch Valid", true)]
+    [InlineData("refs/heads/", "REFS/HEADS/VALID-BRANCH", "Branch Valid", true)]
     [InlineData("", "invalid-branch", "The branch 'invalid-branch' is invalid.", false)]
     public async void Run_WithValidOrInvalidBranch_CorrectlySetsOutput(
         string branchPrefix,
@@ -303,6 +303,8 @@ public class GitHubActionTests
             trimFromStart: "refs/heads/",
             failWhenNotValid: false);
 
+        var expectedBranchValidResult = expectedValidResult ? "Branch Valid" : "Branch Invalid";
+
         this.mockExpressionValidationService.Setup(m => m.Validate(validationLogic))
             .Returns((true, string.Empty));
         this.mockExpressionExecutorService.Setup(m => m.Execute(inputs.ValidationLogic, branchName))
@@ -314,8 +316,8 @@ public class GitHubActionTests
         await action.Run(inputs, _ => { }, _ => { });
 
         // Assert
-        this.mockConsoleService.Verify(m => m.BlankLine(), Times.Exactly(6));
-        this.mockConsoleService.VerifyOnce(m => m.WriteLine(expectedMsgResult));
+        this.mockConsoleService.VerifyOnce(m => m.WriteLine(expectedBranchValidResult, true, false));
+        this.mockConsoleService.VerifyOnce(m => m.WriteLine($"{expectedMsgResult}", true, true));
         this.mockActionOutputService.VerifyOnce(m => m.SetOutputValue("valid-branch", expectedValidResult.ToString().ToLower()));
         this.mockBranchNameObservable.VerifyOnce(m => m.PushNotification(branchName));
         this.mockBranchNameObservable.VerifyOnce(m => m.UnsubscribeAll());
@@ -334,8 +336,8 @@ public class GitHubActionTests
         var act = () => action.Run(inputs, _ => { }, e => throw e);
 
         // Assert
-        await act.Should().ThrowAsync<Exception>()
-            .WithMessage("failure-exception-msg");
+        await act.Should().ThrowAsync<InvalidBranchException>()
+            .WithMessage($"Branch Invalid{Environment.NewLine}{Environment.NewLine}failure-exception-msg");
     }
 
     [Fact]
@@ -352,7 +354,6 @@ public class GitHubActionTests
 
         // Assert
         await act.Should().NotThrowAsync();
-        this.mockConsoleService.VerifyOnce(m => m.WriteLine("Branch Invalid: branch invalid"));
     }
 
     [Fact]
@@ -400,11 +401,10 @@ public class GitHubActionTests
         await action.Run(inputs, _ => { }, _ => { });
 
         // Assert
-        this.mockConsoleService.VerifyOnce(m => m.WriteLine("Validating expression . . ."));
-        this.mockConsoleService.VerifyOnce(m => m.WriteLine("Expression validation complete."));
-        this.mockConsoleService.VerifyOnce(m => m.WriteLine("Executing expression . . ."));
-        this.mockConsoleService.VerifyOnce(m => m.WriteLine("Expression execution complete."));
-        this.mockConsoleService.VerifyOnce(m => m.WriteLine("Branch Valid"));
+        this.mockConsoleService.VerifyOnce(m => m.Write("Validating expression . . . "));
+        this.mockConsoleService.VerifyOnce(m => m.WriteLine("expression validation complete."));
+        this.mockConsoleService.VerifyOnce(m => m.Write("Executing expression . . . "));
+        this.mockConsoleService.VerifyOnce(m => m.WriteLine("expression execution complete."));
     }
 
     [Fact]

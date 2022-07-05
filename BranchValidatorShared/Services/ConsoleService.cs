@@ -10,7 +10,26 @@ public class ConsoleService : IConsoleService
     private const char GroupExpanded = '▼';
 
     /// <inheritdoc/>
+    public void Write(string value) => Console.Write(value);
+
+    /// <inheritdoc/>
     public virtual void WriteLine(string value) => Console.WriteLine(value);
+
+    /// <inheritdoc/>
+    public virtual void WriteLine(string value, bool blankLineBefore, bool blankLineAfter)
+    {
+        if (blankLineBefore)
+        {
+            BlankLine();
+        }
+
+        WriteLine(value);
+
+        if (blankLineAfter)
+        {
+            BlankLine();
+        }
+    }
 
     /// <inheritdoc/>
     public virtual void WriteLine(uint tabs, string value)
@@ -62,7 +81,7 @@ public class ConsoleService : IConsoleService
     {
         var currentClr = Console.ForegroundColor;
         Console.ForegroundColor = ConsoleColor.Red;
-        Console.WriteLine($"ERROR > {value}");
+        Console.WriteLine($"ERROR: {value}");
         Console.ForegroundColor = currentClr;
     }
 

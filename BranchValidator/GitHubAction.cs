@@ -99,49 +99,40 @@ public sealed class GitHubAction : IGitHubAction<bool>
                 throw new InvalidActionInput("The 'validation-logic' action input cannot be null or empty.");
             }
 
-            this.consoleService.WriteLine("Validating expression . . .");
+            this.consoleService.Write("Validating expression . . . ");
             var validSyntaxResult = this.expressionValidatorService.Validate(inputs.ValidationLogic);
 
             if (validSyntaxResult.isValid is false)
             {
-                var exceptionMsg = $"Invalid Syntax:{Environment.NewLine}";
+                var exceptionMsg = $"Invalid Syntax{Environment.NewLine}";
                 exceptionMsg += $"\t{validSyntaxResult.msg}";
 
-                throw new Exception(exceptionMsg)
+                this.consoleService.WriteLine("expression validation complete.");
+
+                throw new InvalidSyntaxExpression(exceptionMsg)
                 {
                     HResult = 500,
                 };
             }
 
-            this.consoleService.WriteLine("Expression validation complete.");
+            this.consoleService.WriteLine("expression validation complete.");
 
             this.consoleService.BlankLine();
 
-            this.consoleService.WriteLine("Executing expression . . .");
+            this.consoleService.Write("Executing expression . . . ");
 
             (bool branchIsValid, string msg) logicResult = this.expressionExecutorService.Execute(inputs.ValidationLogic, inputs.BranchName);
             branchIsValid = logicResult.branchIsValid;
 
-            this.consoleService.WriteLine("Expression execution complete.");
+            this.consoleService.WriteLine("expression execution complete.");
 
             if (inputs.FailWhenNotValid is true && logicResult.branchIsValid is false)
             {
-                throw new Exception(logicResult.msg)
-                {
-                    HResult = 600,
-                };
+                throw new InvalidBranchException($"Branch Invalid{Environment.NewLine}{Environment.NewLine}{logicResult.msg}");
             }
 
-            this.consoleService.BlankLine();
-
-            var executionResult = logicResult.branchIsValid
-                ? "Branch Valid"
-                : $"Branch Invalid: {logicResult.msg}";
-
-            this.consoleService.WriteLine(executionResult);
-
-            this.consoleService.BlankLine();
-            this.consoleService.WriteLine(logicResult.msg);
+            this.consoleService.WriteLine($"Branch {(logicResult.branchIsValid ? "Valid" : "Invalid")}", true, false);
+            this.consoleService.WriteLine(logicResult.msg, true, true);
 
             this.actionOutputService.SetOutputValue("valid-branch", logicResult.branchIsValid.ToString().ToLower());
         }

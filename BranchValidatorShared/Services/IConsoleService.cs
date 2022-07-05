@@ -10,10 +10,25 @@ namespace BranchValidatorShared.Services;
 public interface IConsoleService
 {
     /// <summary>
+    /// Writes the given <paramref name="value"/> to the console without a new line.
+    /// </summary>
+    /// <param name="value">The value to write.</param>
+    void Write(string value);
+
+    /// <summary>
     /// Writes the given <paramref name="value"/> to the console on its own line.
     /// </summary>
     /// <param name="value">The value to write.</param>
     void WriteLine(string value);
+
+    /// <summary>
+    /// Writes the given <paramref name="value"/> to the console on its own line and will
+    /// insert a blank line before and/or after the <paramref name="value"/>.
+    /// </summary>
+    /// <param name="value">The value to write.</param>
+    /// <param name="blankLineBefore">Adds a blank line before the <paramref name="value"/> if true.</param>
+    /// <param name="blankLineAfter">Adds a blank line after the <paramref name="value"/> if true.</param>
+    void WriteLine(string value, bool blankLineBefore, bool blankLineAfter);
 
     /// <summary>
     /// Writes the given <paramref name="value"/> to the console on its own line that is
