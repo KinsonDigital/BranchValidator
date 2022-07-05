@@ -69,26 +69,27 @@ public class GitHubActionIntegrationTests : IDisposable
     }
 
     [Theory]
-    [InlineData("equalTo('test-branch')", "test-branch")]
-    [InlineData("isCharNum(8)", "feature/123-test-branch")]
-    [InlineData("isSectionNum(8, 10)", "feature/123-test-branch")]
-    [InlineData("isSectionNum(8, '-')", "feature/123-test-branch")]
-    [InlineData("contains('123-test')", "feature/123-test-branch")]
-    [InlineData("notContains('not-contained')", "feature/123-test-branch")]
-    [InlineData("existTotal('123-test', 1)", "feature/123-test-branch")]
-    [InlineData("existTotal('test-branch', 2)", "feature/123-test-branch-test-branch-test")]
-    [InlineData("existsLessThan('123-', 2)", "feature/123-test-branch")]
-    [InlineData("existsGreaterThan('test', 2)", "feature/test-123-test-123-test-branch")]
-    [InlineData("startsWith('feature/123')", "feature/123-test-branch")]
-    [InlineData("notStartsWith('123')", "feature/123-test-branch")]
-    [InlineData("endsWith('test-branch')", "feature/123-test-branch")]
-    [InlineData("notEndsWith('123')", "feature/123-test-branch")]
-    [InlineData("startsWithNum()", "123-test-branch")]
-    [InlineData("endsWithNum()", "feature/123-test-branch-456")]
-    [InlineData("lenLessThan(200)", "feature/123-test-branch")]
-    [InlineData("isBefore('123', 'branch')", "feature/123-test-branch")]
-    [InlineData("isAfter('test', 'feature')", "feature/123-test-branch")]
-    public async void Run_WithValidBranches_ReturnsCorrectResult(string expression, string branchName)
+    [InlineData("equalTo('test-branch')", "test-branch", "")]
+    [InlineData("isCharNum(8)", "feature/123-test-branch", "")]
+    [InlineData("isCharNum(8)", "refs/heads/feature/123-test-branch", "refs/heads/")]
+    [InlineData("isSectionNum(8, 10)", "feature/123-test-branch", "")]
+    [InlineData("isSectionNum(8, '-')", "feature/123-test-branch", "")]
+    [InlineData("contains('123-test')", "feature/123-test-branch", "")]
+    [InlineData("notContains('not-contained')", "feature/123-test-branch", "")]
+    [InlineData("existTotal('123-test', 1)", "feature/123-test-branch", "")]
+    [InlineData("existTotal('test-branch', 2)", "feature/123-test-branch-test-branch-test", "")]
+    [InlineData("existsLessThan('123-', 2)", "feature/123-test-branch", "")]
+    [InlineData("existsGreaterThan('test', 2)", "feature/test-123-test-123-test-branch", "")]
+    [InlineData("startsWith('feature/123')", "feature/123-test-branch", "")]
+    [InlineData("notStartsWith('123')", "feature/123-test-branch", "")]
+    [InlineData("endsWith('test-branch')", "feature/123-test-branch", "")]
+    [InlineData("notEndsWith('123')", "feature/123-test-branch", "")]
+    [InlineData("startsWithNum()", "123-test-branch", "")]
+    [InlineData("endsWithNum()", "feature/123-test-branch-456", "")]
+    [InlineData("lenLessThan(200)", "feature/123-test-branch", "")]
+    [InlineData("isBefore('123', 'branch')", "feature/123-test-branch", "")]
+    [InlineData("isAfter('test', 'feature')", "feature/123-test-branch", "")]
+    public async void Run_WithValidBranches_ReturnsCorrectResult(string expression, string branchName, string trimFromStart)
     {
         // Arrange
         bool? branchIsValid = null;
@@ -96,6 +97,7 @@ public class GitHubActionIntegrationTests : IDisposable
         {
             BranchName = branchName,
             ValidationLogic = expression,
+            TrimFromStart = trimFromStart,
             FailWhenNotValid = true,
         };
 

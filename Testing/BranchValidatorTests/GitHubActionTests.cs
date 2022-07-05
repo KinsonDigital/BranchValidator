@@ -204,7 +204,7 @@ public class GitHubActionTests
 
         // Assert
         this.mockConsoleService.VerifyOnce(m => m.WriteLine("Welcome To The BranchValidator GitHub Action!!"));
-        this.mockConsoleService.Verify(m => m.BlankLine(), Times.Exactly(3));
+        this.mockConsoleService.Verify(m => m.BlankLine(), Times.Exactly(4));
     }
 
     [Fact]
@@ -228,6 +228,25 @@ public class GitHubActionTests
 
         // Assert
         this.mockConsoleService.VerifyOnce(m => m.WriteGroup("Available Functions", expected));
+    }
+
+    [Theory]
+    [InlineData("refs/heads/feature/123-test-branch", "refs/heads/", "feature/123-test-branch")]
+    [InlineData("feature/123-test-branch", "refs/heads/", "feature/123-test-branch")]
+    public async void Run_WhenInvoked_ProperlyTrimsBranchName(
+        string branchName,
+        string trimFromStart,
+        string expectedTrimmedBranchName)
+    {
+        // Arrange
+        var inputs = CreateInputs(branchName: branchName, trimFromStart: trimFromStart);
+        var action = CreateAction();
+
+        // Act
+        await action.Run(inputs, _ => { }, e => { });
+
+        // Assert
+        this.mockBranchNameObservable.VerifyOnce(m => m.PushNotification(expectedTrimmedBranchName));
     }
 
     [Theory]
@@ -265,20 +284,28 @@ public class GitHubActionTests
     }
 
     [Theory]
-    [InlineData("valid-branch", "The branch 'valid-branch' is valid.", true)]
-    [InlineData("invalid-branch", "The branch 'invalid-branch' is invalid.", false)]
+    [InlineData("", "valid-branch", "The branch 'valid-branch' is valid.", true)]
+    [InlineData("refs/heads/", "valid-branch", "The branch 'valid-branch' is valid.", true)]
+    [InlineData("REFS/HEADS/", "refs/heads/valid-branch", "The branch 'valid-branch' is valid.", true)]
+    [InlineData("refs/heads/", "REFS/HEADS/VALID-BRANCH", "The branch 'valid-branch' is valid.", true)]
+    [InlineData("", "invalid-branch", "The branch 'invalid-branch' is invalid.", false)]
     public async void Run_WithValidOrInvalidBranch_CorrectlySetsOutput(
+        string branchPrefix,
         string branchName,
         string expectedMsgResult,
         bool expectedValidResult)
     {
         // Arrange
         var validationLogic = $"funA('{branchName}')";
-        var inputs = CreateInputs(validationLogic: validationLogic, branchName: branchName, failWhenNotValid: false);
+        var inputs = CreateInputs(
+            validationLogic: validationLogic,
+            branchName: $"{branchPrefix}{branchName}",
+            trimFromStart: "refs/heads/",
+            failWhenNotValid: false);
 
         this.mockExpressionValidationService.Setup(m => m.Validate(validationLogic))
             .Returns((true, string.Empty));
-        this.mockExpressionExecutorService.Setup(m => m.Execute(inputs.ValidationLogic, inputs.BranchName))
+        this.mockExpressionExecutorService.Setup(m => m.Execute(inputs.ValidationLogic, branchName))
             .Returns((expectedValidResult, expectedMsgResult));
 
         var action = CreateAction();
@@ -287,7 +314,7 @@ public class GitHubActionTests
         await action.Run(inputs, _ => { }, _ => { });
 
         // Assert
-        this.mockConsoleService.Verify(m => m.BlankLine(), Times.Exactly(5));
+        this.mockConsoleService.Verify(m => m.BlankLine(), Times.Exactly(6));
         this.mockConsoleService.VerifyOnce(m => m.WriteLine(expectedMsgResult));
         this.mockActionOutputService.VerifyOnce(m => m.SetOutputValue("valid-branch", expectedValidResult.ToString().ToLower()));
         this.mockBranchNameObservable.VerifyOnce(m => m.PushNotification(branchName));
@@ -402,10 +429,12 @@ public class GitHubActionTests
     private static ActionInputs CreateInputs(
         string branchName = "test-branch",
         string validationLogic = "equalTo('test-branch')",
+        string trimFromStart = "",
         bool? failWhenNotValid = true) => new ()
     {
         BranchName = branchName,
         ValidationLogic = validationLogic,
+        TrimFromStart = trimFromStart,
         FailWhenNotValid = failWhenNotValid,
     };
 

@@ -65,6 +65,16 @@ public sealed class GitHubAction : IGitHubAction<bool>
         var branchIsValid = false;
         ShowWelcomeMessage();
 
+        inputs.BranchName = inputs.BranchName.TrimStart(inputs.TrimFromStart);
+
+        var branchNeedsTrimming = string.IsNullOrEmpty(inputs.TrimFromStart) is false &&
+                                  inputs.BranchName.ToLower().StartsWith(inputs.TrimFromStart.ToLower());
+
+        if (branchNeedsTrimming)
+        {
+            this.consoleService.WriteLine($"The text '{inputs.TrimFromStart}' has been trimmed from");
+        }
+
         // Update the function definitions object of the branch name
         this.branchNameObservable.PushNotification(inputs.BranchName);
         this.branchNameObservable.UnsubscribeAll();

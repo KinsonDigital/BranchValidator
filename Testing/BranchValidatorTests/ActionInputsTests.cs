@@ -34,6 +34,11 @@ public class ActionInputsTests
         inputs.GetAttrFromProp<OptionAttribute>(nameof(ActionInputs.ValidationLogic))
             .AssertOptionAttrProps("validation-logic", true, string.Empty, "The logic expression to use to validate the branch name.");
 
+        inputs.TrimFromStart.Should().BeEmpty();
+        typeof(ActionInputs).GetProperty(nameof(ActionInputs.TrimFromStart)).Should().BeDecoratedWith<OptionAttribute>();
+        inputs.GetAttrFromProp<OptionAttribute>(nameof(ActionInputs.TrimFromStart))
+            .AssertOptionAttrProps("trim-from-start", false, string.Empty, "The value to trim from the start of the branch.  This is not case sensitive.");
+
         inputs.FailWhenNotValid.Should().BeTrue();
         typeof(ActionInputs).GetProperty(nameof(ActionInputs.FailWhenNotValid)).Should().BeDecoratedWith<OptionAttribute>();
         inputs.GetAttrFromProp<OptionAttribute>(nameof(ActionInputs.FailWhenNotValid))

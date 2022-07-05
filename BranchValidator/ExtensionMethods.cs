@@ -4,6 +4,7 @@
 
 using System.Collections.ObjectModel;
 using System.Reflection;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace BranchValidator;
@@ -209,6 +210,45 @@ public static class ExtensionMethods
         }
 
         return value.Substring(leftIndex + 1, rightIndex - leftIndex - 1);
+    }
+
+    /// <summary>
+    /// Removes the given <c>string</c> <paramref name="value"/> from the beginning
+    /// of this string.
+    /// </summary>
+    /// <param name="thisStr">The <c>string</c> value to trim.</param>
+    /// <param name="value">The value to trim from the beginning of this <c>string</c>.</param>
+    /// <returns>The trimmed <c>string</c>.</returns>
+    /// <remarks>
+    ///     This is not case sensitive.
+    /// </remarks>
+    public static string TrimStart(this string thisStr, string value)
+    {
+        if (string.IsNullOrEmpty(value))
+        {
+            return thisStr;
+        }
+
+        var valueIndex = thisStr.ToLower().IndexOf(value.ToLower(), StringComparison.Ordinal);
+
+        if (valueIndex != 0)
+        {
+            return thisStr;
+        }
+
+        var result = new StringBuilder();
+
+        for (var i = 0; i < thisStr.Length; i++)
+        {
+            if (i >= valueIndex && i <= valueIndex + value.Length - 1)
+            {
+                continue;
+            }
+
+            result.Append(thisStr[i]);
+        }
+
+        return result.ToString();
     }
 
     /// <summary>
