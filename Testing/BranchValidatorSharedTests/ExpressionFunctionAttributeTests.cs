@@ -26,5 +26,22 @@ public class ExpressionFunctionAttributeTests
         // Assert
         actual.Should().Be(expected);
     }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    public void Ctor_WithNullFunctionNameParam_ThrowsException(string functionName)
+    {
+        // Arrange & Act
+        var act = () =>
+        {
+            _ = new ExpressionFunctionAttribute(functionName);
+        };
+
+        // Assert
+        act.Should()
+            .Throw<ArgumentNullException>()
+            .WithMessage("The string parameter must not be null or empty. (Parameter 'functionName')");
+    }
     #endregion
 }

@@ -65,14 +65,18 @@ public sealed class GitHubAction : IGitHubAction<bool>
         var branchIsValid = false;
         ShowWelcomeMessage();
 
-        inputs.BranchName = inputs.BranchName.TrimStart(inputs.TrimFromStart);
 
         var branchNeedsTrimming = string.IsNullOrEmpty(inputs.TrimFromStart) is false &&
                                   inputs.BranchName.ToLower().StartsWith(inputs.TrimFromStart.ToLower());
 
         if (branchNeedsTrimming)
         {
-            this.consoleService.WriteLine($"The text '{inputs.TrimFromStart}' has been trimmed from");
+            this.consoleService.WriteLine($"Branch Before Trimming: {inputs.BranchName}");
+
+            inputs.BranchName = inputs.BranchName.TrimStart(inputs.TrimFromStart);
+
+            this.consoleService.WriteLine($"The text '{inputs.TrimFromStart}' has been trimmed from the branch name.");
+            this.consoleService.WriteLine($"Branch After Trimming: {inputs.BranchName}");
         }
 
         // Update the function definitions object of the branch name
@@ -102,7 +106,7 @@ public sealed class GitHubAction : IGitHubAction<bool>
             this.consoleService.Write("Validating expression . . . ");
             var validSyntaxResult = this.expressionValidatorService.Validate(inputs.ValidationLogic);
 
-            if (validSyntaxResult.isValid is false)
+            if (inputs.FailWhenNotValid is true && validSyntaxResult.isValid is false)
             {
                 var exceptionMsg = $"Invalid Syntax{Environment.NewLine}";
                 exceptionMsg += $"\t{validSyntaxResult.msg}";
@@ -115,10 +119,7 @@ public sealed class GitHubAction : IGitHubAction<bool>
                 };
             }
 
-            this.consoleService.WriteLine("expression validation complete.");
-
-            this.consoleService.BlankLine();
-
+            this.consoleService.WriteLine("expression validation complete.", false, true);
             this.consoleService.Write("Executing expression . . . ");
 
             (bool branchIsValid, string msg) logicResult = this.expressionExecutorService.Execute(inputs.ValidationLogic, inputs.BranchName);
@@ -160,9 +161,5 @@ public sealed class GitHubAction : IGitHubAction<bool>
     /// Shows a welcome message.
     /// </summary>
     private void ShowWelcomeMessage()
-    {
-        this.consoleService.BlankLine();
-        this.consoleService.WriteLine("Welcome To The BranchValidator GitHub Action!!");
-        this.consoleService.BlankLine();
-    }
+        => this.consoleService.WriteLine("Welcome To The BranchValidator GitHub Action!!", true, true);
 }

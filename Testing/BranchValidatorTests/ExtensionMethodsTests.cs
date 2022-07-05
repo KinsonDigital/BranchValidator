@@ -297,7 +297,8 @@ public class ExtensionMethodsTests
     }
 
     [Theory]
-    [InlineData("funA('value')", '\'', '(', ')', true)]
+    [InlineData(null, 'n', 'n', 'n', false)]
+    [InlineData("", 'n', 'n', 'n', false)]
     [InlineData("funA'value')", '\'', '(', ')', false)]
     [InlineData("funA('value'", '\'', '(', ')', false)]
     [InlineData("funA(123)", '\'', '(', ')', false)]
@@ -306,6 +307,7 @@ public class ExtensionMethodsTests
     [InlineData("funA('value') && funB('other-value'", '\'', '(', ')', false)]
     [InlineData("funA('value') && funB'other-value')", '\'', '(', ')', false)]
     [InlineData("funA('value') && funB('other-value')", '\'', '(', ')', true)]
+    [InlineData("funA('value')", '\'', '(', ')', true)]
     [InlineData("funA('value') && funB(123)", '\'', '(', ')', true)]
     public void AllIsBetween_WhenInvoked_ReturnsCorrectResult(
         string thisString,

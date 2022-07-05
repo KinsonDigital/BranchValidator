@@ -2,9 +2,12 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace BranchValidatorShared.Services;
 
 /// <inheritdoc/>
+[ExcludeFromCodeCoverage]
 public class ConsoleService : IConsoleService
 {
     private const char GroupExpanded = '▼';

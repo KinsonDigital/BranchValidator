@@ -17,10 +17,7 @@ public class ExpressionFunctionAttribute : Attribute
     /// <exception cref="ArgumentNullException">Thrown if the <paramref name="functionName"/> is null or empty.</exception>
     public ExpressionFunctionAttribute(string functionName)
     {
-        if (string.IsNullOrEmpty(functionName))
-        {
-            throw new ArgumentNullException(nameof(functionName), "The parameter must not be null or empty.");
-        }
+        EnsureThat.StringParamIsNotNullOrEmpty(functionName);
 
         FunctionName = functionName;
     }

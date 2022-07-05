@@ -203,8 +203,7 @@ public class GitHubActionTests
         await action.Run(inputs, _ => { }, _ => { });
 
         // Assert
-        this.mockConsoleService.VerifyOnce(m => m.WriteLine("Welcome To The BranchValidator GitHub Action!!"));
-        this.mockConsoleService.Verify(m => m.BlankLine(), Times.Exactly(4));
+        this.mockConsoleService.VerifyOnce(m => m.WriteLine("Welcome To The BranchValidator GitHub Action!!", true, true));
     }
 
     [Fact]
@@ -230,15 +229,14 @@ public class GitHubActionTests
         this.mockConsoleService.VerifyOnce(m => m.WriteGroup("Available Functions", expected));
     }
 
-    [Theory]
-    [InlineData("refs/heads/feature/123-test-branch", "refs/heads/", "feature/123-test-branch")]
-    [InlineData("feature/123-test-branch", "refs/heads/", "feature/123-test-branch")]
-    public async void Run_WhenInvoked_ProperlyTrimsBranchName(
-        string branchName,
-        string trimFromStart,
-        string expectedTrimmedBranchName)
+    [Fact]
+    public async void Run_WhenInvoked_ProperlyTrimsBranchName()
     {
         // Arrange
+        const string branchName = "refs/heads/feature/123-test-branch";
+        const string trimFromStart = "refs/heads/";
+        const string expectedTrimmedBranchName = "feature/123-test-branch";
+
         var inputs = CreateInputs(branchName: branchName, trimFromStart: trimFromStart);
         var action = CreateAction();
 
@@ -246,7 +244,33 @@ public class GitHubActionTests
         await action.Run(inputs, _ => { }, e => { });
 
         // Assert
-        this.mockBranchNameObservable.VerifyOnce(m => m.PushNotification(expectedTrimmedBranchName));
+        this.mockConsoleService.VerifyOnce(m =>
+            m.WriteLine($"Branch Before Trimming: {branchName}"));
+        this.mockConsoleService.VerifyOnce(m =>
+            m.WriteLine($"The text '{trimFromStart}' has been trimmed from the branch name."));
+        this.mockConsoleService.VerifyOnce(m =>
+            m.WriteLine($"Branch After Trimming: {expectedTrimmedBranchName}"));
+    }
+
+    [Fact]
+    public async void Run_WithInvalidSyntax_ThrowsException()
+    {
+        // Arrange
+        var inputs = CreateInputs(
+            branchName: "feature/123-test-branch",
+            failWhenNotValid: true);
+
+        this.mockExpressionValidationService.Setup(m => m.Validate(It.IsAny<string>()))
+            .Returns((false, "syntax invalid"));
+
+        var action = CreateAction();
+
+        // Act
+        var act = () => action.Run(inputs, _ => { }, e => throw e);
+
+        // Assert
+        await act.Should().ThrowAsync<InvalidSyntaxExpression>()
+            .WithMessage($"Invalid Syntax{Environment.NewLine}\tsyntax invalid");
     }
 
     [Theory]
@@ -402,7 +426,7 @@ public class GitHubActionTests
 
         // Assert
         this.mockConsoleService.VerifyOnce(m => m.Write("Validating expression . . . "));
-        this.mockConsoleService.VerifyOnce(m => m.WriteLine("expression validation complete."));
+        this.mockConsoleService.VerifyOnce(m => m.WriteLine("expression validation complete.", false, true));
         this.mockConsoleService.VerifyOnce(m => m.Write("Executing expression . . . "));
         this.mockConsoleService.VerifyOnce(m => m.WriteLine("expression execution complete."));
     }

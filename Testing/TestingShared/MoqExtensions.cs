@@ -3,6 +3,8 @@
 // </copyright>
 
 // ReSharper disable UnusedMember.Global
+using System.Diagnostics.CodeAnalysis;
+
 namespace TestingShared
 {
     using System;
@@ -13,6 +15,7 @@ namespace TestingShared
     /// <summary>
     /// Provides extensions to the <see cref="Moq"/> library for ease of use and readability purposes.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public static class MoqExtensions
     {
         private static int callOrder = 1;

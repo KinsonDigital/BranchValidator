@@ -74,6 +74,19 @@ public class ActionInputsTests
     }
 
     [Fact]
+    public void TrimFromStart_WhenSettingValue_ReturnsCorrectResult()
+    {
+        // Arrange
+        var inputs = new ActionInputs();
+
+        // Act
+        inputs.TrimFromStart = "trim-test";
+
+        // Assert
+        inputs.TrimFromStart.Should().Be("trim-test");
+    }
+
+    [Fact]
     public void FailWhenNotValid_WhenSettingValue_ReturnsCorrectResult()
     {
         // Arrange

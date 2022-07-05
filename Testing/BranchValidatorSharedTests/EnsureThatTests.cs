@@ -46,14 +46,24 @@ public class EnsureThatTests
     [Theory]
     [InlineData("")]
     [InlineData(null)]
-    public void StringParamIsNotNullOrEmpty_WhenInvoked_ThrowsException(string value)
+    public void StringParamIsNotNullOrEmpty_WhenNullOrEmpty_ThrowsException(string value)
     {
-        // Act
+        // Arrange & Act
         var act = () => EnsureThat.StringParamIsNotNullOrEmpty(value);
 
         // Assert
         act.Should().Throw<ArgumentNullException>()
             .WithMessage($"The string parameter must not be null or empty. (Parameter '{nameof(value)}')");
+    }
+
+    [Fact]
+    public void StringParamIsNotNullOrEmpty_WhenNotNullOrEmpty_DoesNotThrowException()
+    {
+        // Arrange & Act
+        var act = () => EnsureThat.StringParamIsNotNullOrEmpty("non-null-or-empty-value");
+
+        // Assert
+        act.Should().NotThrow();
     }
     #endregion
 }
