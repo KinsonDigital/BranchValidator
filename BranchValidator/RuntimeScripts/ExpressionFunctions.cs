@@ -262,14 +262,14 @@ public static class ExpressionFunctions
     /// <remarks>
     ///     The search is case sensitive.
     /// </remarks>
-    public static bool ExistTotal(string value, uint total)
+    public static bool ExistsTotal(string value, uint total)
     {
         var branchIsNotNullOrEmpty = !string.IsNullOrEmpty(BranchName);
         var totalExists = Count(BranchName, value) == total;
 
         var result = branchIsNotNullOrEmpty && totalExists;
 
-        RegisterFunctionResult($"{nameof(ExistTotal)}({typeof(string)}, {typeof(uint)})", result);
+        RegisterFunctionResult($"{nameof(ExistsTotal)}({typeof(string)}, {typeof(uint)})", result);
 
         return result;
     }

@@ -173,7 +173,8 @@ public class FunctionDefinitionsTests
     [InlineData("feature/123-test-branch", "test", 1, true)]
     [InlineData("feature/123-te|st-branch", "te|st", 1, true)]
     [InlineData("feature/123-test-branch-test", "test", 2, true)]
-    public void ExistTotal_WhenInvoked_ReturnsCorrectResult(
+    [InlineData("release/v1.2.3-preview.4", ".", 3, true)]
+    public void ExistsTotal_WhenInvoked_ReturnsCorrectResult(
         string branchName,
         string value,
         uint total,
@@ -183,12 +184,12 @@ public class FunctionDefinitionsTests
         var definitions = new FunctionDefinitions(branchName);
 
         // Act
-        var actual = definitions.ExistTotal(value, total);
+        var actual = definitions.ExistsTotal(value, total);
         var actualFunctionResults = FunctionDefinitions.GetFunctionResults();
 
         // Assert
         actual.Should().Be(expected);
-        actualFunctionResults.Should().Contain($"existTotal(string, number) -> {expected.ToString().ToLower()}");
+        actualFunctionResults.Should().Contain($"existsTotal(string, number) -> {expected.ToString().ToLower()}");
     }
 
     [Theory]

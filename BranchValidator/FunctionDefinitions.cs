@@ -277,15 +277,15 @@ public class FunctionDefinitions
     /// <remarks>
     ///     The search is case sensitive.
     /// </remarks>
-    [ExpressionFunction(nameof(ExistTotal))]
-    public bool ExistTotal(string value, uint total)
+    [ExpressionFunction(nameof(ExistsTotal))]
+    public bool ExistsTotal(string value, uint total)
     {
         var branchIsNotNullOrEmpty = !string.IsNullOrEmpty(this.branchName);
         var totalExists = Count(this.branchName, value) == total;
 
         var result = branchIsNotNullOrEmpty && totalExists;
 
-        RegisterFunctionResult($"{nameof(ExistTotal)}({typeof(string)}, {typeof(uint)})", result);
+        RegisterFunctionResult($"{nameof(ExistsTotal)}({typeof(string)}, {typeof(uint)})", result);
 
         return result;
     }
