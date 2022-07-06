@@ -222,9 +222,25 @@ public static class ExpressionFunctions
     /// </remarks>
     public static bool Contains(string value)
     {
+        const char numCharsOnly = '#';
+        const string regexNumMatch = @"\d+";
+
+        bool ContainsWithRegex()
+        {
+            // Replace the # symbol with
+            value = value.Replace(numCharsOnly.ToString(), regexNumMatch);
+
+            // Prefix all '.' symbols with '\' to match the '.' literally in regex
+            value = value.Replace(".", @"\.");
+
+            return Regex.Matches(BranchName, value, RegexOptions.IgnoreCase).Count > 0;
+        }
+
         var branchNotNullOrEmpty = !string.IsNullOrEmpty(BranchName);
         var branch = branchNotNullOrEmpty ? BranchName : string.Empty;
-        var contains = branch.Contains(value);
+        var contains = value.Contains(numCharsOnly)
+            ? ContainsWithRegex()
+            : branch.Contains(value);
         var result = branchNotNullOrEmpty && contains;
 
         RegisterFunctionResult($"{nameof(Contains)}({typeof(string)})", result);

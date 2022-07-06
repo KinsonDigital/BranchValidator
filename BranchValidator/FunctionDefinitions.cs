@@ -2,6 +2,18 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
+/*TODO:
+ 1. Expression function 'contains()' improvements
+    - allow the '*' character for globbing checks
+    - ✔️allow the '#' character that matches if that character is a number
+ 2. Expression function 'startsWith()' and 'notStartsWith()' improvements
+    - allow the '*' character for globbing checks
+    - allow the '#' character that matches if that character is a number
+ 3. Expression function 'endsWith()' 'notEndsWith()' improvements
+    - allow the '*' character for globbing checks
+    - allow the '#' character that matches if that character is a number
+ */
+
 using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 using BranchValidatorShared;
@@ -236,9 +248,25 @@ public class FunctionDefinitions
     [ExpressionFunction(nameof(Contains))]
     public bool Contains(string value)
     {
+        const char numCharsOnly = '#';
+        const string regexNumMatch = @"\d+";
+
+        bool ContainsWithRegex()
+        {
+            // Replace the # symbol with
+            value = value.Replace(numCharsOnly.ToString(), regexNumMatch);
+
+            // Prefix all '.' symbols with '\' to match the '.' literally in regex
+            value = value.Replace(".", @"\.");
+
+            return Regex.Matches(this.branchName, value, RegexOptions.IgnoreCase).Count > 0;
+        }
+
         var branchNotNullOrEmpty = !string.IsNullOrEmpty(this.branchName);
         var branch = branchNotNullOrEmpty ? this.branchName : string.Empty;
-        var contains = branch.Contains(value);
+        var contains = value.Contains(numCharsOnly)
+            ? ContainsWithRegex()
+            : branch.Contains(value);
         var result = branchNotNullOrEmpty && contains;
 
         RegisterFunctionResult($"{nameof(Contains)}({typeof(string)})", result);

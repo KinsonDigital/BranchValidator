@@ -65,7 +65,6 @@ public sealed class GitHubAction : IGitHubAction<bool>
         var branchIsValid = false;
         ShowWelcomeMessage();
 
-
         var branchNeedsTrimming = string.IsNullOrEmpty(inputs.TrimFromStart) is false &&
                                   inputs.BranchName.ToLower().StartsWith(inputs.TrimFromStart.ToLower());
 
