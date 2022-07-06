@@ -127,7 +127,7 @@ public class GitHubActionIntegrationTests : IDisposable
         string expectedAnalyzerMsg)
     {
         // Arrange
-        var expectedMsg = $"Invalid Syntax:{Environment.NewLine}\t{expectedAnalyzerMsg}";
+        var expectedMsg = $"Invalid Syntax{Environment.NewLine}\t{expectedAnalyzerMsg}";
         var actionInputs = new ActionInputs
         {
             BranchName = "test-branch",
@@ -167,7 +167,7 @@ public class GitHubActionIntegrationTests : IDisposable
         string funcSignature)
     {
         // Arrange
-        var expectedMsg = $"Function Results:{Environment.NewLine}\t{funcSignature} -> False";
+        var expectedMsg = $"Branch Invalid{Environment.NewLine}{Environment.NewLine}Function Results:{Environment.NewLine}\t{funcSignature} -> false";
         var actionInputs = new ActionInputs
         {
             BranchName = branchName,
