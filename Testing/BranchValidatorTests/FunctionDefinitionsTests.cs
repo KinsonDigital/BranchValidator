@@ -70,7 +70,6 @@ public class FunctionDefinitionsTests
     [InlineData("feature/123-test-branch", 8, 11, false)]
     [InlineData("feature/123-test-branch", 8, 10, true)]
     [InlineData("feature/0123456789", 12, 3000, true)]
-    [InlineData("feature/123-test-branch", 8, 10, true)]
     [InlineData("release/v1.2.3-preview.4", 9, 9, true)]
     public void SectionIsNum_WhenInvokedWithStartAndEndPosParams_ReturnsCorrectResult(
         string branchName,
@@ -128,6 +127,8 @@ public class FunctionDefinitionsTests
     [InlineData("feature/123-test-branch", "is-not-contained", false)]
     [InlineData("feature/123-test-branch", "123-test", true)]
     [InlineData("release/v1.2.3-preview.4", "#.#.#", true)]
+    [InlineData("start2end", "start##end", true)]
+    [InlineData("start2end", "start**end", true)]
     [InlineData("release/v1.2.3-ANYTHING.4", "release/v1.2.3-*.4", true)]
     [InlineData("release/v1.2.3-preview.4", "-preview.#", true)]
     [InlineData("release/v1.2.3-preview.4", "release/v#.#.#-preview.#", true)]

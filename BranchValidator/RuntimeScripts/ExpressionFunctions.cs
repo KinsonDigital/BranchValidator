@@ -222,30 +222,14 @@ public static class ExpressionFunctions
     /// </remarks>
     public static bool Contains(string value)
     {
-        // NOTE: Refer to this website for more regex information -> https://regex101.com/
         const char matchNumbers = '#';
         const char matchAnything = '*';
-        const string regexMatchNumbers = @"\d+";
-        const string regexMatchAnything = ".+";
-
-        bool ContainsWithRegex()
-        {
-            // Replace the '#' symbol with
-            value = value.Replace(matchNumbers.ToString(), regexMatchNumbers);
-
-            // Prefix all '.' symbols with '\' to match the '.' literally in regex
-            value = value.Replace(".", @"\.");
-
-            // Replace all '*' character with '.+'
-            value = value.Replace(matchAnything.ToString(), regexMatchAnything);
-
-            return Regex.Matches(BranchName, value, RegexOptions.IgnoreCase).Count > 0;
-        }
 
         var branchNotNullOrEmpty = !string.IsNullOrEmpty(BranchName);
         var branch = branchNotNullOrEmpty ? BranchName : string.Empty;
-        var contains = value.Contains(matchNumbers) || value.Contains(matchAnything)
-            ? ContainsWithRegex()
+        var hasGlobbingSyntax = value.Contains(matchNumbers) || value.Contains(matchAnything);
+        var contains = hasGlobbingSyntax
+            ? MatchContains(BranchName, value)
             : branch.Contains(value);
         var result = branchNotNullOrEmpty && contains;
 
@@ -558,7 +542,6 @@ public static class ExpressionFunctions
     private static int Count(string thisStr, string value)
     {
         // NOTE: Refer to this website for more regex information -> https://regex101.com/
-
         if (string.IsNullOrEmpty(thisStr))
         {
             return 0;
@@ -610,6 +593,47 @@ public static class ExpressionFunctions
         }
 
         return true;
+    }
+
+    /// <summary>
+    /// Returns a value indicating if given <paramref name="globbingPattern"/> contains a match
+    /// to the given <c>string</c> <paramref name="value"/>.
+    /// </summary>
+    /// <param name="value">The <c>string</c> to match against.</param>
+    /// <param name="globbingPattern">The globbing pattern and text to search for.</param>
+    /// <returns>
+    ///     <c>true</c> if the globbing pattern finds a match in the given <c>string</c> <paramref name="value"/>.
+    /// </returns>
+    private static bool MatchContains(string value, string globbingPattern)
+    {
+        // NOTE: Refer to this website for more regex information -> https://regex101.com/
+        const char matchNumbers = '#';
+        const char matchAnything = '*';
+        const string regexMatchNumbers = @"\d+";
+        const string regexMatchAnything = ".+";
+
+        // Remove any consecutive '#' symbols until no more consecutive symbols exists anymore
+        while (globbingPattern.Contains($"{matchNumbers}{matchNumbers}"))
+        {
+            globbingPattern = globbingPattern.Replace($"{matchNumbers}{matchNumbers}", matchNumbers.ToString());
+        }
+
+        // Remove any consecutive '*' symbols until no more consecutive symbols exists anymore
+        while (globbingPattern.Contains($"{matchAnything}{matchAnything}"))
+        {
+            globbingPattern = globbingPattern.Replace($"{matchAnything}{matchAnything}", matchAnything.ToString());
+        }
+
+        // Replace the '#' symbol with
+        globbingPattern = globbingPattern.Replace(matchNumbers.ToString(), regexMatchNumbers);
+
+        // Prefix all '.' symbols with '\' to match the '.' literally in regex
+        globbingPattern = globbingPattern.Replace(".", @"\.");
+
+        // Replace all '*' character with '.+'
+        globbingPattern = globbingPattern.Replace(matchAnything.ToString(), regexMatchAnything);
+
+        return Regex.Matches(value, globbingPattern, RegexOptions.IgnoreCase).Count > 0;
     }
 }
 
