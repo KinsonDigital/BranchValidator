@@ -222,23 +222,29 @@ public static class ExpressionFunctions
     /// </remarks>
     public static bool Contains(string value)
     {
-        const char numCharsOnly = '#';
-        const string regexNumMatch = @"\d+";
+        // NOTE: Refer to this website for more regex information -> https://regex101.com/
+        const char matchNumbers = '#';
+        const char matchAnything = '*';
+        const string regexMatchNumbers = @"\d+";
+        const string regexMatchAnything = ".+";
 
         bool ContainsWithRegex()
         {
-            // Replace the # symbol with
-            value = value.Replace(numCharsOnly.ToString(), regexNumMatch);
+            // Replace the '#' symbol with
+            value = value.Replace(matchNumbers.ToString(), regexMatchNumbers);
 
             // Prefix all '.' symbols with '\' to match the '.' literally in regex
             value = value.Replace(".", @"\.");
+
+            // Replace all '*' character with '.+'
+            value = value.Replace(matchAnything.ToString(), regexMatchAnything);
 
             return Regex.Matches(BranchName, value, RegexOptions.IgnoreCase).Count > 0;
         }
 
         var branchNotNullOrEmpty = !string.IsNullOrEmpty(BranchName);
         var branch = branchNotNullOrEmpty ? BranchName : string.Empty;
-        var contains = value.Contains(numCharsOnly)
+        var contains = value.Contains(matchNumbers) || value.Contains(matchAnything)
             ? ContainsWithRegex()
             : branch.Contains(value);
         var result = branchNotNullOrEmpty && contains;
@@ -551,6 +557,8 @@ public static class ExpressionFunctions
     /// <returns>The number of times the <paramref name="value"/> exists.</returns>
     private static int Count(string thisStr, string value)
     {
+        // NOTE: Refer to this website for more regex information -> https://regex101.com/
+
         if (string.IsNullOrEmpty(thisStr))
         {
             return 0;

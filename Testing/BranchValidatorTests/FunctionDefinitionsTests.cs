@@ -128,9 +128,11 @@ public class FunctionDefinitionsTests
     [InlineData("feature/123-test-branch", "is-not-contained", false)]
     [InlineData("feature/123-test-branch", "123-test", true)]
     [InlineData("release/v1.2.3-preview.4", "#.#.#", true)]
+    [InlineData("release/v1.2.3-ANYTHING.4", "release/v1.2.3-*.4", true)]
     [InlineData("release/v1.2.3-preview.4", "-preview.#", true)]
     [InlineData("release/v1.2.3-preview.4", "release/v#.#.#-preview.#", true)]
     [InlineData("release/v1.20.300-preview.4000", "release/v#.#.#-preview.#", true)]
+    [InlineData("ANYTHING1/v1.20.300-ANYTHING2.4000", "*/v#.#.#-*.#", true)]
     public void Contains_WhenInvoked_ReturnsCorrectResult(
         string branchName,
         string value,

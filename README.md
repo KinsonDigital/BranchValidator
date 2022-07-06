@@ -3,6 +3,10 @@
 **Branch Validator**
 </h1>
 
+1. <span style="color:yellow">TODO:</span> Talks about escaping '#' and '*' characters
+2. <span style="color:yellow">TODO:</span> Talk about using the '#' and '*' characters for globbing functionality
+3. <span style="color:yellow">TODO:</span> Talk about each function separatly
+
 <div align="center">
 
 ### GitHub Action for checking if GIT branch names are valid using simple expressions.

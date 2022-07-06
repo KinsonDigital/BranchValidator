@@ -186,7 +186,7 @@ public class GitHubActionIntegrationTests : IDisposable
     }
 
     [Theory]
-    [InlineData("contains('-') && isSectionNum(8, '-')", "feature/123-test-branch")]
+    [InlineData("contains('-') && sectionIsNum(8, '-')", "feature/123-test-branch")]
     [InlineData("startsWith('feature/') || startsWith('preview')", "feature/123-branch")]
     public async void Run_WithValidBranchesAndOperators_ReturnsCorrectResult(string expression, string branchName)
     {
