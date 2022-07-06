@@ -70,8 +70,8 @@ public class GitHubActionIntegrationTests : IDisposable
 
     [Theory]
     [InlineData("equalTo('test-branch')", "test-branch", "")]
-    [InlineData("isCharNum(8)", "feature/123-test-branch", "")]
-    [InlineData("isCharNum(8)", "refs/heads/feature/123-test-branch", "refs/heads/")]
+    [InlineData("charIsNum(8)", "feature/123-test-branch", "")]
+    [InlineData("charIsNum(8)", "refs/heads/feature/123-test-branch", "refs/heads/")]
     [InlineData("sectionIsNum(8, 10)", "feature/123-test-branch", "")]
     [InlineData("sectionIsNum(8, '-')", "feature/123-test-branch", "")]
     [InlineData("contains('123-test')", "feature/123-test-branch", "")]
@@ -115,13 +115,13 @@ public class GitHubActionIntegrationTests : IDisposable
     }
 
     [Theory]
-    [InlineData("isCharNum(-8)", "Negative number argument values not aloud.")]
-    [InlineData("isCharNum8)", "The expression is missing a '('.")]
-    [InlineData("isCharNum(8", "The expression is missing a ')'.")]
-    [InlineData("isCharNum((8)", "The expression is missing a ')'.")]
-    [InlineData("isCharNum(8))", "The expression is missing a '('.")]
+    [InlineData("charIsNum(-8)", "Negative number argument values not aloud.")]
+    [InlineData("charIsNum8)", "The expression is missing a '('.")]
+    [InlineData("charIsNum(8", "The expression is missing a ')'.")]
+    [InlineData("charIsNum((8)", "The expression is missing a ')'.")]
+    [InlineData("charIsNum(8))", "The expression is missing a '('.")]
     [InlineData("(8)", "The expression cannot start with a '(' or ')' parenthesis.")]
-    [InlineData("isCharNum()", "The expression function is missing an argument.")] // Missing a parameter
+    [InlineData("charIsNum()", "The expression function is missing an argument.")] // Missing a parameter
     public async void Run_WithExpressionSyntaxErrors_ReturnsCorrectInvalidResult(
         string expression,
         string expectedAnalyzerMsg)
@@ -145,7 +145,7 @@ public class GitHubActionIntegrationTests : IDisposable
 
     [Theory]
     [InlineData("equalTo('not-equal-branch')", "test-branch", "equalTo(string)")]
-    [InlineData("isCharNum(4)", "feature/123-test-branch", "isCharNum(number)")]
+    [InlineData("charIsNum(4)", "feature/123-test-branch", "charIsNum(number)")]
     [InlineData("sectionIsNum(4, 8)", "feature/123-test-branch", "sectionIsNum(number, number)")]
     [InlineData("contains('not-contained')", "feature/123-test-branch", "contains(string)")]
     [InlineData("notContains('123-test')", "feature/123-test-branch", "notContains(string)")]

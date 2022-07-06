@@ -72,16 +72,16 @@ public static class ExpressionFunctions
     ///     </item>
     /// </list>
     /// </remarks>
-    public static bool IsCharNum(uint charPos)
+    public static bool CharIsNum(uint charPos)
     {
         var notNullOrEmpty = !string.IsNullOrEmpty(BranchName);
 
         var branch = notNullOrEmpty ? BranchName : string.Empty;
 
-        var isCharNum = charPos <= branch.Length - 1 && MemoryExtensions.Contains(Numbers, branch[(int)charPos]);
+        var charIsNum = charPos <= branch.Length - 1 && MemoryExtensions.Contains(Numbers, branch[(int)charPos]);
 
-        var result = notNullOrEmpty && isCharNum;
-        RegisterFunctionResult($"{nameof(IsCharNum)}({typeof(uint)})", result);
+        var result = notNullOrEmpty && charIsNum;
+        RegisterFunctionResult($"{nameof(CharIsNum)}({typeof(uint)})", result);
 
         return result;
     }

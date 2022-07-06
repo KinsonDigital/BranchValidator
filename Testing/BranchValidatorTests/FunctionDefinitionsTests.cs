@@ -45,7 +45,7 @@ public class FunctionDefinitionsTests
     [InlineData(4, "feature/123-my-branch", false)]
     [InlineData(400, "feature/123-my-branch", false)]
     [InlineData(8, "feature/123-my-branch", true)]
-    public void IsCharNum_WhenInvoked_ReturnsCorrectResult(
+    public void CharIsNum_WhenInvoked_ReturnsCorrectResult(
         uint charPos,
         string branchName,
         bool expected)
@@ -54,12 +54,12 @@ public class FunctionDefinitionsTests
         var definitions = new FunctionDefinitions(branchName);
 
         // Act
-        var actual = definitions.IsCharNum(charPos);
+        var actual = definitions.CharIsNum(charPos);
         var actualFunctionResults = FunctionDefinitions.GetFunctionResults();
 
         // Assert
         actual.Should().Be(expected);
-        actualFunctionResults.Should().Contain($"isCharNum(number) -> {expected.ToString().ToLower()}");
+        actualFunctionResults.Should().Contain($"charIsNum(number) -> {expected.ToString().ToLower()}");
     }
 
     [Theory]

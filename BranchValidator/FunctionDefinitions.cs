@@ -82,17 +82,17 @@ public class FunctionDefinitions
     ///     </item>
     /// </list>
     /// </remarks>
-    [ExpressionFunction(nameof(IsCharNum))]
-    public bool IsCharNum(uint charPos)
+    [ExpressionFunction(nameof(CharIsNum))]
+    public bool CharIsNum(uint charPos)
     {
         var notNullOrEmpty = !string.IsNullOrEmpty(this.branchName);
 
         var branch = notNullOrEmpty ? this.branchName : string.Empty;
 
-        var isCharNum = charPos <= branch.Length - 1 && MemoryExtensions.Contains(Numbers, branch[(int)charPos]);
+        var charIsNum = charPos <= branch.Length - 1 && MemoryExtensions.Contains(Numbers, branch[(int)charPos]);
 
-        var result = notNullOrEmpty && isCharNum;
-        RegisterFunctionResult($"{nameof(IsCharNum)}({typeof(uint)})", result);
+        var result = notNullOrEmpty && charIsNum;
+        RegisterFunctionResult($"{nameof(CharIsNum)}({typeof(uint)})", result);
 
         return result;
     }
