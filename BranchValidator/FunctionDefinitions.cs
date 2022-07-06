@@ -115,8 +115,8 @@ public class FunctionDefinitions
     ///     </item>
     /// </list>
     /// </remarks>
-    [ExpressionFunction(nameof(IsSectionNum))]
-    public bool IsSectionNum(uint startPos, uint endPos)
+    [ExpressionFunction(nameof(SectionIsNum))]
+    public bool SectionIsNum(uint startPos, uint endPos)
     {
         var branchNotNullOrEmpty = !string.IsNullOrEmpty(this.branchName);
         var branch = branchNotNullOrEmpty ? this.branchName : string.Empty;
@@ -138,7 +138,7 @@ public class FunctionDefinitions
 
         var result = branchNotNullOrEmpty && sectionIsNum;
 
-        RegisterFunctionResult($"{nameof(IsSectionNum)}({typeof(uint)}, {typeof(uint)})", result);
+        RegisterFunctionResult($"{nameof(SectionIsNum)}({typeof(uint)}, {typeof(uint)})", result);
 
         return result;
     }
@@ -194,8 +194,8 @@ public class FunctionDefinitions
     ///         </item>
     ///     </list>
     /// </remarks>
-    [ExpressionFunction(nameof(IsSectionNum))]
-    public bool IsSectionNum(uint startPos, string upToChar)
+    [ExpressionFunction(nameof(SectionIsNum))]
+    public bool SectionIsNum(uint startPos, string upToChar)
     {
         var branchNotNullOrEmpty = !string.IsNullOrEmpty(this.branchName);
         var branch = branchNotNullOrEmpty ? this.branchName : string.Empty;
@@ -220,7 +220,7 @@ public class FunctionDefinitions
                      upToCharNotNullOrEmpty &&
                      entireSectionIsNum;
 
-        RegisterFunctionResult($"{nameof(IsSectionNum)}({typeof(uint)}, {typeof(string)})", result);
+        RegisterFunctionResult($"{nameof(SectionIsNum)}({typeof(uint)}, {typeof(string)})", result);
 
         return result;
     }
@@ -569,17 +569,23 @@ public class FunctionDefinitions
         }
 
         // Go through each character and escape it if needed
+        // This is due to some characters having a regex specific meaning
         for (var i = 0; i < value.Length; i++)
         {
             var character = value[i];
 
-            if (character != '|')
+            if (character == '|')
             {
+                value = value.Insert(i, @"\");
+                i++;
                 continue;
             }
 
-            value = value.Insert(i, @"\");
-            i++;
+            if (character == '.')
+            {
+                value = value.Insert(i, @"\");
+                i++;
+            }
         }
 
         return Regex.Matches(thisStr, value, RegexOptions.IgnoreCase).Count;

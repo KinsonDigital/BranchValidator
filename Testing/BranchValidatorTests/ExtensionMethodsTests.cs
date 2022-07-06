@@ -432,10 +432,10 @@ public class ExtensionMethodsTests
     }
 
     [Theory]
-    [InlineData("123", "456", true, "")] // Function Example: isSectionNum(8, 10)
-    [InlineData("123", "'-'", true, "")] // Function Example: isSectionNum(8, '-')
+    [InlineData("123", "456", true, "")] // Function Example: sectionIsNum(8, 10)
+    [InlineData("123", "'-'", true, "")] // Function Example: sectionIsNum(8, '-')
     // Validation would catch that quotes do not exist, but this is just checking the param value without caring about the analyzers
-    [InlineData("123", "-", true, "")] // Function Example: isSectionNum(8, -)
+    [InlineData("123", "-", true, "")] // Function Example: sectionIsNum(8, -)
     public void GetMethod_WithOverloadedMethods_ReturnsCorrectResult(
         string param1Value,
         string param2Value,

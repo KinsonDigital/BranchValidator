@@ -1,4 +1,4 @@
-﻿// <copyright file="FunctionDefinitionsTests.cs" company="KinsonDigital">
+// <copyright file="FunctionDefinitionsTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -70,7 +70,9 @@ public class FunctionDefinitionsTests
     [InlineData("feature/123-test-branch", 8, 11, false)]
     [InlineData("feature/123-test-branch", 8, 10, true)]
     [InlineData("feature/0123456789", 12, 3000, true)]
-    public void IsSectionNum_WhenInvokedWithStartAndEndPosParams_ReturnsCorrectResult(
+    [InlineData("feature/123-test-branch", 8, 10, true)]
+    [InlineData("release/v1.2.3-preview.4", 9, 9, true)]
+    public void SectionIsNum_WhenInvokedWithStartAndEndPosParams_ReturnsCorrectResult(
         string branchName,
         uint startPos,
         uint endPos,
@@ -80,12 +82,12 @@ public class FunctionDefinitionsTests
         var definitions = new FunctionDefinitions(branchName);
 
         // Act
-        var actual = definitions.IsSectionNum(startPos, endPos);
+        var actual = definitions.SectionIsNum(startPos, endPos);
         var actualFunctionResults = FunctionDefinitions.GetFunctionResults();
 
         // Assert
         actual.Should().Be(expected);
-        actualFunctionResults.Should().Contain($"isSectionNum(number, number) -> {expected.ToString().ToLower()}");
+        actualFunctionResults.Should().Contain($"sectionIsNum(number, number) -> {expected.ToString().ToLower()}");
     }
 
     [Theory]
@@ -102,7 +104,7 @@ public class FunctionDefinitionsTests
     [InlineData("feature/123-test-branch", 8, "-", true)]
     [InlineData("feature/123-test-branch", 8, "-other-characters", true)]
     [InlineData("0123456789-", 0, "-", true)]
-    public void IsSectionNum_WhenInvokedWithStartPosAndUpToCharParams_ReturnsCorrectResult(
+    public void SectionIsNum_WhenInvokedWithStartPosAndUpToCharParams_ReturnsCorrectResult(
         string branchName,
         uint startPos,
         string upToChar,
@@ -112,12 +114,12 @@ public class FunctionDefinitionsTests
         var definitions = new FunctionDefinitions(branchName);
 
         // Act
-        var actual = definitions.IsSectionNum(startPos, upToChar);
+        var actual = definitions.SectionIsNum(startPos, upToChar);
         var actualFunctionResults = FunctionDefinitions.GetFunctionResults();
 
         // Assert
         actual.Should().Be(expected);
-        actualFunctionResults.Should().Contain($"isSectionNum(number, string) -> {expected.ToString().ToLower()}");
+        actualFunctionResults.Should().Contain($"sectionIsNum(number, string) -> {expected.ToString().ToLower()}");
     }
 
     [Theory]
