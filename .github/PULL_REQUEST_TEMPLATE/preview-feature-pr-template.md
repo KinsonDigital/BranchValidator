@@ -17,13 +17,15 @@
     </details>
 
 - [ ] The **_head(source)_** branch for this pull request is created from a **_preview release_** branch, with the correct naming syntax, in the following example:
-  <details closed><summary>Example</summary>
+  - A **_head(source)_** branch is the branch that is being merged into the **_base(target)_** branch.
 
-    ``` xml
-    Syntax: preview/v<major>.<minor>.<patch>-preview.<prev-num>
-    Example: preview/v1.2.3-preview.4
-    ```
-  </details>
+    <details closed><summary>Example</summary>
+
+      ``` xml
+      Syntax: preview/v<major>.<minor>.<patch>-preview.<prev-num>
+      Example: preview/v1.2.3-preview.4
+      ```
+    </details>
 
 - [ ] The **_base(target)_** branch for this pull request is a **_preview release_** branch, with the correct naming syntax, in the following example:
   - A **_base(target)_** branch is the branch that the **_head(source)_** branch is merging into.
