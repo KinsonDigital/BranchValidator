@@ -249,7 +249,7 @@ public class GitHubActionTests
         this.mockConsoleService.VerifyOnce(m =>
             m.WriteLine($"The text '{trimFromStart}' has been trimmed from the branch name."));
         this.mockConsoleService.VerifyOnce(m =>
-            m.WriteLine($"Branch After Trimming: {expectedTrimmedBranchName}"));
+            m.WriteLine($"Branch After Trimming: {expectedTrimmedBranchName}", false, true));
     }
 
     [Fact]

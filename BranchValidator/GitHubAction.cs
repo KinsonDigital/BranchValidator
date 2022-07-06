@@ -76,7 +76,7 @@ public sealed class GitHubAction : IGitHubAction<bool>
             inputs.BranchName = inputs.BranchName.TrimStart(inputs.TrimFromStart);
 
             this.consoleService.WriteLine($"The text '{inputs.TrimFromStart}' has been trimmed from the branch name.");
-            this.consoleService.WriteLine($"Branch After Trimming: {inputs.BranchName}");
+            this.consoleService.WriteLine($"Branch After Trimming: {inputs.BranchName}", false, true);
         }
 
         // Update the function definitions object of the branch name
