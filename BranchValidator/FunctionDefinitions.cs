@@ -277,20 +277,16 @@ public class FunctionDefinitions
     [ExpressionFunction(nameof(Contains))]
     public bool Contains(string value)
     {
-        const char matchNumbers = '#';
-        const char matchAnything = '*';
-
         var branchNotNullOrEmpty = !string.IsNullOrEmpty(this.branchName);
         var branch = branchNotNullOrEmpty ? this.branchName : string.Empty;
-        var hasGlobbingSyntax = value.Contains(matchNumbers) || value.Contains(matchAnything);
+        var hasGlobbingSyntax = value.Contains(MatchNumbers) || value.Contains(MatchAnything);
         var contains = hasGlobbingSyntax
-            ? Match(this.branchName, value, MatchType.All)
-            : branch.Contains(value);
-        var result = branchNotNullOrEmpty && contains;
+            ? branchNotNullOrEmpty && Match(branch, value, MatchType.All)
+            : branchNotNullOrEmpty && branch.Contains(value);
 
-        RegisterFunctionResult($"{nameof(Contains)}({typeof(string)})", result);
+        RegisterFunctionResult($"{nameof(Contains)}({typeof(string)})", contains);
 
-        return result;
+        return contains;
     }
 
     /// <summary>
@@ -304,14 +300,16 @@ public class FunctionDefinitions
     [ExpressionFunction(nameof(NotContains))]
     public bool NotContains(string value)
     {
-        var branchNotNullOrEmpty = !string.IsNullOrEmpty(this.branchName);
-        var branch = branchNotNullOrEmpty ? this.branchName : string.Empty;
-        var doesNotContain = branch.Contains(value) is false;
-        var result = branchNotNullOrEmpty && doesNotContain;
+        var branchNullOrEmpty = string.IsNullOrEmpty(this.branchName);
+        var branch = branchNullOrEmpty ? string.Empty : this.branchName;
+        var hasGlobbingSyntax = value.Contains(MatchNumbers) || value.Contains(MatchAnything);
+        var doesNotContain = hasGlobbingSyntax
+            ? branchNullOrEmpty || !Match(branch, value, MatchType.All)
+            : branchNullOrEmpty || !branch.Contains(value);
 
-        RegisterFunctionResult($"{nameof(NotContains)}({typeof(string)})", result);
+        RegisterFunctionResult($"{nameof(NotContains)}({typeof(string)})", doesNotContain);
 
-        return result;
+        return doesNotContain;
     }
 
     /// <summary>
