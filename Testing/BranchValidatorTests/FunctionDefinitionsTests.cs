@@ -69,65 +69,6 @@ public class FunctionDefinitionsTests
     }
 
     [Theory]
-    [InlineData(null, 0, 10, false)]
-    [InlineData("", 0, 10, false)]
-    [InlineData("feature/123-test-branch", 8, 12, false)]
-    [InlineData("feature/test-branch", 12, 3000, false)]
-    [InlineData("feature/123-test-branch", 8, 11, false)]
-    [InlineData("feature/123-test-branch", 8, 10, true)]
-    [InlineData("feature/0123456789", 12, 3000, true)]
-    [InlineData("release/v1.2.3-preview.4", 9, 9, true)]
-    public void SectionIsNum_WhenInvokedWithStartAndEndPosParams_ReturnsCorrectResult(
-        string branchName,
-        uint startPos,
-        uint endPos,
-        bool expected)
-    {
-        // Arrange
-        var definitions = new FunctionDefinitions(branchName);
-
-        // Act
-        var actual = definitions.SectionIsNum(startPos, endPos);
-        var actualFunctionResults = FunctionDefinitions.GetFunctionResults();
-
-        // Assert
-        actual.Should().Be(expected);
-        actualFunctionResults.Should().Contain($"sectionIsNum(number, number) -> {expected.ToString().ToLower()}");
-    }
-
-    [Theory]
-    [InlineData(null, 0, "-", false)]
-    [InlineData(null, 1000, "-", false)]
-    [InlineData("", 0, "-", false)]
-    [InlineData("", 2000, "-", false)]
-    [InlineData("feature/123-test-branch", 8, null, false)]
-    [InlineData("feature/123-test-branch", 8, "", false)]
-    [InlineData("feature/123testbranch", 8, "-", false)]
-    [InlineData("feature/123-testbranch", 11, "-", false)]
-    [InlineData("feature/123test-branch", 8, "-", false)]
-    [InlineData("feature/123-test-branch", 3000, "-", false)]
-    [InlineData("feature/123-test-branch", 8, "-", true)]
-    [InlineData("feature/123-test-branch", 8, "-other-characters", true)]
-    [InlineData("0123456789-", 0, "-", true)]
-    public void SectionIsNum_WhenInvokedWithStartPosAndUpToCharParams_ReturnsCorrectResult(
-        string branchName,
-        uint startPos,
-        string upToChar,
-        bool expected)
-    {
-        // Arrange
-        var definitions = new FunctionDefinitions(branchName);
-
-        // Act
-        var actual = definitions.SectionIsNum(startPos, upToChar);
-        var actualFunctionResults = FunctionDefinitions.GetFunctionResults();
-
-        // Assert
-        actual.Should().Be(expected);
-        actualFunctionResults.Should().Contain($"sectionIsNum(number, string) -> {expected.ToString().ToLower()}");
-    }
-
-    [Theory]
     [InlineData(null, "123-test", false)]
     [InlineData("", "123-test", false)]
     [InlineData("feature/123-test-branch", "is-not-contained", false)]
