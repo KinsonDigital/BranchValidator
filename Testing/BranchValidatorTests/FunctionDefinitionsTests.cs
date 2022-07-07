@@ -402,5 +402,79 @@ public class FunctionDefinitionsTests
         actual.Should().Be(expected);
         actualFunctionResults.Should().Contain($"isAfter(string, string) -> {expected.ToString().ToLower()}");
     }
+
+    [Fact]
+    public void AllUpperCase_WhenAllUpperCase_ReturnsTrue()
+    {
+        // Arrange
+        const string branchName = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        var definitions = new FunctionDefinitions(branchName);
+
+        // Act
+        var actual = definitions.AllUpperCase();
+        var actualFunctionResults = FunctionDefinitions.GetFunctionResults();
+
+        // Assert
+        actual.Should().BeTrue();
+        actualFunctionResults.Should().Contain("allUpperCase() -> true");
+    }
+
+    [Fact]
+    public void AllUpperCase_WhenSingleCharacterIsLowerCase_ReturnsFalse()
+    {
+        // Arrange
+        const string letters = "abcdefghijklmnopqrstuvwxyz";
+        Assert.All(letters, c =>
+        {
+            // Arrange
+            var branchName = c.ToString();
+            var definitions = new FunctionDefinitions(branchName);
+
+            // Act
+            var actual = definitions.AllUpperCase();
+            var actualFunctionResults = FunctionDefinitions.GetFunctionResults();
+
+            // Assert
+            actual.Should().BeFalse();
+            actualFunctionResults.Should().Contain("allUpperCase() -> false");
+        });
+    }
+
+    [Fact]
+    public void AllLowerCase_WhenAllLowerCase_ReturnsTrue()
+    {
+        // Arrange
+        const string branchName = "abcdefghijklmnopqrstuvwxyz";
+        var definitions = new FunctionDefinitions(branchName);
+
+        // Act
+        var actual = definitions.AllLowerCase();
+        var actualFunctionResults = FunctionDefinitions.GetFunctionResults();
+
+        // Assert
+        actual.Should().BeTrue();
+        actualFunctionResults.Should().Contain("allLowerCase() -> true");
+    }
+
+    [Fact]
+    public void AllLowerCase_WhenSingleCharacterIsUpperCase_ReturnsFalse()
+    {
+        // Arrange
+        const string letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        Assert.All(letters, c =>
+        {
+            // Arrange
+            var branchName = c.ToString();
+            var definitions = new FunctionDefinitions(branchName);
+
+            // Act
+            var actual = definitions.AllLowerCase();
+            var actualFunctionResults = FunctionDefinitions.GetFunctionResults();
+
+            // Assert
+            actual.Should().BeFalse();
+            actualFunctionResults.Should().Contain("allLowerCase() -> false");
+        });
+    }
     #endregion
 }

@@ -35,6 +35,8 @@ public static class ExpressionFunctions
 	private static readonly List<string> FunctionResults = new ();
 	private const string BranchName = "//<branch-name/>";
 	private static readonly char[] Numbers = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', };
+	private static readonly char[] LowerCaseLetters = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', };
+	private static readonly char[] UpperCaseLetters = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', };
 
     /// <summary>
     /// Gets the results of all the functions.
@@ -381,6 +383,66 @@ public static class ExpressionFunctions
     }
 
     /// <summary>
+    /// Returns a value indicating whether or not the branch name has all upper case letters.
+    /// </summary>
+    /// <returns><c>true</c> if all of the letters are uppercase.</returns>
+    public static bool AllUpperCase()
+    {
+        if (string.IsNullOrEmpty(BranchName))
+        {
+            return false;
+        }
+
+        var result = true;
+
+        foreach (var c in BranchName)
+        {
+            var isLetter = Contains(LowerCaseLetters, c) || Contains(UpperCaseLetters, c);
+
+            // If the character is a symbol, ignore and move on to the next
+            if (isLetter && Contains(UpperCaseLetters, c) is false)
+            {
+                result = false;
+                break;
+            }
+        }
+
+        RegisterFunctionResult($"{nameof(AllUpperCase)}()", result);
+
+        return result;
+    }
+
+    /// <summary>
+    /// Returns a value indicating whether or not the branch name has all lower case letters.
+    /// </summary>
+    /// <returns><c>true</c> if all of the letters are lowercase.</returns>
+    public static bool AllLowerCase()
+    {
+        if (string.IsNullOrEmpty(BranchName))
+        {
+            return false;
+        }
+
+        var result = true;
+
+        foreach (var c in BranchName)
+        {
+            var isLetter = Contains(LowerCaseLetters, c) || Contains(UpperCaseLetters, c);
+
+            // If the character is a symbol, ignore and move on to the next
+            if (isLetter && Contains(LowerCaseLetters, c) is false)
+            {
+                result = false;
+                break;
+            }
+        }
+
+        RegisterFunctionResult($"{nameof(AllLowerCase)}()", result);
+
+        return result;
+    }
+
+    /// <summary>
     /// Registers the given function <paramref name="name"/> and its associated result.
     /// </summary>
     /// <param name="name">The name of the function.</param>
@@ -435,28 +497,26 @@ public static class ExpressionFunctions
     }
 
     /// <summary>
-    /// Returns true if all of the characters in the given <c>string</c> <paramref name="value"/> return <c>true</c>
-    /// in the given <paramref name="predicate"/>.
+    /// Returns a value indicating whether or not the given <paramref name="character"/>
+    /// is contained in the given <c>string</c> <paramref name="characters"/>.
     /// </summary>
-    /// <param name="value">The value to check.</param>
-    /// <param name="predicate">The predicate to use for checking each <c>character</c>.</param>
-    /// <returns><c>true</c> if the <paramref name="predicate"/> returned <c>true</c> for every <c>character</c>.</returns>
-    private static bool All(string value, Func<char, bool> predicate)
+    /// <param name="characters">The <c>string</c> that might contain the character.</param>
+    /// <param name="character">The character to check for.</param>
+    /// <returns>
+    ///     <c>true</c> if the given <paramref name="character"/> is
+    ///     contained in the <c>string</c> <paramref name="characters"/>.
+    /// </returns>
+    private static bool Contains(char[] characters, char character)
     {
-        if (string.IsNullOrEmpty(value))
+        foreach (var c in characters)
         {
-            return false;
-        }
-
-        foreach (var character in value)
-        {
-            if (predicate(character) is false)
+            if (c == character)
             {
-                return false;
+                return true;
             }
         }
 
-        return true;
+        return false;
     }
 
     /// <summary>
