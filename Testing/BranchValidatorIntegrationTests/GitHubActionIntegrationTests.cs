@@ -87,6 +87,7 @@ public class GitHubActionIntegrationTests : IDisposable
     [InlineData("isBefore('123', 'branch')", "feature/123-test-branch", "")]
     [InlineData("isAfter('test', 'feature')", "feature/123-test-branch", "")]
     [InlineData("contains('#-test')", "feature/123-test-branch", "")]
+    [InlineData("contains('123-*-branch')", "feature/123-test-branch", "")]
     [InlineData("contains('release/v#.#.#-preview.#')", "refs/heads/release/v1.20.300-preview.4000", "refs/heads/")]
     public async void Run_WithValidBranches_ReturnsCorrectResult(string expression, string branchName, string trimFromStart)
     {
@@ -120,7 +121,9 @@ public class GitHubActionIntegrationTests : IDisposable
     [InlineData("charIsNum((8)", "The expression is missing a ')'.")]
     [InlineData("charIsNum(8))", "The expression is missing a '('.")]
     [InlineData("(8)", "The expression cannot start with a '(' or ')' parenthesis.")]
-    [InlineData("charIsNum()", "The expression function is missing an argument.")] // Missing a parameter
+    [InlineData("charIsNum()", "The expression function is missing an argument.")]
+    [InlineData("equalTo('feature/123-*-branch'", "The expression is missing a ')'.")]
+    [InlineData("equalTo('feature/#-test-branch'", "The expression is missing a ')'.")]
     public async void Run_WithExpressionSyntaxErrors_ReturnsCorrectInvalidResult(
         string expression,
         string expectedAnalyzerMsg)
@@ -157,6 +160,9 @@ public class GitHubActionIntegrationTests : IDisposable
     [InlineData("lenLessThan(10)", "feature/123-test-branch", "lenLessThan(number)")]
     [InlineData("isBefore('branch', '123')", "feature/123-test-branch", "isBefore(string, string)")]
     [InlineData("isAfter('feature', 'test')", "feature/123-test-branch", "isAfter(string, string)")]
+    [InlineData("equalTo('feature/123-#-branch')", "feature/123-test-branch", "equalTo(string)")]
+    [InlineData("equalTo('feature/456-*-branch')", "feature/123-test-branch", "equalTo(string)")]
+    [InlineData("equalTo('feature/*-#-branch')", "feature/123-test-branch", "equalTo(string)")]
     public async void Run_WithInvalidBranches_FailsActionWithException(
         string expression,
         string branchName,
@@ -182,6 +188,8 @@ public class GitHubActionIntegrationTests : IDisposable
     [Theory]
     [InlineData("contains('-') && notContains('preview')", "feature/123-test-branch")]
     [InlineData("startsWith('feature/') || startsWith('preview')", "feature/123-branch")]
+    [InlineData("startsWith('feature/#') || startsWith('preview#')", "feature/123-branch")]
+    [InlineData("startsWith('feature/*-test') || startsWith('preview*')", "feature/123-test-branch")]
     public async void Run_WithValidBranchesAndOperators_ReturnsCorrectResult(string expression, string branchName)
     {
         CheckForOps(expression);
@@ -212,7 +220,7 @@ public class GitHubActionIntegrationTests : IDisposable
     /// </summary>
     public void Dispose() => this.action.Dispose();
 
-     /// <summary>
+    /// <summary>
     /// Asserts that the given <c>string</c> <paramref name="value"/> contains operators for testing to work properly.
     /// </summary>
     /// <param name="value">The value to check.</param>
