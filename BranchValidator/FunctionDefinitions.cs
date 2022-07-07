@@ -98,11 +98,17 @@ public class FunctionDefinitions
     [ExpressionFunction(nameof(EqualTo))]
     public bool EqualTo(string value)
     {
-        var result = (string.IsNullOrEmpty(value) && string.IsNullOrEmpty(this.branchName)) || value == this.branchName;
+        var branch = string.IsNullOrEmpty(this.branchName) ? string.Empty : this.branchName;
+        value = string.IsNullOrEmpty(value) ? string.Empty : value;
 
-        RegisterFunctionResult($"{nameof(EqualTo)}({typeof(string)})", result);
+        var hasGlobbingSyntax = value.Contains(MatchNumbers) || value.Contains(MatchAnything);
+        var isEqual = hasGlobbingSyntax
+            ? Match(branch, value, MatchType.All)
+            : (string.IsNullOrEmpty(value) && string.IsNullOrEmpty(branch)) || value == branch;
 
-        return result;
+        RegisterFunctionResult($"{nameof(EqualTo)}({typeof(string)})", isEqual);
+
+        return isEqual;
     }
 
     /// <summary>

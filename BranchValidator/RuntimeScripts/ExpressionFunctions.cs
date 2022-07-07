@@ -56,11 +56,17 @@ public static class ExpressionFunctions
     /// </remarks>
     public static bool EqualTo(string value)
     {
-        var result = (string.IsNullOrEmpty(value) && string.IsNullOrEmpty(BranchName)) || value == BranchName;
+        var branch = string.IsNullOrEmpty(BranchName) ? string.Empty : BranchName;
+        value = string.IsNullOrEmpty(value) ? string.Empty : value;
 
-        RegisterFunctionResult($"{nameof(EqualTo)}({typeof(string)})", result);
+        var hasGlobbingSyntax = value.Contains(MatchNumbers) || value.Contains(MatchAnything);
+        var isEqual = hasGlobbingSyntax
+            ? Match(branch, value, MatchType.All)
+            : (string.IsNullOrEmpty(value) && string.IsNullOrEmpty(branch)) || value == branch;
 
-        return result;
+        RegisterFunctionResult($"{nameof(EqualTo)}({typeof(string)})", isEqual);
+
+        return isEqual;
     }
 
     /// <summary>

@@ -14,14 +14,20 @@ public class FunctionDefinitionsTests
 {
     #region Method Tests
     [Theory]
-    [InlineData("my-branch", "my-branch", true)]
-    [InlineData(null, "", true)]
-    [InlineData("", null, true)]
     [InlineData("my-branch", "other-branch", false)]
     [InlineData(null, "my-branch", false)]
     [InlineData("", "my-branch", false)]
     [InlineData("my-branch", null, false)]
     [InlineData("my-branch", "", false)]
+    [InlineData("my-branch", "my-branch", true)]
+    [InlineData(null, "", true)]
+    [InlineData("", null, true)]
+    [InlineData("release/v#.#.#-preview.#", "release/v1.^.3-preview.4", false)]
+    [InlineData("release/v1.2.3-*.4", "release/v1.2.3-.4", false)]
+    [InlineData("release/v#.2.#-*.4", "release/vT.2.3-.4", false)]
+    [InlineData("release/v#.#.#-preview.#", "release/v1.2.3-preview.4", true)]
+    [InlineData("release/v1.2.3-*.4", "release/v1.2.3-preview.4", true)]
+    [InlineData("release/v#.2.#-*.4", "release/v1.2.3-preview.4", true)]
     public void EqualTo_WhenInvoked_ReturnsCorrectResult(
         string value,
         string branchName,
