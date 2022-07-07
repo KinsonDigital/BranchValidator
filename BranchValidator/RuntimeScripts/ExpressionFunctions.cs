@@ -410,23 +410,6 @@ public static class ExpressionFunctions
     }
 
     /// <summary>
-    /// Returns a value indicating whether or not the branch name starts with a number.
-    /// </summary>
-    /// <returns><c>true</c> if the branch starts with a number.</returns>
-    public static bool StartsWithNum()
-    {
-        var branchIsNotNullOrEmpty = !string.IsNullOrEmpty(BranchName);
-        var branch = branchIsNotNullOrEmpty ? BranchName : string.Empty;
-        var startsWithNum = branchIsNotNullOrEmpty && MemoryExtensions.Contains(Numbers, branch[0]);
-
-        var result = branchIsNotNullOrEmpty && startsWithNum;
-
-        RegisterFunctionResult($"{nameof(StartsWithNum)}()", result);
-
-        return result;
-    }
-
-    /// <summary>
     /// Returns a value indicating whether or not the branch name ends with a number.
     /// </summary>
     /// <returns><c>true</c> if the branch ends with a number.</returns>

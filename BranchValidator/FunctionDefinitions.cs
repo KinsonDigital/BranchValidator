@@ -3,13 +3,13 @@
 // </copyright>
 
 /*TODO:
- 1. Expression function 'contains()' improvements
+ 1. ✔️Expression function 'contains()' improvements
     - ✔️allow the '*' character for globbing checks
     - ✔️allow the '#' character that matches if that character is a number
- 2. Expression function 'startsWith()' and 'notStartsWith()' improvements
+ 2. ✔️Expression function 'startsWith()' and 'notStartsWith()' improvements
     - ✔️allow the '*' character for globbing checks
     - ✔️allow the '#' character that matches if that character is a number
-    - Remove the StartsWithNum() expression function.  This is not needed because you can just do this . . .
+    - ✔️Remove the StartsWithNum() expression function.  This is not needed because you can just do this . . .
       startsWith('#')
  3. Expression function 'endsWith()' 'notEndsWith()' improvements
     - allow the '*' character for globbing checks
@@ -443,24 +443,6 @@ public class FunctionDefinitions
         var result = branchIsNotNullOrEmpty && doesNotEndWith;
 
         RegisterFunctionResult($"{nameof(NotEndsWith)}({typeof(string)})", result);
-
-        return result;
-    }
-
-    /// <summary>
-    /// Returns a value indicating whether or not the branch name starts with a number.
-    /// </summary>
-    /// <returns><c>true</c> if the branch starts with a number.</returns>
-    [ExpressionFunction(nameof(StartsWithNum))]
-    public bool StartsWithNum()
-    {
-        var branchIsNotNullOrEmpty = !string.IsNullOrEmpty(this.branchName);
-        var branch = branchIsNotNullOrEmpty ? this.branchName : string.Empty;
-        var startsWithNum = branchIsNotNullOrEmpty && MemoryExtensions.Contains(Numbers, branch[0]);
-
-        var result = branchIsNotNullOrEmpty && startsWithNum;
-
-        RegisterFunctionResult($"{nameof(StartsWithNum)}()", result);
 
         return result;
     }

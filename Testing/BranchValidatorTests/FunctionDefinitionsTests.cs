@@ -353,27 +353,6 @@ public class FunctionDefinitionsTests
     [InlineData(null, false)]
     [InlineData("", false)]
     [InlineData("feature/123-test-branch", false)]
-    [InlineData("123-test-branch", true)]
-    public void StartsWithNum_WhenInvoked_ReturnsCorrectResult(
-        string branchName,
-        bool expected)
-    {
-        // Arrange
-        var definitions = new FunctionDefinitions(branchName);
-
-        // Act
-        var actual = definitions.StartsWithNum();
-        var actualFunctionResults = FunctionDefinitions.GetFunctionResults();
-
-        // Assert
-        actual.Should().Be(expected);
-        actualFunctionResults.Should().Contain($"startsWithNum() -> {expected.ToString().ToLower()}");
-    }
-
-    [Theory]
-    [InlineData(null, false)]
-    [InlineData("", false)]
-    [InlineData("feature/123-test-branch", false)]
     [InlineData("feature/123-test-branch-456", true)]
     public void EndsWithNum_WhenInvoked_ReturnsCorrectResult(
         string branchName,
