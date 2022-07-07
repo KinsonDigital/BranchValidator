@@ -420,23 +420,6 @@ public static class ExpressionFunctions
     }
 
     /// <summary>
-    /// Returns a value indicating whether or not the branch name ends with a number.
-    /// </summary>
-    /// <returns><c>true</c> if the branch ends with a number.</returns>
-    public static bool EndsWithNum()
-    {
-        var branchIsNotNullOrEmpty = !string.IsNullOrEmpty(BranchName);
-        var branch = branchIsNotNullOrEmpty ? BranchName : string.Empty;
-        var endsWithNum = branchIsNotNullOrEmpty && MemoryExtensions.Contains(Numbers, branch[^1]);
-
-        var result = branchIsNotNullOrEmpty && endsWithNum;
-
-        RegisterFunctionResult($"{nameof(EndsWithNum)}()", result);
-
-        return result;
-    }
-
-    /// <summary>
     /// Returns a value indicating whether or not the length of the branch name is less than the given <paramref name="length"/>.
     /// </summary>
     /// <param name="length">The length to compare to the length of the branch.</param>

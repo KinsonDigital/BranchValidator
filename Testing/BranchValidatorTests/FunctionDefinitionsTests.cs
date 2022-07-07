@@ -363,27 +363,6 @@ public class FunctionDefinitionsTests
     }
 
     [Theory]
-    [InlineData(null, false)]
-    [InlineData("", false)]
-    [InlineData("feature/123-test-branch", false)]
-    [InlineData("feature/123-test-branch-456", true)]
-    public void EndsWithNum_WhenInvoked_ReturnsCorrectResult(
-        string branchName,
-        bool expected)
-    {
-        // Arrange
-        var definitions = new FunctionDefinitions(branchName);
-
-        // Act
-        var actual = definitions.EndsWithNum();
-        var actualFunctionResults = FunctionDefinitions.GetFunctionResults();
-
-        // Assert
-        actual.Should().Be(expected);
-        actualFunctionResults.Should().Contain($"endsWithNum() -> {expected.ToString().ToLower()}");
-    }
-
-    [Theory]
     [InlineData(null, 0, false)]
     [InlineData("", 0, false)]
     [InlineData("feature/123-test-branch", 10, false)]

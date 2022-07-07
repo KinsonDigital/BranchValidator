@@ -14,7 +14,7 @@
  3. Expression function 'endsWith()' 'notEndsWith()' improvements
     - ✔️allow the '*' character for globbing checks
     - ✔️allow the '#' character that matches if that character is a number
-    - Remove the EndsWithNum() expression function.  This is not needed because you can just do this . . .
+    - ✔️Remove the EndsWithNum() expression function.  This is not needed because you can just do this . . .
       endsWith('#')
  4. If all of the '*' '#' globbing patterns are implemented and working, there is no need for the sectionIsNum() expression
     function anymore.  Delete this.
@@ -471,24 +471,6 @@ public class FunctionDefinitions
         RegisterFunctionResult($"{nameof(NotEndsWith)}({typeof(string)})", endsWith);
 
         return endsWith;
-    }
-
-    /// <summary>
-    /// Returns a value indicating whether or not the branch name ends with a number.
-    /// </summary>
-    /// <returns><c>true</c> if the branch ends with a number.</returns>
-    [ExpressionFunction(nameof(EndsWithNum))]
-    public bool EndsWithNum()
-    {
-        var branchIsNotNullOrEmpty = !string.IsNullOrEmpty(this.branchName);
-        var branch = branchIsNotNullOrEmpty ? this.branchName : string.Empty;
-        var endsWithNum = branchIsNotNullOrEmpty && MemoryExtensions.Contains(Numbers, branch[^1]);
-
-        var result = branchIsNotNullOrEmpty && endsWithNum;
-
-        RegisterFunctionResult($"{nameof(EndsWithNum)}()", result);
-
-        return result;
     }
 
     /// <summary>
