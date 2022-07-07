@@ -473,31 +473,6 @@ public class FunctionDefinitions
     }
 
     /// <summary>
-    /// Returns true if all of the characters in the given <c>string</c> <paramref name="value"/> return <c>true</c>
-    /// in the given <paramref name="predicate"/>.
-    /// </summary>
-    /// <param name="value">The value to check.</param>
-    /// <param name="predicate">The predicate to use for checking each <c>character</c>.</param>
-    /// <returns><c>true</c> if the <paramref name="predicate"/> returned <c>true</c> for every <c>character</c>.</returns>
-    private static bool All(string value, Func<char, bool> predicate)
-    {
-        if (string.IsNullOrEmpty(value))
-        {
-            return false;
-        }
-
-        foreach (var character in value)
-        {
-            if (predicate(character) is false)
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /// <summary>
     /// Returns a value indicating if the given <paramref name="globbingPattern"/> contains a match
     /// to the given <c>string</c> <paramref name="value"/>.
     /// </summary>
