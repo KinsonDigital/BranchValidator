@@ -12,8 +12,10 @@
     - ✔️Remove the StartsWithNum() expression function.  This is not needed because you can just do this . . .
       startsWith('#')
  3. Expression function 'endsWith()' 'notEndsWith()' improvements
-    - allow the '*' character for globbing checks
-    - allow the '#' character that matches if that character is a number
+    - ✔️allow the '*' character for globbing checks
+    - ✔️allow the '#' character that matches if that character is a number
+    - Remove the EndsWithNum() expression function.  This is not needed because you can just do this . . .
+      endsWith('#')
  4. If all of the '*' '#' globbing patterns are implemented and working, there is no need for the sectionIsNum() expression
     function anymore.  Delete this.
  */
@@ -25,6 +27,27 @@ using BranchValidatorShared;
 namespace BranchValidator;
 
 /// <summary>
+/// Represents the type of matching that should be performed.
+/// </summary>
+public enum MatchType
+{
+    /// <summary>
+    /// Match against the entire string.
+    /// </summary>
+    All,
+
+    /// <summary>
+    /// Only match against the beginning of the string.
+    /// </summary>
+    Start,
+
+    /// <summary>
+    /// Only match against the end of the string.
+    /// </summary>
+    End,
+}
+
+/// <summary>
 /// Holds all of the functions that can be used in an expression and
 /// acts like a container to build the C# script for execution during runtime.
 /// </summary>
@@ -32,6 +55,8 @@ namespace BranchValidator;
 [SuppressMessage("ReSharper", "MemberCanBeMadeStatic.Global", Justification = "Methods cannot be static due to reflection requirements and invocation.")]
 public class FunctionDefinitions
 {
+    private const char MatchNumbers = '#';
+    private const char MatchAnything = '*';
     private static readonly List<string> FunctionResults = new ();
     private static readonly char[] Numbers =
     {
@@ -259,7 +284,7 @@ public class FunctionDefinitions
         var branch = branchNotNullOrEmpty ? this.branchName : string.Empty;
         var hasGlobbingSyntax = value.Contains(matchNumbers) || value.Contains(matchAnything);
         var contains = hasGlobbingSyntax
-            ? Match(this.branchName, value, false)
+            ? Match(this.branchName, value, MatchType.All)
             : branch.Contains(value);
         var result = branchNotNullOrEmpty && contains;
 
@@ -363,14 +388,11 @@ public class FunctionDefinitions
     [ExpressionFunction(nameof(StartsWith))]
     public bool StartsWith(string value)
     {
-        const char matchNumbers = '#';
-        const char matchAnything = '*';
-
         var branchIsNotNullOrEmpty = !string.IsNullOrEmpty(this.branchName);
         var branch = branchIsNotNullOrEmpty ? this.branchName : string.Empty;
-        var hasGlobbingSyntax = value.Contains(matchNumbers) || value.Contains(matchAnything);
+        var hasGlobbingSyntax = value.Contains(MatchNumbers) || value.Contains(MatchAnything);
         var startsWith = hasGlobbingSyntax
-            ? Match(this.branchName, value, true)
+            ? Match(branch, value, MatchType.Start)
             : branch.StartsWith(value);
         var result = branchIsNotNullOrEmpty && startsWith;
 
@@ -390,14 +412,11 @@ public class FunctionDefinitions
     [ExpressionFunction(nameof(NotStartsWith))]
     public bool NotStartsWith(string value)
     {
-        const char matchNumbers = '#';
-        const char matchAnything = '*';
-
         var branchNullOrEmpty = string.IsNullOrEmpty(this.branchName);
 
-        var hasGlobbingSyntax = value.Contains(matchNumbers) || value.Contains(matchAnything);
+        var hasGlobbingSyntax = value.Contains(MatchNumbers) || value.Contains(MatchAnything);
         var startsWith = hasGlobbingSyntax
-            ? branchNullOrEmpty || !Match(this.branchName, value, true)
+            ? branchNullOrEmpty || !Match(this.branchName, value, MatchType.Start)
             : branchNullOrEmpty || !this.branchName.StartsWith(value);
 
         RegisterFunctionResult($"{nameof(NotStartsWith)}({typeof(string)})", startsWith);
@@ -418,7 +437,12 @@ public class FunctionDefinitions
     {
         var branchIsNotNullOrEmpty = !string.IsNullOrEmpty(this.branchName);
         var branch = branchIsNotNullOrEmpty ? this.branchName : string.Empty;
-        var endsWith = branch.EndsWith(value);
+
+        var hasGlobbingSyntax = value.Contains(MatchNumbers) || value.Contains(MatchAnything);
+
+        var endsWith = hasGlobbingSyntax
+            ? Match(branch, value, MatchType.End)
+            : branch.EndsWith(value);
         var result = branchIsNotNullOrEmpty && endsWith;
 
         RegisterFunctionResult($"{nameof(endsWith)}({typeof(string)})", result);
@@ -437,14 +461,16 @@ public class FunctionDefinitions
     [ExpressionFunction(nameof(NotEndsWith))]
     public bool NotEndsWith(string value)
     {
-        var branchIsNotNullOrEmpty = !string.IsNullOrEmpty(this.branchName);
-        var branch = branchIsNotNullOrEmpty ? this.branchName : string.Empty;
-        var doesNotEndWith = !branch.EndsWith(value);
-        var result = branchIsNotNullOrEmpty && doesNotEndWith;
+        var branchNullOrEmpty = string.IsNullOrEmpty(this.branchName);
 
-        RegisterFunctionResult($"{nameof(NotEndsWith)}({typeof(string)})", result);
+        var hasGlobbingSyntax = value.Contains(MatchNumbers) || value.Contains(MatchAnything);
+        var endsWith = hasGlobbingSyntax
+            ? branchNullOrEmpty || !Match(this.branchName, value, MatchType.End)
+            : branchNullOrEmpty || !this.branchName.EndsWith(value);
 
-        return result;
+        RegisterFunctionResult($"{nameof(NotEndsWith)}({typeof(string)})", endsWith);
+
+        return endsWith;
     }
 
     /// <summary>
@@ -637,16 +663,17 @@ public class FunctionDefinitions
     /// </summary>
     /// <param name="value">The <c>string</c> to match against.</param>
     /// <param name="globbingPattern">The globbing pattern and text to search for.</param>
-    /// <param name="matchStart">If <c>true</c>, will match against the beginning of the <c>string</c> <paramref name="value"/>.</param>
+    /// <param name="matchType">The type of matching that should be performed.</param>
     /// <returns>
     ///     <c>true</c> if the globbing pattern finds a match in the given <c>string</c> <paramref name="value"/>.
     /// </returns>
-    private static bool Match(string value, string globbingPattern, bool matchStart)
+    private static bool Match(string value, string globbingPattern, MatchType matchType)
     {
         // NOTE: Refer to this website for more regex information -> https://regex101.com/
         const char matchNumbers = '#';
         const char matchAnything = '*';
         const char regexMatchStart = '^';
+        const char regexMatchEnd = '$';
         const string regexMatchNumbers = @"\d+";
         const string regexMatchAnything = ".+";
 
@@ -662,9 +689,13 @@ public class FunctionDefinitions
         // Replace all '*' character with '.+'
         globbingPattern = globbingPattern.Replace(matchAnything.ToString(), regexMatchAnything);
 
-        if (matchStart)
+        if (matchType == MatchType.Start)
         {
             globbingPattern = $"{regexMatchStart}{globbingPattern}";
+        }
+        else if (matchType == MatchType.End)
+        {
+            globbingPattern = $"{globbingPattern}{regexMatchEnd}";
         }
 
         return Regex.Matches(value, globbingPattern, RegexOptions.IgnoreCase).Count > 0;

@@ -42,8 +42,17 @@ public class ScriptTemplateService : IScriptTemplateService
         script.AppendLine("using System.Text.RegularExpressions;");
         script.AppendLine("using System.Collections.Generic;");
         script.AppendLine();
+        script.AppendLine("public enum MatchType");
+            script.AppendLine("{");
+            script.AppendLine("\tAll,");
+            script.AppendLine("\tStart,");
+            script.AppendLine("\tEnd,");
+        script.AppendLine("}");
+        script.AppendLine();
         script.AppendLine("public static class ExpressionFunctions");
         script.AppendLine("{");
+            script.AppendLine("\tprivate const char MatchNumbers = '#';");
+            script.AppendLine("\tprivate const char MatchAnything = '*';");
             script.AppendLine("\tprivate static readonly List<string> FunctionResults = new ();");
             script.AppendLine("\tprivate const string BranchName = \"//<branch-name/>\";");
             script.AppendLine("\tprivate static readonly char[] Numbers = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', };");
