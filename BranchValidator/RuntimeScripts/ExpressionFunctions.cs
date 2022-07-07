@@ -229,7 +229,7 @@ public static class ExpressionFunctions
         var branch = branchNotNullOrEmpty ? BranchName : string.Empty;
         var hasGlobbingSyntax = value.Contains(matchNumbers) || value.Contains(matchAnything);
         var contains = hasGlobbingSyntax
-            ? MatchContains(BranchName, value)
+            ? Match(BranchName, value, false)
             : branch.Contains(value);
         var result = branchNotNullOrEmpty && contains;
 
@@ -328,9 +328,15 @@ public static class ExpressionFunctions
     /// </remarks>
     public static bool StartsWith(string value)
     {
+        const char matchNumbers = '#';
+        const char matchAnything = '*';
+
         var branchIsNotNullOrEmpty = !string.IsNullOrEmpty(BranchName);
         var branch = branchIsNotNullOrEmpty ? BranchName : string.Empty;
-        var startsWith = branch.StartsWith(value);
+        var hasGlobbingSyntax = value.Contains(matchNumbers) || value.Contains(matchAnything);
+        var startsWith = hasGlobbingSyntax
+            ? Match(BranchName, value, true)
+            : branch.StartsWith(value);
         var result = branchIsNotNullOrEmpty && startsWith;
 
         RegisterFunctionResult($"{nameof(StartsWith)}({typeof(string)})", result);
@@ -348,15 +354,19 @@ public static class ExpressionFunctions
     /// </remarks>
     public static bool NotStartsWith(string value)
     {
-        var branchIsNotNullOrEmpty = !string.IsNullOrEmpty(BranchName);
+        const char matchNumbers = '#';
+        const char matchAnything = '*';
 
-        var branch = branchIsNotNullOrEmpty ? BranchName : string.Empty;
-        var startsWith = !branch.StartsWith(value);
-        var result = branchIsNotNullOrEmpty && startsWith;
+        var branchNullOrEmpty = string.IsNullOrEmpty(BranchName);
 
-        RegisterFunctionResult($"{nameof(NotStartsWith)}({typeof(string)})", result);
+        var hasGlobbingSyntax = value.Contains(matchNumbers) || value.Contains(matchAnything);
+        var startsWith = hasGlobbingSyntax
+            ? branchNullOrEmpty || !Match(BranchName, value, true)
+            : branchNullOrEmpty || !BranchName.StartsWith(value);
 
-        return result;
+        RegisterFunctionResult($"{nameof(NotStartsWith)}({typeof(string)})", startsWith);
+
+        return startsWith;
     }
 
     /// <summary>
@@ -596,33 +606,26 @@ public static class ExpressionFunctions
     }
 
     /// <summary>
-    /// Returns a value indicating if given <paramref name="globbingPattern"/> contains a match
+    /// Returns a value indicating if the given <paramref name="globbingPattern"/> contains a match
     /// to the given <c>string</c> <paramref name="value"/>.
     /// </summary>
     /// <param name="value">The <c>string</c> to match against.</param>
     /// <param name="globbingPattern">The globbing pattern and text to search for.</param>
+    /// <param name="matchStart">If <c>true</c>, will match against the beginning of the <c>string</c> <paramref name="value"/>.</param>
     /// <returns>
     ///     <c>true</c> if the globbing pattern finds a match in the given <c>string</c> <paramref name="value"/>.
     /// </returns>
-    private static bool MatchContains(string value, string globbingPattern)
+    private static bool Match(string value, string globbingPattern, bool matchStart)
     {
         // NOTE: Refer to this website for more regex information -> https://regex101.com/
         const char matchNumbers = '#';
         const char matchAnything = '*';
+        const char regexMatchStart = '^';
         const string regexMatchNumbers = @"\d+";
         const string regexMatchAnything = ".+";
 
-        // Remove any consecutive '#' symbols until no more consecutive symbols exists anymore
-        while (globbingPattern.Contains($"{matchNumbers}{matchNumbers}"))
-        {
-            globbingPattern = globbingPattern.Replace($"{matchNumbers}{matchNumbers}", matchNumbers.ToString());
-        }
-
-        // Remove any consecutive '*' symbols until no more consecutive symbols exists anymore
-        while (globbingPattern.Contains($"{matchAnything}{matchAnything}"))
-        {
-            globbingPattern = globbingPattern.Replace($"{matchAnything}{matchAnything}", matchAnything.ToString());
-        }
+        // Remove any consecutive '#' and '*' symbols until no more consecutive symbols exists anymore
+        globbingPattern = RemoveConsecutiveCharacters(new[] { matchNumbers, matchAnything }, globbingPattern);
 
         // Replace the '#' symbol with
         globbingPattern = globbingPattern.Replace(matchNumbers.ToString(), regexMatchNumbers);
@@ -633,7 +636,31 @@ public static class ExpressionFunctions
         // Replace all '*' character with '.+'
         globbingPattern = globbingPattern.Replace(matchAnything.ToString(), regexMatchAnything);
 
+        if (matchStart)
+        {
+            globbingPattern = $"{regexMatchStart}{globbingPattern}";
+        }
+
         return Regex.Matches(value, globbingPattern, RegexOptions.IgnoreCase).Count > 0;
+    }
+
+    /// <summary>
+    /// Removes any consecutive occurrences of the given <paramref name="characters"/> from the given <c>string</c> <paramref name="value"/>.
+    /// </summary>
+    /// <param name="characters">The <c>char</c> to check for.</param>
+    /// <param name="value">The value to remove the consecutive characters from.</param>
+    /// <returns>The original <c>string</c> value with the consecutive characters removed.</returns>
+    private static string RemoveConsecutiveCharacters(IEnumerable<char> characters, string value)
+    {
+        foreach (var c in characters)
+        {
+            while (value.Contains($"{c}{c}"))
+            {
+                value = value.Replace($"{c}{c}", c.ToString());
+            }
+        }
+
+        return value;
     }
 }
 

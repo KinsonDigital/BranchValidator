@@ -251,8 +251,14 @@ public class FunctionDefinitionsTests
     [Theory]
     [InlineData(null, "test", false)]
     [InlineData("", "test", false)]
-    [InlineData("feature/123-test-123-branch-123", "feature/123", true)]
     [InlineData("feature/123-test-branch", "123", false)]
+    [InlineData("feature/123-test-branch", "feature/#-test-branch", true)]
+    [InlineData("feature/123-test-branch", "feature/##-test-branch", true)]
+    [InlineData("123-my-test-branch", "#-my-test-branch", true)]
+    [InlineData("letters-numbers-numbers-test", "*-*-numbers", true)]
+    [InlineData("123-my-test-branch", "#-my", true)]
+    [InlineData("123-my-test-branch", "#*-test", true)]
+    [InlineData("feature/123-test-123-branch-123", "feature/123", true)]
     public void StartsWith_WhenInvoked_ReturnsCorrectResult(
         string branchName,
         string value,
@@ -271,9 +277,15 @@ public class FunctionDefinitionsTests
     }
 
     [Theory]
-    [InlineData(null, "test", false)]
-    [InlineData("", "test", false)]
+    [InlineData(null, "test", true)]
+    [InlineData("", "test", true)]
     [InlineData("feature/123-test-branch", "123", true)]
+    [InlineData("feature/123-test-branch", "feature/#-test-branch", false)]
+    [InlineData("feature/123-test-branch", "feature/##-test-branch", false)]
+    [InlineData("123-my-test-branch", "#-my-test-branch", false)]
+    [InlineData("letters-numbers-numbers-test", "*-*-numbers", false)]
+    [InlineData("123-my-test-branch", "#-my", false)]
+    [InlineData("123-my-test-branch", "#*-test", false)]
     [InlineData("feature/123-test-123-branch-123", "feature/123", false)]
     public void NotStartsWith_WhenInvoked_ReturnsCorrectResult(
         string branchName,
@@ -319,6 +331,7 @@ public class FunctionDefinitionsTests
     [InlineData("", "test", false)]
     [InlineData("feature/123-test-branch", "123", true)]
     [InlineData("feature/123-test-branch", "branch", false)]
+    [InlineData("feature/123-test-branch')", "feature/", true)]
     public void NotEndsWith_WhenInvoked_ReturnsCorrectResult(
         string branchName,
         string value,

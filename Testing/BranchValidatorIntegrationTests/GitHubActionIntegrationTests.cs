@@ -3,6 +3,7 @@
 // </copyright>
 
 using BranchValidator;
+using BranchValidator.Exceptions;
 using BranchValidator.Observables;
 using BranchValidator.Services;
 using BranchValidator.Services.Analyzers;
@@ -155,9 +156,9 @@ public class GitHubActionIntegrationTests : IDisposable
     [InlineData("existsLessThan('123-test', 2)", "feature/123-test-123-test-branch", "existsLessThan(string, number)")]
     [InlineData("existsGreaterThan('test', 2)", "feature/123-test-123-test-branch", "existsGreaterThan(string, number)")]
     [InlineData("startsWith('123')", "feature/123-test-branch", "startsWith(string)")]
-    [InlineData("notStartsWith('feature/123')", "feature/123-test-branch", "notStartsWith(string)")]
+    [InlineData("notStartsWith('feature')", "feature/123-test-branch", "notStartsWith(string)")]
     [InlineData("endsWith('123')", "feature/123-test-branch", "endsWith(string)")]
-    [InlineData("notEndsWith('test-branch')", "feature/123-test-branch", "notEndsWith(string)")]
+    [InlineData("notEndsWith('branch')", "feature/123-test-branch", "notEndsWith(string)")]
     [InlineData("startsWithNum()", "feature/123-test-branch", "startsWithNum()")]
     [InlineData("endsWithNum()", "feature/123-test-branch", "endsWithNum()")]
     [InlineData("lenLessThan(10)", "feature/123-test-branch", "lenLessThan(number)")]
@@ -181,7 +182,7 @@ public class GitHubActionIntegrationTests : IDisposable
         var act = () => this.action.Run(actionInputs, _ => { }, e => throw e);
 
         // Assert
-        await act.Should().ThrowAsync<Exception>()
+        await act.Should().ThrowAsync<InvalidBranchException>()
             .WithMessage(expectedMsg);
     }
 
