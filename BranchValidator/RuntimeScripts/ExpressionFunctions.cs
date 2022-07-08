@@ -361,28 +361,6 @@ public static class ExpressionFunctions
     }
 
     /// <summary>
-    /// Returns a value indicating whether or not the given <paramref name="value"/> <c>string</c> is located
-    /// after the given <paramref name="before"/> <c>string</c>.
-    /// </summary>
-    /// <param name="value">The <c>string</c> located after <paramref name="before"/> <c>string</c>.</param>
-    /// <param name="before">The <c>string</c> located before the <paramref name="value"/> <c>string</c>.</param>
-    /// <returns><c>true</c> if the <paramref name="value"/> <c>string</c> is located after the <paramref name="before"/> <c>string</c>.</returns>
-    public static bool IsAfter(string value, string before)
-    {
-        var branchIsNotNullOrEmpty = !string.IsNullOrEmpty(BranchName);
-        var branch = branchIsNotNullOrEmpty ? BranchName : string.Empty;
-        var valueIndex = branch.IndexOf(value, StringComparison.Ordinal);
-        var beforeIndex = branch.IndexOf(before, StringComparison.Ordinal);
-        var isBefore = valueIndex > beforeIndex;
-
-        var result = branchIsNotNullOrEmpty && isBefore;
-
-        RegisterFunctionResult($"{nameof(IsAfter)}({typeof(string)}, {typeof(string)})", result);
-
-        return result;
-    }
-
-    /// <summary>
     /// Returns a value indicating whether or not the branch name has all upper case letters.
     /// </summary>
     /// <returns><c>true</c> if all of the letters are uppercase.</returns>

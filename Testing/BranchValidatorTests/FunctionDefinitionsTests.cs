@@ -380,29 +380,6 @@ public class FunctionDefinitionsTests
         actualFunctionResults.Should().Contain($"isBefore(string, string) -> {expected.ToString().ToLower()}");
     }
 
-    [Theory]
-    [InlineData(null, "123", "branch", false)]
-    [InlineData("", "123", "branch", false)]
-    [InlineData("feature/123-test-branch", "123", "branch", false)]
-    [InlineData("feature/123-test-branch", "branch", "123", true)]
-    public void IsAfter_WhenInvoked_ReturnsCorrectResult(
-        string branchName,
-        string value,
-        string after,
-        bool expected)
-    {
-        // Arrange
-        var definitions = new FunctionDefinitions(branchName);
-
-        // Act
-        var actual = definitions.IsAfter(value, after);
-        var actualFunctionResults = FunctionDefinitions.GetFunctionResults();
-
-        // Assert
-        actual.Should().Be(expected);
-        actualFunctionResults.Should().Contain($"isAfter(string, string) -> {expected.ToString().ToLower()}");
-    }
-
     [Fact]
     public void AllUpperCase_WhenAllUpperCase_ReturnsTrue()
     {
