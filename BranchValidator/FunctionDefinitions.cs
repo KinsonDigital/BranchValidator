@@ -103,39 +103,6 @@ public class FunctionDefinitions
     }
 
     /// <summary>
-    /// Returns a value indicating whether or not the <c>char</c> at the given <paramref name="charPos"/>
-    /// is a number in a branch <c>string</c> that matches the given branch name.
-    /// </summary>
-    /// <param name="charPos">The position of the character.</param>
-    /// <returns><c>true</c> if the character is a number.</returns>
-    /// <remarks>
-    /// Things to consider:
-    /// <list type="bullet">
-    ///     <item>
-    ///         If the character position is larger than the length of the branch name,
-    ///         then the result will automatically be <c>false</c>.
-    ///     </item>
-    ///     <item>
-    ///         A null or empty branch name will return <c>false.</c>
-    ///     </item>
-    /// </list>
-    /// </remarks>
-    [ExpressionFunction(nameof(CharIsNum))]
-    public bool CharIsNum(uint charPos)
-    {
-        var notNullOrEmpty = !string.IsNullOrEmpty(this.branchName);
-
-        var branch = notNullOrEmpty ? this.branchName : string.Empty;
-
-        var charIsNum = charPos <= branch.Length - 1 && MemoryExtensions.Contains(Numbers, branch[(int)charPos]);
-
-        var result = notNullOrEmpty && charIsNum;
-        RegisterFunctionResult($"{nameof(CharIsNum)}({typeof(uint)})", result);
-
-        return result;
-    }
-
-    /// <summary>
     /// Returns a value indicating whether or not the branch name has all upper case letters.
     /// </summary>
     /// <returns><c>true</c> if all of the letters are uppercase.</returns>

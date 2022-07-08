@@ -78,8 +78,6 @@ public class GitHubActionIntegrationTests : IDisposable
     [InlineData("equalTo('preview/feature/v#.#.#-preview.#')", "preview/feature/v1.20.300-preview.4000", "refs/heads/")]
     [InlineData("equalTo('hotfix/v#.#.#')", "hotfix/v1.2.3", "refs/heads/")]
     [InlineData("equalTo('release/v#.#.#')", "release/v1.2.3", "refs/heads/")]
-    [InlineData("charIsNum(8)", "feature/123-test-branch", "")]
-    [InlineData("charIsNum(8)", "refs/heads/feature/123-test-branch", "refs/heads/")]
     [InlineData("allUpperCase()", "FEATURE/123-TEST-BRANCH", "")]
     [InlineData("allLowerCase()", "feature/123-test-branch", "")]
     public async void Run_WithValidBranches_ReturnsCorrectResult(string expression, string branchName, string trimFromStart)
@@ -108,13 +106,13 @@ public class GitHubActionIntegrationTests : IDisposable
     }
 
     [Theory]
-    [InlineData("charIsNum(-8)", "Negative number argument values not aloud.")]
-    [InlineData("charIsNum8)", "The expression is missing a '('.")]
-    [InlineData("charIsNum(8", "The expression is missing a ')'.")]
-    [InlineData("charIsNum((8)", "The expression is missing a ')'.")]
-    [InlineData("charIsNum(8))", "The expression is missing a '('.")]
+    [InlineData("equalTo(-8)", "Negative number argument values not aloud.")]
+    [InlineData("equalTo8)", "The expression is missing a '('.")]
+    [InlineData("equalTo(8", "The expression is missing a ')'.")]
+    [InlineData("equalTo((8)", "The expression is missing a ')'.")]
+    [InlineData("equalTo(8))", "The expression is missing a '('.")]
     [InlineData("(8)", "The expression cannot start with a '(' or ')' parenthesis.")]
-    [InlineData("charIsNum()", "The expression function is missing an argument.")]
+    [InlineData("equalTo()", "The expression function is missing an argument.")]
     [InlineData("equalTo('feature/123-*-branch'", "The expression is missing a ')'.")]
     [InlineData("equalTo('feature/#-test-branch'", "The expression is missing a ')'.")]
     public async void Run_WithExpressionSyntaxErrors_ReturnsCorrectInvalidResult(
@@ -142,7 +140,6 @@ public class GitHubActionIntegrationTests : IDisposable
     [InlineData("equalTo('not-equal-branch')", "test-branch", "equalTo(string)")]
     [InlineData("equalTo('release/v#.#.#-preview.#')", "release/v1.20.test-preview.4000", "equalTo(string)")]
     [InlineData("equalTo('feature/#-*')", "feature/word-test-branch", "equalTo(string)")]
-    [InlineData("charIsNum(4)", "feature/123-test-branch", "charIsNum(number)")]
     [InlineData("allUpperCase()", "feature/123-test-branch", "allUpperCase()")]
     [InlineData("allLowerCase()", "FEATURE/123-TEST-BRANCH", "allLowerCase()")]
     [InlineData("equalTo('feature/123-#-branch')", "feature/123-test-branch", "equalTo(string)")]

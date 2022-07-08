@@ -45,29 +45,6 @@ public class FunctionDefinitionsTests
         actualFunctionResults.Should().Contain($"equalTo(string) -> {expected.ToString().ToLower()}");
     }
 
-    [Theory]
-    [InlineData(8, null, false)]
-    [InlineData(8, "", false)]
-    [InlineData(4, "feature/123-my-branch", false)]
-    [InlineData(400, "feature/123-my-branch", false)]
-    [InlineData(8, "feature/123-my-branch", true)]
-    public void CharIsNum_WhenInvoked_ReturnsCorrectResult(
-        uint charPos,
-        string branchName,
-        bool expected)
-    {
-        // Arrange
-        var definitions = new FunctionDefinitions(branchName);
-
-        // Act
-        var actual = definitions.CharIsNum(charPos);
-        var actualFunctionResults = FunctionDefinitions.GetFunctionResults();
-
-        // Assert
-        actual.Should().Be(expected);
-        actualFunctionResults.Should().Contain($"charIsNum(number) -> {expected.ToString().ToLower()}");
-    }
-
     [Fact]
     public void AllUpperCase_WhenAllUpperCase_ReturnsTrue()
     {
