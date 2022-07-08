@@ -3,11 +3,19 @@
 **Branch Validator**
 </h1>
 
-1. <span style="color:yellow">TODO:</span> Talks about escaping '#' and '*' characters
-2. <span style="color:yellow">TODO:</span> Talk about using the '#' and '*' characters for globbing functionality
-3. <span style="color:yellow">TODO:</span> Talk about each function separately
-4. <span style="color:yellow">TODO:</span> Create funding YAML file
-5. <span style="color:yellow">TODO:</span> Add badges
+<div align="center">
+
+![](https://img.shields.io/github/workflow/status/KinsonDigital/BranchValidator/%F0%9F%9A%80Preview%20Release?label=QA%20Release%20%F0%9F%9A%80&logo=GitHub&style=plastic)
+![](https://img.shields.io/github/workflow/status/KinsonDigital/BranchValidator/%F0%9F%9A%80Preview%20Release?label=Preview%20Release%20%F0%9F%9A%80&logo=GitHub&style=plastic)
+![](https://img.shields.io/github/workflow/status/KinsonDigital/BranchValidator/%F0%9F%9A%80Production%20Release?label=Production%20Release%20%F0%9F%9A%80&logo=GitHub&style=plastic)
+
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.0-4baaaa.svg?style=plastic)](code_of_conduct.md)
+
+![Twitter URL](https://img.shields.io/twitter/url?label=Follow%20@KDCoder&logo=twitter&style=plastic&url=https%3A%2F%2Ftwitter.com%2FKDCoder)
+[![Join our Discord](https://img.shields.io/badge/chat%20on-discord-7289DA?style=plastic)](https://discord.gg/qewu6fNgv7)
+
+</div>
+
 
 <div align="center">
 
@@ -82,6 +90,8 @@ The applications of this are endless!!
 | `trim-from-start`     | Trims the test from the beginning of a branch name.         | no       |  empty string      |
 | `fail-when-not-valid` | Fails the job if the branch is not valid.                   | no       |     true           |
 
+
+
 ---
 
 <div align="center">
@@ -89,21 +99,11 @@ The applications of this are endless!!
 ## **Action Outputs**
 </div>
 
-| Input Name            | Description                                                 | Required | Default Value      |
-|-----------------------|:------------------------------------------------------------|:--------:|:------------------:|
-| `branch-name`         | The name of the GIT branch.                                 | yes      |     N/A            |
+| Input Name            | Description                                                 | Values Returned  |
+|-----------------------|:------------------------------------------------------------|:----------------:|
+| `branch-name`         | Returns a string value of 'true' or 'false' indicating whether or not the branch is valid.  | 'true' or 'false' |
 
-
-<table style="border: 1px solid gray">
-  <tr>
-    <th style="border: 1px solid gray">Output Name</th>
-    <th style="border: 1px solid gray">Description</th>
-  </tr>
-  <tr>
-    <td style="border: 1px solid gray">'valid-branch`</td>
-    <td style="border: 1px solid gray">Returns a string value of 'true' or 'false' indicating whether or not the branch is valid.</td>
-  </tr>
-</table>
+---
 
 <div align="center" style="font-weight:bold">
 
