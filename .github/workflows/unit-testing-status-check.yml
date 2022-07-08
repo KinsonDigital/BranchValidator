@@ -43,6 +43,6 @@ jobs:
     needs: Determine_Build_Config
     uses: KinsonDigital/Infrastructure/.github/workflows/unit-testing-status-check.yml@master
     with:
-      projectname: "BranchValidator"
+      projectname: "BranchValidatorTests"
       buildconfig: ${{ needs.Determine_Build_Config.outputs.build-config }}
       netsdkversion: "6.0.300"
