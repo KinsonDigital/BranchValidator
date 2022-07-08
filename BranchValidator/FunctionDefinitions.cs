@@ -182,29 +182,6 @@ public class FunctionDefinitions
     }
 
     /// <summary>
-    /// Returns a value indicating whether or not the given <paramref name="value"/> occurs within
-    /// a branch name the given <paramref name="total"/> amount of times.
-    /// </summary>
-    /// <param name="value">The value to check for.</param>
-    /// <param name="total">The total number of times that the <paramref name="value"/> should exist.</param>
-    /// <returns><c>true</c> if the <paramref name="value"/> exists the exact specified number of times.</returns>
-    /// <remarks>
-    ///     The search is case sensitive.
-    /// </remarks>
-    [ExpressionFunction(nameof(ExistsTotal))]
-    public bool ExistsTotal(string value, uint total)
-    {
-        var branchIsNotNullOrEmpty = !string.IsNullOrEmpty(this.branchName);
-        var totalExists = Count(this.branchName, value) == total;
-
-        var result = branchIsNotNullOrEmpty && totalExists;
-
-        RegisterFunctionResult($"{nameof(ExistsTotal)}({typeof(string)}, {typeof(uint)})", result);
-
-        return result;
-    }
-
-    /// <summary>
     /// Returns a value indicating whether or not the branch name has all upper case letters.
     /// </summary>
     /// <returns><c>true</c> if all of the letters are uppercase.</returns>

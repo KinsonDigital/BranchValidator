@@ -123,34 +123,6 @@ public class FunctionDefinitionsTests
         actualFunctionResults.Should().Contain($"notContains(string) -> {expected.ToString().ToLower()}");
     }
 
-    [Theory]
-    [InlineData(null, "test", 1, false)]
-    [InlineData("", "test", 1, false)]
-    [InlineData("feature/123-branch", "test", 1, false)]
-    [InlineData("feature/123-branch", "a", 2, true)]
-    [InlineData("feature/123-test-branch-test", "test", 4, false)]
-    [InlineData("feature/123-test-branch", "test", 1, true)]
-    [InlineData("feature/123-te|st-branch", "te|st", 1, true)]
-    [InlineData("feature/123-test-branch-test", "test", 2, true)]
-    [InlineData("release/v1.2.3-preview.4", ".", 3, true)]
-    public void ExistsTotal_WhenInvoked_ReturnsCorrectResult(
-        string branchName,
-        string value,
-        uint total,
-        bool expected)
-    {
-        // Arrange
-        var definitions = new FunctionDefinitions(branchName);
-
-        // Act
-        var actual = definitions.ExistsTotal(value, total);
-        var actualFunctionResults = FunctionDefinitions.GetFunctionResults();
-
-        // Assert
-        actual.Should().Be(expected);
-        actualFunctionResults.Should().Contain($"existsTotal(string, number) -> {expected.ToString().ToLower()}");
-    }
-
     [Fact]
     public void AllUpperCase_WhenAllUpperCase_ReturnsTrue()
     {
