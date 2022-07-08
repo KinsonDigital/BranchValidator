@@ -21,10 +21,28 @@ on:
 
 
 jobs:
+  Determine_Build_Config:
+    name: Determine Build Configuration
+    runs-on: ubuntu-latest
+    outputs:
+      build-config: ${{ steps.get-build-config.outputs.build-config }}
+    steps:
+      - name: Get Build Config
+        id: get-build-config
+        shell: pwsh
+        run: |
+          # If the destination branch that the pull request is merging into is master, do a release build
+          if ( "${{ github.base_ref }}" -eq "master") {
+            Write-Host "::set-output name=build-config::Release"
+          } else { # Any other branch than master, do a debug build
+            Write-Host "::set-output name=build-config::Debug"
+          }
+
   Unit_Testing_Status_Check:
     name: Unit Testing Status Check
+    needs: Determine_Build_Config
     uses: KinsonDigital/Infrastructure/.github/workflows/unit-testing-status-check.yml@master
     with:
       projectname: "BranchValidator"
+      buildconfig: ${{ needs.Determine_Build_Config.outputs.build-config }}
       netsdkversion: "6.0.300"
-
