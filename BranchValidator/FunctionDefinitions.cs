@@ -363,25 +363,6 @@ public class FunctionDefinitions
     }
 
     /// <summary>
-    /// Returns a value indicating whether or not the length of the branch name is greater than the given <paramref name="length"/>.
-    /// </summary>
-    /// <param name="length">The length to compare to the length of the branch.</param>
-    /// <returns><c>true</c> if the length of the branch is greater than the given <paramref name="length"/>.</returns>
-    [ExpressionFunction(nameof(LenGreaterThan))]
-    public bool LenGreaterThan(uint length)
-    {
-        var branchIsNotNullOrEmpty = !string.IsNullOrEmpty(this.branchName);
-        var branch = branchIsNotNullOrEmpty ? this.branchName : string.Empty;
-        var lengthIsGreaterThan = branch.Length > length;
-
-        var result = branchIsNotNullOrEmpty && lengthIsGreaterThan;
-
-        RegisterFunctionResult($"{nameof(LenGreaterThan)}({typeof(uint)})", result);
-
-        return result;
-    }
-
-    /// <summary>
     /// Returns a value indicating whether or not the branch name has all upper case letters.
     /// </summary>
     /// <returns><c>true</c> if all of the letters are uppercase.</returns>
