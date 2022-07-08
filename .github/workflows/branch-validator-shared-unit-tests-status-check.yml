@@ -1,8 +1,8 @@
-name: ✔Branch Validator Unit Testing Status Check
+name: ✔Branch Validator Shared Unit Testing Status Check
 
 
 env:
-  PROJECT_NAME: BranchValidator
+  PROJECT_NAME: BranchValidatorShared
   NET_SDK_VERSION: 6.0.300
 
 
