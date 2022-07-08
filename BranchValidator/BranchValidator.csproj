@@ -19,6 +19,8 @@
     <Product>BranchValidator</Product>
     <Description>Custom GitHub action used to check GIT branch syntax.</Description>
     <Copyright>Copyright ©2022 Kinson Digital</Copyright>
+    <Configurations>Debug;Release;GenerateScript</Configurations>
+    <Platforms>AnyCPU</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
@@ -56,8 +58,8 @@
     <EmbeddedResource Include="RuntimeScripts\ExpressionFunctions.cs" />
   </ItemGroup>
     
-  <Target Name="PostBuild" Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'" AfterTargets="PostBuildEvent">
-    <Exec Command="cd $(SolutionDir)Scripts &amp;&amp; dotnet-script RunScriptGenerator.csx &quot;$(SolutionDir)Tooling\ScriptGenerator\$(OutDir)ScriptGenerator.exe&quot;" />
+  <Target Name="PostBuild" Condition="'$(Configuration)|$(Platform)'=='GenerateScript|AnyCPU'" AfterTargets="PostBuildEvent">
+    <Exec Command="cd $(SolutionDir)Scripts &amp;&amp; dotnet-script RunScriptGenerator.csx &quot;$(SolutionDir)Tooling\ScriptGenerator\bin\Debug\net6.0\ScriptGenerator.exe&quot;" />
   </Target>
 
 </Project>
