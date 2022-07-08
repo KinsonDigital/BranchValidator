@@ -1,4 +1,4 @@
-name: ✔Branch Validator Unit Testing Status Check
+name: ✔Unit Testing Status Check
 
 
 env:
@@ -22,7 +22,7 @@ on:
 
 jobs:
   Unit_Testing_Status_Check:
-    name: Branch Validator Unit Testing Status Check
+    name: Unit Testing Status Check
     uses: KinsonDigital/Infrastructure/.github/workflows/unit-testing-status-check.yml@master
     with:
       projectname: "BranchValidator"
