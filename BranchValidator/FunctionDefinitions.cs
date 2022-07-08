@@ -205,26 +205,6 @@ public class FunctionDefinitions
     }
 
     /// <summary>
-    /// Returns a value indicating whether or not the given <paramref name="value"/> exists
-    /// less than the given <paramref name="total"/> amount of times.
-    /// </summary>
-    /// <param name="value">The value to check for.</param>
-    /// <param name="total">The total number of times to check that the <paramref name="value"/> exists.</param>
-    /// <returns><c>true</c> if the <paramref name="value"/> exists greater than the specified number of times.</returns>
-    [ExpressionFunction(nameof(ExistsLessThan))]
-    public bool ExistsLessThan(string value, uint total)
-    {
-        var branchIsNotNullOrEmpty = !string.IsNullOrEmpty(this.branchName);
-        var isLessThan = Count(this.branchName, value) < total;
-
-        var result = branchIsNotNullOrEmpty && isLessThan;
-
-        RegisterFunctionResult($"{nameof(ExistsLessThan)}({typeof(string)}, {typeof(uint)})", result);
-
-        return result;
-    }
-
-    /// <summary>
     /// Returns a value indicating whether or not the branch name has all upper case letters.
     /// </summary>
     /// <returns><c>true</c> if all of the letters are uppercase.</returns>
