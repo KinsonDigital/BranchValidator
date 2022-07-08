@@ -30,6 +30,7 @@ jobs:
 
     - name: Get Build Config
       id: get-build-config
+      shell: pwsh
       run: |
         # If the destination branch that the pull request is merging into is master, do a release build
         if ( "${{ github.base_ref }}" -eq "master") {
