@@ -1,0 +1,30 @@
+name: ✔Branch Validator Unit Testing Status Check
+
+
+env:
+  NET_SDK_VERSION: 
+
+
+on:
+  workflow_dispatch:
+    paths-ignore:
+      - ".github/**"
+      - "Documentation/**"
+      - '.editorconfig'
+      - '*.runsettings'
+      - '.gitattributes'
+      - '.gitignore'
+      - '*.md'
+      - '*.yml'
+      - '.vscode/**'
+      - '*.sln'
+
+
+jobs:
+  Unit_Testing_Status_Check:
+    name: Branch Validator Unit Testing Status Check
+    uses: KinsonDigital/Infrastructure/.github/workflows/unit-testing-status-check.yml@master
+    with:
+      projectname: "BranchValidator"
+      netsdkversion: 6.0.300
+
