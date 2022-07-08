@@ -24,7 +24,7 @@ on:
 jobs:
   Build_Status_Check:
     name: Build Status Check
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
 

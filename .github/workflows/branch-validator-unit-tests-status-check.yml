@@ -24,7 +24,7 @@ on:
 jobs:
   Unit_Testing_Status_Check:
     name: Unit Testing Status Check
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
 
