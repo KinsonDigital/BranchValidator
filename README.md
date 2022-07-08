@@ -6,6 +6,8 @@
 1. <span style="color:yellow">TODO:</span> Talks about escaping '#' and '*' characters
 2. <span style="color:yellow">TODO:</span> Talk about using the '#' and '*' characters for globbing functionality
 3. <span style="color:yellow">TODO:</span> Talk about each function separatly
+4. <span style="color:yellow">TODO:</span> Add section with a link to donate to the organization
+5. <span style="color:yellow">TODO:</span> Create funding YAML file
 
 <div align="center">
 

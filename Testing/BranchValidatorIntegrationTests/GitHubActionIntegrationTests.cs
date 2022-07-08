@@ -71,6 +71,13 @@ public class GitHubActionIntegrationTests : IDisposable
 
     [Theory]
     [InlineData("equalTo('test-branch')", "test-branch", "")]
+    [InlineData("equalTo('release/v#.#.#-preview.#')", "release/v1.20.300-preview.4000", "refs/heads/")]
+    [InlineData("equalTo('feature/#-*')", "feature/123-test-branch", "refs/heads/")]
+    [InlineData("equalTo('master')", "master", "refs/heads/")]
+    [InlineData("equalTo('develop')", "develop", "refs/heads/")]
+    [InlineData("equalTo('preview/feature/v#.#.#-preview.#')", "preview/feature/v1.20.300-preview.4000", "refs/heads/")]
+    [InlineData("equalTo('hotfix/v#.#.#')", "hotfix/v1.2.3", "refs/heads/")]
+    [InlineData("equalTo('release/v#.#.#')", "release/v1.2.3", "refs/heads/")]
     [InlineData("charIsNum(8)", "feature/123-test-branch", "")]
     [InlineData("charIsNum(8)", "refs/heads/feature/123-test-branch", "refs/heads/")]
     [InlineData("contains('123-test')", "feature/123-test-branch", "")]
@@ -149,6 +156,8 @@ public class GitHubActionIntegrationTests : IDisposable
 
     [Theory]
     [InlineData("equalTo('not-equal-branch')", "test-branch", "equalTo(string)")]
+    [InlineData("equalTo('release/v#.#.#-preview.#')", "release/v1.20.test-preview.4000", "equalTo(string)")]
+    [InlineData("equalTo('feature/#-*')", "feature/word-test-branch", "equalTo(string)")]
     [InlineData("charIsNum(4)", "feature/123-test-branch", "charIsNum(number)")]
     [InlineData("contains('not-contained')", "feature/123-test-branch", "contains(string)")]
     [InlineData("notContains('123-test')", "feature/123-test-branch", "notContains(string)")]
