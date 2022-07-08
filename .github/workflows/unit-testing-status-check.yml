@@ -26,5 +26,5 @@ jobs:
     uses: KinsonDigital/Infrastructure/.github/workflows/unit-testing-status-check.yml@master
     with:
       projectname: "BranchValidator"
-      netsdkversion: 6.0.300
+      netsdkversion: "6.0.300"
 
