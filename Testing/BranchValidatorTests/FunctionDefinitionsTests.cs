@@ -175,29 +175,6 @@ public class FunctionDefinitionsTests
         actualFunctionResults.Should().Contain($"existsLessThan(string, number) -> {expected.ToString().ToLower()}");
     }
 
-    [Theory]
-    [InlineData(null, "test", 1, false)]
-    [InlineData("", "test", 1, false)]
-    [InlineData("feature/123-test-123-branch-123", "123", 2, true)]
-    [InlineData("feature/123-test-branch", "123", 1, false)]
-    public void ExistsGreaterThan_WhenInvoked_ReturnsCorrectResult(
-        string branchName,
-        string value,
-        uint total,
-        bool expected)
-    {
-        // Arrange
-        var definitions = new FunctionDefinitions(branchName);
-
-        // Act
-        var actual = definitions.ExistsGreaterThan(value, total);
-        var actualFunctionResults = FunctionDefinitions.GetFunctionResults();
-
-        // Assert
-        actual.Should().Be(expected);
-        actualFunctionResults.Should().Contain($"existsGreaterThan(string, number) -> {expected.ToString().ToLower()}");
-    }
-
     [Fact]
     public void AllUpperCase_WhenAllUpperCase_ReturnsTrue()
     {
