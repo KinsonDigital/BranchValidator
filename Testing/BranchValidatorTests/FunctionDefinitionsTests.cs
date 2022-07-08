@@ -283,35 +283,6 @@ public class FunctionDefinitionsTests
         actualFunctionResults.Should().Contain($"endsWith(string) -> {expected.ToString().ToLower()}");
     }
 
-    [Theory]
-    [InlineData("feature/123-test-branch", "branch", false)]
-    [InlineData("release/v.1.2.3-preview.4", "-*.4", false)]
-    [InlineData("release/v.1.2.3-beta.4", "-*.4", false)]
-    [InlineData("release/v.1.2.3", "v.#.#.#", false)]
-    [InlineData("release/v.1.2.3-preview.4", "#", false)]
-    [InlineData("release/v.1.2.3-preview.123456789", "#", false)]
-    [InlineData("release/v.1.2.3-preview.4", "3-*.#", false)]
-    [InlineData(null, "test", true)]
-    [InlineData("", "test", true)]
-    [InlineData("feature/123-test-branch", "123", true)]
-    [InlineData("release/v.1.2.3-preview.4-hello", "release/v.1.2.3-preview.#", true)]
-    public void NotEndsWith_WhenInvoked_ReturnsCorrectResult(
-        string branchName,
-        string value,
-        bool expected)
-    {
-        // Arrange
-        var definitions = new FunctionDefinitions(branchName);
-
-        // Act
-        var actual = definitions.NotEndsWith(value);
-        var actualFunctionResults = FunctionDefinitions.GetFunctionResults();
-
-        // Assert
-        actual.Should().Be(expected);
-        actualFunctionResults.Should().Contain($"notEndsWith(string) -> {expected.ToString().ToLower()}");
-    }
-
     [Fact]
     public void AllUpperCase_WhenAllUpperCase_ReturnsTrue()
     {
