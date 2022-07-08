@@ -23,13 +23,14 @@ on:
 
 jobs:
   Unit_Testing_Status_Check:
-    name: Unit Testing Status Check
+    name: Branch Validator Shared Unit Testing Status Check
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
 
     - name: Get Build Config
       id: get-build-config
+      shell: pwsh
       run: |
         # If the destination branch that the pull request is merging into is master, do a release build
         if ( "${{ github.base_ref }}" -eq "master") {
