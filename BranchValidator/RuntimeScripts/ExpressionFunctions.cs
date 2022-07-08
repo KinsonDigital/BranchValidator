@@ -253,31 +253,6 @@ public static class ExpressionFunctions
     }
 
     /// <summary>
-    /// Returns a value indicating whether or not a branch name ends with the given <paramref name="value"/>.
-    /// </summary>
-    /// <param name="value">The value that the branch possibly ends with.</param>
-    /// <returns><c>true</c> if the branch does ends with the given <paramref name="value."/>.</returns>
-    /// <remarks>
-    ///     The match for the <paramref name="value"/> is case sensitive.
-    /// </remarks>
-    public static bool EndsWith(string value)
-    {
-        var branchIsNotNullOrEmpty = !string.IsNullOrEmpty(BranchName);
-        var branch = branchIsNotNullOrEmpty ? BranchName : string.Empty;
-
-        var hasGlobbingSyntax = value.Contains(MatchNumbers) || value.Contains(MatchAnything);
-
-        var endsWith = hasGlobbingSyntax
-            ? Match(branch, value, MatchType.End)
-            : branch.EndsWith(value);
-        var result = branchIsNotNullOrEmpty && endsWith;
-
-        RegisterFunctionResult($"{nameof(endsWith)}({typeof(string)})", result);
-
-        return result;
-    }
-
-    /// <summary>
     /// Returns a value indicating whether or not the branch name has all upper case letters.
     /// </summary>
     /// <returns><c>true</c> if all of the letters are uppercase.</returns>
