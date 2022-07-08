@@ -312,29 +312,6 @@ public class FunctionDefinitionsTests
         actualFunctionResults.Should().Contain($"notEndsWith(string) -> {expected.ToString().ToLower()}");
     }
 
-    [Theory]
-    [InlineData(null, 0, false)]
-    [InlineData("", 0, false)]
-    [InlineData("feature/123-test-branch", 10, false)]
-    [InlineData("feature/123-test-branch", 23, false)]
-    [InlineData("feature/123-test-branch", 200, true)]
-    public void LenLessThan_WhenInvoked_ReturnsCorrectResult(
-        string branchName,
-        uint value,
-        bool expected)
-    {
-        // Arrange
-        var definitions = new FunctionDefinitions(branchName);
-
-        // Act
-        var actual = definitions.LenLessThan(value);
-        var actualFunctionResults = FunctionDefinitions.GetFunctionResults();
-
-        // Assert
-        actual.Should().Be(expected);
-        actualFunctionResults.Should().Contain($"lenLessThan(number) -> {expected.ToString().ToLower()}");
-    }
-
     [Fact]
     public void AllUpperCase_WhenAllUpperCase_ReturnsTrue()
     {
