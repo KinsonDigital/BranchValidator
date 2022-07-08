@@ -198,34 +198,6 @@ public class FunctionDefinitionsTests
         actualFunctionResults.Should().Contain($"existsGreaterThan(string, number) -> {expected.ToString().ToLower()}");
     }
 
-    [Theory]
-    [InlineData(null, "test", false)]
-    [InlineData("", "test", false)]
-    [InlineData("feature/123-test-branch", "123", false)]
-    [InlineData("feature/123-test-branch", "feature/#-test-branch", true)]
-    [InlineData("feature/123-test-branch", "feature/##-test-branch", true)]
-    [InlineData("123-my-test-branch", "#-my-test-branch", true)]
-    [InlineData("letters-numbers-numbers-test", "*-*-numbers", true)]
-    [InlineData("123-my-test-branch", "#-my", true)]
-    [InlineData("123-my-test-branch", "#*-test", true)]
-    [InlineData("feature/123-test-123-branch-123", "feature/123", true)]
-    public void StartsWith_WhenInvoked_ReturnsCorrectResult(
-        string branchName,
-        string value,
-        bool expected)
-    {
-        // Arrange
-        var definitions = new FunctionDefinitions(branchName);
-
-        // Act
-        var actual = definitions.StartsWith(value);
-        var actualFunctionResults = FunctionDefinitions.GetFunctionResults();
-
-        // Assert
-        actual.Should().Be(expected);
-        actualFunctionResults.Should().Contain($"startsWith(string) -> {expected.ToString().ToLower()}");
-    }
-
     [Fact]
     public void AllUpperCase_WhenAllUpperCase_ReturnsTrue()
     {

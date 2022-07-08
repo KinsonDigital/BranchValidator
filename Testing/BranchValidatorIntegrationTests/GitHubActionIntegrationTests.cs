@@ -86,7 +86,6 @@ public class GitHubActionIntegrationTests : IDisposable
     [InlineData("existsTotal('test-branch', 2)", "feature/123-test-branch-test-branch-test", "")]
     [InlineData("existsLessThan('123-', 2)", "feature/123-test-branch", "")]
     [InlineData("existsGreaterThan('test', 2)", "feature/test-123-test-123-test-branch", "")]
-    [InlineData("startsWith('feature/123')", "feature/123-test-branch", "")]
     [InlineData("allUpperCase()", "FEATURE/123-TEST-BRANCH", "")]
     [InlineData("allLowerCase()", "feature/123-test-branch", "")]
     [InlineData("contains('#-test')", "feature/123-test-branch", "")]
@@ -158,7 +157,6 @@ public class GitHubActionIntegrationTests : IDisposable
     [InlineData("existsTotal('456-test', 1)", "feature/123-test-branch", "existsTotal(string, number)")]
     [InlineData("existsLessThan('123-test', 2)", "feature/123-test-123-test-branch", "existsLessThan(string, number)")]
     [InlineData("existsGreaterThan('test', 2)", "feature/123-test-123-test-branch", "existsGreaterThan(string, number)")]
-    [InlineData("startsWith('123')", "feature/123-test-branch", "startsWith(string)")]
     [InlineData("allUpperCase()", "feature/123-test-branch", "allUpperCase()")]
     [InlineData("allLowerCase()", "FEATURE/123-TEST-BRANCH", "allLowerCase()")]
     [InlineData("equalTo('feature/123-#-branch')", "feature/123-test-branch", "equalTo(string)")]
@@ -188,9 +186,6 @@ public class GitHubActionIntegrationTests : IDisposable
 
     [Theory]
     [InlineData("contains('-') && notContains('preview')", "feature/123-test-branch")]
-    [InlineData("startsWith('feature/') || startsWith('preview')", "feature/123-branch")]
-    [InlineData("startsWith('feature/#') || startsWith('preview#')", "feature/123-branch")]
-    [InlineData("startsWith('feature/*-test') || startsWith('preview*')", "feature/123-test-branch")]
     public async void Run_WithValidBranchesAndOperators_ReturnsCorrectResult(string expression, string branchName)
     {
         CheckForOps(expression);
