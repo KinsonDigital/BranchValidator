@@ -80,12 +80,8 @@ public class GitHubActionIntegrationTests : IDisposable
     [InlineData("equalTo('release/v#.#.#')", "release/v1.2.3", "refs/heads/")]
     [InlineData("charIsNum(8)", "feature/123-test-branch", "")]
     [InlineData("charIsNum(8)", "refs/heads/feature/123-test-branch", "refs/heads/")]
-    [InlineData("contains('123-test')", "feature/123-test-branch", "")]
     [InlineData("allUpperCase()", "FEATURE/123-TEST-BRANCH", "")]
     [InlineData("allLowerCase()", "feature/123-test-branch", "")]
-    [InlineData("contains('#-test')", "feature/123-test-branch", "")]
-    [InlineData("contains('123-*-branch')", "feature/123-test-branch", "")]
-    [InlineData("contains('release/v#.#.#-preview.#')", "refs/heads/release/v1.20.300-preview.4000", "refs/heads/")]
     public async void Run_WithValidBranches_ReturnsCorrectResult(string expression, string branchName, string trimFromStart)
     {
         // Arrange
@@ -147,7 +143,6 @@ public class GitHubActionIntegrationTests : IDisposable
     [InlineData("equalTo('release/v#.#.#-preview.#')", "release/v1.20.test-preview.4000", "equalTo(string)")]
     [InlineData("equalTo('feature/#-*')", "feature/word-test-branch", "equalTo(string)")]
     [InlineData("charIsNum(4)", "feature/123-test-branch", "charIsNum(number)")]
-    [InlineData("contains('not-contained')", "feature/123-test-branch", "contains(string)")]
     [InlineData("allUpperCase()", "feature/123-test-branch", "allUpperCase()")]
     [InlineData("allLowerCase()", "FEATURE/123-TEST-BRANCH", "allLowerCase()")]
     [InlineData("equalTo('feature/123-#-branch')", "feature/123-test-branch", "equalTo(string)")]
@@ -176,7 +171,7 @@ public class GitHubActionIntegrationTests : IDisposable
     }
 
     [Theory]
-    [InlineData("contains('-') && allLowerCase()", "feature/123-test-branch")]
+    [InlineData("equalTo('*-*') && allLowerCase()", "feature/123-test-branch")]
     public async void Run_WithValidBranchesAndOperators_ReturnsCorrectResult(string expression, string branchName)
     {
         CheckForOps(expression);

@@ -68,36 +68,6 @@ public class FunctionDefinitionsTests
         actualFunctionResults.Should().Contain($"charIsNum(number) -> {expected.ToString().ToLower()}");
     }
 
-    [Theory]
-    [InlineData(null, "123-test", false)]
-    [InlineData("", "123-test", false)]
-    [InlineData("feature/123-test-branch", "is-not-contained", false)]
-    [InlineData("feature/123-test-branch", "123-test", true)]
-    [InlineData("release/v1.2.3-preview.4", "#.#.#", true)]
-    [InlineData("start2end", "start##end", true)]
-    [InlineData("start2end", "start**end", true)]
-    [InlineData("release/v1.2.3-ANYTHING.4", "release/v1.2.3-*.4", true)]
-    [InlineData("release/v1.2.3-preview.4", "-preview.#", true)]
-    [InlineData("release/v1.2.3-preview.4", "release/v#.#.#-preview.#", true)]
-    [InlineData("release/v1.20.300-preview.4000", "release/v#.#.#-preview.#", true)]
-    [InlineData("ANYTHING1/v1.20.300-ANYTHING2.4000", "*/v#.#.#-*.#", true)]
-    public void Contains_WhenInvoked_ReturnsCorrectResult(
-        string branchName,
-        string value,
-        bool expected)
-    {
-        // Arrange
-        var definitions = new FunctionDefinitions(branchName);
-
-        // Act
-        var actual = definitions.Contains(value);
-        var actualFunctionResults = FunctionDefinitions.GetFunctionResults();
-
-        // Assert
-        actual.Should().Be(expected);
-        actualFunctionResults.Should().Contain($"contains(string) -> {expected.ToString().ToLower()}");
-    }
-
     [Fact]
     public void AllUpperCase_WhenAllUpperCase_ReturnsTrue()
     {
