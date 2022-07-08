@@ -269,29 +269,6 @@ public class FunctionDefinitions
     }
 
     /// <summary>
-    /// Returns a value indicating whether or not a branch name starts with the given <paramref name="value"/>.
-    /// </summary>
-    /// <param name="value">The value that the branch possibly starts with.</param>
-    /// <returns><c>true</c> if the branch does not start with the given <paramref name="value."/>.</returns>
-    /// <remarks>
-    ///     The match for the <paramref name="value"/> is case sensitive.
-    /// </remarks>
-    [ExpressionFunction(nameof(NotStartsWith))]
-    public bool NotStartsWith(string value)
-    {
-        var branchNullOrEmpty = string.IsNullOrEmpty(this.branchName);
-
-        var hasGlobbingSyntax = value.Contains(MatchNumbers) || value.Contains(MatchAnything);
-        var startsWith = hasGlobbingSyntax
-            ? branchNullOrEmpty || !Match(this.branchName, value, MatchType.Start)
-            : branchNullOrEmpty || !this.branchName.StartsWith(value);
-
-        RegisterFunctionResult($"{nameof(NotStartsWith)}({typeof(string)})", startsWith);
-
-        return startsWith;
-    }
-
-    /// <summary>
     /// Returns a value indicating whether or not the branch name has all upper case letters.
     /// </summary>
     /// <returns><c>true</c> if all of the letters are uppercase.</returns>

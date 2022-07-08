@@ -226,34 +226,6 @@ public class FunctionDefinitionsTests
         actualFunctionResults.Should().Contain($"startsWith(string) -> {expected.ToString().ToLower()}");
     }
 
-    [Theory]
-    [InlineData("feature/123-test-branch", "feature/#-test-branch", false)]
-    [InlineData("feature/123-test-branch", "feature/##-test-branch", false)]
-    [InlineData("123-my-test-branch", "#-my-test-branch", false)]
-    [InlineData("letters-numbers-numbers-test", "*-*-numbers", false)]
-    [InlineData("123-my-test-branch", "#-my", false)]
-    [InlineData("123-my-test-branch", "#*-test", false)]
-    [InlineData("feature/123-test-123-branch-123", "feature/123", false)]
-    [InlineData(null, "test", true)]
-    [InlineData("", "test", true)]
-    [InlineData("feature/123-test-branch", "123", true)]
-    public void NotStartsWith_WhenInvoked_ReturnsCorrectResult(
-        string branchName,
-        string value,
-        bool expected)
-    {
-        // Arrange
-        var definitions = new FunctionDefinitions(branchName);
-
-        // Act
-        var actual = definitions.NotStartsWith(value);
-        var actualFunctionResults = FunctionDefinitions.GetFunctionResults();
-
-        // Assert
-        actual.Should().Be(expected);
-        actualFunctionResults.Should().Contain($"notStartsWith(string) -> {expected.ToString().ToLower()}");
-    }
-
     [Fact]
     public void AllUpperCase_WhenAllUpperCase_ReturnsTrue()
     {
