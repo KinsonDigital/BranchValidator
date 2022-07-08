@@ -106,7 +106,6 @@ public class GitHubActionIntegrationTests : IDisposable
     }
 
     [Theory]
-    [InlineData("equalTo(-8)", "Negative number argument values not aloud.")]
     [InlineData("equalTo8)", "The expression is missing a '('.")]
     [InlineData("equalTo(8", "The expression is missing a ')'.")]
     [InlineData("equalTo((8)", "The expression is missing a ')'.")]
