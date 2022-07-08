@@ -159,29 +159,6 @@ public class FunctionDefinitions
     }
 
     /// <summary>
-    /// Returns a value indicating whether or not the given <paramref name="value"/> is contained within a branch name.
-    /// </summary>
-    /// <param name="value">The value to check for.</param>
-    /// <returns><c>true</c> if a branch name does not contain the <paramref name="value"/>.</returns>
-    /// <remarks>
-    ///     The search is case sensitive.
-    /// </remarks>
-    [ExpressionFunction(nameof(NotContains))]
-    public bool NotContains(string value)
-    {
-        var branchNullOrEmpty = string.IsNullOrEmpty(this.branchName);
-        var branch = branchNullOrEmpty ? string.Empty : this.branchName;
-        var hasGlobbingSyntax = value.Contains(MatchNumbers) || value.Contains(MatchAnything);
-        var doesNotContain = hasGlobbingSyntax
-            ? branchNullOrEmpty || !Match(branch, value, MatchType.All)
-            : branchNullOrEmpty || !branch.Contains(value);
-
-        RegisterFunctionResult($"{nameof(NotContains)}({typeof(string)})", doesNotContain);
-
-        return doesNotContain;
-    }
-
-    /// <summary>
     /// Returns a value indicating whether or not the branch name has all upper case letters.
     /// </summary>
     /// <returns><c>true</c> if all of the letters are uppercase.</returns>

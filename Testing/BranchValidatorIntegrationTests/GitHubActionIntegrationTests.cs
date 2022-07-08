@@ -81,7 +81,6 @@ public class GitHubActionIntegrationTests : IDisposable
     [InlineData("charIsNum(8)", "feature/123-test-branch", "")]
     [InlineData("charIsNum(8)", "refs/heads/feature/123-test-branch", "refs/heads/")]
     [InlineData("contains('123-test')", "feature/123-test-branch", "")]
-    [InlineData("notContains('not-contained')", "feature/123-test-branch", "")]
     [InlineData("allUpperCase()", "FEATURE/123-TEST-BRANCH", "")]
     [InlineData("allLowerCase()", "feature/123-test-branch", "")]
     [InlineData("contains('#-test')", "feature/123-test-branch", "")]
@@ -149,7 +148,6 @@ public class GitHubActionIntegrationTests : IDisposable
     [InlineData("equalTo('feature/#-*')", "feature/word-test-branch", "equalTo(string)")]
     [InlineData("charIsNum(4)", "feature/123-test-branch", "charIsNum(number)")]
     [InlineData("contains('not-contained')", "feature/123-test-branch", "contains(string)")]
-    [InlineData("notContains('123-test')", "feature/123-test-branch", "notContains(string)")]
     [InlineData("allUpperCase()", "feature/123-test-branch", "allUpperCase()")]
     [InlineData("allLowerCase()", "FEATURE/123-TEST-BRANCH", "allLowerCase()")]
     [InlineData("equalTo('feature/123-#-branch')", "feature/123-test-branch", "equalTo(string)")]
@@ -178,7 +176,7 @@ public class GitHubActionIntegrationTests : IDisposable
     }
 
     [Theory]
-    [InlineData("contains('-') && notContains('preview')", "feature/123-test-branch")]
+    [InlineData("contains('-') && allLowerCase()", "feature/123-test-branch")]
     public async void Run_WithValidBranchesAndOperators_ReturnsCorrectResult(string expression, string branchName)
     {
         CheckForOps(expression);

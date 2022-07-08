@@ -98,31 +98,6 @@ public class FunctionDefinitionsTests
         actualFunctionResults.Should().Contain($"contains(string) -> {expected.ToString().ToLower()}");
     }
 
-    [Theory]
-    [InlineData("feature/123-test-branch", "123-test", false)]
-    [InlineData("feature/123-456-branch", "123-#-branch", false)]
-    [InlineData(null, "123-test", true)]
-    [InlineData("", "123-test", true)]
-    [InlineData("feature/123-test-branch", "is-not-contained", true)]
-    [InlineData("feature/123-test-branch", "123-#-branch", true)]
-    [InlineData("feature/123-test-branch", "#-*-#", true)]
-    public void NotContains_WhenInvoked_ReturnsCorrectResult(
-        string branchName,
-        string value,
-        bool expected)
-    {
-        // Arrange
-        var definitions = new FunctionDefinitions(branchName);
-
-        // Act
-        var actual = definitions.NotContains(value);
-        var actualFunctionResults = FunctionDefinitions.GetFunctionResults();
-
-        // Assert
-        actual.Should().Be(expected);
-        actualFunctionResults.Should().Contain($"notContains(string) -> {expected.ToString().ToLower()}");
-    }
-
     [Fact]
     public void AllUpperCase_WhenAllUpperCase_ReturnsTrue()
     {
