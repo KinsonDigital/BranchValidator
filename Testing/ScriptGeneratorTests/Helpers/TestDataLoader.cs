@@ -16,7 +16,7 @@ public static class TestDataLoader
     private const string TestDataDirName = "TestData";
     private static readonly Dictionary<string, string> FileDataText = new ();
     private static readonly Dictionary<string, string[]> FileDataLines = new ();
-    private static readonly string BasePath = $@"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}\";
+    private static readonly string BasePath = $@"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}{Environment.NewLine}";
 
     /// <summary>
     /// Loads the test sample data in the test sample data directory with the given file name.
@@ -31,7 +31,7 @@ public static class TestDataLoader
     /// </exception>
     public static string LoadFileData(string fileName)
     {
-        var fullFilePath = $@"{BasePath}{TestDataDirName}\{fileName}";
+        var fullFilePath = $@"{BasePath}{TestDataDirName}{Environment.NewLine}{fileName}";
 
         if (FileDataText.ContainsKey(fullFilePath))
         {
@@ -72,7 +72,7 @@ public static class TestDataLoader
     /// </exception>
     public static string[] LoadFileDataAsLines(string fileName)
     {
-        var fullFilePath = $@"{BasePath}{TestDataDirName}\{fileName}";
+        var fullFilePath = $@"{BasePath}{TestDataDirName}{Environment.NewLine}{fileName}";
 
         if (FileDataText.ContainsKey(fullFilePath))
         {
