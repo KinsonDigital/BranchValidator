@@ -1,10 +1,6 @@
 name: ✔Unit Testing Status Check
 
 
-env:
-  NET_SDK_VERSION: 
-
-
 on:
   workflow_dispatch:
     paths-ignore:
@@ -21,7 +17,7 @@ on:
 
 
 jobs:
-  Determine_Build_Config:
+  determine_build_config:
     name: Determine Build Configuration
     runs-on: ubuntu-latest
     outputs:
@@ -38,11 +34,39 @@ jobs:
             Write-Host "::set-output name=build-config::Debug"
           }
 
-  Unit_Testing_Status_Check:
-    name: Unit Testing Status Check
-    needs: Determine_Build_Config
+
+  run_branch_validator_tests:
+    name: Execute BranchValidator Tests
+    needs: determine_build_config
     uses: KinsonDigital/Infrastructure/.github/workflows/unit-testing-status-check.yml@master
     with:
-      projectname: "BranchValidatorTests"
-      buildconfig: ${{ needs.Determine_Build_Config.outputs.build-config }}
-      netsdkversion: "6.0.300"
+      project-name: "BranchValidatorTests"
+      build-config: ${{ needs.determine_build_config.outputs.build-config }}
+      net-sdk-version: 6.0.300
+
+  run_branch_validation_shared_tests:
+      name: Execute BranchValidatorShared Tests
+      needs: determine_build_config
+      uses: KinsonDigital/Infrastructure/.github/workflows/unit-testing-status-check.yml@master
+      with:
+        project-name: "BranchValidatorSharedTests"
+        build-config: ${{ needs.determine_build_config.outputs.build-config }}
+        net-sdk-version: 6.0.300
+
+  build_script_generator_tests:
+      name: Build ScriptGenerator Tests
+      needs: determine_build_config
+      uses: KinsonDigital/Infrastructure/.github/workflows/build-status-check.yml@master
+      with:
+        project-name: "ScriptGeneratorTests"
+        build-config: ${{ needs.determine_build_config.outputs.build-config }}
+        net-sdk-version: 6.0.300
+
+  run_script_generator_tests:
+      name: Execute ScriptGenerator Tests
+      needs: build_script_generator_tests
+      uses: KinsonDigital/Infrastructure/.github/workflows/unit-testing-status-check.yml@master
+      with:
+        project-name: "ScriptGeneratorTests"
+        build-config: ${{ needs.determine_build_config.outputs.build-config }}
+        net-sdk-version: 6.0.300
