@@ -36,7 +36,7 @@ jobs:
 
 
   run_branch_validator_tests:
-    name: Execute BranchValidator Tests
+    name: Run BranchValidator Tests
     needs: determine_build_config
     uses: KinsonDigital/Infrastructure/.github/workflows/unit-testing-status-check.yml@master
     with:
@@ -45,7 +45,7 @@ jobs:
       net-sdk-version: 6.0.300
 
   run_branch_validation_shared_tests:
-      name: Execute BranchValidatorShared Tests
+      name: Run BranchValidatorShared Tests
       needs: determine_build_config
       uses: KinsonDigital/Infrastructure/.github/workflows/unit-testing-status-check.yml@master
       with:
@@ -54,10 +54,19 @@ jobs:
         net-sdk-version: 6.0.300
 
   run_script_generator_tests:
-      name: Execute ScriptGenerator Tests
+      name: Run ScriptGenerator Tests
       needs: determine_build_config
       uses: KinsonDigital/Infrastructure/.github/workflows/unit-testing-status-check.yml@master
       with:
         project-name: "ScriptGeneratorTests"
+        build-config: ${{ needs.determine_build_config.outputs.build-config }}
+        net-sdk-version: 6.0.300
+
+  run_integration_tests:
+      name: Run ScriptGenerator Tests
+      needs: [determine_build_config, run_branch_validator_tests, run_branch_validation_shared_tests, run_script_generator_tests]
+      uses: KinsonDigital/Infrastructure/.github/workflows/unit-testing-status-check.yml@master
+      with:
+        project-name: "BranchValidatorIntegrationTests"
         build-config: ${{ needs.determine_build_config.outputs.build-config }}
         net-sdk-version: 6.0.300
