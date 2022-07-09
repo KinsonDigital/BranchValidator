@@ -40,10 +40,6 @@ public class FunctionDefinitions
     private const char MatchNumbers = '#';
     private const char MatchAnything = '*';
     private static readonly List<string> FunctionResults = new ();
-    private static readonly char[] Numbers =
-    {
-        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-    };
     private static readonly char[] LowerCaseLetters =
     {
         'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
@@ -179,43 +175,6 @@ public class FunctionDefinitions
         newName = newName.Replace($"{typeof(string)}", "string");
 
         FunctionResults.Add($"{newName} -> {result.ToString().ToLower()}");
-    }
-
-    /// <summary>
-    /// Counts how many times the given <paramref name="value"/> exists in the this <c>string</c>.
-    /// </summary>
-    /// <param name="thisStr">The string that might contain the <paramref name="value"/>.</param>
-    /// <param name="value">The value to count.</param>
-    /// <returns>The number of times the <paramref name="value"/> exists.</returns>
-    private static int Count(string thisStr, string value)
-    {
-        // NOTE: Refer to this website for more regex information -> https://regex101.com/
-        if (string.IsNullOrEmpty(thisStr))
-        {
-            return 0;
-        }
-
-        // Go through each character and escape it if needed
-        // This is due to some characters having a regex specific meaning
-        for (var i = 0; i < value.Length; i++)
-        {
-            var character = value[i];
-
-            if (character == '|')
-            {
-                value = value.Insert(i, @"\");
-                i++;
-                continue;
-            }
-
-            if (character == '.')
-            {
-                value = value.Insert(i, @"\");
-                i++;
-            }
-        }
-
-        return Regex.Matches(thisStr, value, RegexOptions.IgnoreCase).Count;
     }
 
     /// <summary>

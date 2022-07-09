@@ -3,7 +3,6 @@
 // </copyright>
 
 using BranchValidator;
-using BranchValidatorTests.Helpers;
 using CommandLine;
 using FluentAssertions;
 using TestingShared;

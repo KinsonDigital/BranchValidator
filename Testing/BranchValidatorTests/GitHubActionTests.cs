@@ -241,7 +241,7 @@ public class GitHubActionTests
         var action = CreateAction();
 
         // Act
-        await action.Run(inputs, _ => { }, e => { });
+        await action.Run(inputs, _ => { }, _ => { });
 
         // Assert
         this.mockConsoleService.VerifyOnce(m =>

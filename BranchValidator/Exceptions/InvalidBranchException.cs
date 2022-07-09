@@ -32,4 +32,3 @@ public class InvalidBranchException : Exception
     public InvalidBranchException(string message, Exception innerException)
         : base(message, innerException) => HResult = 600;
 }
-

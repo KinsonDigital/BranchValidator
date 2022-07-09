@@ -56,7 +56,6 @@ public class ScriptTemplateServiceTests
             expectedStrBuilder.AppendLine("\tprivate const char MatchAnything = '*';");
             expectedStrBuilder.AppendLine("\tprivate static readonly List<string> FunctionResults = new ();");
             expectedStrBuilder.AppendLine("\tprivate const string BranchName = \"//<branch-name/>\";");
-            expectedStrBuilder.AppendLine("\tprivate static readonly char[] Numbers = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', };");
             expectedStrBuilder.AppendLine("\tprivate static readonly char[] LowerCaseLetters = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', };");
             expectedStrBuilder.AppendLine("\tprivate static readonly char[] UpperCaseLetters = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', };");
             expectedStrBuilder.AppendLine();

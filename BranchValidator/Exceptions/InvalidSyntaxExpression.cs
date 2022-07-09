@@ -32,5 +32,3 @@ public class InvalidSyntaxExpression : Exception
     public InvalidSyntaxExpression(string message, Exception innerException)
         : base(message, innerException) => HResult = 500;
 }
-
-
