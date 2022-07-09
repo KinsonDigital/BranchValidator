@@ -76,7 +76,9 @@ public class ConsoleService : IConsoleService
             WriteLine(newContentLine);
         }
 
+#if RELEASE
         EndGroup();
+#endif
     }
 
     /// <inheritdoc/>
@@ -88,7 +90,7 @@ public class ConsoleService : IConsoleService
         Console.ForegroundColor = currentClr;
     }
 
-#if DEBUG
+#if DEBUG || GENERATESCRIPT
     /// <inheritdoc/>
     public void PauseConsole() => Console.ReadLine();
 #endif

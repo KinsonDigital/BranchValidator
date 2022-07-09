@@ -21,7 +21,7 @@ public class AppService : IAppService
     /// <inheritdoc/>
     public void Exit(int code)
     {
-#if DEBUG // Kept here to pause console for debugging purposes
+#if DEBUG || GENERATESCRIPT // Kept here to pause console for debugging purposes
         this.consoleService.PauseConsole();
 #endif
         this.consoleService.WriteLine($"Exit Code: {code}");

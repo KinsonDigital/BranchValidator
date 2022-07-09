@@ -14,7 +14,7 @@ public class GitHubConsoleService : ConsoleService
     /// <inheritdoc/>
     public override void StartGroup(string name)
     {
-#if DEBUG
+#if DEBUG || GENERATESCRIPT
         base.StartGroup(name);
 #else
         Console.WriteLine($"::group::{(string.IsNullOrEmpty(name) ? "Group" : name)}");
@@ -24,7 +24,7 @@ public class GitHubConsoleService : ConsoleService
     /// <inheritdoc/>
     public override void EndGroup()
     {
-#if DEBUG
+#if DEBUG || GENERATESCRIPT
         base.EndGroup();
 #else
         Console.WriteLine("::endgroup::");
@@ -34,7 +34,7 @@ public class GitHubConsoleService : ConsoleService
     /// <inheritdoc/>
     public override void WriteError(string value)
     {
-#if DEBUG
+#if DEBUG || GENERATESCRIPT
         base.WriteError(value);
 #else
         Console.WriteLine($"::error::{value}");
