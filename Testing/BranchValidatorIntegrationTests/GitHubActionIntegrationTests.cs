@@ -93,7 +93,7 @@ public class GitHubActionIntegrationTests : IDisposable
         };
 
         // Act & Assert
-        var act = () => this.action.Run(
+        var act = async () => await this.action.Run(
             actionInputs,
             result =>
             {
@@ -128,7 +128,7 @@ public class GitHubActionIntegrationTests : IDisposable
         };
 
         // Act & Assert
-        var act = () => this.action.Run(actionInputs, _ => { }, e => throw e);
+        var act = async () => await this.action.Run(actionInputs, _ => { }, e => throw e);
 
         // Assert
         await act.Should().ThrowAsync<Exception>()
@@ -159,7 +159,7 @@ public class GitHubActionIntegrationTests : IDisposable
         };
 
         // Act & Assert
-        var act = () => this.action.Run(actionInputs, _ => { }, e => throw e);
+        var act = async () => await this.action.Run(actionInputs, _ => { }, e => throw e);
 
         // Assert
         await act.Should().ThrowAsync<InvalidBranchException>()
@@ -181,7 +181,7 @@ public class GitHubActionIntegrationTests : IDisposable
         };
 
         // Act & Assert
-        var act = () => this.action.Run(
+        var act = async () => await this.action.Run(
             actionInputs,
             result =>
             {
