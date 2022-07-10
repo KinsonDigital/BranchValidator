@@ -23,16 +23,16 @@ jobs:
     outputs:
       build-config: ${{ steps.get-build-config.outputs.build-config }}
     steps:
-      - name: Get Build Config
-        id: get-build-config
-        shell: pwsh
-        run: |
-          # If the destination branch that the pull request is merging into is master, do a release build
-          if ( "${{ github.base_ref }}" -eq "master") {
-            Write-Host "::set-output name=build-config::Release"
-          } else { # Any other branch than master, do a debug build
-            Write-Host "::set-output name=build-config::Debug"
-          }
+    - name: Get Build Config
+      id: get-build-config
+      shell: pwsh
+      run: |
+        # If the destination branch that the pull request is merging into is master, do a release build
+        if ( "${{ github.base_ref }}" -eq "master") {
+          Write-Host "::set-output name=build-config::Release"
+        } else { # Any other branch than master, do a debug build
+          Write-Host "::set-output name=build-config::Debug"
+        }
 
 
   run_branch_validator_tests:
@@ -63,7 +63,7 @@ jobs:
         net-sdk-version: 6.0.300
 
   run_integration_tests:
-      name: Run ScriptGenerator Tests
+      name: Run Integration Tests
       needs: [determine_build_config, run_branch_validator_tests, run_branch_validation_shared_tests, run_script_generator_tests]
       uses: KinsonDigital/Infrastructure/.github/workflows/unit-testing-status-check.yml@master
       with:
