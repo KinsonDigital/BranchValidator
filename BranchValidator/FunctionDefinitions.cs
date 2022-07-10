@@ -14,17 +14,17 @@ namespace BranchValidator;
 public enum MatchType
 {
     /// <summary>
-    /// Match against the entire string.
+    /// Matches against the entire string.
     /// </summary>
     All,
 
     /// <summary>
-    /// Only match against the beginning of the string.
+    /// Only matches against the beginning of the string.
     /// </summary>
     Start,
 
     /// <summary>
-    /// Only match against the end of the string.
+    /// Only matches against the end of the string.
     /// </summary>
     End,
 }
@@ -65,9 +65,9 @@ public class FunctionDefinitions
 
     //<script-function>
     /// <summary>
-    /// Gets the results of all the functions.
+    /// Gets all of the function results.
     /// </summary>
-    /// <returns>The result of all the functions.</returns>
+    /// <returns>The results of all the functions.</returns>
     public static string[] GetFunctionResults()
     {
         return FunctionResults.ToArray();
@@ -181,8 +181,8 @@ public class FunctionDefinitions
     /// Returns a value indicating whether or not the given <paramref name="character"/>
     /// is contained in the given <c>string</c> <paramref name="characters"/>.
     /// </summary>
-    /// <param name="characters">The <c>string</c> that might contain the character.</param>
-    /// <param name="character">The character to check for.</param>
+    /// <param name="characters">The <c>string</c> that may or may not contain the character.</param>
+    /// <param name="character">The character to check.</param>
     /// <returns>
     ///     <c>true</c> if the given <paramref name="character"/> is
     ///     contained in the <c>string</c> <paramref name="characters"/>.
@@ -201,11 +201,11 @@ public class FunctionDefinitions
     }
 
     /// <summary>
-    /// Returns a value indicating if the given <paramref name="globbingPattern"/> contains a match
+    /// Returns a value indicating whether or not the given <paramref name="globbingPattern"/> contains a match
     /// to the given <c>string</c> <paramref name="value"/>.
     /// </summary>
-    /// <param name="value">The <c>string</c> to match against.</param>
-    /// <param name="globbingPattern">The globbing pattern and text to search for.</param>
+    /// <param name="value">The <c>string</c> to match.</param>
+    /// <param name="globbingPattern">The globbing pattern and text to search.</param>
     /// <param name="matchType">The type of matching that should be performed.</param>
     /// <returns>
     ///     <c>true</c> if the globbing pattern finds a match in the given <c>string</c> <paramref name="value"/>.
@@ -247,8 +247,8 @@ public class FunctionDefinitions
     /// <summary>
     /// Removes any consecutive occurrences of the given <paramref name="characters"/> from the given <c>string</c> <paramref name="value"/>.
     /// </summary>
-    /// <param name="characters">The <c>char</c> to check for.</param>
-    /// <param name="value">The value to remove the consecutive characters from.</param>
+    /// <param name="characters">The <c>char</c> to check.</param>
+    /// <param name="value">The value that contains the consecutive characters to remove.</param>
     /// <returns>The original <c>string</c> value with the consecutive characters removed.</returns>
     private static string RemoveConsecutiveCharacters(IEnumerable<char> characters, string value)
     {

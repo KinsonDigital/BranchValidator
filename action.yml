@@ -18,7 +18,7 @@ inputs:
     required: false
     default: ''
   fail-when-not-valid:
-    description: 'If true, will fail the job if the branch name is not valid.'
+    description: 'If true, the job will fail if the branch name is not valid.'
     required: false
     default: true
 

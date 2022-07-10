@@ -50,7 +50,7 @@ public abstract class Observable<TData> : IObservable<TData>
 
         // ReSharper disable ForCanBeConvertedToForeach
         /* Keep this loop as a for-loop.  Do not convert to for-each.
-         * This is due to the Dispose() method possibly being called during
+         * This is due to the possibility of the Dispose() method being called during
          * iteration of the observers list which will cause an exception.
         */
         for (var i = 0; i < this.observers.Count; i++)

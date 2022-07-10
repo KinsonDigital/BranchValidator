@@ -5,7 +5,7 @@
 namespace BranchValidator;
 
 /// <summary>
-/// The main action behavior.
+/// A GitHub action to be executed.
 /// </summary>
 /// <typeparam name="TResult">The result of the github action.</typeparam>
 public interface IGitHubAction<out TResult> : IDisposable

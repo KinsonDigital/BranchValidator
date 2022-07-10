@@ -12,7 +12,7 @@ namespace ScriptGenerator;
 public class AppInputs
 {
     /// <summary>
-    /// Gets or sets full file path to the source file for processing.
+    /// Gets or sets the full file path to the source file for processing.
     /// </summary>
     [Option(
         shortName: 's',

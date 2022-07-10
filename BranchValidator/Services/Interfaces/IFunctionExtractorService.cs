@@ -12,10 +12,10 @@ public interface IFunctionExtractorService
     /// <summary>
     /// Extracts only the names from the given <paramref name="expression"/>.
     /// </summary>
-    /// <param name="expression">The expression to extract from.</param>
+    /// <param name="expression">The expression to extract.</param>
     /// <returns>The list of function names in the given <paramref name="expression"/>.</returns>
     /// <remarks>
-    ///     If any functions have a mismatch in parenthesis counts, then the function name will be ignored.
+    ///     If any functions have a mismatch in the number of parenthesis, then the function name will be ignored.
     /// </remarks>
     IEnumerable<string> ExtractNames(string expression);
 

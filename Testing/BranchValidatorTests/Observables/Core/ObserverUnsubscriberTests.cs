@@ -84,7 +84,7 @@ public class ObserverUnsubscriberTests
         var observers = new List<BranchValidator.Observables.Core.IObserver<int>> { observerA, observerB };
 
         /* NOTE: The observer is added to the list of observers
-         * via the Observer<T> class and then both the list and the single
+         * via the Observer<T> class then both the list and the single
          * observer are passed to the ObserverUnsubscriber.  The single
          * observer is added to the observers list above to simulate
          * this process for the purpose of testing.

@@ -16,7 +16,7 @@ public class AssertExtensions : Assert
     private const string TableFlip = "(╯'□')╯︵┻━┻  ";
 
     /// <summary>
-    /// Verifies if the <paramref name="expected"/> and <paramref name="actual"/> arguments are equal.
+    /// Verifies whether or not the <paramref name="expected"/> and <paramref name="actual"/> arguments are equal.
     /// </summary>
     /// <typeparam name="T">The <see cref="IEquatable{T}"/> type of the <paramref name="expected"/> and <paramref name="actual"/>.</typeparam>
     /// <param name="expected">The expected <see langword="int"/> value.</param>

@@ -17,8 +17,8 @@ public class QuoteAnalyzerService : IAnalyzerService
     private const char DoubleQuote = '"';
 
     /// <summary>
-    /// Analyzes the given <paramref name="expression"/> to verify if it has only single or double quotes,
-    /// then verifies that the total number of quotes is even.
+    /// Analyzes the given <paramref name="expression"/> to verify whether or not it has only single or double quotes,
+    /// and verifies that the total count of quotes are even in number.
     /// </summary>
     /// <param name="expression">The expression to analyze.</param>
     /// <returns>

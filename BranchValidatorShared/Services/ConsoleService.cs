@@ -71,7 +71,7 @@ public class ConsoleService : IConsoleService
 
         for (var i = 0; i < contentLines.Length; i++)
         {
-            // Add a tab character if in debug mode
+            // Add a tab character when in debug mode
             var newContentLine = $"|{(i == contentLines.Length - 1 ? "__" : string.Empty)}\t{contentLines[i]}";
             WriteLine(newContentLine);
         }

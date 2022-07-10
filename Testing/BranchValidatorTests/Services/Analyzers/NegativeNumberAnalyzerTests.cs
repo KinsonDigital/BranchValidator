@@ -21,11 +21,11 @@ public class NegativeNumberAnalyzerTests
     [InlineData("funA('str-value')", true, "")]
     [InlineData("funA(40, 50)", true, "")]
     [InlineData("funA()", true, "")]
-    [InlineData("funA(10-0)", false, "Negative number argument values not aloud.")]
-    [InlineData("funA(-60, 70)", false, "Negative number argument values not aloud.")]
-    [InlineData("funA(80, -90)", false, "Negative number argument values not aloud.")]
+    [InlineData("funA(10-0)", false, "Negative number argument values not allowed.")]
+    [InlineData("funA(-60, 70)", false, "Negative number argument values not allowed.")]
+    [InlineData("funA(80, -90)", false, "Negative number argument values not allowed.")]
     [InlineData("funA(110,)", true, "")]
-    [InlineData("funA(-20)", false, "Negative number argument values not aloud.")]
+    [InlineData("funA(-20)", false, "Negative number argument values not allowed.")]
     public void Analyze_WhenInvoked_ReturnsCorrectResult(
         string function,
         bool expectedValid,

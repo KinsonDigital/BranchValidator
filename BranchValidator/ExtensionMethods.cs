@@ -60,7 +60,7 @@ public static class ExtensionMethods
     /// Returns a result indicating whether or not the given <paramref name="item"/> is contained in this list of items.
     /// </summary>
     /// <param name="items">The items to check.</param>
-    /// <param name="item">The item to check for.</param>
+    /// <param name="item">The item to check.</param>
     /// <typeparam name="T">The type of item in the list.</typeparam>
     /// <returns><c>true</c> if the <paramref name="item"/> does not exist.</returns>
     public static bool DoesNotContain<T>(this IEnumerable<T> items, T item) => !items.Contains(item);
@@ -68,8 +68,8 @@ public static class ExtensionMethods
     /// <summary>
     /// Returns the number of times the <c>string</c> <paramref name="value"/> occurs in this <c>string</c>.
     /// </summary>
-    /// <param name="thisStr">The <c>string</c> that might contain the <paramref name="value"/>.</param>
-    /// <param name="value">The <c>string</c> to check for.</param>
+    /// <param name="thisStr">The <c>string</c> that may or may not contain the <paramref name="value"/>.</param>
+    /// <param name="value">The <c>string</c> to check.</param>
     /// <returns>The number of times it exists.</returns>
     public static int Count(this string thisStr, string value)
     {
@@ -91,24 +91,24 @@ public static class ExtensionMethods
     /// <summary>
     /// Returns a value indicating whether or not the given <c>string</c> <paramref name="value"/> starts with the given <paramref name="character"/>.
     /// </summary>
-    /// <param name="value">The value that might start with the <paramref name="character"/>.</param>
-    /// <param name="character">The character to check for.</param>
+    /// <param name="value">The value that may or may not start with the <paramref name="character"/>.</param>
+    /// <param name="character">The character to check.</param>
     /// <returns><c>true</c> if the <paramref name="value"/> does not start with the <paramref name="character"/>.</returns>
     public static bool DoesNotStartWith(this string value, char character) => !value.StartsWith(character);
 
     /// <summary>
     /// Returns a value indicating whether or not the given <c>string</c> <paramref name="value"/> ends with the given <paramref name="character"/>.
     /// </summary>
-    /// <param name="value">The value that might end with the <paramref name="character"/>.</param>
-    /// <param name="character">The character to check for.</param>
+    /// <param name="value">The value that may or may not end with the <paramref name="character"/>.</param>
+    /// <param name="character">The character to check.</param>
     /// <returns><c>true</c> if the <paramref name="value"/> does not end with the <paramref name="character"/>.</returns>
     public static bool DoesNotEndWith(this string value, char character) => !value.EndsWith(character);
 
     /// <summary>
     /// Returns a value indicating whether or not the given <paramref name="character"/> is contained in this <c>string</c> value.
     /// </summary>
-    /// <param name="value">The <c>string</c> that might hold the <paramref name="character"/>.</param>
-    /// <param name="character">The character to check for.</param>
+    /// <param name="value">The <c>string</c> that may or may not hold the <paramref name="character"/>.</param>
+    /// <param name="character">The character to check.</param>
     /// <returns><c>true</c> if the <paramref name="character"/> is contained.</returns>
     public static bool DoesNotContain(this string value, char character) => !string.IsNullOrEmpty(value) && !value.Contains(character);
 
@@ -134,7 +134,7 @@ public static class ExtensionMethods
     }
 
     /// <summary>
-    /// Returns the text data from this <c>string</c> up to the first occurrence of the given <paramref name="character"/>.
+    /// Returns the text data from this <c>string</c> to the first occurrence of the given <paramref name="character"/>.
     /// </summary>
     /// <param name="value">The value that holds the <c>string</c> to return.</param>
     /// <param name="character">The character that is the end of the<c>string</c>to return.</param>
@@ -297,7 +297,7 @@ public static class ExtensionMethods
     /// between the given <paramref name="leftChar"/> and <paramref name="rightChar"/>.
     /// </summary>
     /// <param name="thisStr">The string to process.</param>
-    /// <param name="value">The <c>char</c> value to search for.</param>
+    /// <param name="value">The <c>char</c> value to search.</param>
     /// <param name="leftChar">The <c>char</c> that should be to the left of the given <paramref name="value"/>.</param>
     /// <param name="rightChar">The <c>char</c> that should be to the right of the given <paramref name="value"/>.</param>
     /// <returns>
@@ -362,17 +362,16 @@ public static class ExtensionMethods
     /// between the given <paramref name="leftChar"/> and <paramref name="rightChar"/>.
     /// </summary>
     /// <param name="thisStr">The string to process.</param>
-    /// <param name="value">The <c>char</c> value to search for.</param>
-    /// <param name="leftChar">The <c>char</c> that might not be to the left of the given <paramref name="value"/>.</param>
-    /// <param name="rightChar">The <c>char</c> that might not be to the right of the given <paramref name="value"/>.</param>
+    /// <param name="value">The <c>char</c> value to search.</param>
+    /// <param name="leftChar">The <c>char</c> that may or may not be to the left of the given <paramref name="value"/>.</param>
+    /// <param name="rightChar">The <c>char</c> that may or may not be to the right of the given <paramref name="value"/>.</param>
     /// <returns>
     ///     True if any occurence of the given <paramref name="value"/> is not between the <paramref name="leftChar"/> and <paramref name="rightChar"/>.
     /// </returns>
     public static bool AnyNotBetween(this string thisStr, char value, char leftChar, char rightChar) => !AllIsBetween(thisStr, value, leftChar, rightChar);
 
     /// <summary>
-    /// Returns a value indicating whether or not the given <c>string</c> <paramref name="value"/> is
-    /// a negative or positive whole number.
+    /// Returns a value indicating whether or not the given <c>string</c> <paramref name="value"/> is a whole number.
     /// </summary>
     /// <param name="value">The value to check.</param>
     /// <returns><c>true</c> if the <paramref name="value"/> is a whole number.</returns>
@@ -403,10 +402,10 @@ public static class ExtensionMethods
 
     /// <summary>
     /// Returns a result indicating whether or not this <c>object</c> contains a method that matches
-    /// the given <paramref name="methodName"/> with the given <paramref name="returnType"/> with the given <paramref name="argValues"/>.
+    /// the given <paramref name="methodName"/> with the given <paramref name="returnType"/> and the given <paramref name="argValues"/>.
     /// </summary>
-    /// <param name="obj">The <c>object</c> that might contain the method.</param>
-    /// <param name="methodName">The name of the method to search for.</param>
+    /// <param name="obj">The <c>object</c> that may or may not contain the method.</param>
+    /// <param name="methodName">The name of the method to search.</param>
     /// <param name="returnType">The type returned by the method.</param>
     /// <param name="argValues">The list of argument values.</param>
     /// <returns>

@@ -55,8 +55,8 @@ public static class ExtensionMethods
     /// is located positionally before the given <paramref name="afterChar"/>.
     /// </summary>
     /// <param name="value">This <c>string</c> to search for the <paramref name="beforeChar"/> and <paramref name="afterChar"/>.</param>
-    /// <param name="beforeChar">The <c>char</c> that might be located before the <paramref name="afterChar"/>.</param>
-    /// <param name="afterChar">The <c>char</c> that might be located after the <paramref name="beforeChar"/>.</param>
+    /// <param name="beforeChar">The <c>char</c> that may or may not be located before the <paramref name="afterChar"/>.</param>
+    /// <param name="afterChar">The <c>char</c> that may or may not be located after the <paramref name="beforeChar"/>.</param>
     /// <returns><c>true</c> if the <paramref name="beforeChar"/> is located before the <paramref name="afterChar"/>.</returns>
     public static bool IsBefore(this string value, char beforeChar, char afterChar)
     {
@@ -86,8 +86,8 @@ public static class ExtensionMethods
     /// is located positionally before the given <paramref name="afterChar"/>.
     /// </summary>
     /// <param name="value">This <c>string</c> to search for the <paramref name="beforeStr"/> and <paramref name="afterChar"/>.</param>
-    /// <param name="beforeStr">The <c>char</c> that might be located before the <paramref name="afterChar"/>.</param>
-    /// <param name="afterChar">The <c>char</c> that might be located after the <paramref name="beforeStr"/>.</param>
+    /// <param name="beforeStr">The <c>char</c> that may or may not be located before the <paramref name="afterChar"/>.</param>
+    /// <param name="afterChar">The <c>char</c> that may or may not be located after the <paramref name="beforeStr"/>.</param>
     /// <returns><c>true</c> if the <paramref name="beforeStr"/> is located before the <paramref name="afterChar"/>.</returns>
     public static bool IsBefore(this string value, string beforeStr, char afterChar)
     {
@@ -118,8 +118,8 @@ public static class ExtensionMethods
     /// is located positionally after the given <paramref name="beforeChar"/>.
     /// </summary>
     /// <param name="value">This <c>string</c> to search for the <paramref name="afterChar"/> and <paramref name="beforeChar"/>.</param>
-    /// <param name="afterChar">The <c>char</c> that might be located after the <paramref name="beforeChar"/>.</param>
-    /// <param name="beforeChar">The <c>char</c> that might be located before the <paramref name="afterChar"/>.</param>
+    /// <param name="afterChar">The <c>char</c> that may or may not be located after the <paramref name="beforeChar"/>.</param>
+    /// <param name="beforeChar">The <c>char</c> that may or may not be located before the <paramref name="afterChar"/>.</param>
     /// <returns><c>true</c> if the <paramref name="afterChar"/> is located after the <paramref name="beforeChar"/>.</returns>
     public static bool IsAfter(this string value, char afterChar, char beforeChar)
     {
@@ -149,8 +149,8 @@ public static class ExtensionMethods
     /// is located positionally after the given <paramref name="beforeChar"/>.
     /// </summary>
     /// <param name="value">This <c>string</c> to search for the <paramref name="afterStr"/> and <paramref name="beforeChar"/>.</param>
-    /// <param name="afterStr">The <c>char</c> that might be located after the <paramref name="beforeChar"/>.</param>
-    /// <param name="beforeChar">The <c>char</c> that might be located before the <paramref name="afterStr"/>.</param>
+    /// <param name="afterStr">The <c>char</c> that may or may not be located after the <paramref name="beforeChar"/>.</param>
+    /// <param name="beforeChar">The <c>char</c> that may or may not be located before the <paramref name="afterStr"/>.</param>
     /// <returns><c>true</c> if the <paramref name="afterStr"/> is located after the <paramref name="beforeChar"/>.</returns>
     public static bool IsAfter(this string value, string afterStr, char beforeChar)
     {

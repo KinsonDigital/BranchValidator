@@ -15,7 +15,7 @@ public interface IRelativePathResolverService
     /// <param name="path">The path to resolve.</param>
     /// <returns>The resolved path.</returns>
     /// <remarks>
-    ///     If the <paramref name="path"/> is an absolute path, then the same path will simply be returned.
+    ///     If the <paramref name="path"/> is an absolute path, then the same path will be returned.
     /// </remarks>
     string Resolve(string path);
 }

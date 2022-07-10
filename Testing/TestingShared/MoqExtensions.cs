@@ -39,7 +39,7 @@ namespace TestingShared
             });
 
         /// <summary>
-        /// Specifies a callback to invoke when the method is called and then asserts that the call is in the correct order.
+        /// Specifies a callback to invoke when the method is called and then asserts that the call is in the correct order
         /// specified by the given <paramref name="expectedOrder"/>.
         /// </summary>
         /// <param name="setup">The mock setup to extend.</param>
@@ -68,7 +68,7 @@ namespace TestingShared
         /// <param name="expression">Expression to verify.</param>
         /// <typeparam name="T">Type to mock, which can be an interface, a class, or a delegate.</typeparam>
         /// <exception cref="MockException">
-        ///   The invocation was called when it was expected to never be called.
+        ///   The invocation was called when it was not expected to be called.
         /// </exception>
         public static void VerifyNever<T>(this Mock<T> mock, Expression<Action<T>> expression)
             where T : class
@@ -82,7 +82,7 @@ namespace TestingShared
         /// <param name="expression">Expression to verify.</param>
         /// <typeparam name="T">Type to mock, which can be an interface, a class, or a delegate.</typeparam>
         /// <exception cref="MockException">
-        ///   The invocation was called when it was expected to never be called.
+        ///   The invocation was called when it was expected not to be called.
         /// </exception>
         public static void VerifyOnce<T>(this Mock<T> mock, Expression<Action<T>> expression)
             where T : class

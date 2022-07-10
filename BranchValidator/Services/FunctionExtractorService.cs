@@ -110,8 +110,8 @@ public class FunctionExtractorService : IFunctionExtractorService
     }
 
     /// <summary>
-    /// Splits the given <paramref name="expression"/> into sections where each section is a function
-    /// that includes the function name, the argument value list parenthesis and the argument values.
+    /// Splits the given <paramref name="expression"/> into sections where each is a function
+    /// that includes the function name, the argument value list parenthesis, and the argument values.
     /// </summary>
     /// <param name="expression">The expression to split.</param>
     /// <returns>The list of functions.</returns>

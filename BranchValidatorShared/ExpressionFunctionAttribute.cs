@@ -23,7 +23,7 @@ public class ExpressionFunctionAttribute : Attribute
     }
 
     /// <summary>
-    /// Gets the name of the expression function that the method is for.
+    /// Gets the name of the expression function.
     /// </summary>
     public string FunctionName { get; }
 }

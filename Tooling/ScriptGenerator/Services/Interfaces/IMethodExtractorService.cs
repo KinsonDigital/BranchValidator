@@ -10,7 +10,7 @@ namespace ScriptGenerator.Services.Interfaces;
 public interface IMethodExtractorService
 {
     /// <summary>
-    /// Generate script functions from the code in the file at the given <paramref name="filePath"/>.
+    /// Generates script functions from the code in the file at the given <paramref name="filePath"/>.
     /// </summary>
     /// <param name="filePath">The full absolute file path to the code file.</param>
     /// <returns>The script functions code.</returns>

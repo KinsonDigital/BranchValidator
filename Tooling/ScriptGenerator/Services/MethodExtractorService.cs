@@ -52,7 +52,7 @@ public class MethodExtractorService : IMethodExtractorService
             throw new InvalidScriptSourceException(exMsg);
         }
 
-        // If there are more start tags then end tags
+        // If there are more start tags than end tags
         if (totalStartTags > totalEndTags)
         {
             throw new InvalidScriptSourceException("A script function end tag '//</script-function>' is missing.");

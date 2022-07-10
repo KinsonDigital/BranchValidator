@@ -9,7 +9,7 @@ using System.Runtime.CompilerServices;
 
 /// <summary>
 /// Performs analysis on particular values to ensure that a value meets a criteria,
-/// then invokes behavior based on result.
+/// then invokes behavior based on the result.
 /// </summary>
 public static class EnsureThat
 {

@@ -7,7 +7,7 @@ using BranchValidator.Observables.Core;
 namespace BranchValidator.Observables;
 
 /// <summary>
-/// Creates an <see cref="Core.IObservable{T}"/> to send push notifications to signal that the position of the mouse has changed.
+/// Creates a <see cref="Core.IObservable{T}"/> to send push notifications to signal that the position of the mouse has changed.
 /// </summary>
 public class UpdateBranchNameObservable : Observable<string>
 {

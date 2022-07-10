@@ -151,8 +151,8 @@ public static class ExpressionFunctions
     /// Returns a value indicating whether or not the given <paramref name="character"/>
     /// is contained in the given <c>string</c> <paramref name="characters"/>.
     /// </summary>
-    /// <param name="characters">The <c>string</c> that might contain the character.</param>
-    /// <param name="character">The character to check for.</param>
+    /// <param name="characters">The <c>string</c> that may or may not contain the character.</param>
+    /// <param name="character">The character to check.</param>
     /// <returns>
     ///     <c>true</c> if the given <paramref name="character"/> is
     ///     contained in the <c>string</c> <paramref name="characters"/>.
@@ -171,11 +171,11 @@ public static class ExpressionFunctions
     }
 
     /// <summary>
-    /// Returns a value indicating if the given <paramref name="globbingPattern"/> contains a match
+    /// Returns a value indicating whether or not the given <paramref name="globbingPattern"/> contains a match
     /// to the given <c>string</c> <paramref name="value"/>.
     /// </summary>
     /// <param name="value">The <c>string</c> to match against.</param>
-    /// <param name="globbingPattern">The globbing pattern and text to search for.</param>
+    /// <param name="globbingPattern">The globbing pattern and text to search.</param>
     /// <param name="matchType">The type of matching that should be performed.</param>
     /// <returns>
     ///     <c>true</c> if the globbing pattern finds a match in the given <c>string</c> <paramref name="value"/>.
@@ -217,7 +217,7 @@ public static class ExpressionFunctions
     /// <summary>
     /// Removes any consecutive occurrences of the given <paramref name="characters"/> from the given <c>string</c> <paramref name="value"/>.
     /// </summary>
-    /// <param name="characters">The <c>char</c> to check for.</param>
+    /// <param name="characters">The <c>char</c> to check.</param>
     /// <param name="value">The value to remove the consecutive characters from.</param>
     /// <returns>The original <c>string</c> value with the consecutive characters removed.</returns>
     private static string RemoveConsecutiveCharacters(IEnumerable<char> characters, string value)

@@ -11,9 +11,9 @@ namespace BranchValidator.Observables.Core;
 public interface IObservable<T> : IDisposable
 {
     /// <summary>
-    /// Notifies the provider that an <see cref="IObserver{T}"/> is to receive notifications.
+    /// Subscribes the given <paramref name="observer"/> to receive notifications.
     /// </summary>
-    /// <param name="observer">The object that is to receive notifications.</param>
+    /// <param name="observer">The object that receives notifications.</param>
     /// <returns>
     ///     A reference to an interface that allows <see cref="IObserver{T}"/> to stop receiving
     ///     notifications before the provider has finished sending them.

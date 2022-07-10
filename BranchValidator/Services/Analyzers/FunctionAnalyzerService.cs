@@ -49,7 +49,7 @@ public class FunctionAnalyzerService : IAnalyzerService
             var expressionFuncArgDataTypes
                 = this.functionExtractorService.ExtractArgDataTypes(functionSignature).ToArray();
 
-            // This dictionary can hold more then one method with some param data types.
+            // This dictionary can hold more than one method with some param data types.
             // This is due to the possibility of the CSharp method being overloaded which
             // means more than one method with different signatures could be found
             var methodsWithParamsDataTypes
@@ -90,7 +90,7 @@ public class FunctionAnalyzerService : IAnalyzerService
     }
 
     /// <summary>
-    /// Returns a result indicating if all of the <c>C#</c> equivalent methods for the expression
+    /// Returns a result indicating whether or not all of the <c>C#</c> equivalent methods for the expression
     /// function methods in the given <paramref name="expression"/> exist.
     /// </summary>
     /// <param name="expression">The expression to analyze.</param>

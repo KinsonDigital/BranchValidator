@@ -10,14 +10,14 @@ namespace BranchValidator.Services.Interfaces;
 public interface IExpressionExecutorService
 {
     /// <summary>
-    /// Execute the given <paramref name="expression"/> against the given <paramref name="branchName"/>.
+    /// Executes the given <paramref name="expression"/> against the given <paramref name="branchName"/>.
     /// </summary>
     /// <param name="expression">The expression to execute.</param>
     /// <param name="branchName">The branch name used in each function in the <paramref name="expression"/>.</param>
     /// <returns>
     ///     Tuple Result:
     /// <list type="bullet">
-    ///     <item><c>valid:</c> <c>true</c> if the entire expression evaluates to <c>true</c> meaning the branch is valid.</item>
+    ///     <item><c>valid:</c> <c>true</c> if the entire branch is valid.</item>
     ///     <item><c>msg:</c> Additional information about the execution.</item>
     /// </list>
     /// </returns>

@@ -11,7 +11,7 @@ public class NegativeNumberAnalyzer : IAnalyzerService
 {
     /// <summary>
     /// Analyzes the given <paramref name="functionWithArgValues"/> and verifies if any of the
-    /// argument values contains a negative number.
+    /// argument values contain a negative number.
     /// </summary>
     /// <param name="functionWithArgValues">A <c>string</c> containing a function with argument values.</param>
     /// <returns>
@@ -34,7 +34,7 @@ public class NegativeNumberAnalyzer : IAnalyzerService
             .Any(argValue => argValue.Contains('-'));
 
         return containsNegativeNumber
-            ? (false, "Negative number argument values not aloud.")
+            ? (false, "Negative number argument values not allowed.")
             : (true, string.Empty);
     }
 }

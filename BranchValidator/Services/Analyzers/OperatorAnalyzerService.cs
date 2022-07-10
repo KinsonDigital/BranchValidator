@@ -7,7 +7,7 @@ using BranchValidator.Services.Interfaces;
 namespace BranchValidator.Services.Analyzers;
 
 /// <summary>
-/// Analyzes a textual expression to validate that it does not start or end with any && or || operators
+/// Analyzes a textual expression to validate whether or not it starts or ends with any <c>&&</c> or <c>||</c> operators
 /// or operator characters.
 /// </summary>
 public class OperatorAnalyzerService : IAnalyzerService
@@ -20,8 +20,7 @@ public class OperatorAnalyzerService : IAnalyzerService
     private const char RightParen = ')';
 
     /// <summary>
-    /// Analyzes the given <paramref name="expression"/> to verify if it does or does not
-    /// have valid operator syntax.
+    /// Analyzes the given <paramref name="expression"/> to verify whether or not it has valid operator syntax.
     /// </summary>
     /// <param name="expression">The expression to analyze.</param>
     /// <returns>
@@ -112,7 +111,7 @@ public class OperatorAnalyzerService : IAnalyzerService
     }
 
     /// <summary>
-    /// Analyzes the operators themselves between the functions in the given <paramref name="expression"/>.
+    /// Analyzes the operators between the functions in the given <paramref name="expression"/>.
     /// </summary>
     /// <param name="expression">The expression to analyze.</param>
     /// <returns>

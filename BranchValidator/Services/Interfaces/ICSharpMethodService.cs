@@ -13,7 +13,7 @@ public interface ICSharpMethodService
 {
     /// <summary>
     /// Returns a list of method names from a class that matches the given <paramref name="className"/>
-    /// in the assembly that contain the <see cref="ExpressionFunctionAttribute"/> attribute.
+    /// in the assembly that contains the <see cref="ExpressionFunctionAttribute"/> attribute.
     /// </summary>
     /// <param name="className">The name of the class.</param>
     /// <returns>The list of method names.</returns>

@@ -103,7 +103,7 @@ public class ExtensionMethodsTests
     [InlineData(null, "test", false)]
     [InlineData("", "", true)]
     [InlineData(null, null, true)]
-    public void DoesNotContains_WhenInvoked_ReturnsCorrectResult(string containerStr, string value, bool expected)
+    public void DoesNotContain_WhenInvoked_ReturnsCorrectResult(string containerStr, string value, bool expected)
     {
         // Act
         var actual = containerStr.DoesNotContain(value);
@@ -143,20 +143,6 @@ public class ExtensionMethodsTests
     {
         // Act
         var actual = value.DoesNotEndWith('z');
-
-        // Assert
-        actual.Should().Be(expected);
-    }
-
-    [Theory]
-    [InlineData("testvalue", true)]
-    [InlineData("test-value", false)]
-    [InlineData("", false)]
-    [InlineData(null, false)]
-    public void DoesNotContain_WhenInvoked_ReturnsCorrectResult(string value, bool expected)
-    {
-        // Act
-        var actual = value.DoesNotContain('-');
 
         // Assert
         actual.Should().Be(expected);
