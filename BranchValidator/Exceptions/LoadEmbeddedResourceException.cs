@@ -5,7 +5,7 @@
 namespace BranchValidator.Exceptions;
 
 /// <summary>
-/// Occurs when something goes wrong with loading an embedded resource.
+/// Occurs when there is an issue loading an embedded resource.
 /// </summary>
 public class LoadEmbeddedResourceException : Exception
 {

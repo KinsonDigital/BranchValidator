@@ -33,7 +33,7 @@ public static class ExtensionMethods
     public static ReadOnlyCollection<T> ToReadOnlyCollection<T>(this IEnumerable<T> value) => new (value.ToArray());
 
     /// <summary>
-    /// Converts the given <c>string</c> <paramref name="value"/> to pascal casing.
+    /// Converts the given <c>string</c> <paramref name="value"/> to PascalCase.
     /// </summary>
     /// <param name="value">The value to convert.</param>
     /// <returns>The <paramref name="value"/> in pascal case.</returns>
@@ -89,7 +89,7 @@ public static class ExtensionMethods
     }
 
     /// <summary>
-    /// Returns a value indicating whether or not the given this <c>string</c> <paramref name="value"/> does not start with the given <paramref name="character"/>.
+    /// Returns a value indicating whether or not the given <c>string</c> <paramref name="value"/> starts with the given <paramref name="character"/>.
     /// </summary>
     /// <param name="value">The value that might start with the <paramref name="character"/>.</param>
     /// <param name="character">The character to check for.</param>
@@ -97,7 +97,7 @@ public static class ExtensionMethods
     public static bool DoesNotStartWith(this string value, char character) => !value.StartsWith(character);
 
     /// <summary>
-    /// Returns a value indicating whether or not the given this <c>string</c> <paramref name="value"/> ends with the given <paramref name="character"/>.
+    /// Returns a value indicating whether or not the given <c>string</c> <paramref name="value"/> ends with the given <paramref name="character"/>.
     /// </summary>
     /// <param name="value">The value that might end with the <paramref name="character"/>.</param>
     /// <param name="character">The character to check for.</param>
@@ -105,7 +105,7 @@ public static class ExtensionMethods
     public static bool DoesNotEndWith(this string value, char character) => !value.EndsWith(character);
 
     /// <summary>
-    /// Returns a value indicating if the given <paramref name="character"/> is contained in this <c>string</c> value.
+    /// Returns a value indicating whether or not the given <paramref name="character"/> is contained in this <c>string</c> value.
     /// </summary>
     /// <param name="value">The <c>string</c> that might hold the <paramref name="character"/>.</param>
     /// <param name="character">The character to check for.</param>
@@ -113,7 +113,7 @@ public static class ExtensionMethods
     public static bool DoesNotContain(this string value, char character) => !string.IsNullOrEmpty(value) && !value.Contains(character);
 
     /// <summary>
-    /// Returns a value indicating whether or not a specified substring does not occur within this string.
+    /// Returns a value indicating whether or not a specified substring occurs within this string.
     /// </summary>
     /// <param name="thisStr">The value container.</param>
     /// <param name="value">The<c>string</c>to seek.</param>
@@ -175,7 +175,7 @@ public static class ExtensionMethods
     /// Gets all of the<c>string</c>data between the <paramref name="leftChar"/> and <paramref name="rightChar"/>
     /// for this string.
     /// </summary>
-    /// <param name="value">The<c>string</c>to seek in.</param>
+    /// <param name="value">The <c>string</c> in which to seek.</param>
     /// <param name="leftChar">The <see cref="char"/> on the left of the<c>string</c>to get.</param>
     /// <param name="rightChar">The <see cref="char"/> on the right of the string to get.</param>
     /// <returns>
@@ -184,8 +184,8 @@ public static class ExtensionMethods
     /// <remarks>
     /// Consider Items Below:
     /// <list type="bullet">
-    ///     <item>The <paramref name="leftChar"/> is searched for relative from the left end of the <c>this</c> string.</item>
-    ///     <item>The <paramref name="rightChar"/> is searched for relative from the right end of the <c>this</c> string.</item>
+    ///     <item>The <paramref name="leftChar"/> is searched relative from the left end of <c>this</c> string.</item>
+    ///     <item>The <paramref name="rightChar"/> is searched relative from the right end of <c>this</c> string.</item>
     ///     <item>If <c>this</c> string is <c>null</c> or <c>empty</c>, then an empty string will be returned.</item>
     /// </list>
     /// </remarks>
@@ -255,8 +255,8 @@ public static class ExtensionMethods
     /// Returns a value indicating whether or not the given <c>string</c> <paramref name="value"/> is located
     /// between the given <paramref name="startPos"/> and <paramref name="endPos"/> within this <c>string</c>.
     /// </summary>
-    /// <param name="thisStr">The <c>string</c> to check in.</param>
-    /// <param name="value">The value possibly located between the positions.</param>
+    /// <param name="thisStr">The <c>string</c> in which to check.</param>
+    /// <param name="value">The value that may or may not be located between the positions.</param>
     /// <param name="startPos">The starting position.</param>
     /// <param name="endPos">The ending position.</param>
     /// <returns><c>true</c> if the <paramref name="value"/> is in between the positions.</returns>
@@ -280,8 +280,8 @@ public static class ExtensionMethods
     /// Returns a value indicating whether or not the given <c>string</c> <paramref name="value"/> is located
     /// between the given <paramref name="startPos"/> and <paramref name="endPos"/> within this <c>string</c>.
     /// </summary>
-    /// <param name="thisStr">The <c>string</c> to check in.</param>
-    /// <param name="value">The value possibly located between the positions.</param>
+    /// <param name="thisStr">The <c>string</c> in which to check.</param>
+    /// <param name="value">The value that may or may not be located between the positions.</param>
     /// <param name="startPos">The starting position.</param>
     /// <param name="endPos">The ending position.</param>
     /// <returns><c>true</c> if the <paramref name="value"/> is not in between the positions.</returns>
@@ -293,7 +293,7 @@ public static class ExtensionMethods
         => !IsBetween(thisStr, value, startPos, endPos);
 
     /// <summary>
-    /// Returns a value indicating if all occurrences of the given <c>char</c> <paramref name="value"/> is located
+    /// Returns a value indicating whether or not all occurrences of the given <c>char</c> <paramref name="value"/> are located
     /// between the given <paramref name="leftChar"/> and <paramref name="rightChar"/>.
     /// </summary>
     /// <param name="thisStr">The string to process.</param>
@@ -358,7 +358,7 @@ public static class ExtensionMethods
     }
 
     /// <summary>
-    /// Returns a value indicating if all of the occurrences of the given <c>char</c> <paramref name="value"/> is are not located
+    /// Returns a value indicating whether or not all of the occurrences of the given <c>char</c> <paramref name="value"/> is are not located
     /// between the given <paramref name="leftChar"/> and <paramref name="rightChar"/>.
     /// </summary>
     /// <param name="thisStr">The string to process.</param>

@@ -26,7 +26,7 @@ public class ActionInputs
         "validation-logic",
         Required = true,
         Default = "",
-        HelpText = "The logic expression to use to validate the branch name.")]
+        HelpText = "The logic expression used to validate the branch name.")]
     public string ValidationLogic { get; set; } = string.Empty;
 
     /// <summary>

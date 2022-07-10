@@ -39,7 +39,7 @@ public interface IFunctionExtractorService
     /// <summary>
     /// Extracts all of the function argument data types from the given <paramref name="functionSignature"/>.
     /// </summary>
-    /// <param name="functionSignature">The function signature that possibly contains the arguments.</param>
+    /// <param name="functionSignature">The function signature that may or may not contain the arguments.</param>
     /// <returns>A list of function argument data types.</returns>
     IEnumerable<Type> ExtractArgDataTypes(string functionSignature);
 }
