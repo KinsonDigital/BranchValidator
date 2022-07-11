@@ -27,7 +27,7 @@ jobs:
       id: get-build-config
       shell: pwsh
       run: |
-        # If the destination branch that the pull request is merging into is master, do a release build
+        # If the destination branch that the pull request is merging into is the master, do a release build
         if ( "${{ github.base_ref }}" -eq "master") {
           Write-Host "::set-output name=build-config::Release"
         } else { # Any other branch than master, do a debug build

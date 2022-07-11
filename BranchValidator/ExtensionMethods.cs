@@ -358,7 +358,7 @@ public static class ExtensionMethods
     }
 
     /// <summary>
-    /// Returns a value indicating whether or not all of the occurrences of the given <c>char</c> <paramref name="value"/> is are not located
+    /// Returns a value indicating whether or not all of the occurrences of the given <c>char</c> <paramref name="value"/> are not located
     /// between the given <paramref name="leftChar"/> and <paramref name="rightChar"/>.
     /// </summary>
     /// <param name="thisStr">The string to process.</param>

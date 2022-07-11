@@ -194,7 +194,7 @@ public class GitHubActionIntegrationTests : IDisposable
     }
 
     /// <summary>
-    /// Disposes of the action.
+    /// Disposes the action.
     /// </summary>
     public void Dispose() => this.action.Dispose();
 

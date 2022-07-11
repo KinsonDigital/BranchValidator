@@ -7,7 +7,7 @@ using ScriptGenerator.Services.Interfaces;
 namespace ScriptGenerator.Services;
 
 /// <summary>
-/// Removes any test lines from a <c>string</c> that contain inherit XML documentation code.
+/// Removes any test lines from a <c>string</c> that contain <c>inheritdoc</c> XML documentation code.
 /// </summary>
 public class RemoveInheritCodeDocsMutation : IStringMutation
 {

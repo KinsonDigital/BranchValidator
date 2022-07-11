@@ -30,7 +30,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{5010ECCD-3BCC-475D-87EE-31E289E24571}"
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\build-status-check.yml = .github\workflows\build-status-check.yml
-		.github\workflows\unit-tests-status-check.yml = .github\workflows\unit-tests-status-check.yml
+		.github\workflows\unit-testing-status-check.yml = .github\workflows\unit-testing-status-check.yml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Issue Templates", "Issue Templates", "{2C56562A-E5F8-43AD-A99F-049FEA733577}"
