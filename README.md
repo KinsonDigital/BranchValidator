@@ -53,7 +53,7 @@ jobs:
     - name: Validate Branch
       uses: KinsonDigital/BranchValidator@v1.0.0-preview.1
       with:
-        branch-name: "${{ github.ref }}" # The current branch that the workflow is running on.
+        branch-name: "${{ github.ref }}" # The current branch where the workflow is running.
         validation-logic: "equalTo('main')"
         trim-from-start: "refs/heads/"
         fail-when-not-valid: true # Optional. Default is true.
@@ -65,19 +65,20 @@ jobs:
 
 ---
 
-<div align="center"><h2 style="font-weight:bold">What is the point?</h2></div>
+<div align="center"><h2 style="font-weight:bold">What's the point? 🤷🏼</h2></div>
 
-Well, it depends on your project and its needs.  What it really comes down to is enforcing branch names and structure.  
+Here's the kicker, it depends on your project and its needs.  What it really comes down to is enforcing branch names and structure.  
 In CI/CD systems, the name of the branch can determine how the system runs.  The workflows you have might depend on the name of a branch.  
-For example, if uses the GitHub issue number as part of the branch name so the GIT side can easily 
-link back to the project management/issue side of things.  
-Your build may behave differently depending on which branch it is building.
+For example, if uses the GitHub issue number as part of the branch name so the GIT side can easily link back to the project  
+management/issue side of things.  Your build may behave differently depending on which branch it is building.
 
-When these kinds of things are setup and the branch name is incorrect, they can cause issues and confusion with your build and release
-system.  
-This GitHub action will help enforce these project standards to help keep things running smoothly.
-
-Another benefit is to improve understanding of what the GIT branches are for.  The ability to enforce an issue number to exist in your branch name makes it easier for developers to find which branch belongs to which issue.  With this kind of enforcement, you can also setup automation to rely on the issue number existing.  With validation added, you can then trust that the branch name can contain a number.  This means you can use this trust to create some automation to check if the GitHub issue even exists.  This could then prevent incorrect issue numbers being used in a branch name. 
+When incorrect branch names are setup, they can cause issues and confusion with your build and release systems.  
+This GitHub action will help enforce project standards to help keep things running smoothly.  For example, a branch name of  
+`my-branch` does not express the purpose of the branch.  Without enforcing naming conventions of branches,  
+how is the team supposed to know the purpose of the branch?  In addition, the ability to enforce an issue number to exist in  
+the name of a branch, makes it easier for developers to find which branch belongs to which issue.  With this kind of enforcement,  
+you can setup automation to trust that the branch name contains a number.   It also allows you to create automation to check  
+if a GitHub issue even exists, which would prevent incorrect issue numbers being used in a branch name.
 
 The applications of this GitHub action are endless!!
 
@@ -148,7 +149,8 @@ The applications of this GitHub action are endless!!
 ## **Validation Logic Expression Functions**
 </div>
 
-Below is a small list of the available expression functions that you can use in the value of the `validation-logic` input.  These expression functions can be used in combination with the `&&` and `||` operators.  
+Below is a small list of the available expression functions that you can use in the value of the `validation-logic` input.  
+These expression functions can be used in combination with the `&&` and `||` operators:  
   - Example: equalTo('feature/my-*-branch') && allLowerCase()
     - This checks to see whether or not the branch is equal to the value and that the entire branch is lower case.
 
@@ -163,21 +165,21 @@ Below is a small list of the available expression functions that you can use in 
    Standard YAML syntax rules apply.  
    The function value allows the use of 2 characters that provide glob like behavior.  The 2 characters are `#` and `*` and can be used together as many times as needed.
      - Example 1: equalTo('main')
-       - This checks whether or not the branch is equal to the value of `main`.
+       - Checks whether or not the branch is equal to the value of `main`.
      - Example 2: equalTo('feature/my-*-branch')
-       - This will check if the branch starts with the value `feature/my-` and that it ends with `-branch`.  Anything is acceptable between the beginning and end of the branch where the `*` character is located.  This should be a familiar concept to other systems and uses of this type of syntax.
+       - Checks whether or not the branch starts with the value `feature/my-` and that it ends with `-branch`.  Anything is acceptable between the beginning and end of the branch where the `*` character is located.  This should be a familiar concept to other systems and uses of this type of syntax.
      - Example 3: equalTo('feature/#-sample-branch')
-       - This returns valid if the branch name was `feature/my-sample-branch`.  This checks whether or not the branch starts with the value `feature/` and ends with the value `-sample-branch`.  Any text between the start and the end will be checked to see if it is a whole number of any digit size.
-         - This would return as valid if the name of the branch was `feature/12-sample-branch` or `feature/12345-sample-branch`.
-         - This would return as not valid if the name of the branch was `feature/10-20-sample-branch`.  This is because in this example, the branch ends with the value `-20-sample-branch`, not `-sample-branch`.
+       - Returns valid if the branch name was `feature/my-sample-branch`.  This checks whether or not the branch starts with the value `feature/` and ends with the value `-sample-branch`.  Any text between the start and the end will be checked to see if it is a whole number of any digit size.
+         - Returns valid if the name of the branch was `feature/12-sample-branch` or `feature/12345-sample-branch`.
+         - Return as not valid if the name of the branch was `feature/10-20-sample-branch`.  In this example, the branch ends with the value `-20-sample-branch`, not `-sample-branch`.
      - Example: 4: equalTo('release/v#.#.#-*.#')
-       - The would return valid if the branch name was `release/v1.2.3-preview.4`.
+       - Returns valid if the branch name was `release/v1.2.3-preview.4`.
 3. `allLowerCase()` - Checks whether or not the branch name is all lower case.
     - Example 1: allLowerCase()
-      - This would return valid if the name of the branch was `all-lower-case`.  This would return invalid if the name of the branch was `not-all-LOWER-case`.
-4. `allUpperCase()` - Check if the branch name is all upper case
+      - Returns valid if the name of the branch was `all-lower-case`.  This would return invalid if the name of the branch was `not-all-LOWER-case`.
+4. `allUpperCase()` - Checks whether or not if the branch name is all upper case.
     - Example 1: allUpperCase()
-      - This would return valid if the name of the branch was `ALL-UPPER-CASE`.  This would return invalid if the name of the branch was `NOT-ALL-upper-CASE`.
+      - Returns valid if the name of the branch was `ALL-UPPER-CASE`.  This would return invalid if the name of the branch was `NOT-ALL-upper-CASE`.
 
 <div align="center" style="font-weight:bold">
 
