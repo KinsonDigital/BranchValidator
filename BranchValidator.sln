@@ -4,6 +4,10 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.31019.194
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BranchValidator", "BranchValidator\BranchValidator.csproj", "{6B7D8AB5-2EB6-4B9E-A219-44BAA2016BED}"
+	ProjectSection(ProjectDependencies) = postProject
+		{10D490EC-47A4-43BC-AC85-C4D2D9A93111} = {10D490EC-47A4-43BC-AC85-C4D2D9A93111}
+		{C2A493D1-1A38-4D4C-A13C-CA0BF772E46D} = {C2A493D1-1A38-4D4C-A13C-CA0BF772E46D}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5F6905A4-928D-4A81-9D9B-B273A27B3A92}"
 	ProjectSection(SolutionItems) = preProject
@@ -26,7 +30,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{5010ECCD-3BCC-475D-87EE-31E289E24571}"
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\build-status-check.yml = .github\workflows\build-status-check.yml
-		.github\workflows\unit-tests-status-check.yml = .github\workflows\unit-tests-status-check.yml
+		.github\workflows\unit-testing-status-check.yml = .github\workflows\unit-testing-status-check.yml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Issue Templates", "Issue Templates", "{2C56562A-E5F8-43AD-A99F-049FEA733577}"
@@ -40,20 +44,78 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Pull Request Templates", "P
 		.github\PULL_REQUEST_TEMPLATE\preview-feature-pr-template.md = .github\PULL_REQUEST_TEMPLATE\preview-feature-pr-template.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BranchValidatorIntegrationTests", "Testing\BranchValidatorIntegrationTests\BranchValidatorIntegrationTests.csproj", "{FEAF2CD0-88B7-4BBC-BEA9-36BE1B2A54C5}"
+	ProjectSection(ProjectDependencies) = postProject
+		{77B96B49-4D77-456B-A787-E852E9842B60} = {77B96B49-4D77-456B-A787-E852E9842B60}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScriptGenerator", "Tooling\ScriptGenerator\ScriptGenerator.csproj", "{10D490EC-47A4-43BC-AC85-C4D2D9A93111}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tooling", "Tooling", "{9FCCAAD2-2BDF-46C2-8616-A5CDE75ED18E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScriptGeneratorTests", "Testing\ScriptGeneratorTests\ScriptGeneratorTests.csproj", "{C2A493D1-1A38-4D4C-A13C-CA0BF772E46D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BranchValidatorShared", "BranchValidatorShared\BranchValidatorShared.csproj", "{D9041D91-3CB2-4163-9BDC-B8F1836E3265}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BranchValidatorSharedTests", "Testing\BranchValidatorSharedTests\BranchValidatorSharedTests.csproj", "{589D6704-059B-4BF7-B6C3-A2F832BEEF7B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestingShared", "Testing\TestingShared\TestingShared.csproj", "{12A3B5C1-F160-40C1-920D-6CC8075176D4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
+		GenerateScript|Any CPU = GenerateScript|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{6B7D8AB5-2EB6-4B9E-A219-44BAA2016BED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6B7D8AB5-2EB6-4B9E-A219-44BAA2016BED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6B7D8AB5-2EB6-4B9E-A219-44BAA2016BED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6B7D8AB5-2EB6-4B9E-A219-44BAA2016BED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B7D8AB5-2EB6-4B9E-A219-44BAA2016BED}.GenerateScript|Any CPU.ActiveCfg = GenerateScript|Any CPU
+		{6B7D8AB5-2EB6-4B9E-A219-44BAA2016BED}.GenerateScript|Any CPU.Build.0 = GenerateScript|Any CPU
 		{77B96B49-4D77-456B-A787-E852E9842B60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{77B96B49-4D77-456B-A787-E852E9842B60}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{77B96B49-4D77-456B-A787-E852E9842B60}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{77B96B49-4D77-456B-A787-E852E9842B60}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77B96B49-4D77-456B-A787-E852E9842B60}.GenerateScript|Any CPU.ActiveCfg = Debug|Any CPU
+		{77B96B49-4D77-456B-A787-E852E9842B60}.GenerateScript|Any CPU.Build.0 = Debug|Any CPU
+		{FEAF2CD0-88B7-4BBC-BEA9-36BE1B2A54C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FEAF2CD0-88B7-4BBC-BEA9-36BE1B2A54C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FEAF2CD0-88B7-4BBC-BEA9-36BE1B2A54C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FEAF2CD0-88B7-4BBC-BEA9-36BE1B2A54C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FEAF2CD0-88B7-4BBC-BEA9-36BE1B2A54C5}.GenerateScript|Any CPU.ActiveCfg = Debug|Any CPU
+		{FEAF2CD0-88B7-4BBC-BEA9-36BE1B2A54C5}.GenerateScript|Any CPU.Build.0 = Debug|Any CPU
+		{10D490EC-47A4-43BC-AC85-C4D2D9A93111}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10D490EC-47A4-43BC-AC85-C4D2D9A93111}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10D490EC-47A4-43BC-AC85-C4D2D9A93111}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10D490EC-47A4-43BC-AC85-C4D2D9A93111}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10D490EC-47A4-43BC-AC85-C4D2D9A93111}.GenerateScript|Any CPU.ActiveCfg = Debug|Any CPU
+		{10D490EC-47A4-43BC-AC85-C4D2D9A93111}.GenerateScript|Any CPU.Build.0 = Debug|Any CPU
+		{C2A493D1-1A38-4D4C-A13C-CA0BF772E46D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2A493D1-1A38-4D4C-A13C-CA0BF772E46D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C2A493D1-1A38-4D4C-A13C-CA0BF772E46D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C2A493D1-1A38-4D4C-A13C-CA0BF772E46D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C2A493D1-1A38-4D4C-A13C-CA0BF772E46D}.GenerateScript|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2A493D1-1A38-4D4C-A13C-CA0BF772E46D}.GenerateScript|Any CPU.Build.0 = Debug|Any CPU
+		{D9041D91-3CB2-4163-9BDC-B8F1836E3265}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9041D91-3CB2-4163-9BDC-B8F1836E3265}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9041D91-3CB2-4163-9BDC-B8F1836E3265}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9041D91-3CB2-4163-9BDC-B8F1836E3265}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9041D91-3CB2-4163-9BDC-B8F1836E3265}.GenerateScript|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9041D91-3CB2-4163-9BDC-B8F1836E3265}.GenerateScript|Any CPU.Build.0 = Debug|Any CPU
+		{589D6704-059B-4BF7-B6C3-A2F832BEEF7B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{589D6704-059B-4BF7-B6C3-A2F832BEEF7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{589D6704-059B-4BF7-B6C3-A2F832BEEF7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{589D6704-059B-4BF7-B6C3-A2F832BEEF7B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{589D6704-059B-4BF7-B6C3-A2F832BEEF7B}.GenerateScript|Any CPU.ActiveCfg = Debug|Any CPU
+		{589D6704-059B-4BF7-B6C3-A2F832BEEF7B}.GenerateScript|Any CPU.Build.0 = Debug|Any CPU
+		{12A3B5C1-F160-40C1-920D-6CC8075176D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12A3B5C1-F160-40C1-920D-6CC8075176D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12A3B5C1-F160-40C1-920D-6CC8075176D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12A3B5C1-F160-40C1-920D-6CC8075176D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12A3B5C1-F160-40C1-920D-6CC8075176D4}.GenerateScript|Any CPU.ActiveCfg = Debug|Any CPU
+		{12A3B5C1-F160-40C1-920D-6CC8075176D4}.GenerateScript|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -66,5 +128,10 @@ Global
 		{5010ECCD-3BCC-475D-87EE-31E289E24571} = {5F6905A4-928D-4A81-9D9B-B273A27B3A92}
 		{2C56562A-E5F8-43AD-A99F-049FEA733577} = {5F6905A4-928D-4A81-9D9B-B273A27B3A92}
 		{DC46D789-4072-4F81-B83C-CEF24FFD7229} = {5F6905A4-928D-4A81-9D9B-B273A27B3A92}
+		{FEAF2CD0-88B7-4BBC-BEA9-36BE1B2A54C5} = {0D648979-F6A2-4DBD-ABE7-BDCB9E0EE4BE}
+		{10D490EC-47A4-43BC-AC85-C4D2D9A93111} = {9FCCAAD2-2BDF-46C2-8616-A5CDE75ED18E}
+		{C2A493D1-1A38-4D4C-A13C-CA0BF772E46D} = {0D648979-F6A2-4DBD-ABE7-BDCB9E0EE4BE}
+		{589D6704-059B-4BF7-B6C3-A2F832BEEF7B} = {0D648979-F6A2-4DBD-ABE7-BDCB9E0EE4BE}
+		{12A3B5C1-F160-40C1-920D-6CC8075176D4} = {0D648979-F6A2-4DBD-ABE7-BDCB9E0EE4BE}
 	EndGlobalSection
 EndGlobal

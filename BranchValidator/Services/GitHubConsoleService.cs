@@ -3,64 +3,41 @@
 // </copyright>
 
 using System.Diagnostics.CodeAnalysis;
+using BranchValidatorShared.Services;
 
 namespace BranchValidator.Services;
 
 /// <inheritdoc/>
 [ExcludeFromCodeCoverage]
-public class GitHubConsoleService : IGitHubConsoleService
+public class GitHubConsoleService : ConsoleService
 {
     /// <inheritdoc/>
-    public void Write(string value, bool newLineAfter)
+    public override void StartGroup(string name)
     {
-        Console.Write($"{value}");
-
-        if (newLineAfter)
-        {
-            Console.WriteLine();
-        }
-    }
-
-    /// <inheritdoc/>
-    public void WriteLine(string value) => Console.WriteLine(value);
-
-    /// <inheritdoc/>
-    public void WriteLine(uint tabs, string value)
-    {
-        var allTabs = string.Empty;
-
-        for (var i = 0; i < tabs; i++)
-        {
-            allTabs += "\t";
-        }
-
-        Console.WriteLine($"{allTabs}{value}");
-    }
-
-    /// <inheritdoc/>
-    public void BlankLine() => Console.WriteLine();
-
-    /// <inheritdoc/>
-    public void StartGroup(string name) => Console.WriteLine($"::group::{(string.IsNullOrEmpty(name) ? "Group" : name)}");
-
-    /// <inheritdoc/>
-    public void EndGroup() => Console.WriteLine("::endgroup::");
-
-    /// <inheritdoc/>
-    public void WriteError(string value)
-    {
-        var currentClr = Console.ForegroundColor;
-
-#if DEBUG
-        Console.ForegroundColor = ConsoleColor.Red;
+#if DEBUG || GENERATESCRIPT
+        base.StartGroup(name);
+#else
+        Console.WriteLine($"::group::{(string.IsNullOrEmpty(name) ? "Group" : name)}");
 #endif
+    }
 
+    /// <inheritdoc/>
+    public override void EndGroup()
+    {
+#if DEBUG || GENERATESCRIPT
+        base.EndGroup();
+#else
+        Console.WriteLine("::endgroup::");
+#endif
+    }
+
+    /// <inheritdoc/>
+    public override void WriteError(string value)
+    {
+#if DEBUG || GENERATESCRIPT
+        base.WriteError(value);
+#else
         Console.WriteLine($"::error::{value}");
-        Console.ForegroundColor = currentClr;
-    }
-
-#if DEBUG
-    /// <inheritdoc/>
-    public void PauseConsole() => Console.ReadKey();
 #endif
+    }
 }
