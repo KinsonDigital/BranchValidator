@@ -262,7 +262,7 @@ jobs:
 </div>
 
 - [Calvin Wilkinson](https://github.com/CalvinWilkinson) (Owner and main contributor of the GitHub organization [KinsonDigital](https://github.com/KinsonDigital))
-  - [Got Nuget](https://github.com/KinsonDigital/BranchValidator) is used in various projects for this organization with great success.
+  - [Branch Validator](https://github.com/KinsonDigital/BranchValidator) is used in various projects for this organization with great success.
 - Click [here](https://github.com/KinsonDigital/BranchValidator/issues/new/choose) to report any issues for this GitHub action!!
 
 <div align="center">
