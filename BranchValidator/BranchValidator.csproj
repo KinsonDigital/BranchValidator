@@ -19,10 +19,13 @@
     <Product>BranchValidator</Product>
     <Description>Custom GitHub action used to check GIT branch syntax.</Description>
     <Copyright>Copyright ©2022 Kinson Digital</Copyright>
+    <Configurations>Debug;Release;GenerateScript</Configurations>
+    <Platforms>AnyCPU</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CommandLineParser" Version="2.8.0" />
+    <PackageReference Include="CommandLineParser" Version="2.9.1" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="4.2.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="6.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -30,7 +33,6 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.FileSystemGlobbing" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
-    <PackageReference Include="RestSharp" Version="107.3.0" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -41,5 +43,23 @@
     <None Remove="stylecop.json" />
     <AdditionalFiles Include="stylecop.json" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="FunctionDefinitions\func-defs.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="RuntimeScripts" />
+    <ProjectReference Include="..\BranchValidatorShared\BranchValidatorShared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="RuntimeScripts\ExpressionFunctions.cs" />
+    <EmbeddedResource Include="RuntimeScripts\ExpressionFunctions.cs" />
+  </ItemGroup>
+    
+  <Target Name="PostBuild" Condition="'$(Configuration)|$(Platform)'=='GenerateScript|AnyCPU'" AfterTargets="PostBuildEvent">
+    <Exec Command="cd $(SolutionDir)Scripts &amp;&amp; dotnet-script RunScriptGenerator.csx &quot;$(SolutionDir)Tooling\ScriptGenerator\bin\Debug\net6.0\ScriptGenerator.exe&quot;" />
+  </Target>
 
 </Project>

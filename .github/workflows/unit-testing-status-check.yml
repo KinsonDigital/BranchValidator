@@ -1,0 +1,72 @@
+name: ✔Unit Testing Status Check
+
+
+on:
+  workflow_dispatch:
+    paths-ignore:
+      - ".github/**"
+      - "Documentation/**"
+      - '.editorconfig'
+      - '*.runsettings'
+      - '.gitattributes'
+      - '.gitignore'
+      - '*.md'
+      - '*.yml'
+      - '.vscode/**'
+      - '*.sln'
+
+
+jobs:
+  determine_build_config:
+    name: Determine Build Configuration
+    runs-on: ubuntu-latest
+    outputs:
+      build-config: ${{ steps.get-build-config.outputs.build-config }}
+    steps:
+    - name: Get Build Config
+      id: get-build-config
+      shell: pwsh
+      run: |
+        # If the destination branch that the pull request is merging into is the master, do a release build
+        if ( "${{ github.base_ref }}" -eq "master") {
+          Write-Host "::set-output name=build-config::Release"
+        } else { # Any other branch than master, do a debug build
+          Write-Host "::set-output name=build-config::Debug"
+        }
+
+
+  run_branch_validator_tests:
+    name: Run BranchValidator Tests
+    needs: determine_build_config
+    uses: KinsonDigital/Infrastructure/.github/workflows/unit-testing-status-check.yml@master
+    with:
+      project-name: "BranchValidatorTests"
+      build-config: ${{ needs.determine_build_config.outputs.build-config }}
+      net-sdk-version: 6.0.300
+
+  run_branch_validation_shared_tests:
+      name: Run BranchValidatorShared Tests
+      needs: determine_build_config
+      uses: KinsonDigital/Infrastructure/.github/workflows/unit-testing-status-check.yml@master
+      with:
+        project-name: "BranchValidatorSharedTests"
+        build-config: ${{ needs.determine_build_config.outputs.build-config }}
+        net-sdk-version: 6.0.300
+
+  run_script_generator_tests:
+      name: Run ScriptGenerator Tests
+      needs: determine_build_config
+      uses: KinsonDigital/Infrastructure/.github/workflows/unit-testing-status-check.yml@master
+      with:
+        project-name: "ScriptGeneratorTests"
+        build-config: ${{ needs.determine_build_config.outputs.build-config }}
+        net-sdk-version: 6.0.300
+
+  run_integration_tests:
+      name: Run Integration Tests
+      needs: [determine_build_config, run_branch_validator_tests, run_branch_validation_shared_tests, run_script_generator_tests]
+      uses: KinsonDigital/Infrastructure/.github/workflows/unit-testing-status-check.yml@master
+      with:
+        project-name: "BranchValidatorIntegrationTests"
+        build-config: ${{ needs.determine_build_config.outputs.build-config }}
+        net-sdk-version: 6.0.300

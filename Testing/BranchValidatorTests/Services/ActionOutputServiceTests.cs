@@ -4,20 +4,24 @@
 
 using BranchValidator.Exceptions;
 using BranchValidator.Services;
-using BranchValidatorTests.Helpers;
+using BranchValidatorShared.Services;
 using FluentAssertions;
 using Moq;
+using TestingShared;
 
 namespace BranchValidatorTests.Services;
 
+/// <summary>
+/// Tests the <see cref="ActionOutputService"/> class.
+/// </summary>
 public class ActionOutputServiceTests
 {
-    private readonly Mock<IGitHubConsoleService> mockConsoleService;
+    private readonly Mock<IConsoleService> mockConsoleService;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ActionOutputServiceTests"/> class.
     /// </summary>
-    public ActionOutputServiceTests() => this.mockConsoleService = new Mock<IGitHubConsoleService>();
+    public ActionOutputServiceTests() => this.mockConsoleService = new Mock<IConsoleService>();
 
     #region Method Tests
     [Fact]
@@ -44,7 +48,7 @@ public class ActionOutputServiceTests
 
         // Assert
         act.Should()
-            .Throw<NullOrEmptyStringException>()
+            .Throw<NullOrEmptyStringArgumentException>()
             .WithMessage("The parameter 'name' must not be null or empty.");
     }
     #endregion
@@ -53,5 +57,5 @@ public class ActionOutputServiceTests
     /// Creates a new instance of <see cref="ActionOutputService"/> for the purpose of testing.
     /// </summary>
     /// <returns>The instance to test.</returns>
-    private ActionOutputService CreateService() => new ActionOutputService(this.mockConsoleService.Object);
+    private ActionOutputService CreateService() => new (this.mockConsoleService.Object);
 }

@@ -11,7 +11,7 @@ LABEL repository="https://github.com/KinsonDigital/BranchValidator"
 LABEL homepage="https://github.com/KinsonDigital/BranchValidator"
 
 # Label as GitHub action
-LABEL com.github.actions.name="Got Nuget"
+LABEL com.github.actions.name="Branch Validator"
 
 # Relayer the .NET SDK, anew with the build output
 FROM mcr.microsoft.com/dotnet/sdk:6.0

@@ -13,14 +13,18 @@ inputs:
     description: 'The logic expression to use to validate the branch name.'
     required: true
     default: ''
+  trim-from-start:
+    description: 'The value to trim from the start of the branch.  This is not case sensitive.'
+    required: false
+    default: ''
   fail-when-not-valid:
-    description: 'If true, will fail the job if the branch name is not valid.'
+    description: 'If true, the job will fail if the branch name is not valid.'
     required: false
     default: true
 
 outputs:
-  nuget-exists:
-    description: 'True if the NuGet package exists.'
+  valid-branch:
+    description: 'True if the branch is valid.'
 
 # These are the arguments that are passed into the console app
 runs:
@@ -31,5 +35,7 @@ runs:
   - ${{ inputs.branch-name }}
   - '--validation-logic'
   - ${{ inputs.validation-logic }}
+  - '--trim-from-start'
+  - ${{ inputs.trim-from-start }}
   - '--fail-when-not-valid'
   - ${{ inputs.fail-when-not-valid }}

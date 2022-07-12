@@ -1,10 +1,7 @@
 name: ✔Build Status Check
 
-
 env:
-  PROJECT_NAME: BranchValidator
   NET_SDK_VERSION: 6.0.300
-
 
 on:
   workflow_dispatch:
@@ -22,31 +19,123 @@ on:
 
 
 jobs:
-  Build_Status_Check:
-    name: Build Status Check
-    runs-on: windows-latest
+  determine_build_config:
+    name: Determine Build Configuration
+    runs-on: ubuntu-latest
+    outputs:
+      build-config: ${{ steps.get-build-config.outputs.build-config }}
     steps:
-    - uses: actions/checkout@v2
+      - name: Get Build Config
+        id: get-build-config
+        shell: pwsh
+        run: |
+          # If the destination branch that the pull request is merging into is the master, do a release build
+          if ( "${{ github.base_ref }}" -eq "master") {
+            Write-Host "::set-output name=build-config::Release";
+          } else { # Any other branch than master, do a debug build
+            Write-Host "::set-output name=build-config::Debug";
+          }
 
-    - name: Get Build Config
-      id: get-build-config
-      run: |
-        # If the destination branch that the pull request is merging into is master, do a release build
-        if ( "${{ github.base_ref }}" -eq "master") {
-          Write-Host "::set-output name=build-config::Release"
-        } else { # Any other branch than master, do a debug build
-          Write-Host "::set-output name=build-config::Debug"
-        }
+  get_sdk_version:
+    name: Get SDK Version
+    runs-on: ubuntu-latest
+    outputs:
+      sdk-version: ${{ steps.get-sdk-version.outputs.sdk-version }}
+    steps:
+      - name: Get SDK Version From Environment Variable
+        id: get-sdk-version
+        shell: pwsh
+        run: Write-Host "::set-output name=sdk-version::${{ env.NET_SDK_VERSION }}";
 
-    - name: Setup .NET SDK
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: ${{ env.NET_SDK_VERSION }}
+  # Build Main Projects
+  build_branch_validator:
+    name: Build BranchValidator Project
+    needs: [determine_build_config, get_sdk_version]
+    uses: KinsonDigital/Infrastructure/.github/workflows/build-status-check.yml@master
+    with:
+      project-name: "BranchValidator"
+      build-config: ${{ needs.determine_build_config.outputs.build-config }}
+      net-sdk-version: ${{ needs.get_sdk_version.outputs.sdk-version }}
 
-    - name: Restore Dependencies
-      run: dotnet restore "${{ github.workspace }}/${{ env.PROJECT_NAME }}/${{ env.PROJECT_NAME }}.csproj"
+  build_branch_validator_shared:
+    name: Build BranchValidatorShared Project
+    needs: [determine_build_config, get_sdk_version]
+    uses: KinsonDigital/Infrastructure/.github/workflows/build-status-check.yml@master
+    with:
+      project-name: "BranchValidatorShared"
+      build-config: ${{ needs.determine_build_config.outputs.build-config }}
+      net-sdk-version: ${{ needs.get_sdk_version.outputs.sdk-version }}
 
-    - name: Build Project
-      run: dotnet build "${{ github.workspace }}/${{ env.PROJECT_NAME }}/${{ env.PROJECT_NAME }}.csproj" `
-        -c ${{ steps.get-build-config.outputs.build-config }} `
-        --no-restore
+  build_script_generator:
+    name: Build ScriptGenerator Project
+    needs: [determine_build_config, get_sdk_version]
+    uses: KinsonDigital/Infrastructure/.github/workflows/build-status-check.yml@master
+    with:
+      project-name: "ScriptGenerator"
+      build-config: ${{ needs.determine_build_config.outputs.build-config }}
+      net-sdk-version: ${{ needs.get_sdk_version.outputs.sdk-version }}
+      base-path: "${{ github.workspace }}/Tooling"
+
+#----------------------------------------------------------------------
+
+  # Build all of the unit testing projects
+  build_testing_shared:
+    name: Build TestingShared
+    needs: [determine_build_config,
+            get_sdk_version,
+            build_branch_validator,
+            build_branch_validator_shared,
+            build_script_generator]
+    uses: KinsonDigital/Infrastructure/.github/workflows/build-status-check.yml@master
+    with:
+      project-name: "TestingShared"
+      build-config: ${{ needs.determine_build_config.outputs.build-config }}
+      net-sdk-version: ${{ needs.get_sdk_version.outputs.sdk-version }}
+
+  build_branch_validator_tests:
+    name: Build BranchValidatorTests Project
+    needs: [determine_build_config,
+            get_sdk_version,
+            build_branch_validator,
+            build_testing_shared]
+    uses: KinsonDigital/Infrastructure/.github/workflows/build-status-check.yml@master
+    with:
+      project-name: "BranchValidatorTests"
+      build-config: ${{ needs.determine_build_config.outputs.build-config }}
+      net-sdk-version: ${{ needs.get_sdk_version.outputs.sdk-version }}
+
+  build_branch_validator_shared_tests:
+    name: Build BranchValidatorSharedTests Project
+    needs: [determine_build_config,
+            get_sdk_version,
+            build_branch_validator_shared,
+            build_testing_shared]
+    uses: KinsonDigital/Infrastructure/.github/workflows/build-status-check.yml@master
+    with:
+      project-name: "BranchValidatorSharedTests"
+      build-config: ${{ needs.determine_build_config.outputs.build-config }}
+      net-sdk-version: ${{ needs.get_sdk_version.outputs.sdk-version }}
+
+  build_branch_validator_integration_tests:
+    name: Build BranchValidatorIntegrationTests Project
+    needs: [determine_build_config,
+            get_sdk_version,
+            build_branch_validator,
+            build_testing_shared]
+    uses: KinsonDigital/Infrastructure/.github/workflows/build-status-check.yml@master
+    with:
+      project-name: "BranchValidatorIntegrationTests"
+      build-config: ${{ needs.determine_build_config.outputs.build-config }}
+      net-sdk-version: ${{ needs.get_sdk_version.outputs.sdk-version }}
+
+  build_script_generator_tests:
+    name: Build ScriptGeneratorTests Project
+    needs: [determine_build_config,
+            get_sdk_version,
+            build_script_generator,
+            build_testing_shared]
+    uses: KinsonDigital/Infrastructure/.github/workflows/build-status-check.yml@master
+    with:
+      project-name: "ScriptGeneratorTests"
+      build-config: ${{ needs.determine_build_config.outputs.build-config }}
+      net-sdk-version: ${{ needs.get_sdk_version.outputs.sdk-version }}
