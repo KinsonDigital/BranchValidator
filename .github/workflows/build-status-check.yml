@@ -51,7 +51,7 @@ jobs:
   build_branch_validator:
     name: Build BranchValidator Project
     needs: [determine_build_config, get_sdk_version]
-    uses: KinsonDigital/Infrastructure/.github/workflows/build-status-check.yml@master
+    uses: KinsonDigital/Infrastructure/.github/workflows/build-status-check.yml@v1.0.0
     with:
       project-name: "BranchValidator"
       build-config: ${{ needs.determine_build_config.outputs.build-config }}
@@ -60,7 +60,7 @@ jobs:
   build_branch_validator_shared:
     name: Build BranchValidatorShared Project
     needs: [determine_build_config, get_sdk_version]
-    uses: KinsonDigital/Infrastructure/.github/workflows/build-status-check.yml@master
+    uses: KinsonDigital/Infrastructure/.github/workflows/build-status-check.yml@v1.0.0
     with:
       project-name: "BranchValidatorShared"
       build-config: ${{ needs.determine_build_config.outputs.build-config }}
@@ -69,7 +69,7 @@ jobs:
   build_script_generator:
     name: Build ScriptGenerator Project
     needs: [determine_build_config, get_sdk_version]
-    uses: KinsonDigital/Infrastructure/.github/workflows/build-status-check.yml@master
+    uses: KinsonDigital/Infrastructure/.github/workflows/build-status-check.yml@v1.0.0
     with:
       project-name: "ScriptGenerator"
       build-config: ${{ needs.determine_build_config.outputs.build-config }}
@@ -86,7 +86,7 @@ jobs:
             build_branch_validator,
             build_branch_validator_shared,
             build_script_generator]
-    uses: KinsonDigital/Infrastructure/.github/workflows/build-status-check.yml@master
+    uses: KinsonDigital/Infrastructure/.github/workflows/build-status-check.yml@v1.0.0
     with:
       project-name: "TestingShared"
       build-config: ${{ needs.determine_build_config.outputs.build-config }}
@@ -98,7 +98,7 @@ jobs:
             get_sdk_version,
             build_branch_validator,
             build_testing_shared]
-    uses: KinsonDigital/Infrastructure/.github/workflows/build-status-check.yml@master
+    uses: KinsonDigital/Infrastructure/.github/workflows/build-status-check.yml@v1.0.0
     with:
       project-name: "BranchValidatorTests"
       build-config: ${{ needs.determine_build_config.outputs.build-config }}
@@ -110,7 +110,7 @@ jobs:
             get_sdk_version,
             build_branch_validator_shared,
             build_testing_shared]
-    uses: KinsonDigital/Infrastructure/.github/workflows/build-status-check.yml@master
+    uses: KinsonDigital/Infrastructure/.github/workflows/build-status-check.yml@v1.0.0
     with:
       project-name: "BranchValidatorSharedTests"
       build-config: ${{ needs.determine_build_config.outputs.build-config }}
@@ -122,7 +122,7 @@ jobs:
             get_sdk_version,
             build_branch_validator,
             build_testing_shared]
-    uses: KinsonDigital/Infrastructure/.github/workflows/build-status-check.yml@master
+    uses: KinsonDigital/Infrastructure/.github/workflows/build-status-check.yml@v1.0.0
     with:
       project-name: "BranchValidatorIntegrationTests"
       build-config: ${{ needs.determine_build_config.outputs.build-config }}
@@ -134,7 +134,7 @@ jobs:
             get_sdk_version,
             build_script_generator,
             build_testing_shared]
-    uses: KinsonDigital/Infrastructure/.github/workflows/build-status-check.yml@master
+    uses: KinsonDigital/Infrastructure/.github/workflows/build-status-check.yml@v1.0.0
     with:
       project-name: "ScriptGeneratorTests"
       build-config: ${{ needs.determine_build_config.outputs.build-config }}
