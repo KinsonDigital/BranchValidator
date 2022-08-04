@@ -1,3 +1,10 @@
+<div align="center">
+
+  ![BranchingDiagram](./Images/../Documentation/Images/branchvalidator-logo-darkmode.png#gh-dark-mode-only)
+  ![BranchingDiagram](./Images/../Documentation/Images/branchvalidator-logo-lightmode.png#gh-light-mode-only)  
+  <br />
+</div>
+
 <h1 align="center">
 
 **Branch Validator**
