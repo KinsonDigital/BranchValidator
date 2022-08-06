@@ -30,6 +30,6 @@
     ```
   </details>
 
-- [ ] A https://github.com/KinsonDigital/Velaptor/labels/%F0%9F%9A%80Production%20Release label has been added to this PR.
+- [ ] A https://github.com/KinsonDigital/BranchValidator/labels/%F0%9F%9A%80Production%20Release label has been added to this PR.
 
 - [ ] A QA issue has been created and manual QA testing has been performed for the changes being released.
