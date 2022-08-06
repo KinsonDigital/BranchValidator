@@ -8,4 +8,4 @@ As with all software, including releases, there is always a chance for issues an
 
 <h2 style="font-weight:bold" align="center">New 🎉</h2>
 
-1. [#4](https://github.com/KinsonDigital/BranchValidator/issues/14) - Initial creation of GitHub action
+1. [#4](https://github.com/KinsonDigital/Velaptor/issues/14) - Initial creation of GitHub action
