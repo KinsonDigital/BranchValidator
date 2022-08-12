@@ -1,4 +1,4 @@
-name: 'BranchValidator'
+name: 'Branch Validator'
 description: 'Checks if a GIT branch name is valid.'
 author: 'Calvin Wilkinson (KinsonDigital)'
 branding:
