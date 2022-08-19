@@ -38,6 +38,13 @@
 This **GitHub Action** can be used to check whether or not GIT branch names are valid using an expression in combination some with glob syntax.  
 These expressions are functions that can be used in combination with **&&** and **||** logic to perform the validation.
 
+<div align="center"><h3 style="font-weight:bold">⚠️Quick Note⚠️</h3></div>
+
+This GitHub action is built using C#/NET and runs in a docker container.  If the job step for running this action is contained in a job that runs on **Windows**, you will need to move the step to a job that runs on **Ubuntu**.  You can split up your jobs to fulfill `runs-on` requirements of the GitHub action. This can be accomplished by moving the step into it's own job.  You can then route the action step outputs to the job outputs and use them throughout the rest of your workflow. For more information, refer to the Github documentation links below:
+
+For more info on step and job outputs, refer to the GitHub documentation links below:
+- [Defining outputs for jobs](https://docs.github.com/en/actions/using-jobs/defining-outputs-for-jobs)
+- [Setting a step action output parameter](https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-output-parameter)
 
 <div align="center">
   <h3 style="font-weight:bold">Quick Example</h3>
