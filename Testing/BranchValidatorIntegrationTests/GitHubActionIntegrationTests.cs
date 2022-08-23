@@ -9,6 +9,7 @@ using BranchValidator.Services;
 using BranchValidator.Services.Analyzers;
 using BranchValidator.Services.Interfaces;
 using FluentAssertions;
+using KDActionUtils.Services;
 
 namespace BranchValidatorIntegrationTests;
 
