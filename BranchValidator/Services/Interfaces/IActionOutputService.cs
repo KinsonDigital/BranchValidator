@@ -2,7 +2,7 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-using BranchValidator.Exceptions;
+using KDActionUtils.Exceptions;
 
 namespace BranchValidator.Services.Interfaces;
 
