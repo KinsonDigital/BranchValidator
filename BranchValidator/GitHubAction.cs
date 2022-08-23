@@ -11,7 +11,7 @@ using KDActionUtils.Services;
 namespace BranchValidator;
 
 /// <inheritdoc/>
-public sealed class GitHubAction : IGitHubAction<bool>
+public sealed class GitHubAction : IGitHubAction<ActionInputs, bool>
 {
     private readonly IConsoleService<ConsoleContext> consoleService;
     private readonly IActionOutputService actionOutputService;
