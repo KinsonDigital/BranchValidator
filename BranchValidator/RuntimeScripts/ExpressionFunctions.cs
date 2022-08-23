@@ -38,9 +38,9 @@ public static class ExpressionFunctions
 	private static readonly char[] UpperCaseLetters = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', };
 
     /// <summary>
-    /// Gets the results of all the functions.
+    /// Gets all of the function results.
     /// </summary>
-    /// <returns>The result of all the functions.</returns>
+    /// <returns>The results of all the functions.</returns>
     public static string[] GetFunctionResults()
     {
         return FunctionResults.ToArray();
@@ -174,7 +174,7 @@ public static class ExpressionFunctions
     /// Returns a value indicating whether or not the given <paramref name="globbingPattern"/> contains a match
     /// to the given <c>string</c> <paramref name="value"/>.
     /// </summary>
-    /// <param name="value">The <c>string</c> to match against.</param>
+    /// <param name="value">The <c>string</c> to match.</param>
     /// <param name="globbingPattern">The globbing pattern and text to search.</param>
     /// <param name="matchType">The type of matching that should be performed.</param>
     /// <returns>
@@ -218,7 +218,7 @@ public static class ExpressionFunctions
     /// Removes any consecutive occurrences of the given <paramref name="characters"/> from the given <c>string</c> <paramref name="value"/>.
     /// </summary>
     /// <param name="characters">The <c>char</c> to check.</param>
-    /// <param name="value">The value to remove the consecutive characters from.</param>
+    /// <param name="value">The value that contains the consecutive characters to remove.</param>
     /// <returns>The original <c>string</c> value with the consecutive characters removed.</returns>
     private static string RemoveConsecutiveCharacters(IEnumerable<char> characters, string value)
     {
