@@ -177,10 +177,6 @@ These expression functions can be used in combination with the `&&` and `||` ope
 
 1. `equalTo(string)` - Checks to see whether or not the given branch name is equal to the argument value of the function. The argument value must be a string value that is surrounded by single or double quotes. The quotes used must be the opposite of the quotes used for the entire input value. Standard YAML syntax rules apply. The function value allows the use of 2 characters that provide glob like behavior. The 2 characters are `#` and `*` and can be used together as many times as needed.
      - _Example 1:_ `equalTo('main')`
-   The quotes used must be the opposite of the quotes used for the entire input value. 
-   Standard YAML syntax rules apply. 
-   The function value allows the use of 2 characters that provide glob like behavior. The 2 characters are `#` and `*` and can be used together as many times as needed.
-     - Example 1: equalTo('main')
        - Checks whether or not the branch is equal to the value of `main`.
      - _Example 2:_ `equalTo('feature/my-*-branch')`
        - Checks whether or not the branch starts with the value `feature/my-` and that it ends with `-branch`. Anything is acceptable between the beginning and end of the branch where the `*` character is located. This should be a familiar concept to other systems and uses of this type of syntax.
@@ -192,10 +188,10 @@ These expression functions can be used in combination with the `&&` and `||` ope
        - Returns valid if the branch name was `release/v1.2.3-preview.4`.
 3. `allLowerCase()` - Checks whether or not the branch name is all lower case.
     - _Example 1:_ `allLowerCase()`
-      - Returns valid if the name of the branch was `all-lower-case`. This would return invalid if the name of the branch was `not-all-LOWER-case`.
+      - Returns valid if the name of the branch was _**all-lower-case**_. This would return invalid if the name of the branch was _**not-all-LOWER-case**_. 
 4. `allUpperCase()` - Checks whether or not if the branch name is all upper case.
     - _Example 1:_ `allUpperCase()`
-      - Returns valid if the name of the branch was `ALL-UPPER-CASE`. This would return invalid if the name of the branch was `NOT-ALL-upper-CASE`.
+      - Returns valid if the name of the branch was _**ALL-UPPER-CASE**_. This would return invalid if the name of the branch was _**NOT-ALL-upper-CASE**_.
 
 <div align="center" style="font-weight:bold">
 
