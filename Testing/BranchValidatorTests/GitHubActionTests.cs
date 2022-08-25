@@ -5,8 +5,9 @@
 using BranchValidator;
 using BranchValidator.Exceptions;
 using BranchValidator.Services.Interfaces;
-using BranchValidatorShared.Services;
 using FluentAssertions;
+using KDActionUtils;
+using KDActionUtils.Services;
 using Moq;
 using TestingShared;
 
@@ -17,7 +18,7 @@ namespace BranchValidatorTests;
 /// </summary>
 public class GitHubActionTests
 {
-    private readonly Mock<IConsoleService> mockConsoleService;
+    private readonly Mock<IConsoleService<ConsoleContext>> mockConsoleService;
     private readonly Mock<IActionOutputService> mockActionOutputService;
     private readonly Mock<IExpressionValidatorService> mockExpressionValidationService;
     private readonly Mock<IExpressionExecutorService> mockExpressionExecutorService;
@@ -30,7 +31,7 @@ public class GitHubActionTests
     /// </summary>
     public GitHubActionTests()
     {
-        this.mockConsoleService = new Mock<IConsoleService>();
+        this.mockConsoleService = new Mock<IConsoleService<ConsoleContext>>();
         this.mockActionOutputService = new Mock<IActionOutputService>();
 
         this.mockExpressionValidationService = new Mock<IExpressionValidatorService>();

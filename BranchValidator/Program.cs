@@ -8,7 +8,8 @@ using BranchValidator.Observables;
 using BranchValidator.Services;
 using BranchValidator.Services.Analyzers;
 using BranchValidator.Services.Interfaces;
-using BranchValidatorShared.Services;
+using KDActionUtils;
+using KDActionUtils.Services;
 
 [assembly: InternalsVisibleTo("BranchValidatorTests", AllInternalsVisible = true)]
 
@@ -36,7 +37,7 @@ public static class Program
                 services.AddSingleton<IBranchNameObservable, UpdateBranchNameObservable>();
                 services.AddSingleton<IEmbeddedResourceLoaderService<string>, TextResourceLoaderService>();
                 services.AddSingleton<IAppService, AppService>();
-                services.AddSingleton<IConsoleService, GitHubConsoleService>();
+                services.AddSingleton<IConsoleService<ConsoleContext>, GitHubConsoleService>();
                 services.AddSingleton<IActionOutputService, ActionOutputService>();
                 services.AddSingleton<ICSharpMethodService, CSharpMethodService>();
                 services.AddSingleton<IParsingService, ParsingService>();
@@ -60,16 +61,16 @@ public static class Program
 
                     return result.ToReadOnlyCollection();
                 });
-                services.AddSingleton<IGitHubAction<bool>, GitHubAction>();
+                services.AddSingleton<IGitHubAction<ActionInputs, bool>, GitHubAction>();
             }).Build();
 
         var appService = host.Services.GetRequiredService<IAppService>();
-        var consoleService = host.Services.GetRequiredService<IConsoleService>();
-        IGitHubAction<bool>? gitHubAction = null;
+        var consoleService = host.Services.GetRequiredService<IConsoleService<ConsoleContext>>();
+        IGitHubAction<ActionInputs, bool>? gitHubAction = null;
 
         try
         {
-            gitHubAction = host.Services.GetRequiredService<IGitHubAction<bool>>();
+            gitHubAction = host.Services.GetRequiredService<IGitHubAction<ActionInputs, bool>>();
         }
         catch (Exception e)
         {
