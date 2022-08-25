@@ -1,9 +1,10 @@
-﻿// <copyright file="Program.cs" company="KinsonDigital">
+// <copyright file="Program.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
 using System.IO.Abstractions;
-using BranchValidatorShared.Services;
+using KDActionUtils;
+using KDActionUtils.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ScriptGenerator;
@@ -21,7 +22,7 @@ IHost host = Host.CreateDefaultBuilder(args)
         services.AddSingleton<IPath>(_ => fileSystem.Path);
         services.AddSingleton<IScriptTemplateService, ScriptTemplateService>();
         services.AddSingleton<IAppService, AppService>();
-        services.AddSingleton<IConsoleService, ConsoleService>();
+        services.AddSingleton<IConsoleService<ConsoleContext>, ConsoleService>();
         services.AddSingleton(_ => MutationFactory.CreateMutations());
         services.AddSingleton<IRelativePathResolverService, RelativePathResolverService>();
         services.AddSingleton<IArgParsingService<AppInputs>, ArgParsingService<AppInputs>>();
@@ -33,7 +34,7 @@ IHost host = Host.CreateDefaultBuilder(args)
 
 IArgParsingService<AppInputs> argParsingService = host.Services.GetRequiredServiceAndHandleError<IArgParsingService<AppInputs>>();
 IAppService appService = host.Services.GetRequiredServiceAndHandleError<IAppService>();
-IConsoleService consoleService = host.Services.GetRequiredServiceAndHandleError<IConsoleService>();
+IConsoleService<ConsoleContext> consoleService = host.Services.GetRequiredServiceAndHandleError<IConsoleService<ConsoleContext>>();
 IGeneratorService generatorService = host.Services.GetRequiredServiceAndHandleError<IGeneratorService>();
 
 try
