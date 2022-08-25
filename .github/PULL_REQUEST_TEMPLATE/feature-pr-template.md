@@ -13,10 +13,10 @@
 
 - [ ] The **_head(source)_** branch for this pull request is created from a **_development_** branch with the name **_develop_**.
 
-💡For more information on branching, refer to the project's [branching documentation](../../Documentation/Branching.md).
-
 - [ ] The **_base(target)_** branch for this pull request is a **_development_** branch with the name **_develop_**.
   - A **_base(target)_** branch is the branch that the **_head(source)_** branch is merging into.
+
+💡For more information on branching, refer to the project's [branching documentation](../../Documentation/Branching.md).
 
 - [ ] Associated issue exists and is linked to this pull request.
   - One issue per pull request.
