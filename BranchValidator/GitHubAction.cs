@@ -5,14 +5,15 @@
 using BranchValidator.Exceptions;
 using BranchValidator.Services.Interfaces;
 using BranchValidatorShared;
-using BranchValidatorShared.Services;
+using KDActionUtils;
+using KDActionUtils.Services;
 
 namespace BranchValidator;
 
 /// <inheritdoc/>
-public sealed class GitHubAction : IGitHubAction<bool>
+public sealed class GitHubAction : IGitHubAction<ActionInputs, bool>
 {
-    private readonly IConsoleService consoleService;
+    private readonly IConsoleService<ConsoleContext> consoleService;
     private readonly IActionOutputService actionOutputService;
     private readonly IExpressionValidatorService expressionValidatorService;
     private readonly IExpressionExecutorService expressionExecutorService;
@@ -32,7 +33,7 @@ public sealed class GitHubAction : IGitHubAction<bool>
     /// <param name="parsingService">Provides parsing functionality.</param>
     /// <param name="branchNameObservable">Sends a push notification of the branch name.</param>
     public GitHubAction(
-        IConsoleService consoleService,
+        IConsoleService<ConsoleContext> consoleService,
         IActionOutputService actionOutputService,
         IExpressionValidatorService expressionValidatorService,
         IExpressionExecutorService expressionExecutorService,

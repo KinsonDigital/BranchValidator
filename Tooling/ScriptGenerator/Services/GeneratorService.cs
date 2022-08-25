@@ -4,7 +4,8 @@
 
 using System.IO.Abstractions;
 using BranchValidatorShared;
-using BranchValidatorShared.Services;
+using KDActionUtils;
+using KDActionUtils.Services;
 using ScriptGenerator.Services.Interfaces;
 
 namespace ScriptGenerator.Services;
@@ -17,7 +18,7 @@ public class GeneratorService : IGeneratorService
     private readonly IDirectory directory;
     private readonly IFile file;
     private readonly IPath path;
-    private readonly IConsoleService consoleService;
+    private readonly IConsoleService<ConsoleContext> consoleService;
     private readonly IMethodExtractorService methodExtractorService;
     private readonly IRelativePathResolverService pathResolver;
     private readonly IScriptTemplateService scriptTemplateService;
@@ -41,7 +42,7 @@ public class GeneratorService : IGeneratorService
         IDirectory directory,
         IFile file,
         IPath path,
-        IConsoleService consoleService,
+        IConsoleService<ConsoleContext> consoleService,
         IMethodExtractorService methodExtractorService,
         IRelativePathResolverService pathResolver,
         IScriptTemplateService scriptTemplateService,
