@@ -18,12 +18,16 @@
 - [ ] The **_base(target)_** branch for this pull request is a **_development_** branch with the name **_develop_**.
   - A **_base(target)_** branch is the branch that the **_head(source)_** branch is merging into.
 
-- [ ] Pull request title matches the title of the linked issue.
-
 - [ ] Associated issue exists and is linked to this pull request.
   - One issue per pull request.
 
+- [ ] Pull request title matches the title of the associated issue.
+
 - [ ] The labels attached to this PR match the labels attached to the associated issue.
+
+- [ ] Project assigned matches the project of the associated issue.
+
+- [ ] Milestone assigned matches the milestone of the associated issue.
 
 - [ ] My code follows the coding style of this project.
   - The style is enforced by the **_.editorconfig_** files in the project and displayed as warnings.  If there is an edge case, reach out and let's discuss it.
