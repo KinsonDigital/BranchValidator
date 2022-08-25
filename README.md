@@ -35,12 +35,12 @@
 </div>
 
 
-This **GitHub Action** can be used to check whether or not GIT branch names are valid using an expression in combination some with glob syntax.  
+This **GitHub Action** can be used to check whether or not GIT branch names are valid using an expression in combination some with glob syntax. 
 These expressions are functions that can be used in combination with **&&** and **||** logic to perform the validation.
 
 <div align="center"><h2 style="font-weight:bold">⚠️Quick Note⚠️</h2></div>
 
-This GitHub action is built using C#/NET and runs in a docker container.  If the job step for running this action is contained in a job that runs on **Windows**, you will need to move the step to a job that runs on **Ubuntu**.  You can split up your jobs to fulfill `runs-on` requirements of the GitHub action. This can be accomplished by moving the step into it's own job.  You can then route the action step outputs to the job outputs and use them throughout the rest of your workflow. For more information, refer to the Github documentation links below:
+This GitHub action is built using C#/NET and runs in a docker container. If the job step for running this action is contained in a job that runs on **Windows**, you will need to move the step to a job that runs on **Ubuntu**. You can split up your jobs to fulfill `runs-on` requirements of the GitHub action. This can be accomplished by moving the step into it's own job. You can then route the action step outputs to the job outputs and use them throughout the rest of your workflow. For more information, refer to the Github documentation links below:
 
 For more info on step and job outputs, refer to the GitHub documentation links below:
 - [Defining outputs for jobs](https://docs.github.com/en/actions/using-jobs/defining-outputs-for-jobs)
@@ -81,18 +81,20 @@ jobs:
 
 <div align="center"><h2 style="font-weight:bold">What's the point? 🤷🏼</h2></div>
 
-Here's the kicker, it depends on your project and its needs.  What it really comes down to is enforcing branch names and structure.  
-In CI/CD systems, the name of the branch can determine how the system runs.  The workflows you have might depend on the name of a branch.  
-For example, if uses the GitHub issue number as part of the branch name so the GIT side can easily link back to the project  
-management/issue side of things.  Your build may behave differently depending on which branch it is building.
+Here's the kicker, it depends on your project and its needs. What it really comes down to is enforcing branch
+names and structure. In CI/CD systems, the name of the branch can determine how the system runs. The workflows 
+you have might depend on the name of a branch. For example, if the branch uses the GitHub issue number as part 
+of the branch name, it will refer back to the GitHub issue. Your build may behave differently depending on which
+branch it is building.
 
-When incorrect branch names are setup, they can cause issues and confusion with your build and release systems.  
-This GitHub action will help enforce project standards to help keep things running smoothly.  For example, a branch name of  
-`my-branch` does not express the purpose of the branch.  Without enforcing naming conventions of branches,  
-how is the team supposed to know the purpose of the branch?  In addition, the ability to enforce an issue number to exist in  
-the name of a branch, makes it easier for developers to find which branch belongs to which issue.  With this kind of enforcement,  
-you can setup automation to trust that the branch name contains a number.   It also allows you to create automation to check  
-if a GitHub issue even exists, which would prevent incorrect issue numbers being used in a branch name.
+When incorrect branch names are setup, they can cause issues with your build and release systems and confusion
+with your team. This GitHub action will help enforce project standards to help keep things running smoothly. For 
+example, a branch name of `my-branch` does not express the purpose of the branch. Without enforcing naming
+conventions of branches, how is the team supposed to know the purpose of it? In addition, the ability to 
+enforce an issue number to exist in the name of a branch, makes it easier for developers to find which branch 
+belongs to which issue. With this kind of enforcement, you can setup automation to trust that the branch name 
+contains a number. It also allows you to create automation to check if a GitHub issue exists, which would prevent
+incorrect issue numbers from being used in a branch name.
 
 The applications of this GitHub action are endless!!
 
@@ -163,7 +165,7 @@ The applications of this GitHub action are endless!!
 ## **Validation Logic Expression Functions**
 </div>
 
-Below is a small list of the available expression functions that you can use in the value of the `validation-logic` input.  
+Below is a small list of the available expression functions that you can use in the value of the `validation-logic` input. 
 These expression functions can be used in combination with the `&&` and `||` operators:  
   - Example: equalTo('feature/my-*-branch') && allLowerCase()
     - This checks to see whether or not the branch is equal to the value and that the entire branch is lower case.
@@ -173,27 +175,23 @@ These expression functions can be used in combination with the `&&` and `||` ope
 ### **Expression Function List**
 </div>
 
-1. `equalTo(string)` - Checks to see whether or not the given branch name is equal to the argument value of the function.  
-   The argument value must be a string value that is surrounded by single or double quotes.  
-   The quotes used must be the opposite of the quotes used for the entire input value.  
-   Standard YAML syntax rules apply.  
-   The function value allows the use of 2 characters that provide glob like behavior.  The 2 characters are `#` and `*` and can be used together as many times as needed.
-     - Example 1: equalTo('main')
+1. `equalTo(string)` - Checks to see whether or not the given branch name is equal to the argument value of the function. The argument value must be a string value that is surrounded by single or double quotes. The quotes used must be the opposite of the quotes used for the entire input value. Standard YAML syntax rules apply. The function value allows the use of 2 characters that provide glob like behavior. The 2 characters are `#` and `*` and can be used together as many times as needed.
+     - _Example 1:_ `equalTo('main')`
        - Checks whether or not the branch is equal to the value of `main`.
-     - Example 2: equalTo('feature/my-*-branch')
-       - Checks whether or not the branch starts with the value `feature/my-` and that it ends with `-branch`.  Anything is acceptable between the beginning and end of the branch where the `*` character is located.  This should be a familiar concept to other systems and uses of this type of syntax.
-     - Example 3: equalTo('feature/#-sample-branch')
-       - Returns valid if the branch name was `feature/my-sample-branch`.  This checks whether or not the branch starts with the value `feature/` and ends with the value `-sample-branch`.  Any text between the start and the end will be checked to see if it is a whole number of any digit size.
+     - _Example 2:_ `equalTo('feature/my-*-branch')`
+       - Checks whether or not the branch starts with the value `feature/my-` and that it ends with `-branch`. Anything is acceptable between the beginning and end of the branch where the `*` character is located. This should be a familiar concept to other systems and uses of this type of syntax.
+     - _Example 3:_ `equalTo('feature/#-sample-branch')`
+       - Returns valid if the branch name was `feature/my-sample-branch`. This checks whether or not the branch starts with the value `feature/` and ends with the value `-sample-branch`. Any text between the start and the end will be checked to see if it is a whole number of any digit size.
          - Returns valid if the name of the branch was `feature/12-sample-branch` or `feature/12345-sample-branch`.
-         - Return as not valid if the name of the branch was `feature/10-20-sample-branch`.  In this example, the branch ends with the value `-20-sample-branch`, not `-sample-branch`.
-     - Example: 4: equalTo('release/v#.#.#-*.#')
+         - Return as not valid if the name of the branch was `feature/10-20-sample-branch`. In this example, the branch ends with the value `-20-sample-branch`, not `-sample-branch`.
+     - _Example 4:_ `equalTo('release/v#.#.#-*.#')`
        - Returns valid if the branch name was `release/v1.2.3-preview.4`.
 3. `allLowerCase()` - Checks whether or not the branch name is all lower case.
-    - Example 1: allLowerCase()
-      - Returns valid if the name of the branch was `all-lower-case`.  This would return invalid if the name of the branch was `not-all-LOWER-case`.
+    - _Example 1:_ `allLowerCase()`
+      - Returns valid if the name of the branch was _**all-lower-case**_. This would return invalid if the name of the branch was _**not-all-LOWER-case**_. 
 4. `allUpperCase()` - Checks whether or not if the branch name is all upper case.
-    - Example 1: allUpperCase()
-      - Returns valid if the name of the branch was `ALL-UPPER-CASE`.  This would return invalid if the name of the branch was `NOT-ALL-upper-CASE`.
+    - _Example 1:_ `allUpperCase()`
+      - Returns valid if the name of the branch was _**ALL-UPPER-CASE**_. This would return invalid if the name of the branch was _**NOT-ALL-upper-CASE**_.
 
 <div align="center" style="font-weight:bold">
 
@@ -284,7 +282,7 @@ jobs:
 ## **Please help by [donating](https://github.com/sponsors/KinsonDigital)!!🙏**
 </div>
 
-Any donations for the work I do is greatly appreciated and helps me do this full time.  I work on many things such as GitHub actions, game development frameworks and libraries, and also provide C#/dotnet technology training.
+Any donations for the work I do is greatly appreciated and helps me do this full time. I work on many things such as GitHub actions, game development frameworks and libraries, and also provide C#/dotnet technology training.
 
 <div align="right">
 <a href="#what-is-it">Back to the top!👆🏼</a>
