@@ -163,8 +163,8 @@ public sealed class GitHubAction : IGitHubAction<ActionInputs, bool>
     private void ShowWelcomeMessage()
     {
         const string issueUrl = "https://github.com/KinsonDigital/BranchValidator/issues/new/choose";
-        this.consoleService.WriteLine("Welcome To The BranchValidator GitHub Action!!", true, true);
-        this.consoleService.WriteLine($"To open an issue, click here 👉🏼 {issueUrl}");
+        this.consoleService.WriteLine("Welcome To The BranchValidator GitHub Action!!", true, false);
+        this.consoleService.WriteLine($"\tTo open an issue, click here 👉🏼 {issueUrl}");
         this.consoleService.BlankLine();
         this.consoleService.BlankLine();
     }
