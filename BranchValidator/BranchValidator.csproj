@@ -9,14 +9,14 @@
     <RootNamespace>BranchValidator</RootNamespace>
 
     <!--Update this for production and preview releases-->
-    <Version>0.1.0</Version>
+    <Version>v1.0.0-preview.3</Version>
 
     <!--Update this for production and preview releases-->
-    <FileVersion>0.1.0</FileVersion>
+    <FileVersion>v1.0.0-preview.3</FileVersion>
 
     <Authors>Calvin Wilkinson</Authors>
     <Company>Kinson Digital</Company>
-    <Product>BranchValidator</Product>
+    <Product>Branch Validator</Product>
     <Description>Custom GitHub action used to check GIT branch syntax.</Description>
     <Copyright>Copyright ©2022 Kinson Digital</Copyright>
     <Configurations>Debug;Release;GenerateScript</Configurations>
@@ -58,7 +58,7 @@
     <Compile Remove="RuntimeScripts\ExpressionFunctions.cs" />
     <EmbeddedResource Include="RuntimeScripts\ExpressionFunctions.cs" />
   </ItemGroup>
-    
+
   <Target Name="PostBuild" Condition="'$(Configuration)|$(Platform)'=='GenerateScript|AnyCPU'" AfterTargets="PostBuildEvent">
     <Exec Command="cd $(SolutionDir)Scripts &amp;&amp; dotnet-script RunScriptGenerator.csx &quot;$(SolutionDir)Tooling\ScriptGenerator\bin\Debug\net6.0\ScriptGenerator.exe&quot;" />
   </Target>
