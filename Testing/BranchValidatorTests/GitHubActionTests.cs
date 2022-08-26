@@ -197,6 +197,7 @@ public class GitHubActionTests
     [Fact]
     public async void Run_WhenInvoked_ShowsWelcomeMessage()
     {
+        const string issueUrl = "https://github.com/KinsonDigital/BranchValidator/issues/new/choose";
         var inputs = CreateInputs();
         var action = CreateAction();
 
@@ -204,7 +205,10 @@ public class GitHubActionTests
         await action.Run(inputs, _ => { }, _ => { });
 
         // Assert
-        this.mockConsoleService.VerifyOnce(m => m.WriteLine("Welcome To The BranchValidator GitHub Action!!", true, true));
+        this.mockConsoleService.VerifyOnce(m
+            => m.WriteLine("Welcome To The BranchValidator GitHub Action!!", true, false));
+        this.mockConsoleService.VerifyOnce(m => m.WriteLine($"\tTo open an issue, click here 👉🏼 {issueUrl}"));
+        this.mockConsoleService.Verify(m => m.BlankLine(), Times.Exactly(3));
     }
 
     [Fact]
