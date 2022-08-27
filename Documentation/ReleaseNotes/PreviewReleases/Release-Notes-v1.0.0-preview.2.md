@@ -53,24 +53,24 @@ As with all software, there is always a chance for issues and bugs, especially f
 <h5 align="center">(Includes anything that does not fit into the categories above)</h5>
 
 1. [#5](https://github.com/KinsonDigital/BranchValidator/issues/5) - Create logo for project.
-    - Create light and dark mode versions of the project logo.
+    - Created light and dark mode versions of the project logo.
     - Added logo to the top of the project README file.
 2. [#18](https://github.com/KinsonDigital/BranchValidator/issues/18) - Updated and added issue and PR templates to the project.
 3. [#16](https://github.com/KinsonDigital/BranchValidator/issues/16) - Added code of conduct file to the project.
 4. [#23](https://github.com/KinsonDigital/BranchValidator/issues/23) - Fixed `release-todo-issue-template.yml` by removing character artifacts that were preventing the template from working properly.
-4. [#9](https://github.com/KinsonDigital/BranchValidator/issues/9) - Updated the name of the GitHub action from `BranchValidator` to `Branch Validator`
-    - This will make it a little more intuitive when searching for actions in the marketplace
-5. [#28](https://github.com/KinsonDigital/CASL/issues/28) - Updated the `release-todo-issue-template.yml` file.
+5. [#9](https://github.com/KinsonDigital/BranchValidator/issues/9) - Updated the name of the GitHub action from `BranchValidator` to `Branch Validator`.
+    - This will make it a little more intuitive when searching for actions in the marketplace.
+6. [#28](https://github.com/KinsonDigital/CASL/issues/28) - Updated the `release-todo-issue-template.yml` file.
     - Added a new item to the **Perform Release ToDo List** section to check that the PR is approved and merged.
     - Bolded a section of the last item in the **Perform Release ToDo List** section.
-6. [#27](https://github.com/KinsonDigital/CASL/issues/27) - Added branching documentation with branching documents.
-7. [#30](https://github.com/KinsonDigital/CASL/issues/30) - Updated project readme.
-    - Added a note explaining wny the action must be ran in Ubuntu with some links to some GitHub documentation resources.
-8. [#35](https://github.com/KinsonDigital/CASL/issues/35) - Updated the `preview-feature-pr-template.md` pull request template file.
+7. [#27](https://github.com/KinsonDigital/CASL/issues/27) - Added branching documentation with branching documents.
+8. [#30](https://github.com/KinsonDigital/CASL/issues/30) - Updated project readme.
+    - Added a note explaining why the action must be run in **Ubuntu** with some links to some GitHub documentation resources.
+9. [#35](https://github.com/KinsonDigital/CASL/issues/35) - Updated the `preview-feature-pr-template.md` pull request template file.
     - Rearranged the order of 2 tasks items.
-9. [#38](https://github.com/KinsonDigital/BranchValidator/issues/38) - Improve project README.
-10. [#41](https://github.com/KinsonDigital/BranchValidator/issues/41) - Made various improvements to the pull request templates by adding 2 new tasks as well as rearranging the order of of the tasks.  List of pull request template updated below:
-- `feature-pr-template.md`
-- `preview-feature-pr-template.md`
-- `preview-release-pr-template.md`
-- `production-release-pr-template.md`
+10. [#38](https://github.com/KinsonDigital/BranchValidator/issues/38) - Improved project README.
+11. [#41](https://github.com/KinsonDigital/BranchValidator/issues/41) - Made various improvements to the pull request templates by adding 2 new tasks as well as rearranging the order of of the tasks.  List of pull request templates updated below:
+    - `feature-pr-template.md`
+    - `preview-feature-pr-template.md`
+    - `preview-release-pr-template.md`
+    - `production-release-pr-template.md`
