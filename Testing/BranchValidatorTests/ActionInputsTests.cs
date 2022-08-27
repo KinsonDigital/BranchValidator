@@ -42,7 +42,7 @@ public class ActionInputsTests
                 "validation-logic",
                 true,
                 string.Empty,
-                "The logic expression to use to validate the branch name.");
+                "The logic expression used to validate the branch name.");
 
         inputs.TrimFromStart.Should().BeEmpty();
         typeof(ActionInputs).GetProperty(nameof(ActionInputs.TrimFromStart)).Should().BeDecoratedWith<OptionAttribute>();

@@ -4,8 +4,9 @@
 
 using System.IO.Abstractions;
 using System.Text;
-using BranchValidatorShared.Services;
 using FluentAssertions;
+using KDActionUtils;
+using KDActionUtils.Services;
 using Moq;
 using ScriptGenerator.Services;
 using ScriptGenerator.Services.Interfaces;
@@ -21,7 +22,7 @@ public class GeneratorServiceTests
     private readonly Mock<IDirectory> mockDir;
     private readonly Mock<IFile> mockFile;
     private readonly Mock<IPath> mockPath;
-    private readonly Mock<IConsoleService> mockConsoleService;
+    private readonly Mock<IConsoleService<ConsoleContext>> mockConsoleService;
     private readonly Mock<IMethodExtractorService> mockMethodExtractorService;
     private readonly Mock<IRelativePathResolverService> mockRelativePathResolverService;
     private readonly Mock<IScriptTemplateService> mockScriptTemplateService;
@@ -40,7 +41,7 @@ public class GeneratorServiceTests
 
         this.mockPath = new Mock<IPath>();
 
-        this.mockConsoleService = new Mock<IConsoleService>();
+        this.mockConsoleService = new Mock<IConsoleService<ConsoleContext>>();
 
         this.mockMethodExtractorService = new Mock<IMethodExtractorService>();
         this.mockRelativePathResolverService = new Mock<IRelativePathResolverService>();

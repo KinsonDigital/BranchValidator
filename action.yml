@@ -1,4 +1,4 @@
-name: 'BranchValidator'
+name: 'Branch Validator'
 description: 'Checks if a GIT branch name is valid.'
 author: 'Calvin Wilkinson (KinsonDigital)'
 branding:
@@ -10,7 +10,7 @@ inputs:
     required: true
     default: ''
   validation-logic:
-    description: 'The logic expression to use to validate the branch name.'
+    description: 'The logic expression used to validate the branch name.'
     required: true
     default: ''
   trim-from-start:
