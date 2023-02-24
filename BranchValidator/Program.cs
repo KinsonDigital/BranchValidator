@@ -11,8 +11,6 @@ using BranchValidator.Services.Interfaces;
 using KDActionUtils;
 using KDActionUtils.Services;
 
-[assembly: InternalsVisibleTo("BranchValidatorTests", AllInternalsVisible = true)]
-
 namespace BranchValidator;
 
 /// <summary>
