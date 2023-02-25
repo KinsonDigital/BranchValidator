@@ -1,7 +1,7 @@
 name: ✔Build Status Check
 
 env:
-  NET_SDK_VERSION: 6.0.300
+  NET_SDK_VERSION: 7.0.300
 
 on:
   workflow_dispatch:

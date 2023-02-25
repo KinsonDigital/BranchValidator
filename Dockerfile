@@ -1,5 +1,5 @@
-# Set the base image as the .NET 6.0 SDK (this includes the runtime)
-FROM mcr.microsoft.com/dotnet/sdk:6.0 as build-env
+# Set the base image as the .NET 7.0 SDK (this includes the runtime)
+FROM mcr.microsoft.com/dotnet/sdk:7.0 as build-env
 
 # Copy everything and publish the release (publish implicitly restores and builds)
 COPY . ./
@@ -14,6 +14,6 @@ LABEL homepage="https://github.com/KinsonDigital/BranchValidator"
 LABEL com.github.actions.name="Branch Validator"
 
 # Relayer the .NET SDK, anew with the build output
-FROM mcr.microsoft.com/dotnet/sdk:6.0
+FROM mcr.microsoft.com/dotnet/sdk:7.0
 COPY --from=build-env /out .
 ENTRYPOINT [ "dotnet", "/BranchValidator.dll" ]
