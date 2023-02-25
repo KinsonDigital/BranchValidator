@@ -22,6 +22,7 @@
     <Copyright>Copyright ©2022 Kinson Digital</Copyright>
     <Configurations>Debug;Release;GenerateScript</Configurations>
     <Platforms>AnyCPU</Platforms>
+    <NoWarn>CS7035</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
