@@ -12,17 +12,13 @@
 
 <div align="center">
 
-![](https://img.shields.io/github/workflow/status/KinsonDigital/BranchValidator/%F0%9F%9A%80Preview%20Release?label=QA%20Release%20%F0%9F%9A%80&logo=GitHub&style=plastic)
-![](https://img.shields.io/github/workflow/status/KinsonDigital/BranchValidator/%F0%9F%9A%80Preview%20Release?label=Preview%20Release%20%F0%9F%9A%80&logo=GitHub&style=plastic)
-![](https://img.shields.io/github/workflow/status/KinsonDigital/BranchValidator/%F0%9F%9A%80Production%20Release?label=Production%20Release%20%F0%9F%9A%80&logo=GitHub&style=plastic)
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/KinsonDigital/BranchValidator/build-status-check.yml?color=2F8840&label=Build&logo=GitHub)
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/KinsonDigital/BranchValidator/unit-testing-status-check.yml?color=2F8840&label=Unit%20Tests&logo=GitHub)
 
-[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.0-4baaaa.svg?style=plastic)](code_of_conduct.md)
-
-![Twitter URL](https://img.shields.io/twitter/url?label=Follow%20@KDCoder&logo=twitter&style=plastic&url=https%3A%2F%2Ftwitter.com%2FKDCoder)
-[![Join our Discord](https://img.shields.io/badge/Chat%20on-discord-7289DA?style=plastic)](https://discord.gg/qewu6fNgv7)
+[![Good First GitHub Issues](https://img.shields.io/github/issues/kinsondigital/GotNuget/good%20first%20issue?color=7057ff&label=Good%20First%20Issues)](https://github.com/KinsonDigital/GotNuget/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
+[![Discord](https://img.shields.io/discord/481597721199902720?color=%23575CCB&label=chat%20on%20discord&logo=discord&logoColor=white)](https://discord.gg/qewu6fNgv7)
 
 </div>
-
 
 <div align="center">
 
