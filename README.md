@@ -15,6 +15,8 @@
 ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/KinsonDigital/BranchValidator/build-status-check.yml?color=2F8840&label=Build&logo=GitHub)
 ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/KinsonDigital/BranchValidator/unit-testing-status-check.yml?color=2F8840&label=Unit%20Tests&logo=GitHub)
 
+![Codecov](https://img.shields.io/codecov/c/github/KinsonDigital/BranchValidator?color=2F8840&label=Code%20Coverage&logo=codecov)
+
 [![Good First GitHub Issues](https://img.shields.io/github/issues/kinsondigital/BranchValidator/good%20first%20issue?color=7057ff&label=Good%20First%20Issues)](https://github.com/KinsonDigital/BranchValidator/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
 [![Discord](https://img.shields.io/discord/481597721199902720?color=%23575CCB&label=chat%20on%20discord&logo=discord&logoColor=white)](https://discord.gg/qewu6fNgv7)
 
@@ -255,23 +257,25 @@ jobs:
 
 <div align="center">
 
+## **🔧Maintainers**
+</div>
+
+- [![twitter-logo](https://raw.githubusercontent.com/KinsonDigital/.github/master/Images/twitter-logo-16x16.svg)Calvin Wilkinson](https://twitter.com/KDCoder) (KinsonDigital GitHub Organization - Owner)
+- [![twitter-logo](https://raw.githubusercontent.com/KinsonDigital/.github/master/Images/twitter-logo-16x16.svg)Kristen Wilkinson](https://twitter.com/kswilky) (KinsonDigital GitHub Organization - Documentation Maintainer & Tester)
+
+<div align="center">
+
 ## **Other Info**
 </div>
 
 <div align="left">
 
-### **License**
-- [MIT License - BranchValidator](https://github.com/KinsonDigital/BranchValidator/blob/preview/v1.0.0-preview.1/LICENSE)
-</div>
-
-<div align="left">
-
-### **Maintainer**
-</div>
-
-- [Calvin Wilkinson](https://github.com/CalvinWilkinson) (Owner and main contributor of the GitHub organization [KinsonDigital](https://github.com/KinsonDigital))
-  - [Branch Validator](https://github.com/KinsonDigital/BranchValidator) is used in various projects for this organization with great success.
 - Click [here](https://github.com/KinsonDigital/BranchValidator/issues/new/choose) to report any issues for this GitHub action!!
+- [MIT License](https://github.com/KinsonDigital/BranchValidator/blob/preview/v1.0.0-preview.1/LICENSE)
+</div>
+
+
+
 
 <div align="center">
 
