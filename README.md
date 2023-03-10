@@ -16,6 +16,8 @@
 ![](https://img.shields.io/github/workflow/status/KinsonDigital/BranchValidator/%F0%9F%9A%80Preview%20Release?label=Preview%20Release%20%F0%9F%9A%80&logo=GitHub&style=plastic)
 ![](https://img.shields.io/github/workflow/status/KinsonDigital/BranchValidator/%F0%9F%9A%80Production%20Release?label=Production%20Release%20%F0%9F%9A%80&logo=GitHub&style=plastic)
 
+![Codecov](https://img.shields.io/codecov/c/github/KinsonDigital/BranchValidator?color=2F8840&label=Code%20Coverage&logo=codecov)
+
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.0-4baaaa.svg?style=plastic)](code_of_conduct.md)
 
 ![Twitter URL](https://img.shields.io/twitter/url?label=Follow%20@KDCoder&logo=twitter&style=plastic&url=https%3A%2F%2Ftwitter.com%2FKDCoder)
