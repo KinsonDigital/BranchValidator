@@ -60,7 +60,7 @@ jobs:
     name: Validator Branch
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Validate Branch
       uses: KinsonDigital/BranchValidator@v1.0.0-preview.1
@@ -212,7 +212,7 @@ jobs:
     name: Validate Feature Branch
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Validate Branch
       uses: KinsonDigital/BranchValidator@v1.0.0-preview.1
@@ -236,7 +236,7 @@ jobs:
     name: Validate Feature Branch
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Validate Branch
       id: validate-branch
