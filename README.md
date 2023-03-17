@@ -106,26 +106,26 @@ jobs:
     <tr align="left">
         <td>branch-name</td>
         <td align="left">The name of the GIT branch.</td>
-        <td>yes</td>
-        <td>N/A</td>
+        <td align="center">yes</td>
+        <td align="center">N/A</td>
     </tr>
     <tr align="left">
         <td>validation-logic</td>
         <td align="left">The expression used to validate the branch name.</td>
-        <td>yes</td>
-        <td>N/A</td>
+        <td align="center">yes</td>
+        <td align="center">N/A</td>
     </tr>
     <tr align="left">
         <td>trim-from-start</td>
         <td align="left">Trims the text from the beginning of a branch name.</td>
-        <td>no</td>
-        <td>empty</td>
+        <td align="center">no</td>
+        <td align="center">empty</td>
     </tr>
     <tr align="left">
         <td>fail-when-not-valid</td>
         <td align="left">Fails the job if the branch is not valid.</td>
-        <td>no</td>
-        <td>true</td>
+        <td align="center">no</td>
+        <td align="center">true</td>
     </tr>    
 </table>
 
