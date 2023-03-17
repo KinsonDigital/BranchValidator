@@ -24,28 +24,44 @@
 
 <div align="center">
 
-# GIT Branch Name Validator
-</div>
-
-<div align="center">
-
-## **What is it?**
+## **🤷🏼‍♂️ What is it? 🤷🏼‍♂️**
 </div>
 
 
-This **GitHub Action** can be used to check whether or not GIT branch names are valid using an expression in combination some with glob syntax. 
+This **GitHub Action** can be used to check whether or not GIT branch names are valid using an expression in combination with glob syntax. 
 These expressions are functions that can be used in combination with **&&** and **||** logic to perform the validation.
 
-<div align="center"><h2 style="font-weight:bold">⚠️Quick Note⚠️</h2></div>
+<div align="center"><h2 style="font-weight:bold"></h2></div>
 
-This GitHub action is built using C#/NET and runs in a docker container. If the job step for running this action is contained in a job that runs on **Windows**, you will need to move the step to a job that runs on **Ubuntu**. You can split up your jobs to fulfill `runs-on` requirements of the GitHub action. This can be accomplished by moving the step into it's own job. You can then route the action step outputs to the job outputs and use them throughout the rest of your workflow. For more information, refer to the Github documentation links below:
+<details closed><summary>TLDR</summary>
 
-For more info on step and job outputs, refer to the GitHub documentation links below:
-- [Defining outputs for jobs](https://docs.github.com/en/actions/using-jobs/defining-outputs-for-jobs)
-- [Setting a step action output parameter](https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-output-parameter)
+What it really comes down to is enforcing branch 
+names and structure. In CI/CD systems, the name of the branch can determine how the system runs. The workflows 
+you have might depend on the name of a branch. For example, if the branch uses the GitHub issue number as part 
+of the branch name, it will refer back to the GitHub issue. Your build may behave differently depending on which
+branch it is building.
+
+When incorrect branch names are setup, they can cause issues with your build and release systems and confusion
+with your team. This GitHub action will help enforce project standards to help keep things running smoothly. For 
+example, a branch name of `my-branch` does not express the purpose of the branch. Without enforcing naming
+conventions of branches, how is the team supposed to know the purpose of it? In addition, the ability to 
+enforce an issue number to exist in the name of a branch, makes it easier for developers to find which branch 
+belongs to which issue. With this kind of enforcement, you can setup automation to trust that the branch name 
+contains a number. It also allows you to create automation to check if a GitHub issue exists, which would prevent
+incorrect issue numbers from being used in a branch name.
+
+The applications of this GitHub action are endless!!
+
+</details>
+
+<div align="center"><h2 style="font-weight:bold"></h2></div>
+
+>**Warning** This GitHub action is built using C#/NET and runs in a docker container. If the job step for running this action is contained in a job that runs on **Windows**, you will need to move the step to a job that runs on **Ubuntu**. You can split up your jobs to fulfill `runs-on` requirements of the GitHub action. This can be accomplished by moving the step into its own job. You can then route the action step outputs to the job outputs and use them throughout the rest of your workflow. For more information on step and job outputs, refer to the GitHub documentation links below:
+>- [Defining outputs for jobs](https://docs.github.com/en/actions/using-jobs/>defining-outputs-for-jobs)
+>- [Setting a step action output parameter](https://docs.github.com/en/actions/>using-workflows/workflow-commands-for-github-actions#setting-an-output-parameter)
 
 <div align="center">
-  <h2 style="font-weight:bold">Quick Example</h2>
+  <h2 style="font-weight:bold">🪧 Example 🪧</h2>
 </div>
 
 
@@ -77,30 +93,9 @@ jobs:
 
 ---
 
-<div align="center"><h2 style="font-weight:bold">What's the point? 🤷🏼</h2></div>
-
-Here's the kicker, it depends on your project and its needs. What it really comes down to is enforcing branch
-names and structure. In CI/CD systems, the name of the branch can determine how the system runs. The workflows 
-you have might depend on the name of a branch. For example, if the branch uses the GitHub issue number as part 
-of the branch name, it will refer back to the GitHub issue. Your build may behave differently depending on which
-branch it is building.
-
-When incorrect branch names are setup, they can cause issues with your build and release systems and confusion
-with your team. This GitHub action will help enforce project standards to help keep things running smoothly. For 
-example, a branch name of `my-branch` does not express the purpose of the branch. Without enforcing naming
-conventions of branches, how is the team supposed to know the purpose of it? In addition, the ability to 
-enforce an issue number to exist in the name of a branch, makes it easier for developers to find which branch 
-belongs to which issue. With this kind of enforcement, you can setup automation to trust that the branch name 
-contains a number. It also allows you to create automation to check if a GitHub issue exists, which would prevent
-incorrect issue numbers from being used in a branch name.
-
-The applications of this GitHub action are endless!!
-
----
-
 <div align="center">
 
-## **Action Inputs**
+## **➡️ Action Inputs ⬅️**
 </div>
 
 <table align="center">
@@ -110,25 +105,25 @@ The applications of this GitHub action are endless!!
         <th>Required</th>
         <th>Default Value</th>
     </tr>
-    <tr align="center">
+    <tr align="left">
         <td>branch-name</td>
         <td align="left">The name of the GIT branch.</td>
         <td>yes</td>
         <td>N/A</td>
     </tr>
-    <tr align="center">
+    <tr align="left">
         <td>validation-logic</td>
         <td align="left">The expression used to validate the branch name.</td>
         <td>yes</td>
         <td>N/A</td>
     </tr>
-    <tr align="center">
+    <tr align="left">
         <td>trim-from-start</td>
         <td align="left">Trims the text from the beginning of a branch name.</td>
         <td>no</td>
         <td>empty</td>
     </tr>
-    <tr align="center">
+    <tr align="left">
         <td>fail-when-not-valid</td>
         <td align="left">Fails the job if the branch is not valid.</td>
         <td>no</td>
@@ -140,21 +135,10 @@ The applications of this GitHub action are endless!!
 
 <div align="center">
 
-## **Action Outputs**
+## **⬅️ Action Outputs ➡️**
 </div>
 
-<table align="center">
-    <tr>
-        <th>Output Name</th>
-        <th>Description</th>
-        <th>Values Returned</th>
-    </tr>
-    <tr align="center">
-        <td>valid-branch</td>
-        <td align="left">Returns a string value of <span style="font-weight: bold">true</span> or <span style="font-weight: bold">false</span> indicating whether or not the branch is valid.</td>
-        <td><span style="font-weight: bold">true</span> or <span style="font-weight: bold">false</span></td>
-    </tr>
-</table>
+The name of the output is `valid-branch` and it returns a boolean of true or false. Click <a href="#manual-fail">here</a> to see an example of how to use the output of the action.
 
 ---
 
@@ -168,12 +152,9 @@ These expression functions can be used in combination with the `&&` and `||` ope
   - Example: equalTo('feature/my-*-branch') && allLowerCase()
     - This checks to see whether or not the branch is equal to the value and that the entire branch is lower case.
 
-<div align="center">
+<details closed><summary>TLDR - Expression Function List</summary>
 
-### **Expression Function List**
-</div>
-
-1. `equalTo(string)` - Checks to see whether or not the given branch name is equal to the argument value of the function. The argument value must be a string value that is surrounded by single or double quotes. The quotes used must be the opposite of the quotes used for the entire input value. Standard YAML syntax rules apply. The function value allows the use of 2 characters that provide glob like behavior. The 2 characters are `#` and `*` and can be used together as many times as needed.
+1. `equalTo(string)` - Checks to see whether or not the given branch name is equal to the argument value of the function. The argument value must be a string value that is surrounded by single or double quotes. The quotes used must be the opposite of the quotes used for the entire input value. Standard YAML syntax rules apply. The function value allows the use of 2 characters that provide glob-like behavior. The 2 characters are `#` and `*` and can be used together as many times as needed.
      - _Example 1:_ `equalTo('main')`
        - Checks whether or not the branch is equal to the value of `main`.
      - _Example 2:_ `equalTo('feature/my-*-branch')`
@@ -190,10 +171,13 @@ These expression functions can be used in combination with the `&&` and `||` ope
 4. `allUpperCase()` - Checks whether or not if the branch name is all upper case.
     - _Example 1:_ `allUpperCase()`
       - Returns valid if the name of the branch was _**ALL-UPPER-CASE**_. This would return invalid if the name of the branch was _**NOT-ALL-upper-CASE**_.
+</details>
 
 <div align="center" style="font-weight:bold">
 
-## **Examples**
+<br>
+
+## **🪧 More Examples 🪧**
 </div>
 
 <div align="left">
@@ -223,7 +207,7 @@ jobs:
 ```
 </div>
 
-Failing the workflow manually:
+<h4 id="manual-fail">Failing the workflow manually:</h4>
 
 ``` yaml
 name: Branch Validation Sample Workflow
@@ -255,35 +239,28 @@ jobs:
 
 ---
 
-<div align="center">
+<h2 style="font-weight:bold;" align="center">🙏🏼 Contributing 🙏🏼</h2>
 
-## **🔧Maintainers**
-</div>
-
-- [![twitter-logo](https://raw.githubusercontent.com/KinsonDigital/.github/master/Images/twitter-logo-16x16.svg)Calvin Wilkinson](https://twitter.com/KDCoder) (KinsonDigital GitHub Organization - Owner)
-- [![twitter-logo](https://raw.githubusercontent.com/KinsonDigital/.github/master/Images/twitter-logo-16x16.svg)Kristen Wilkinson](https://twitter.com/kswilky) (KinsonDigital GitHub Organization - Documentation Maintainer & Tester)
+Interested in contributing? If so, click [here](https://github.com/KinsonDigital/.github/blob/master/docs/CONTRIBUTING.md) to learn how to contribute your time or [here](https://github.com/sponsors/KinsonDigital) if you are interested in contributing your funds via one-time or recurring donation.
 
 <div align="center">
 
-## **Other Info**
+## **🔧 Maintainers 🔧**
 </div>
 
-<div align="left">
+  [![twitter-logo](https://raw.githubusercontent.com/KinsonDigital/.github/master/Images/twitter-logo-16x16.svg)Calvin Wilkinson](https://twitter.com/KDCoder) (KinsonDigital GitHub Organization - Owner)
+  
+  [![twitter-logo](https://raw.githubusercontent.com/KinsonDigital/.github/master/Images/twitter-logo-16x16.svg)Kristen Wilkinson](https://twitter.com/kswilky) (KinsonDigital GitHub Organization - Project Management, Documentation, Tester)
+ 
+<br>
 
-- Click [here](https://github.com/KinsonDigital/BranchValidator/issues/new/choose) to report any issues for this GitHub action!!
-- [MIT License](https://github.com/KinsonDigital/BranchValidator/blob/preview/v1.0.0-preview.1/LICENSE)
-</div>
-
-
-
+<h2 style="font-weight:bold;" align="center">🚔 Licensing And Governance 🚔</h2>
 
 <div align="center">
 
-## **Please help by [donating](https://github.com/sponsors/KinsonDigital)!!🙏**
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.0-4baaaa.svg?style=flat)](https://github.com/KinsonDigital/.github/blob/master/docs/code_of_conduct.md)
+![GitHub](https://img.shields.io/github/license/kinsondigital/gotnuget)
 </div>
 
-Any donations for the work I do is greatly appreciated and helps me do this full time. I work on many things such as GitHub actions, game development frameworks and libraries, and also provide C#/dotnet technology training.
-
-<div align="right">
-<a href="#what-is-it">Back to the top!👆🏼</a>
-</div>
+This software is distributed under the very permissive [MIT license](https://github.com/KinsonDigital/GotNuget/blob/preview/v1.0.0-preview.1/LICENSE.md) and all dependencies are distributed under MIT-compatible licenses.
+This project has adopted the code of conduct defined by the **Contributor Covenant** to clarify expected behavior in our community.
