@@ -85,12 +85,6 @@ jobs:
         fail-when-not-valid: true # Optional. Default is true.
 ```
 
-<div align="right">
-<a href="#examples">More Examples Below!! 👇🏼</a>
-</div>
-
----
-
 <div align="center">
 
 ## **➡️ Action Inputs ⬅️**
