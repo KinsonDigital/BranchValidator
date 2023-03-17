@@ -33,7 +33,7 @@ These expressions are functions that can be used in combination with **&&** and 
 
 <div align="center"><h2 style="font-weight:bold"></h2></div>
 
-<details closed><summary>TLDR</summary>
+<details closed><summary>TLDR - Additional Information</summary>
 
 What it really comes down to is enforcing branch 
 names and structure. In CI/CD systems, the name of the branch can determine how the system runs. The workflows 
@@ -41,10 +41,7 @@ you have might depend on the name of a branch. For example, if the branch uses t
 of the branch name, it will refer back to the GitHub issue. Your build may behave differently depending on which
 branch it is building.
 
-When incorrect branch names are setup, they can cause issues with your build and release systems and confusion
-with your team. This GitHub action will help enforce project standards to help keep things running smoothly. For 
-example, a branch name of `my-branch` does not express the purpose of the branch. Without enforcing naming
-conventions of branches, how is the team supposed to know the purpose of it? In addition, the ability to 
+When incorrect branch names are setup, they can cause issues with your build and release systems and confusion with your team. This GitHub action will help enforce project standards to help keep things running smoothly. For example, a branch name of `my-branch` does not express the purpose of the branch. Without enforcing naming conventions of branches, how is the team supposed to know the purpose of it? In addition, the ability to 
 enforce an issue number to exist in the name of a branch, makes it easier for developers to find which branch 
 belongs to which issue. With this kind of enforcement, you can setup automation to trust that the branch name 
 contains a number. It also allows you to create automation to check if a GitHub issue exists, which would prevent
