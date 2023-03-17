@@ -39,7 +39,7 @@ As with all software, there is always a chance for issues and bugs, especially f
 3. [#73](https://github.com/KinsonDigital/BranchValidator/issues/73) - Renamed license file from _**LICENSE**_ to _**LICENSE.md**_.
 4. [#71](https://github.com/KinsonDigital/BranchValidator/issues/71) - Removed files and documents from the repository that are not used.
 5. [#70](https://github.com/KinsonDigital/BranchValidator/issues/70) - Updated the project dotnet SDK from version _**v6**_ to _**v7**_
-6. [#66](https://github.com/KinsonDigital/BranchValidator/issues/66) - Setup dependabot for dependency management.
+6. [#63](https://github.com/KinsonDigital/BranchValidator/issues/63) - Moved the internal visible setup from a _**csharp**_ file to the _**csproj**_ file.
 7. [#48](https://github.com/KinsonDigital/BranchValidator/issues/48) - Added release note template files to the repository.
 8. [#53](https://github.com/KinsonDigital/BranchValidator/issues/53) - Moved release note template files to the correct directory location.
 9.  [#51](https://github.com/KinsonDigital/BranchValidator/issues/51) - Cleaned up some release notes.
