@@ -30,12 +30,20 @@ As with all software, there is always a chance for issues and bugs, especially f
 
 <h2 style="font-weight:bold" align="center">Nuget/Library Updates 📦</h2>
 
-1. Updated the NuGet package **Microsoft.CodeAnalysis.CSharp.Scripting** from version _**v4.2.0**_ to _**v4.4.0**_
-2. Updated the NuGet package **Microsoft.CodeAnalysis.NetAnalyzers** from version _**v6.0.0**_ to _**v7.0.0**_
-3. Updated the NuGet package **Microsoft.Extensions.DependencyInjection.Abstractions** from version _**v6.0.0**_ to _**v7.0.0**_
-4. Updated the NuGet package **Microsoft.Extensions.FileSystemGlobbing** from version _**v6.0.0**_ to _**v7.0.0**_
-5. Updated the NuGet package **Microsoft.Extensions.Hosting** from version _**v6.0.1**_ to _**v7.0.1**_
-6. Updated the NuGet package **FluentAssertions** from version _**v6.7.0**_ to _**v6.10.0**_
+1. [#65](https://github.com/KinsonDigital/BranchValidator/issues/65) - Updated the NuGet packages below:
+    - Updated the package **Microsoft.CodeAnalysis.CSharp.Scripting** from version _**v4.2.0**_ to _**v4.5.0**_
+    - Updated the package **Microsoft.CodeAnalysis.NetAnalyzers** from version _**v6.0.0**_ to _**v7.0.0**_
+    - Updated the package **Microsoft.Extensions.DependencyInjection.Abstractions** from version _**v6.0.0**_ to _**v7.0.0**_
+    - Updated the package **Microsoft.Extensions.FileSystemGlobbing** from version _**v6.0.0**_ to _**v7.0.0**_
+    - Updated the package **Microsoft.Extensions.Hosting** from version _**v6.0.1**_ to _**v7.0.1**_
+    - Updated the package **FluentAssertions** from version _**v6.7.0**_ to _**v6.10.0**_
+2. [#70](https://github.com/KinsonDigital/BranchValidator/issues/70) - Updated the NuGet packages below:
+    - Updated the package **Microsoft.NET.Test.Sdk** from _**v17.2.0**_ to _**v17.5.0**_
+    - Updated the package **xunit** from _**v2.4.1**_ to _**v2.4.2**_
+    - Updated the package **coverlet.collector** from _**v3.1.2**_ to _**v3.2.0**_
+    - Updated the package **coverlet.msbuild** from _**v3.1.2**_ to _**v3.2.0**_
+    - Updated the package **Moq** from _**v4.18.1**_ to _**v4.18.4**_
+    - Updated the package **System.IO.Abstractions** from _**vSystem.IO.Abstractions**_ to _**v19.1.18**_
 
 ---
 
