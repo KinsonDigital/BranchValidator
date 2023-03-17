@@ -42,7 +42,7 @@ jobs:
     with:
       project-name: "BranchValidatorTests"
       build-config: ${{ needs.determine_build_config.outputs.build-config }}
-      net-sdk-version: 6.0.300
+      net-sdk-version: 7.0.300
 
   run_branch_validation_shared_tests:
       name: Run BranchValidatorShared Tests
@@ -51,7 +51,7 @@ jobs:
       with:
         project-name: "BranchValidatorSharedTests"
         build-config: ${{ needs.determine_build_config.outputs.build-config }}
-        net-sdk-version: 6.0.300
+        net-sdk-version: 7.0.300
 
   run_script_generator_tests:
       name: Run ScriptGenerator Tests
@@ -60,7 +60,7 @@ jobs:
       with:
         project-name: "ScriptGeneratorTests"
         build-config: ${{ needs.determine_build_config.outputs.build-config }}
-        net-sdk-version: 6.0.300
+        net-sdk-version: 7.0.300
 
   run_integration_tests:
       name: Run Integration Tests
@@ -69,4 +69,4 @@ jobs:
       with:
         project-name: "BranchValidatorIntegrationTests"
         build-config: ${{ needs.determine_build_config.outputs.build-config }}
-        net-sdk-version: 6.0.300
+        net-sdk-version: 7.0.300

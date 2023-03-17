@@ -2,18 +2,19 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
-    <LangVersion>10.0</LangVersion>
+    <TargetFramework>net7.0</TargetFramework>
+    <LangVersion>11.0</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RootNamespace>BranchValidator</RootNamespace>
 
     <!--Update this for production and preview releases-->
-    <Version>v1.0.0-preview.3</Version>
+    <Version>1.0.0-preview.4</Version>
 
     <!--Update this for production and preview releases-->
-    <FileVersion>v1.0.0-preview.3</FileVersion>
+    <FileVersion>1.0.0-preview.4</FileVersion>
 
+    <AssemblyVersion>1.0.0</AssemblyVersion>
     <Authors>Calvin Wilkinson</Authors>
     <Company>Kinson Digital</Company>
     <Product>Branch Validator</Product>
@@ -21,19 +22,25 @@
     <Copyright>Copyright ©2022 Kinson Digital</Copyright>
     <Configurations>Debug;Release;GenerateScript</Configurations>
     <Platforms>AnyCPU</Platforms>
+    <NoWarn>CS7035</NoWarn>
   </PropertyGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="$(AssemblyName)Tests" />
+    <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.9.1" />
     <PackageReference Include="KinsonDigital.KDActionUtils" Version="1.0.0-preview.1" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="4.2.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="6.0.0">
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="4.5.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="7.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.FileSystemGlobbing" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.FileSystemGlobbing" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -60,7 +67,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" Condition="'$(Configuration)|$(Platform)'=='GenerateScript|AnyCPU'" AfterTargets="PostBuildEvent">
-    <Exec Command="cd $(SolutionDir)Scripts &amp;&amp; dotnet-script RunScriptGenerator.csx &quot;$(SolutionDir)Tooling\ScriptGenerator\bin\Debug\net6.0\ScriptGenerator.exe&quot;" />
+    <Exec Command="cd $(SolutionDir)Scripts &amp;&amp; dotnet-script RunScriptGenerator.csx &quot;$(SolutionDir)Tooling\ScriptGenerator\bin\Debug\net7.0\ScriptGenerator.exe&quot;" />
   </Target>
 
 </Project>

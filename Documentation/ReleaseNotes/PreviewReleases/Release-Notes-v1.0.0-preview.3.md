@@ -30,19 +30,6 @@ As with all software, there is always a chance for issues and bugs, especially f
 
 ---
 
-<h2 style="font-weight:bold" align="center">Bug Fixes 🐛</h2>
-
----
-
-<h2 style="font-weight:bold" align="center">Breaking Changes 🧨</h2>
-
----
-
-<h2 style="font-weight:bold" align="center">Internal Changes ⚙️</h2>
-<h5 align="center">(Changes that do not affect users.  Not breaking changes, new features, or bug fixes.)</h5>
-
----
-
 <h2 style="font-weight:bold" align="center">Nuget/Library Updates 📦</h2>
 
 1. [#12](https://github.com/KinsonDigital/BranchValidator/issues/12) - Added nuget package **KinsonDigital.KDActionUtils** version **v1.0.0-preview.1**.
