@@ -56,9 +56,10 @@ The applications of this GitHub action are endless!!
 
 <div align="center"><h2 style="font-weight:bold"></h2></div>
 
->**Warning** This GitHub action is built using C#/NET and runs in a docker container. If the job step for running this action is contained in a job that runs on **Windows**, you will need to move the step to a job that runs on **Ubuntu**. You can split up your jobs to fulfill `runs-on` requirements of the GitHub action. This can be accomplished by moving the step into its own job. You can then route the action step outputs to the job outputs and use them throughout the rest of your workflow. For more information on step and job outputs, refer to the GitHub documentation links below:
->- [Defining outputs for jobs](https://docs.github.com/en/actions/using-jobs/>defining-outputs-for-jobs)
->- [Setting a step action output parameter](https://docs.github.com/en/actions/>using-workflows/workflow-commands-for-github-actions#setting-an-output-parameter)
+>**Note** This GitHub action is built using C#/NET and runs in a docker container. If the job step for running this action is contained in a job that runs on **Windows**, you will need to move the step to a job that runs on **Ubuntu**. You can split up your jobs to fulfill `runs-on` requirements of the GitHub action. This can be accomplished by moving the step into its own job. You can then route the action step outputs to the job outputs and use them throughout the rest of your workflow.  
+> For more information on step and job outputs, refer to the GitHub documentation links below:
+> - [Defining outputs for jobs](https://docs.github.com/en/actions/using-jobs/defining-outputs-for-jobs)
+> - [Setting a step action output parameter](https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-output-parameter)
 
 <div align="center">
   <h2 style="font-weight:bold">🪧 Example 🪧</h2>
