@@ -75,7 +75,7 @@ jobs:
     - uses: actions/checkout@v3
 
     - name: Validate Branch
-      uses: KinsonDigital/BranchValidator@v1.0.0-preview.1
+      uses: KinsonDigital/BranchValidator@v1.0.0-preview.4 # Make sure this is the latest version
       with:
         branch-name: "${{ github.ref }}" # The current branch where the workflow is running.
         validation-logic: "equalTo('main')"
@@ -218,9 +218,9 @@ jobs:
       with:
         branch-name: "release/v1.2.3-preview" # Missing the text '.4' at the end of the branch
         validation-logic: "equalTo('release/v#.#.#-preview.#')"
-        fail-when-not-valid: false
+        fail-when-not-valid: false # This step will not fail the workflow
 
-    - name: Fail Workflow
+    - name: Fail Workflow # But this step will fail the workflow instead.
       if: ${{ steps.validate-branch.outputs.valid-branch }} = 'false'
       run: |
         Write-Host "The branch is invalid!!";
