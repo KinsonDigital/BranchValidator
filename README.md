@@ -155,10 +155,10 @@ These expression functions can be used in combination with the `&&` and `||` ope
          - Return as not valid if the name of the branch was `feature/10-20-sample-branch`. In this example, the branch ends with the value `-20-sample-branch`, not `-sample-branch`.
      - _Example 4:_ `equalTo('release/v#.#.#-*.#')`
        - Returns valid if the branch name was `release/v1.2.3-preview.4`.
-3. `allLowerCase()` - Checks whether or not the branch name is all lower case.
+2. `allLowerCase()` - Checks whether or not the branch name is all lower case.
     - _Example 1:_ `allLowerCase()`
       - Returns valid if the name of the branch was _**all-lower-case**_. This would return invalid if the name of the branch was _**not-all-LOWER-case**_. 
-4. `allUpperCase()` - Checks whether or not if the branch name is all upper case.
+3. `allUpperCase()` - Checks whether or not if the branch name is all upper case.
     - _Example 1:_ `allUpperCase()`
       - Returns valid if the name of the branch was _**ALL-UPPER-CASE**_. This would return invalid if the name of the branch was _**NOT-ALL-upper-CASE**_.
 </details>
