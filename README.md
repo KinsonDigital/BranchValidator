@@ -33,7 +33,7 @@ These expressions are functions that can be used in combination with **&&** and 
 
 <div align="center"><h2 style="font-weight:bold"></h2></div>
 
-<details closed><summary>TLDR - Additional Information</summary>
+<details closed><summary><b>TLDR</b> - Additional Information</summary>
 
 What it really comes down to is enforcing branch 
 names and structure. In CI/CD systems, the name of the branch can determine how the system runs. The workflows 
@@ -150,7 +150,7 @@ These expression functions can be used in combination with the `&&` and `||` ope
   - Example: equalTo('feature/my-*-branch') && allLowerCase()
     - This checks to see whether or not the branch is equal to the value and that the entire branch is lower case.
 
-<details closed><summary>TLDR - Expression Function List</summary>
+<details closed><summary><b>TLDR</b> - Expression Function List</summary>
 
 1. `equalTo(string)` - Checks to see whether or not the given branch name is equal to the argument value of the function. The argument value must be a string value that is surrounded by single or double quotes. The quotes used must be the opposite of the quotes used for the entire input value. Standard YAML syntax rules apply. The function value allows the use of 2 characters that provide glob-like behavior. The 2 characters are `#` and `*` and can be used together as many times as needed.
      - _Example 1:_ `equalTo('main')`
