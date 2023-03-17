@@ -31,8 +31,6 @@
 This **GitHub Action** can be used to check whether or not GIT branch names are valid using an expression in combination with glob syntax. 
 These expressions are functions that can be used in combination with **&&** and **||** logic to perform the validation.
 
-<div align="center"><h2 style="font-weight:bold"></h2></div>
-
 <details closed><summary><b>TLDR</b> - Additional Information</summary>
 
 What it really comes down to is enforcing branch 
