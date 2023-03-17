@@ -251,7 +251,7 @@ Interested in contributing? If so, click [here](https://github.com/KinsonDigital
 <div align="center">
 
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.0-4baaaa.svg?style=flat)](https://github.com/KinsonDigital/.github/blob/master/docs/code_of_conduct.md)
-![GitHub](https://img.shields.io/github/license/kinsondigital/gotnuget)
+[![GitHub](https://img.shields.io/github/license/kinsondigital/gotnuget)](https://github.com/KinsonDigital/BranchValidator/blob/release/v1.0.0/LICENSE.md)
 </div>
 
 This software is distributed under the very permissive [MIT license](https://github.com/KinsonDigital/GotNuget/blob/preview/v1.0.0-preview.1/LICENSE.md) and all dependencies are distributed under MIT-compatible licenses.
