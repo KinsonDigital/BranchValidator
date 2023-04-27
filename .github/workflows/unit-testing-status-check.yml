@@ -29,9 +29,9 @@ jobs:
       run: |
         # If the destination branch that the pull request is merging into is the master, do a release build
         if ( "${{ github.base_ref }}" -eq "master") {
-          Write-Host "::set-output name=build-config::Release"
+          "build-config=Release" >> $GITHUB_OUTPUT;
         } else { # Any other branch than master, do a debug build
-          Write-Host "::set-output name=build-config::Debug"
+          "build-config=Debug" >> $GITHUB_OUTPUT;
         }
 
 
