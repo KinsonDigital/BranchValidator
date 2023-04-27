@@ -36,6 +36,7 @@ jobs:
             "build-config=Debug" >> $GITHUB_OUTPUT;
           }
 
+
   get_sdk_version:
     name: Get SDK Version
     runs-on: ubuntu-latest
@@ -59,6 +60,7 @@ jobs:
       build-config: ${{ needs.determine_build_config.outputs.build-config }}
       net-sdk-version: ${{ needs.get_sdk_version.outputs.sdk-version }}
 
+
   build_branch_validator_shared:
     name: Build BranchValidatorShared Project
     needs: [determine_build_config, get_sdk_version]
@@ -67,6 +69,7 @@ jobs:
       project-name: "BranchValidatorShared"
       build-config: ${{ needs.determine_build_config.outputs.build-config }}
       net-sdk-version: ${{ needs.get_sdk_version.outputs.sdk-version }}
+
 
   build_script_generator:
     name: Build ScriptGenerator Project
@@ -94,6 +97,7 @@ jobs:
       build-config: ${{ needs.determine_build_config.outputs.build-config }}
       net-sdk-version: ${{ needs.get_sdk_version.outputs.sdk-version }}
 
+
   build_branch_validator_tests:
     name: Build BranchValidatorTests Project
     needs: [determine_build_config,
@@ -105,6 +109,7 @@ jobs:
       project-name: "BranchValidatorTests"
       build-config: ${{ needs.determine_build_config.outputs.build-config }}
       net-sdk-version: ${{ needs.get_sdk_version.outputs.sdk-version }}
+
 
   build_branch_validator_shared_tests:
     name: Build BranchValidatorSharedTests Project
@@ -118,6 +123,7 @@ jobs:
       build-config: ${{ needs.determine_build_config.outputs.build-config }}
       net-sdk-version: ${{ needs.get_sdk_version.outputs.sdk-version }}
 
+
   build_branch_validator_integration_tests:
     name: Build BranchValidatorIntegrationTests Project
     needs: [determine_build_config,
@@ -129,6 +135,7 @@ jobs:
       project-name: "BranchValidatorIntegrationTests"
       build-config: ${{ needs.determine_build_config.outputs.build-config }}
       net-sdk-version: ${{ needs.get_sdk_version.outputs.sdk-version }}
+
 
   build_script_generator_tests:
     name: Build ScriptGeneratorTests Project
