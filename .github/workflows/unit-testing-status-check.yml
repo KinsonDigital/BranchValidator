@@ -38,7 +38,7 @@ jobs:
   run_branch_validator_tests:
     name: Run BranchValidator Tests
     needs: determine_build_config
-    uses: KinsonDigital/Infrastructure/.github/workflows/unit-testing-status-check.yml@v1.0.0
+    uses: KinsonDigital/Infrastructure/.github/workflows/run-csharp-tests.yml@v3.0.2
     with:
       project-name: "BranchValidatorTests"
       build-config: ${{ needs.determine_build_config.outputs.build-config }}
@@ -47,7 +47,7 @@ jobs:
   run_branch_validation_shared_tests:
       name: Run BranchValidatorShared Tests
       needs: determine_build_config
-      uses: KinsonDigital/Infrastructure/.github/workflows/unit-testing-status-check.yml@v1.0.0
+      uses: KinsonDigital/Infrastructure/.github/workflows/run-csharp-tests.yml@v3.0.2
       with:
         project-name: "BranchValidatorSharedTests"
         build-config: ${{ needs.determine_build_config.outputs.build-config }}
@@ -56,7 +56,7 @@ jobs:
   run_script_generator_tests:
       name: Run ScriptGenerator Tests
       needs: determine_build_config
-      uses: KinsonDigital/Infrastructure/.github/workflows/unit-testing-status-check.yml@v1.0.0
+      uses: KinsonDigital/Infrastructure/.github/workflows/run-csharp-tests.yml@v3.0.2
       with:
         project-name: "ScriptGeneratorTests"
         build-config: ${{ needs.determine_build_config.outputs.build-config }}
@@ -65,7 +65,7 @@ jobs:
   run_integration_tests:
       name: Run Integration Tests
       needs: [determine_build_config, run_branch_validator_tests, run_branch_validation_shared_tests, run_script_generator_tests]
-      uses: KinsonDigital/Infrastructure/.github/workflows/unit-testing-status-check.yml@v1.0.0
+      uses: KinsonDigital/Infrastructure/.github/workflows/run-csharp-tests.yml@v3.0.2
       with:
         project-name: "BranchValidatorIntegrationTests"
         build-config: ${{ needs.determine_build_config.outputs.build-config }}
