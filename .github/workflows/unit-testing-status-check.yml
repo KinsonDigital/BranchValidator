@@ -1,6 +1,10 @@
 name: ✔Unit Testing Status Check
 
 
+env:
+  NET_SDK_VERSION: 7.0.203
+
+
 on:
   workflow_dispatch:
     paths-ignore:
@@ -29,44 +33,64 @@ jobs:
       run: |
         # If the destination branch that the pull request is merging into is the master, do a release build
         if ( "${{ github.base_ref }}" -eq "master") {
-          Write-Host "::set-output name=build-config::Release"
+          "build-config=Release" >> $GITHUB_OUTPUT;
         } else { # Any other branch than master, do a debug build
-          Write-Host "::set-output name=build-config::Debug"
+          "build-config=Debug" >> $GITHUB_OUTPUT;
         }
+
+
+  get_sdk_version:
+    name: Get SDK Version
+    runs-on: ubuntu-latest
+    outputs:
+      sdk-version: ${{ steps.get-sdk-version.outputs.sdk-version }}
+    steps:
+      - name: Get SDK Version From Environment Variable
+        id: get-sdk-version
+        shell: pwsh
+        run: |
+          "sdk-version=${{ env.NET_SDK_VERSION }}" >> $GITHUB_OUTPUT;
 
 
   run_branch_validator_tests:
     name: Run BranchValidator Tests
-    needs: determine_build_config
-    uses: KinsonDigital/Infrastructure/.github/workflows/unit-testing-status-check.yml@v1.0.0
+    needs: [determine_build_config, get_sdk_version]
+    uses: KinsonDigital/Infrastructure/.github/workflows/run-csharp-tests.yml@v3.0.2
     with:
       project-name: "BranchValidatorTests"
       build-config: ${{ needs.determine_build_config.outputs.build-config }}
-      net-sdk-version: 7.0.300
+      net-sdk-version: ${{ needs.get_sdk_version.outputs.sdk-version }}
+
 
   run_branch_validation_shared_tests:
       name: Run BranchValidatorShared Tests
-      needs: determine_build_config
-      uses: KinsonDigital/Infrastructure/.github/workflows/unit-testing-status-check.yml@v1.0.0
+      needs: [determine_build_config, get_sdk_version]
+      uses: KinsonDigital/Infrastructure/.github/workflows/run-csharp-tests.yml@v3.0.2
       with:
         project-name: "BranchValidatorSharedTests"
         build-config: ${{ needs.determine_build_config.outputs.build-config }}
-        net-sdk-version: 7.0.300
+        net-sdk-version: ${{ needs.get_sdk_version.outputs.sdk-version }}
+
 
   run_script_generator_tests:
       name: Run ScriptGenerator Tests
-      needs: determine_build_config
-      uses: KinsonDigital/Infrastructure/.github/workflows/unit-testing-status-check.yml@v1.0.0
+      needs: [determine_build_config, get_sdk_version]
+      uses: KinsonDigital/Infrastructure/.github/workflows/run-csharp-tests.yml@v3.0.2
       with:
         project-name: "ScriptGeneratorTests"
         build-config: ${{ needs.determine_build_config.outputs.build-config }}
-        net-sdk-version: 7.0.300
+        net-sdk-version: ${{ needs.get_sdk_version.outputs.sdk-version }}
+
 
   run_integration_tests:
       name: Run Integration Tests
-      needs: [determine_build_config, run_branch_validator_tests, run_branch_validation_shared_tests, run_script_generator_tests]
-      uses: KinsonDigital/Infrastructure/.github/workflows/unit-testing-status-check.yml@v1.0.0
+      needs: [determine_build_config,
+        run_branch_validator_tests,
+        run_branch_validation_shared_tests,
+        run_script_generator_tests,
+        get_sdk_version]
+      uses: KinsonDigital/Infrastructure/.github/workflows/run-csharp-tests.yml@v3.0.2
       with:
         project-name: "BranchValidatorIntegrationTests"
         build-config: ${{ needs.determine_build_config.outputs.build-config }}
-        net-sdk-version: 7.0.300
+        net-sdk-version: ${{ needs.get_sdk_version.outputs.sdk-version }}
