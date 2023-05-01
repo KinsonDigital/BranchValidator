@@ -1,0 +1,88 @@
+name: 🚀Release
+
+
+defaults:
+  run:
+    shell: pwsh
+
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_type:
+        description: "Release Type"
+        required: true
+        type: choice
+        options:
+          - Preview
+          - Production
+
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+    - name: Validate Branch
+      run: |
+        $branch = "${{ github.ref }}";
+
+        if ($branch -ne "refs/heads/master") {
+          Write-Host "::error::Release workflow can only run on the $branch branch";
+          exit 1;
+        }
+
+    - name: Checkout
+      uses: actions/checkout@v3 
+
+    - name: Build Main Project
+      run: dotnet build "${{ github.workspace }}/BranchValidator/BranchValidator.csproj" -c Release;
+
+    - name: Run Unit Tests
+      run: dotnet test "${{ github.workspace }}/Testing/BranchValidatorTests/BranchValidatorTests.csproj";
+
+    - name: Set Up Deno
+      uses: denoland/setup-deno@v1
+      with:
+        deno-version: v1.x
+
+    - name: Get Version From C# Project File
+      id: get-version
+      uses: KinsonDigital/BranchValidator@v1.0.0-preview.4
+      with: # github action output is 'version'
+        repo-owner: KinsonDigital
+        repo-name: BranchValidator
+        repo-token: ${{ secrets.CICD_TOKEN }}
+        branch-name: "${{ github.ref }}"
+        trim-start-from-branch: "refs/heads/"
+        file-format: xml # Not case sensitive
+        file-path: "BranchValidator/BranchValidator.csproj"
+        version-keys: Version
+
+    - name: Validate Tag
+      run: deno run --allow-run "${{ github.workspace }}/.github/cicd/validate-tag.ts" "${{ inputs.release_type }}" "v${{ steps.get-version.outputs.version }}";
+
+    - name: Validate Release Notes
+      run: deno run --allow-read "${{ github.workspace }}/.github/cicd/validate-notes.ts" "${{ inputs.release_type }}" "v${{ steps.get-version.outputs.version }}";
+
+    - name: Preview Release
+      uses: softprops/action-gh-release@v1
+      if: inputs.release_type == 'Preview'
+      with: 
+        name: "🚀Preview Release - v${{ steps.get-version.outputs.version }}" 
+        body_path: "${{ github.workspace }}/Documentation/ReleaseNotes/PreviewReleases/Release-Notes-v${{ steps.get-version.outputs.version }}.md"
+        files: "${{ github.workspace }}/Documentation/ReleaseNotes/PreviewReleases/Release-Notes-v${{ steps.get-version.outputs.version }}.md"
+        tag_name: "v${{ steps.get-version.outputs.version }}"
+        prerelease: true
+        draft: false
+
+    - name: Production Release
+      uses: softprops/action-gh-release@v1
+      if: inputs.release_type == 'Production'
+      with:
+        name: "🚀Production Release - v${{ steps.get-version.outputs.version }}" 
+        body_path: "${{ github.workspace }}/Documentation/ReleaseNotes/ProductionReleases/Release-Notes-v${{ steps.get-version.outputs.version }}.md"
+        files: "${{ github.workspace }}/Documentation/ReleaseNotes/ProductionReleases/Release-Notes-v${{ steps.get-version.outputs.version }}.md"
+        tag_name: "v${{ steps.get-version.outputs.version }}"
+        prerelease: false
+        draft: false
