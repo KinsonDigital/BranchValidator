@@ -48,7 +48,7 @@ jobs:
 
     - name: Get Version From C# Project File
       id: get-version
-      uses: KinsonDigital/BranchValidator@v1.0.0-preview.4
+      uses: KinsonDigital/VersionMiner@v1.0.0-preview.4
       with: # github action output is 'version'
         repo-owner: KinsonDigital
         repo-name: BranchValidator
