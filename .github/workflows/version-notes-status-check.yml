@@ -47,10 +47,7 @@ jobs:
 
         "branch-name=$branch" >> "$env:GITHUB_OUTPUT";
 
-    - name: Test Step Output
-      run: Write-Host "Branch Name Output ${{ steps.get-branch-name.outputs.branch-name }}";
-
-    - name: Get Version (Manual Run)
+    - name: Get Version 
       id: get-version
       uses: KinsonDigital/VersionMiner@v1.0.0-preview.4
       with: # github action output is 'version'
@@ -74,7 +71,7 @@ jobs:
           --allow-net `
           https://raw.githubusercontent.com/KinsonDigital/Infrastructure/v3.0.3/cicd/validate-tag.ts `
           "Either" `
-          "v${{ steps.get-version.outputs.version }}"`
+          "v${{ steps.get-version.outputs.version }}" `
           "${{ env.project-name }}";
   
     - name: Validate Release Notes
