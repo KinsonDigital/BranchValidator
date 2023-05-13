@@ -6,6 +6,10 @@ defaults:
     shell: pwsh
 
 
+env:
+  project-name: BranchValidator
+
+
 on:
   workflow_dispatch:
     inputs:
@@ -28,7 +32,7 @@ jobs:
         $branch = "${{ github.ref }}";
 
         if ($branch -ne "refs/heads/master") {
-          Write-Host "::error::Release workflow can only run on the $branch branch";
+          Write-Host "::error::Release workflow can only run on the master branch";
           exit 1;
         }
 
@@ -36,10 +40,15 @@ jobs:
       uses: actions/checkout@v3 
 
     - name: Build Main Project
-      run: dotnet build "${{ github.workspace }}/BranchValidator/BranchValidator.csproj" -c Release;
+      run: |
+        dotnet build `
+          "${{ github.workspace }}/${{ env.project-name }}/${{ env.project-name }}.csproj" `
+          -c Release;
 
     - name: Run Unit Tests
-      run: dotnet test "${{ github.workspace }}/Testing/BranchValidatorTests/BranchValidatorTests.csproj";
+      run: |
+        dotnet test `
+          "${{ github.workspace }}/Testing/${{ env.project-name }}Tests/${{ env.project-name }}Tests.csproj";
 
     - name: Set Up Deno
       uses: denoland/setup-deno@v1
@@ -51,20 +60,32 @@ jobs:
       uses: KinsonDigital/VersionMiner@v1.0.0-preview.4
       with: # github action output is 'version'
         repo-owner: KinsonDigital
-        repo-name: BranchValidator
+        repo-name: ${{ env.project-name }}
         repo-token: ${{ secrets.CICD_TOKEN }}
         branch-name: "${{ github.ref }}"
         trim-start-from-branch: "refs/heads/"
         file-format: xml # Not case sensitive
-        file-path: "BranchValidator/BranchValidator.csproj"
+        file-path: "${{ env.project-name }}/${{ env.project-name }}.csproj"
         version-keys: Version
 
     - name: Validate Tag
-      run: deno run --allow-run "${{ github.workspace }}/.github/cicd/validate-tag.ts" "${{ inputs.release_type }}" "v${{ steps.get-version.outputs.version }}";
+      run: |
+        deno run `
+          --allow-run `
+          --allow-net `
+          https://raw.githubusercontent.com/KinsonDigital/Infrastructure/v3.0.3/cicd/validate-tag.ts `
+          "${{ inputs.release_type }}" `
+          "v${{ steps.get-version.outputs.version }}" `
+          "${{ env.project-name }}";
 
     - name: Validate Release Notes
-      run: deno run --allow-read "${{ github.workspace }}/.github/cicd/validate-notes.ts" "${{ inputs.release_type }}" "v${{ steps.get-version.outputs.version }}";
-
+      run: |
+        deno run `
+          --allow-read `
+          https://raw.githubusercontent.com/KinsonDigital/Infrastructure/v3.0.3/cicd/validate-notes.ts `
+          "${{ inputs.release_type }}" `
+          "v${{ steps.get-version.outputs.version }}";
+          
     - name: Preview Release
       uses: softprops/action-gh-release@v1
       if: inputs.release_type == 'Preview'
