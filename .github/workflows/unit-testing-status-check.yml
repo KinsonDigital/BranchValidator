@@ -7,17 +7,9 @@ env:
 
 on:
   workflow_dispatch:
-    paths-ignore:
-      - ".github/**"
-      - "Documentation/**"
-      - '.editorconfig'
-      - '*.runsettings'
-      - '.gitattributes'
-      - '.gitignore'
-      - '*.md'
-      - '*.yml'
-      - '.vscode/**'
-      - '*.sln'
+  pull_request:
+    branches: master
+    paths: ["**.cs", "**.csproj"]
 
 
 jobs:
