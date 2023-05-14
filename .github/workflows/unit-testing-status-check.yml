@@ -1,4 +1,4 @@
-name: ✔Unit Testing Status Check
+name: ✅Unit Testing Status Check
 
 
 env:
@@ -7,17 +7,9 @@ env:
 
 on:
   workflow_dispatch:
-    paths-ignore:
-      - ".github/**"
-      - "Documentation/**"
-      - '.editorconfig'
-      - '*.runsettings'
-      - '.gitattributes'
-      - '.gitignore'
-      - '*.md'
-      - '*.yml'
-      - '.vscode/**'
-      - '*.sln'
+  pull_request:
+    branches: master
+    paths: ["**.cs", "**.csproj"]
 
 
 jobs:
@@ -45,10 +37,10 @@ jobs:
     outputs:
       sdk-version: ${{ steps.get-sdk-version.outputs.sdk-version }}
     steps:
-      - name: Get SDK Version From Environment Variable
-        id: get-sdk-version
-        shell: pwsh
-        run: |
+    - name: Get SDK Version From Environment Variable
+      id: get-sdk-version
+      shell: pwsh
+      run: |
           "sdk-version=${{ env.NET_SDK_VERSION }}" >> $GITHUB_OUTPUT;
 
 
