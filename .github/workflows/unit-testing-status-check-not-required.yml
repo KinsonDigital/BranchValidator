@@ -15,8 +15,8 @@ on:
 
 
 jobs:
-  unit_testing_not_required_status_check:
-    name: Unit Testing Not Required Status Check
+  unit_testing_status_check_not_required:
+    name: Unit Testing Status Check Not Required
     runs-on: ubuntu-latest
     steps:
     - name: Print Message
