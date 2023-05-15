@@ -1,0 +1,21 @@
+name: ✅Version and Notes Status Check
+run-name: "Version and Notes Status Check (Not Required)"
+
+
+defaults:
+  run:
+    shell: pwsh
+
+
+on:
+  pull_request:
+    paths-ignore: ["**.cs", "**.csproj"]
+
+
+jobs:
+  version_and_notes_status_check:
+    name: Version Notes Not Required Status Check
+    runs-on: ubuntu-latest
+    steps:
+    - name: Print Message
+      run: echo "Status Check Not Required"
