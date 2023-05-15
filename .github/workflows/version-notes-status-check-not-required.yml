@@ -1,4 +1,5 @@
 name: ✅Version and Notes Status Check
+run-name: "Version and Notes Status Check (Not Required)"
 
 
 defaults:
@@ -6,78 +7,17 @@ defaults:
     shell: pwsh
 
 
-env:
-  project-name: BranchValidator
-
-
 on:
-  workflow_dispatch:
   pull_request:
-    branches: master
-    paths:
+    paths-ignore:
       - "**.cs"
       - "**.csproj"
 
 
 jobs:
-  version_and_notes_status_check_not_required:
-    name: Version and Notes Status Check Not Required
+  version_and_notes_status_check:
+    name: Version Notes Not Required Status Check
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-   
-    - name: Get Branch Name
-      id: get-branch-name
-      run: |
-        Write-Host "::group::Environment Variables";
-        Write-Host "GITHUB_REF: ${{ github.ref }}";
-        Write-Host "GITHUB_HEAD_REF: ${{ github.head_ref }}";
-        Write-Host "::endgroup::";
-
-        $branch = "";
-
-        if ("${{ github.ref }}".startsWith("refs/pull/")) {
-          $branch = "${{ github.head_ref }}";
-          Write-Host "Pull Request Run Head Branch: $branch";
-        } else {
-          $branch = "${{ github.ref }}".Replace("refs/heads/", "");
-          Write-Host "Manual Run Branch: $branch";
-        }
-
-        "branch-name=$branch" >> "$env:GITHUB_OUTPUT";
-
-    - name: Get Version
-      id: get-version
-      uses: KinsonDigital/VersionMiner@v1.0.0-preview.4
-      with: # github action output is 'version'
-        repo-owner: KinsonDigital
-        repo-name: ${{ env.project-name }}
-        repo-token: ${{ secrets.CICD_TOKEN }}
-        branch-name: "${{ steps.get-branch-name.outputs.branch-name }}"
-        file-format: xml # Not case sensitive
-        file-path: "${{ env.project-name }}/${{ env.project-name }}.csproj"
-        version-keys: Version
-   
-    - name: Set Up Deno
-      uses: denoland/setup-deno@v1
-      with:
-        deno-version: v1.x
-
-    - name: Validate Tag
-      run: |
-        deno run `
-          --allow-run `
-          --allow-net `
-          https://raw.githubusercontent.com/KinsonDigital/Infrastructure/v3.0.3/cicd/validate-tag.ts `
-          "Either" `
-          "v${{ steps.get-version.outputs.version }}"`
-          "${{ env.project-name }}";
-  
-    - name: Validate Release Notes
-      run: |
-        deno run `
-          --allow-read `
-          https://raw.githubusercontent.com/KinsonDigital/Infrastructure/v3.0.3/cicd/validate-notes.ts `
-          "Either" `
-          "v${{ steps.get-version.outputs.version }}";
+    - name: Print Message
+      run: echo "Status Check Not Required"
