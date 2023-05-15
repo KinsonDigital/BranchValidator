@@ -9,9 +9,7 @@ defaults:
 
 on:
   pull_request:
-    paths-ignore:
-      - "**.cs"
-      - "**.csproj"
+    paths-ignore: ["**.cs", "**.csproj"]
 
 
 jobs:
