@@ -223,7 +223,7 @@ jobs:
     - name: Fail Workflow # But this step will fail the workflow instead.
       if: ${{ steps.validate-branch.outputs.valid-branch }} = 'false'
       run: |
-        Write-Host "The branch is invalid!!";
+        Write-Host "::error::The branch is invalid!!";
         exit 1; # Fail the workflow
 ```
 
