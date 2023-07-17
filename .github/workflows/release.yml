@@ -1,4 +1,5 @@
 name: 🚀Release
+run-name: 🚀${{ inputs.release-type }} Release ${{ inputs.dry-run == true && '(Dry Run)' || '' }}
 
 
 defaults:
@@ -7,103 +8,43 @@ defaults:
 
 
 env:
-  project-name: BranchValidator
+  runs-on: ubuntu-latest
 
 
 on:
   workflow_dispatch:
     inputs:
-      release_type:
-        description: "Release Type"
+      release-type:
+        description: The type of release to validate.  Either 'Preview' or 'Production'.
         required: true
         type: choice
-        options:
-          - Preview
-          - Production
+        options: [Preview, Production]
+      runs-on:
+        description: The type of runner to run the workflow on.
+        required: false
+        type: choice
+        options: [ubuntu-latest, windows-latest, macos-latest]
+        default: ubuntu-latest
+      dry-run:
+        required: false
+        description: If true, the release will not be created.
+        default: false
+        type: boolean          
 
 
 jobs:
-  release:
-    name: Release
-    runs-on: ubuntu-latest
-    steps:
-    - name: Validate Branch
-      run: |
-        $branch = "${{ github.ref }}";
-
-        if ($branch -ne "refs/heads/master") {
-          Write-Host "::error::Release workflow can only run on the master branch";
-          exit 1;
-        }
-
-    - name: Checkout
-      uses: actions/checkout@v3 
-
-    - name: Build Main Project
-      run: |
-        dotnet build `
-          "${{ github.workspace }}/${{ env.project-name }}/${{ env.project-name }}.csproj" `
-          -c Release;
-
-    - name: Run Unit Tests
-      run: |
-        dotnet test `
-          "${{ github.workspace }}/Testing/${{ env.project-name }}Tests/${{ env.project-name }}Tests.csproj";
-
-    - name: Set Up Deno
-      uses: denoland/setup-deno@v1
-      with:
-        deno-version: v1.x
-
-    - name: Get Version From C# Project File
-      id: get-version
-      uses: KinsonDigital/VersionMiner@v1.0.0-preview.4
-      with: # github action output is 'version'
-        repo-owner: KinsonDigital
-        repo-name: ${{ env.project-name }}
-        repo-token: ${{ secrets.CICD_TOKEN }}
-        branch-name: "${{ github.ref }}"
-        trim-start-from-branch: "refs/heads/"
-        file-format: xml # Not case sensitive
-        file-path: "${{ env.project-name }}/${{ env.project-name }}.csproj"
-        version-keys: Version
-
-    - name: Validate Tag
-      run: |
-        deno run `
-          --allow-run `
-          --allow-net `
-          https://raw.githubusercontent.com/KinsonDigital/Infrastructure/v3.0.3/cicd/validate-tag.ts `
-          "${{ inputs.release_type }}" `
-          "v${{ steps.get-version.outputs.version }}" `
-          "${{ env.project-name }}";
-
-    - name: Validate Release Notes
-      run: |
-        deno run `
-          --allow-read `
-          https://raw.githubusercontent.com/KinsonDigital/Infrastructure/v3.0.3/cicd/validate-notes.ts `
-          "${{ inputs.release_type }}" `
-          "v${{ steps.get-version.outputs.version }}";
-          
-    - name: Preview Release
-      uses: softprops/action-gh-release@v1
-      if: inputs.release_type == 'Preview'
-      with: 
-        name: "🚀Preview Release - v${{ steps.get-version.outputs.version }}" 
-        body_path: "${{ github.workspace }}/Documentation/ReleaseNotes/PreviewReleases/Release-Notes-v${{ steps.get-version.outputs.version }}.md"
-        files: "${{ github.workspace }}/Documentation/ReleaseNotes/PreviewReleases/Release-Notes-v${{ steps.get-version.outputs.version }}.md"
-        tag_name: "v${{ steps.get-version.outputs.version }}"
-        prerelease: true
-        draft: false
-
-    - name: Production Release
-      uses: softprops/action-gh-release@v1
-      if: inputs.release_type == 'Production'
-      with:
-        name: "🚀Production Release - v${{ steps.get-version.outputs.version }}" 
-        body_path: "${{ github.workspace }}/Documentation/ReleaseNotes/ProductionReleases/Release-Notes-v${{ steps.get-version.outputs.version }}.md"
-        files: "${{ github.workspace }}/Documentation/ReleaseNotes/ProductionReleases/Release-Notes-v${{ steps.get-version.outputs.version }}.md"
-        tag_name: "v${{ steps.get-version.outputs.version }}"
-        prerelease: false
-        draft: false
+  perform_release:
+    name: Performing ${{ inputs.release-type }} Release of ${{ vars.PROJECT_NAME }} (${{ inputs.release-type == 'Production' && 'Release' || 'Debug' }})
+    uses: KinsonDigital/Infrastructure/.github/workflows/dotnet-action-release.yml@v8.1.0
+    with:
+      project-name: "${{ vars.PROJECT_NAME }}"
+      release-type: "${{ inputs.release-type }}"
+      run-branch: "${{ github.ref_name }}"
+      net-sdk-version: "${{ vars.NET_SDK_VERSION }}"
+      relative-release-notes-dir-path: "${{ vars.SCRIPT_RELATIVE_DIR_PATH }}"
+      release-notes-file-name-prefix: "${{ vars.RELEASE_NOTES_FILE_NAME_PREFIX }}"
+      build-config: "${{ inputs.release-type == 'Production' && 'Release' || 'Debug' }}"
+      cicd-scripts-version: "${{ vars.CICD_SCRIPTS_VERSION}}"
+      pr-include-notes-label: "${{ vars.PR_INCLUDE_NOTES_LABEL }}"
+      runs-on: ${{ inputs.runs-on }}
+      dry-run: ${{ inputs.dry-run }}
