@@ -1,36 +1,13 @@
 name: ✅Build Status Check
 
 
-env:
-  NET_SDK_VERSION: 7.0.203
-
-
 on:
   workflow_dispatch:
   pull_request:
-    branches: master
-    paths: ["**.cs", "**.csproj"]
+    branches: main
 
 
 jobs:
-  determine_build_config:
-    name: Determine Build Configuration
-    runs-on: ubuntu-latest
-    outputs:
-      build-config: ${{ steps.get-build-config.outputs.build-config }}
-    steps:
-    - name: Get Build Config
-      id: get-build-config
-      shell: pwsh
-      run: |
-        # If the destination branch that the pull request is merging into is the master, do a release build
-        if ( "${{ github.base_ref }}" -eq "master") {
-          "build-config=Release" >> $GITHUB_OUTPUT;
-        } else { # Any other branch than master, do a debug build
-          "build-config=Debug" >> $GITHUB_OUTPUT;
-        }
-
-
   get_sdk_version:
     name: Get SDK Version
     runs-on: ubuntu-latest
@@ -41,36 +18,36 @@ jobs:
       id: get-sdk-version
       shell: pwsh
       run: |
-        "sdk-version=${{ env.NET_SDK_VERSION }}" >> $GITHUB_OUTPUT;
+        "sdk-version=${{ vars.NET_SDK_VERSION }}" >> $GITHUB_OUTPUT;
 
 
   build_branch_validator:
-    name: Build BranchValidator Project
-    needs: [determine_build_config, get_sdk_version]
-    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v3.0.2
+    name: Build ${{ vars.PROJECT_NAME }} Project
+    needs: get_sdk_version
+    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v9.1.0
     with:
-      project-name: "BranchValidator"
-      build-config: ${{ needs.determine_build_config.outputs.build-config }}
+      project-name: "${{ vars.PROJECT_NAME }}"
+      build-config: Debug
       net-sdk-version: ${{ needs.get_sdk_version.outputs.sdk-version }}
 
 
   build_branch_validator_shared:
-    name: Build BranchValidatorShared Project
-    needs: [determine_build_config, get_sdk_version]
-    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v3.0.2
+    name: Build ${{ vars.PROJECT_NAME }}Shared Project
+    needs: get_sdk_version
+    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v9.1.0
     with:
-      project-name: "BranchValidatorShared"
-      build-config: ${{ needs.determine_build_config.outputs.build-config }}
+      project-name: "${{ vars.PROJECT_NAME }}Shared"
+      build-config: Debug
       net-sdk-version: ${{ needs.get_sdk_version.outputs.sdk-version }}
 
 
   build_script_generator:
     name: Build ScriptGenerator Project
-    needs: [determine_build_config, get_sdk_version]
-    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v3.0.2
+    needs: get_sdk_version
+    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v9.1.0
     with:
       project-name: "ScriptGenerator"
-      build-config: ${{ needs.determine_build_config.outputs.build-config }}
+      build-config: Debug
       net-sdk-version: ${{ needs.get_sdk_version.outputs.sdk-version }}
       base-path: "${{ github.workspace }}/Tooling"
 
@@ -79,65 +56,60 @@ jobs:
   # Build all of the unit testing projects
   build_testing_shared:
     name: Build TestingShared
-    needs: [determine_build_config,
-            get_sdk_version,
+    needs: [get_sdk_version,
             build_branch_validator,
             build_branch_validator_shared,
             build_script_generator]
-    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v3.0.2
+    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v9.1.0
     with:
       project-name: "TestingShared"
-      build-config: ${{ needs.determine_build_config.outputs.build-config }}
+      build-config: Debug
       net-sdk-version: ${{ needs.get_sdk_version.outputs.sdk-version }}
 
 
   build_branch_validator_tests:
-    name: Build BranchValidatorTests Project
-    needs: [determine_build_config,
-            get_sdk_version,
+    name: Build ${{ vars.PROJECT_NAME }}Tests Project
+    needs: [get_sdk_version,
             build_branch_validator,
             build_testing_shared]
-    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v3.0.2
+    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v9.1.0
     with:
-      project-name: "BranchValidatorTests"
-      build-config: ${{ needs.determine_build_config.outputs.build-config }}
+      project-name: "${{ vars.PROJECT_NAME }}Tests"
+      build-config: Debug
       net-sdk-version: ${{ needs.get_sdk_version.outputs.sdk-version }}
 
 
   build_branch_validator_shared_tests:
-    name: Build BranchValidatorSharedTests Project
-    needs: [determine_build_config,
-            get_sdk_version,
+    name: Build ${{ vars.PROJECT_NAME }}SharedTests Project
+    needs: [get_sdk_version,
             build_branch_validator_shared,
             build_testing_shared]
-    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v3.0.2
+    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v9.1.0
     with:
-      project-name: "BranchValidatorSharedTests"
-      build-config: ${{ needs.determine_build_config.outputs.build-config }}
+      project-name: "${{ vars.PROJECT_NAME }}SharedTests"
+      build-config: Debug
       net-sdk-version: ${{ needs.get_sdk_version.outputs.sdk-version }}
 
 
   build_branch_validator_integration_tests:
-    name: Build BranchValidatorIntegrationTests Project
-    needs: [determine_build_config,
-            get_sdk_version,
+    name: Build ${{ vars.PROJECT_NAME }}IntegrationTests Project
+    needs: [get_sdk_version,
             build_branch_validator,
             build_testing_shared]
-    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v3.0.2
+    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v9.1.0
     with:
-      project-name: "BranchValidatorIntegrationTests"
-      build-config: ${{ needs.determine_build_config.outputs.build-config }}
+      project-name: "${{ vars.PROJECT_NAME }}IntegrationTests"
+      build-config: Debug
       net-sdk-version: ${{ needs.get_sdk_version.outputs.sdk-version }}
 
 
   build_script_generator_tests:
     name: Build ScriptGeneratorTests Project
-    needs: [determine_build_config,
-            get_sdk_version,
+    needs: [get_sdk_version,
             build_script_generator,
             build_testing_shared]
-    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v3.0.2
+    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v9.1.0
     with:
       project-name: "ScriptGeneratorTests"
-      build-config: ${{ needs.determine_build_config.outputs.build-config }}
+      build-config: Debug
       net-sdk-version: ${{ needs.get_sdk_version.outputs.sdk-version }}

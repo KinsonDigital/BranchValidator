@@ -74,7 +74,7 @@ public class GitHubActionIntegrationTests : IDisposable
     [InlineData("equalTo('test-branch')", "test-branch", "")]
     [InlineData("equalTo('release/v#.#.#-preview.#')", "release/v1.20.300-preview.4000", "refs/heads/")]
     [InlineData("equalTo('feature/#-*')", "feature/123-test-branch", "refs/heads/")]
-    [InlineData("equalTo('master')", "master", "refs/heads/")]
+    [InlineData("equalTo('main')", "main", "refs/heads/")]
     [InlineData("equalTo('develop')", "develop", "refs/heads/")]
     [InlineData("equalTo('preview/feature/v#.#.#-preview.#')", "preview/feature/v1.20.300-preview.4000", "refs/heads/")]
     [InlineData("equalTo('hotfix/v#.#.#')", "hotfix/v1.2.3", "refs/heads/")]
