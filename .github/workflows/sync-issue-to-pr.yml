@@ -40,6 +40,14 @@ jobs:
           Write-Host "::notice::PR Number: $prNumber";
           Write-Host "::notice::Comment: $command";
 
+          <#
+            1. Organization name
+            2. Project name
+            3. Login name of person performing issue change
+            4. Pull request number
+            5. Sync command - This is either 'issue' or 'pr'
+            6. PAT
+          #>
           deno run `
             --allow-net `
             "$scriptUrl" `
@@ -48,4 +56,4 @@ jobs:
             "${{ github.event.sender.login }}" `
             "$prNumber" `
             "$command" `
-            "${{ secrets.CICD_REST_API }}";
+            "${{ secrets.CICD_TOKEN }}";
