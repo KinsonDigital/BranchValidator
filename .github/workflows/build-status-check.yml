@@ -56,7 +56,7 @@ jobs:
 
   build_status_check:
     name: ${{ vars.PROJECT_NAME }} Build Status Check
-    needs: [build_branch_validator, build_branch_validator_shared, build_script_generator]
+    needs: [build_branch_validator, build_branch_validator_shared]
     runs-on: ubuntu-latest
     steps:
       - name: Print Status Check Pass Message
