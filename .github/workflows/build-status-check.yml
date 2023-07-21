@@ -18,7 +18,7 @@ jobs:
       id: get-sdk-version
       shell: pwsh
       run: |
-        "sdk-version=${{ vars.NET_SDK_VERSION }}" >> $GITHUB_OUTPUT;
+        "sdk-version=${{ vars.NET_SDK_VERSION }}" >> $env:GITHUB_OUTPUT;
 
 
   build_branch_validator:
