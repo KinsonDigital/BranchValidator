@@ -24,7 +24,7 @@ jobs:
   build_branch_validator:
     name: Build ${{ vars.PROJECT_NAME }} Project
     needs: get_sdk_version
-    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v10.0.0
+    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v10.0.1
     with:
       project-name: "${{ vars.PROJECT_NAME }}"
       build-config: Debug
@@ -34,7 +34,7 @@ jobs:
   build_branch_validator_shared:
     name: Build ${{ vars.PROJECT_NAME }}Shared Project
     needs: get_sdk_version
-    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v10.0.0
+    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v10.0.1
     with:
       project-name: "${{ vars.PROJECT_NAME }}Shared"
       build-config: Debug
@@ -46,7 +46,7 @@ jobs:
   # build_script_generator:
   #   name: Build ScriptGenerator Project
   #   needs: get_sdk_version
-  #   uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v10.0.0
+  #   uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v10.0.1
   #   with:
   #     project-name: ScriptGenerator
   #     build-config: Debug
