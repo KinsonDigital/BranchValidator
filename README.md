@@ -1,7 +1,7 @@
 <div align="center">
 
-  ![BranchingDiagram](./Images/../Documentation/Images/branchvalidator-logo-darkmode.png#gh-dark-mode-only)
-  ![BranchingDiagram](./Images/../Documentation/Images/branchvalidator-logo-lightmode.png#gh-light-mode-only)  
+  ![BranchingDiagram](https://raw.githubusercontent.com/KinsonDigital/BranchValidator/preview/Images/branchvalidator-logo-darkmode.png#gh-dark-mode-only)
+  ![BranchingDiagram](https://raw.githubusercontent.com/KinsonDigital/BranchValidator/preview/Images/branchvalidator-logo-lightmode.png#gh-light-mode-only)  
   <br />
 </div>
 
@@ -12,8 +12,8 @@
 
 <div align="center">
 
-![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/KinsonDigital/BranchValidator/build-status-check.yml?color=2F8840&label=Build&logo=GitHub)
-![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/KinsonDigital/BranchValidator/unit-testing-status-check.yml?color=2F8840&label=Unit%20Tests&logo=GitHub)
+[![Build PR Status Check](https://img.shields.io/github/actions/workflow/status/KinsonDigital/BranchValidator/build-status-check.yml?label=%E2%9A%99%EF%B8%8FBuild)](https://github.com/KinsonDigital/BranchValidator/actions/workflows/build-status-check.yml)
+[![Unit Test PR Status Check](https://img.shields.io/github/actions/workflow/status/KinsonDigital/BranchValidator/unit-test-status-check.yml?label=%F0%9F%A7%AATests)](https://github.com/KinsonDigital/BranchValidator/actions/workflows/unit-test-status-check.yml)
 
 ![Codecov](https://img.shields.io/codecov/c/github/KinsonDigital/BranchValidator?color=2F8840&label=Code%20Coverage&logo=codecov)
 
@@ -249,7 +249,7 @@ Interested in contributing? If so, click [here](https://github.com/KinsonDigital
 <div align="center">
 
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg?style=flat)](https://github.com/KinsonDigital/.github/blob/master/docs/code_of_conduct.md)
-[![GitHub](https://img.shields.io/github/license/kinsondigital/gotnuget)](https://github.com/KinsonDigital/BranchValidator/blob/release/v1.0.0/LICENSE.md)
+[![GitHub](https://img.shields.io/github/license/kinsondigital/branchvalidator)](https://github.com/KinsonDigital/BranchValidator/blob/preview/LICENSE.md)
 </div>
 
 This software is distributed under the very permissive MIT license and all dependencies are distributed under MIT-compatible licenses.

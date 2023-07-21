@@ -16,8 +16,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.gitignore = .gitignore
 		action.yml = action.yml
 		Dockerfile = Dockerfile
-		LICENSE = LICENSE
 		README.md = README.md
+		codecov.yml = codecov.yml
+		LICENSE.md = LICENSE.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BranchValidatorTests", "Testing\BranchValidatorTests\BranchValidatorTests.csproj", "{77B96B49-4D77-456B-A787-E852E9842B60}"
@@ -31,17 +32,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\build-status-check.yml = .github\workflows\build-status-check.yml
 		.github\workflows\unit-testing-status-check.yml = .github\workflows\unit-testing-status-check.yml
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Issue Templates", "Issue Templates", "{2C56562A-E5F8-43AD-A99F-049FEA733577}"
-	ProjectSection(SolutionItems) = preProject
-		.github\ISSUE_TEMPLATE\bug-issue-template.yml = .github\ISSUE_TEMPLATE\bug-issue-template.yml
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Pull Request Templates", "Pull Request Templates", "{DC46D789-4072-4F81-B83C-CEF24FFD7229}"
-	ProjectSection(SolutionItems) = preProject
-		.github\PULL_REQUEST_TEMPLATE\feature-pr-template.md = .github\PULL_REQUEST_TEMPLATE\feature-pr-template.md
-		.github\PULL_REQUEST_TEMPLATE\preview-feature-pr-template.md = .github\PULL_REQUEST_TEMPLATE\preview-feature-pr-template.md
+		.github\workflows\add-new-issue-to-project.yml = .github\workflows\add-new-issue-to-project.yml
+		.github\workflows\prepare-release.yml = .github\workflows\prepare-release.yml
+		.github\workflows\release.yml = .github\workflows\release.yml
+		.github\workflows\sync-bot.yml = .github\workflows\sync-bot.yml
+		.github\workflows\sync-issue-to-pr.yml = .github\workflows\sync-issue-to-pr.yml
+		.github\workflows\sync-status-check.yml = .github\workflows\sync-status-check.yml
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BranchValidatorIntegrationTests", "Testing\BranchValidatorIntegrationTests\BranchValidatorIntegrationTests.csproj", "{FEAF2CD0-88B7-4BBC-BEA9-36BE1B2A54C5}"
@@ -123,8 +119,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{77B96B49-4D77-456B-A787-E852E9842B60} = {0D648979-F6A2-4DBD-ABE7-BDCB9E0EE4BE}
 		{5010ECCD-3BCC-475D-87EE-31E289E24571} = {5F6905A4-928D-4A81-9D9B-B273A27B3A92}
-		{2C56562A-E5F8-43AD-A99F-049FEA733577} = {5F6905A4-928D-4A81-9D9B-B273A27B3A92}
-		{DC46D789-4072-4F81-B83C-CEF24FFD7229} = {5F6905A4-928D-4A81-9D9B-B273A27B3A92}
 		{FEAF2CD0-88B7-4BBC-BEA9-36BE1B2A54C5} = {0D648979-F6A2-4DBD-ABE7-BDCB9E0EE4BE}
 		{10D490EC-47A4-43BC-AC85-C4D2D9A93111} = {9FCCAAD2-2BDF-46C2-8616-A5CDE75ED18E}
 		{C2A493D1-1A38-4D4C-A13C-CA0BF772E46D} = {0D648979-F6A2-4DBD-ABE7-BDCB9E0EE4BE}
