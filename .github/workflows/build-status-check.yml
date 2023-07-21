@@ -40,16 +40,18 @@ jobs:
       build-config: Debug
       net-sdk-version: "${{ needs.get_sdk_version.outputs.sdk-version }}"
 
+  # NOTE: Disabled until the 'resolve-csharp-proj-file.yml' reusable workflow in the 'Infrastructure' repo
+  # gets updated to use deno to recursively search for the project file.
 
-  build_script_generator:
-    name: Build ScriptGenerator Project
-    needs: get_sdk_version
-    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v10.0.0
-    with:
-      project-name: ScriptGenerator
-      build-config: Debug
-      net-sdk-version: "${{ needs.get_sdk_version.outputs.sdk-version }}"
-      base-path: "${{ github.workspace }}/Tooling"
+  # build_script_generator:
+  #   name: Build ScriptGenerator Project
+  #   needs: get_sdk_version
+  #   uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v10.0.0
+  #   with:
+  #     project-name: ScriptGenerator
+  #     build-config: Debug
+  #     net-sdk-version: "${{ needs.get_sdk_version.outputs.sdk-version }}"
+  #     base-path: "${{ github.workspace }}/Tooling"
 
 
   build_status_check:
