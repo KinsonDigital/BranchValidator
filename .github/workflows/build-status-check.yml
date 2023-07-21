@@ -28,7 +28,7 @@ jobs:
     with:
       project-name: "${{ vars.PROJECT_NAME }}"
       build-config: Debug
-      net-sdk-version: ${{ needs.get_sdk_version.outputs.sdk-version }}
+      net-sdk-version: "${{ needs.get_sdk_version.outputs.sdk-version }}"
 
 
   build_branch_validator_shared:
@@ -38,7 +38,7 @@ jobs:
     with:
       project-name: "${{ vars.PROJECT_NAME }}Shared"
       build-config: Debug
-      net-sdk-version: ${{ needs.get_sdk_version.outputs.sdk-version }}
+      net-sdk-version: "${{ needs.get_sdk_version.outputs.sdk-version }}"
 
 
   build_script_generator:
@@ -48,7 +48,7 @@ jobs:
     with:
       project-name: ScriptGenerator
       build-config: Debug
-      net-sdk-version: ${{ needs.get_sdk_version.outputs.sdk-version }}
+      net-sdk-version: "${{ needs.get_sdk_version.outputs.sdk-version }}"
       base-path: "${{ github.workspace }}/Tooling"
 
 
