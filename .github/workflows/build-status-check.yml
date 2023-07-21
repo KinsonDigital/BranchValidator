@@ -4,7 +4,7 @@ name: ✅Build Status Check
 on:
   workflow_dispatch:
   pull_request:
-    branches: main
+    branches: [main, preview]
 
 
 jobs:
@@ -24,7 +24,7 @@ jobs:
   build_branch_validator:
     name: Build ${{ vars.PROJECT_NAME }} Project
     needs: get_sdk_version
-    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v9.1.0
+    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v10.0.0
     with:
       project-name: "${{ vars.PROJECT_NAME }}"
       build-config: Debug
@@ -34,7 +34,7 @@ jobs:
   build_branch_validator_shared:
     name: Build ${{ vars.PROJECT_NAME }}Shared Project
     needs: get_sdk_version
-    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v9.1.0
+    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v10.0.0
     with:
       project-name: "${{ vars.PROJECT_NAME }}Shared"
       build-config: Debug
@@ -44,72 +44,19 @@ jobs:
   build_script_generator:
     name: Build ScriptGenerator Project
     needs: get_sdk_version
-    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v9.1.0
+    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v10.0.0
     with:
-      project-name: "ScriptGenerator"
+      project-name: ScriptGenerator
       build-config: Debug
       net-sdk-version: ${{ needs.get_sdk_version.outputs.sdk-version }}
       base-path: "${{ github.workspace }}/Tooling"
 
-#----------------------------------------------------------------------
 
-  # Build all of the unit testing projects
-  build_testing_shared:
-    name: Build TestingShared
-    needs: [get_sdk_version,
-            build_branch_validator,
-            build_branch_validator_shared,
-            build_script_generator]
-    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v9.1.0
-    with:
-      project-name: "TestingShared"
-      build-config: Debug
-      net-sdk-version: ${{ needs.get_sdk_version.outputs.sdk-version }}
-
-
-  build_branch_validator_tests:
-    name: Build ${{ vars.PROJECT_NAME }}Tests Project
-    needs: [get_sdk_version,
-            build_branch_validator,
-            build_testing_shared]
-    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v9.1.0
-    with:
-      project-name: "${{ vars.PROJECT_NAME }}Tests"
-      build-config: Debug
-      net-sdk-version: ${{ needs.get_sdk_version.outputs.sdk-version }}
-
-
-  build_branch_validator_shared_tests:
-    name: Build ${{ vars.PROJECT_NAME }}SharedTests Project
-    needs: [get_sdk_version,
-            build_branch_validator_shared,
-            build_testing_shared]
-    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v9.1.0
-    with:
-      project-name: "${{ vars.PROJECT_NAME }}SharedTests"
-      build-config: Debug
-      net-sdk-version: ${{ needs.get_sdk_version.outputs.sdk-version }}
-
-
-  build_branch_validator_integration_tests:
-    name: Build ${{ vars.PROJECT_NAME }}IntegrationTests Project
-    needs: [get_sdk_version,
-            build_branch_validator,
-            build_testing_shared]
-    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v9.1.0
-    with:
-      project-name: "${{ vars.PROJECT_NAME }}IntegrationTests"
-      build-config: Debug
-      net-sdk-version: ${{ needs.get_sdk_version.outputs.sdk-version }}
-
-
-  build_script_generator_tests:
-    name: Build ScriptGeneratorTests Project
-    needs: [get_sdk_version,
-            build_script_generator,
-            build_testing_shared]
-    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v9.1.0
-    with:
-      project-name: "ScriptGeneratorTests"
-      build-config: Debug
-      net-sdk-version: ${{ needs.get_sdk_version.outputs.sdk-version }}
+  build_status_check:
+    name: ${{ vars.PROJECT_NAME }} Build Status Check
+    needs: [build_branch_validator, build_branch_validator_shared, build_script_generator]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print Status Check Pass Message
+        shell: pwsh
+        run: Write-Host "::notice::✅Build Status Check Passed✅";
