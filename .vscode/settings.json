@@ -9,31 +9,21 @@
         "runsettings"
     ],
     "dotnet.defaultSolution": "BranchValidator.sln",
+	"[csharp]": {
+		"editor.insertSpaces": false,
+		"editor.indentSize": 4,
+	},
 	"[jsonc]": {
-        "editor.indentSize": 4,
 		"editor.insertSpaces": false,
-        "editor.detectIndentation": false,
-    },
-    "[csharp]": {
         "editor.indentSize": 4,
-		"editor.insertSpaces": false,
-        "editor.detectIndentation": false,
     },
-	"[yml]": {
-		"editor.indentSize": 2,
+	"[yaml]": {
 		"editor.insertSpaces": true,
-        "editor.detectIndentation": false,
+		"editor.tabSize": 2,
     },
-	"rest-client.environmentVariables": {
-		"$shared": {
-			"repoOwner": "KinsonDigital",
-			"githubHostAddress": "https://api.github.com",
-		},
-		"GitHub-CASL": {
-			"hostAddress": "{{$shared githubHostAddress}}",
-			"repoOwner": "{{$shared repoOwner}}",
-			"repoName": "CASL",
-			"milestoneNumber": "7",
-		},
+	"editor.detectIndentation": false,
+	"[github-actions-workflow]": {
+		"editor.tabSize": 2,
+		"editor.insertSpaces": true
 	},
 }
