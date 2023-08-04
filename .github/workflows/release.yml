@@ -31,7 +31,7 @@ on:
 jobs:
   perform_release:
     name: Performing ${{ inputs.release-type }} Release of ${{ vars.PROJECT_NAME }} (${{ inputs.release-type == 'Production' && 'Release' || 'Debug' }})
-    uses: KinsonDigital/Infrastructure/.github/workflows/dotnet-action-release.yml@v10.0.1
+    uses: KinsonDigital/Infrastructure/.github/workflows/dotnet-action-release.yml@v10.1.1
     with:
       project-name: "${{ vars.PROJECT_NAME }}"
       release-type: "${{ inputs.release-type }}"
