@@ -22,8 +22,8 @@ on:
         options: [ubuntu-latest, windows-latest, macos-latest]
         default: ubuntu-latest
       dry-run:
+        description: Dry Run - Check to run the workflow without creating a release.
         required: false
-        description: If true, the release will not be created.
         default: false
         type: boolean          
 
