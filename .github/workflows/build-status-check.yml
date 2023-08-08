@@ -2,6 +2,11 @@ name: ✅Build Status Check
 run-name: ✅Build Status Check (${{ github.base_ref }} branch)
 
 
+defaults:
+  run:
+    shell: pwsh
+
+
 on:
   pull_request:
     branches: [main, preview]
@@ -16,7 +21,6 @@ jobs:
     steps:
     - name: Get SDK Version From Environment Variable
       id: get-sdk-version
-      shell: pwsh
       run: |
         "sdk-version=${{ vars.NET_SDK_VERSION }}" >> $env:GITHUB_OUTPUT;
 
@@ -40,19 +44,6 @@ jobs:
       build-config: Debug
       net-sdk-version: "${{ needs.get_sdk_version.outputs.sdk-version }}"
 
-  # NOTE: Disabled until the 'resolve-csharp-proj-file.yml' reusable workflow in the 'Infrastructure' repo
-  # gets updated to use deno to recursively search for the project file.
-
-  # build_script_generator:
-  #   name: Build ScriptGenerator Project
-  #   needs: get_sdk_version
-  #   uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v10.1.1
-  #   with:
-  #     project-name: ScriptGenerator
-  #     build-config: Debug
-  #     net-sdk-version: "${{ needs.get_sdk_version.outputs.sdk-version }}"
-  #     base-path: "${{ github.workspace }}/Tooling"
-
 
   build_status_check:
     name: ${{ vars.PROJECT_NAME }} Build Status Check
@@ -60,5 +51,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Print Status Check Pass Message
-        shell: pwsh
         run: Write-Host "::notice::✅Build Status Check Passed✅";

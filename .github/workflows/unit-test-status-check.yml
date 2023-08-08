@@ -2,6 +2,11 @@ name: ✅Unit Testing Status Check
 run-name: ✅Unit Testing Status Check (${{ github.base_ref }} branch)
 
 
+defaults:
+  run:
+    shell: pwsh
+
+
 on:
   pull_request:
     branches: [main, preview]
@@ -16,9 +21,8 @@ jobs:
     steps:
     - name: Get SDK Version From Environment Variable
       id: get-sdk-version
-      shell: pwsh
       run: |
-          "sdk-version=${{ vars.NET_SDK_VERSION }}" >> $env:GITHUB_OUTPUT;
+        "sdk-version=${{ vars.NET_SDK_VERSION }}" >> $env:GITHUB_OUTPUT;
 
 
   run_branch_validator_tests:
@@ -73,5 +77,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Print Status Check Pass Message
-        shell: pwsh
         run: Write-Host "::notice::✅Test Status Check Passed✅";
