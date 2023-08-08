@@ -45,7 +45,7 @@ jobs:
   perform_release:
     name: Performing ${{ inputs.release-type }} Release of ${{ vars.PROJECT_NAME }} (${{ inputs.release-type == 'Production' && 'Release' || 'Debug' }})
     needs: determine_release_notes_path
-    uses: KinsonDigital/Infrastructure/.github/workflows/dotnet-action-release.yml@v10.1.1
+    uses: KinsonDigital/Infrastructure/.github/workflows/dotnet-action-release.yml@v11.0.0
     with:
       project-name: "${{ vars.PROJECT_NAME }}"
       release-type: "${{ inputs.release-type }}"
@@ -57,3 +57,5 @@ jobs:
       pr-include-notes-label: "${{ vars.PR_INCLUDE_NOTES_LABEL }}"
       runs-on: ${{ inputs.runs-on }}
       dry-run: ${{ inputs.dry-run }}
+    secrets:
+      cicd-pat: ${{ secrets.CICD_TOKEN }}
