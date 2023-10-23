@@ -33,6 +33,9 @@ jobs:
       project-name: "${{ vars.PROJECT_NAME }}Tests"
       build-config: Debug
       net-sdk-version: "${{ needs.get_sdk_version.outputs.sdk-version }}"
+      checkout-ref: ${{ github.event.pull_request.head.ref }}
+      checkout-repository: ${{ github.event.pull_request.head.repo.full_name }}
+
 
 
   run_branch_validation_shared_tests:
@@ -43,6 +46,9 @@ jobs:
       project-name: "${{ vars.PROJECT_NAME }}SharedTests"
       build-config: Debug
       net-sdk-version: "${{ needs.get_sdk_version.outputs.sdk-version }}"
+      checkout-ref: ${{ github.event.pull_request.head.ref }}
+      checkout-repository: ${{ github.event.pull_request.head.repo.full_name }}
+
 
 
   run_script_generator_tests:
@@ -53,6 +59,9 @@ jobs:
       project-name: "ScriptGeneratorTests"
       build-config: Debug
       net-sdk-version: "${{ needs.get_sdk_version.outputs.sdk-version }}"
+      checkout-ref: ${{ github.event.pull_request.head.ref }}
+      checkout-repository: ${{ github.event.pull_request.head.repo.full_name }}
+
 
 
   run_integration_tests:
@@ -66,6 +75,9 @@ jobs:
       project-name: "${{ vars.PROJECT_NAME }}IntegrationTests"
       build-config: Debug
       net-sdk-version: "${{ needs.get_sdk_version.outputs.sdk-version }}"
+      checkout-ref: ${{ github.event.pull_request.head.ref }}
+      checkout-repository: ${{ github.event.pull_request.head.repo.full_name }}
+
 
 
   test_status_check:
