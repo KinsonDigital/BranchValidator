@@ -3,7 +3,6 @@
 // </copyright>
 
 using BranchValidator.Observables.Core;
-using BranchValidatorTests.Helpers;
 using FluentAssertions;
 using Moq;
 
@@ -85,7 +84,7 @@ public class ObserverTests
         observer.OnCompleted();
 
         // Assert
-        AssertExtensions.EqualWithMessage(1, onCompleteInvokedCount, "The 'onCompleted' action was invoked more than once.");
+        Assert.Equal(1, onCompleteInvokedCount);
     }
 
     [Fact]

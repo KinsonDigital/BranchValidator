@@ -21,7 +21,7 @@ public static class ExtensionMethods
     /// <param name="propName">The name of the property on the object.</param>
     /// <typeparam name="T">The type of attribute on the property.</typeparam>
     /// <returns>The existing attribute.</returns>
-    /// <exception cref="AssertActualExpectedException">
+    /// <exception cref="XunitException">
     ///     Thrown if the property or attribute does not exist.
     /// </exception>
     public static T GetAttrFromProp<T>(this object value, string propName)
@@ -34,10 +34,7 @@ public static class ExtensionMethods
 
         if (props.Length <= 0)
         {
-            throw new AssertActualExpectedException(
-                "at least 1 item.",
-                "was 0 items.",
-                noPropsAssertMsg);
+            throw new XunitException(noPropsAssertMsg);
         }
 
         var propNotFoundAssertMsg = $"Cannot get an attribute on the property '{propName}' if the property does not exist.";
@@ -47,10 +44,7 @@ public static class ExtensionMethods
 
         if (foundProp is null)
         {
-            throw new AssertActualExpectedException(
-                "not to be null.",
-                "was null",
-                propNotFoundAssertMsg);
+            throw new XunitException(propNotFoundAssertMsg);
         }
 
         var noAttrsAssertMsg = $"Cannot get an attribute when the property '{propName}' does not have any attributes.";
@@ -58,10 +52,7 @@ public static class ExtensionMethods
 
         if (attrs.Length <= 0)
         {
-            throw new AssertActualExpectedException(
-                "at least 1 item.",
-                "was 0 items.",
-                noAttrsAssertMsg);
+            throw new XunitException(noAttrsAssertMsg);
         }
 
         return attrs[0];
@@ -83,7 +74,7 @@ public static class ExtensionMethods
     /// <param name="requiredExpected">The expected value of the <see cref="OptionAttribute.Required"/> property.</param>
     /// <param name="defaultExpected">The expected value of the <see cref="BaseAttribute.Default"/> property.</param>
     /// <param name="helpTextExpected">The expected value of the <see cref="OptionAttribute.HelpText"/> property.</param>
-    /// <exception cref="AssertActualExpectedException">
+    /// <exception cref="XunitException">
     ///     Thrown if the properties do not have the correct values.
     /// </exception>
     public static void AssertOptionAttrProps(this OptionAttribute value,
@@ -95,42 +86,52 @@ public static class ExtensionMethods
     {
         if (value.ShortName != shortNameExpected)
         {
-            throw new AssertActualExpectedException(
-                shortNameExpected,
-                value.ShortName,
-                $"The '{nameof(OptionAttribute)}.{nameof(OptionAttribute.ShortName)}' property value is not correct for option '{shortNameExpected}'.");
+            var exMsg = $"The '{nameof(OptionAttribute)}.{nameof(OptionAttribute.ShortName)}' property";
+            exMsg += " value is not correct for option '{shortNameExpected}'.";
+            exMsg += $"\nExpected: {shortNameExpected}";
+            exMsg += $"\nActual: {value.ShortName}";
+
+            throw new XunitException(exMsg);
         }
 
         if (value.LongName != longNameExpected)
         {
-            throw new AssertActualExpectedException(
-                longNameExpected,
-                value.LongName,
-                $"The '{nameof(OptionAttribute)}.{nameof(OptionAttribute.LongName)}' property value is not correct for option '{longNameExpected}'.");
+            var exMsg = $"The '{nameof(OptionAttribute)}.{nameof(OptionAttribute.LongName)}' property";
+            exMsg += " value is not correct for option '{longNameExpected}'.";
+            exMsg += $"\nExpected: {longNameExpected}";
+            exMsg += $"\nActual: {value.LongName}";
+
+            throw new XunitException(exMsg);
         }
 
         if (value.Required != requiredExpected)
         {
-            throw new AssertActualExpectedException(
-                requiredExpected,
-                value.Required,
-                $"The '{nameof(OptionAttribute)}.{nameof(OptionAttribute.Required)}' property value is not correct for option '{longNameExpected}'.");
+            var exMsg = $"The '{nameof(OptionAttribute)}.{nameof(OptionAttribute.Required)}' property";
+            exMsg += " value is not correct for option '{longNameExpected}'.";
+            exMsg += $"\nExpected: {requiredExpected}";
+            exMsg += $"\nActual: {value.Required}";
+
+            throw new XunitException(exMsg);
         }
 
         if (value.Default.ToString() != defaultExpected.ToString())
         {
-            throw new AssertActualExpectedException(
-                defaultExpected,
-                value.Default,
-                $"The '{nameof(OptionAttribute)}.{nameof(OptionAttribute.Default)}' property value is not correct for option '{defaultExpected}'.");
+            var exMsg = $"The '{nameof(OptionAttribute)}.{nameof(OptionAttribute.Default)}' property";
+            exMsg += " value is not correct for option '{defaultExpected}'.";
+            exMsg += $"\nExpected: {defaultExpected}";
+            exMsg += $"\nActual: {value.Default}";
+
+            throw new XunitException(exMsg);
         }
 
         if (value.HelpText != helpTextExpected)
         {
-            throw new AssertActualExpectedException(
-                helpTextExpected,
-                value.HelpText,
-                $"The '{nameof(OptionAttribute)}.{nameof(OptionAttribute.HelpText)}' property value is not correct for option '{longNameExpected}'.");
+            var exMsg = $"The '{nameof(OptionAttribute)}.{nameof(OptionAttribute.HelpText)}' property";
+            exMsg += " value is not correct for option '{longNameExpected}'.";
+            exMsg += $"\nExpected: {helpTextExpected}";
+            exMsg += $"\nActual: {value.HelpText}";
+
+            throw new XunitException(exMsg);
         }
     }
 }
