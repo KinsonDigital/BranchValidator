@@ -21,46 +21,6 @@ namespace TestingShared
         private static int callOrder = 1;
 
         /// <summary>
-        /// Specifies a callback to invoke when the method is called and then asserts that the call is in the correct order
-        /// specified by the given <paramref name="expectedOrder"/>.
-        /// </summary>
-        /// <param name="setup">The mock setup to extend.</param>
-        /// <param name="methodName">The name of the method expected to be invoked.</param>
-        /// <param name="expectedOrder">The order sequence that the method should be invoked.</param>
-        /// <typeparam name="T">The type that the setup is mocking.</typeparam>
-        public static void CallbackInOrder<T>(this ISetup<T> setup, string methodName, int expectedOrder)
-            where T : class
-            => setup.Callback(() =>
-            {
-                AssertExtensions.EqualWithMessage(
-                    expectedOrder,
-                    callOrder++,
-                    $"Method '{methodName}' called out of order.");
-            });
-
-        /// <summary>
-        /// Specifies a callback to invoke when the method is called and then asserts that the call is in the correct order
-        /// specified by the given <paramref name="expectedOrder"/>.
-        /// </summary>
-        /// <param name="setup">The mock setup to extend.</param>
-        /// <param name="methodName">The name of the method expected to be invoked.</param>
-        /// <param name="id">
-        ///     The ID to assign to the callback to help distinguish between
-        ///     multiple calls to the same method with different parameter data.
-        /// </param>
-        /// <param name="expectedOrder">The order sequence that the method should be invoked.</param>
-        /// <typeparam name="T">The type that the setup is mocking.</typeparam>
-        public static void CallbackInOrder<T>(this ISetup<T> setup, string methodName, int id, int expectedOrder)
-            where T : class
-            => setup.Callback(() =>
-            {
-                AssertExtensions.EqualWithMessage(
-                    expectedOrder,
-                    callOrder++,
-                    $"Method '{methodName}' with ID '{id}' called out of order.");
-            });
-
-        /// <summary>
         /// Verifies that a specific invocation matching the given expression was never performed on the mock.
         /// Use in conjunction with the default <see cref="MockBehavior.Loose"/>.
         /// </summary>
