@@ -28,37 +28,43 @@ jobs:
   run_branch_validator_tests:
     name: Run ${{ vars.PROJECT_NAME }} Tests
     needs: get_sdk_version
-    uses: KinsonDigital/Infrastructure/.github/workflows/run-csharp-tests.yml@v13.1.0
+    uses: KinsonDigital/Infrastructure/.github/workflows/run-csharp-tests.yml@v13.3.0
     with:
       project-name: "${{ vars.PROJECT_NAME }}Tests"
       build-config: Debug
       net-sdk-version: "${{ needs.get_sdk_version.outputs.sdk-version }}"
       checkout-ref: ${{ github.event.pull_request.head.ref }}
       checkout-repository: ${{ github.event.pull_request.head.repo.full_name }}
+    secrets:
+      cicd-pat: ${{ secrets.CICD_TOKEN }}
 
 
   run_branch_validation_shared_tests:
     name: Run ${{ vars.PROJECT_NAME }}Shared Tests
     needs: get_sdk_version
-    uses: KinsonDigital/Infrastructure/.github/workflows/run-csharp-tests.yml@v13.1.0
+    uses: KinsonDigital/Infrastructure/.github/workflows/run-csharp-tests.yml@v13.3.0
     with:
       project-name: "${{ vars.PROJECT_NAME }}SharedTests"
       build-config: Debug
       net-sdk-version: "${{ needs.get_sdk_version.outputs.sdk-version }}"
       checkout-ref: ${{ github.event.pull_request.head.ref }}
       checkout-repository: ${{ github.event.pull_request.head.repo.full_name }}
+    secrets:
+      cicd-pat: ${{ secrets.CICD_TOKEN }}
 
 
   run_script_generator_tests:
     name: Run ScriptGenerator Tests
     needs: get_sdk_version
-    uses: KinsonDigital/Infrastructure/.github/workflows/run-csharp-tests.yml@v13.1.0
+    uses: KinsonDigital/Infrastructure/.github/workflows/run-csharp-tests.yml@v13.3.0
     with:
       project-name: "ScriptGeneratorTests"
       build-config: Debug
       net-sdk-version: "${{ needs.get_sdk_version.outputs.sdk-version }}"
       checkout-ref: ${{ github.event.pull_request.head.ref }}
       checkout-repository: ${{ github.event.pull_request.head.repo.full_name }}
+    secrets:
+      cicd-pat: ${{ secrets.CICD_TOKEN }}
 
 
   run_integration_tests:
@@ -67,13 +73,15 @@ jobs:
       run_branch_validation_shared_tests,
       run_script_generator_tests,
       get_sdk_version]
-    uses: KinsonDigital/Infrastructure/.github/workflows/run-csharp-tests.yml@v13.1.0
+    uses: KinsonDigital/Infrastructure/.github/workflows/run-csharp-tests.yml@v13.3.0
     with:
       project-name: "${{ vars.PROJECT_NAME }}IntegrationTests"
       build-config: Debug
       net-sdk-version: "${{ needs.get_sdk_version.outputs.sdk-version }}"
       checkout-ref: ${{ github.event.pull_request.head.ref }}
       checkout-repository: ${{ github.event.pull_request.head.repo.full_name }}
+    secrets:
+      cicd-pat: ${{ secrets.CICD_TOKEN }}
 
 
   test_status_check:
