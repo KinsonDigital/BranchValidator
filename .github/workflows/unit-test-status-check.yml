@@ -28,7 +28,7 @@ jobs:
   run_branch_validator_tests:
     name: Run ${{ vars.PROJECT_NAME }} Tests
     needs: get_sdk_version
-    uses: KinsonDigital/Infrastructure/.github/workflows/run-csharp-tests.yml@v13.3.0
+    uses: KinsonDigital/Infrastructure/.github/workflows/run-csharp-tests.yml@v13.3.1
     with:
       project-name: "${{ vars.PROJECT_NAME }}Tests"
       build-config: Debug
@@ -42,7 +42,7 @@ jobs:
   run_branch_validation_shared_tests:
     name: Run ${{ vars.PROJECT_NAME }}Shared Tests
     needs: get_sdk_version
-    uses: KinsonDigital/Infrastructure/.github/workflows/run-csharp-tests.yml@v13.3.0
+    uses: KinsonDigital/Infrastructure/.github/workflows/run-csharp-tests.yml@v13.3.1
     with:
       project-name: "${{ vars.PROJECT_NAME }}SharedTests"
       build-config: Debug
@@ -56,7 +56,7 @@ jobs:
   run_script_generator_tests:
     name: Run ScriptGenerator Tests
     needs: get_sdk_version
-    uses: KinsonDigital/Infrastructure/.github/workflows/run-csharp-tests.yml@v13.3.0
+    uses: KinsonDigital/Infrastructure/.github/workflows/run-csharp-tests.yml@v13.3.1
     with:
       project-name: "ScriptGeneratorTests"
       build-config: Debug
@@ -73,7 +73,7 @@ jobs:
       run_branch_validation_shared_tests,
       run_script_generator_tests,
       get_sdk_version]
-    uses: KinsonDigital/Infrastructure/.github/workflows/run-csharp-tests.yml@v13.3.0
+    uses: KinsonDigital/Infrastructure/.github/workflows/run-csharp-tests.yml@v13.3.1
     with:
       project-name: "${{ vars.PROJECT_NAME }}IntegrationTests"
       build-config: Debug
