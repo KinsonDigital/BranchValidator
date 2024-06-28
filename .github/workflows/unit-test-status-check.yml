@@ -56,7 +56,7 @@ jobs:
   run_script_generator_tests:
     name: Run ScriptGenerator Tests
     needs: get_sdk_version
-    uses: KinsonDigital/Infrastructure/.github/workflows/run-csharp-tests.yml@v13.6.3
+    uses: KinsonDigital/Infrastructure/.github/workflows/run-csharp-tests.yml@v8.1.0
     with:
       project-name: "ScriptGeneratorTests"
       build-config: Debug
